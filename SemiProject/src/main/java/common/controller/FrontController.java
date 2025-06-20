@@ -27,7 +27,7 @@ import java.util.Properties;
 		description = "사용자가 웹에서 *.do 을 했을 경우 이 서블릿이 응답을 해주도록 한다.", 
 		urlPatterns = { "*.do" }, 
 		initParams = { 
-				@WebInitParam(name = "PropertyConfig", value = "/Users/dong/git/SemiProject/SemiProject/src/main/webapp/WEB-INF/Command.properties",
+				@WebInitParam(name = "PropertyConfig", value = "C:/git/SemiProject/SemiProject/src/main/webapp/WEB-INF/Command.properties",
 								description = "*.do 에 대한 클래스의 매핑파일")
 		})
 
@@ -421,4 +421,3 @@ public class FrontController extends HttpServlet {
 	}
 
 }
->>>>>>> branch 'yejun12348888' of https://github.com/yejunsKim/SemiProject.git
