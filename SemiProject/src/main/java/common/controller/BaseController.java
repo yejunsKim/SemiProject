@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package common.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -58,3 +59,83 @@ public abstract class BaseController implements InterCommand{
 	}
 */
 }
+=======
+package common.controller;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+public abstract class BaseController implements InterCommand {
+
+	// AbstractConroller 라는 명명으로 부모클래스가 됨. 
+	// command라는 Interface이다. implements로 인터페이스 구성
+	// 미완성 메소드(추상메소드)라서 빨간줄나옴. @override 진행하는데, 
+	// execute 작업을 각 클래스에서 진행하기위해 public 뒤에 abstract 적용
+	// 해당 클래스는 execute메서드 작업 ㅇ나함
+
+	   /*
+	      === 다음의 나오는 것은 우리끼리한 약속이다. ===
+	
+	      ※ view 단 페이지(.jsp)로 이동시 forward 방법(dispatcher)으로 이동시키고자 한다라면 
+	       자식클래스(/webapp/WEB-INF/Command.properties 파일에 기록된 클래스명들)에서는 부모클래스에서 
+	       생성해둔 메소드 호출시 아래와 같이 하면 되게끔 한다.
+	     
+	       super.setRedirect(false); 
+	       super.setViewPage("/WEB-INF/index.jsp");
+	    
+	    
+	       ※ URL 주소를 변경하여 페이지 이동시키고자 한다라면
+	        즉, sendRedirect 를 하고자 한다라면    
+	        자식클래스에서는 부모클래스에서 생성해둔 메소드 호출시 아래와 같이 하면 되게끔 한다.
+	          
+	       super.setRedirect(true);
+	       super.setViewPage("registerMember.up");               
+	    */
+
+		private boolean isRedirect = false;
+		// isRedirect 변수의 값이 false 이라면 view단 페이지(.jsp)로 forward 방법(dispatcher)으로 이동시키겠다. 
+		// isRedirect 변수의 값이 true 이라면 sendRedirect 로 페이지이동을 시키겠다.
+		
+		private String viewPage;
+		// viewPage 는 isRedirect 값이 false 이라면 view단 페이지(.jsp)의 경로명 이고,
+		// isRedirect 값이 true 이라면 이동해야할 페이지 URL 주소 이다.
+		
+		public boolean isRedirect() {
+		   return isRedirect;
+		}
+		
+		public void setRedirect(boolean isRedirect) {
+		   this.isRedirect = isRedirect;
+		}
+		
+		public String getViewPage() {
+		   return viewPage;
+		}
+		
+		public void setViewPage(String viewPage) {
+		   this.viewPage = viewPage;
+		}
+		
+		////////////////////////////////
+		// 로그인 유무를 검색해서 로그인 했으면 true를 리턴
+		// 로그인 안했으면 false 를 리턴 
+		
+		/*
+		public boolean checkLogin(HttpServletRequest request) {
+			
+			HttpSession session = request.getSession();
+			// MemberVO loginuser = (MemberVO) session.getAttribute("loginuser"); // return이 오브젝이니
+			
+			if(loginuser != null) {
+				return true;
+			} 
+			else {
+				return false;
+			}
+			
+		}// end of public boolean checkLogin() {} 
+		*/
+	
+}
+>>>>>>> branch 'yejun12348888' of https://github.com/yejunsKim/SemiProject.git
