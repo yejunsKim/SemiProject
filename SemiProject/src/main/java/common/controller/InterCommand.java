@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-package common.controller;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
-public interface InterCommand {
-	
-	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception;
-	
-	
-}
-=======
 package common.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,4 +12,4 @@ public interface InterCommand {
 	// 껍데기는 같고, 알멩이는 각 다름
 	
 }
->>>>>>> branch 'yejun12348888' of https://github.com/yejunsKim/SemiProject.git
+
