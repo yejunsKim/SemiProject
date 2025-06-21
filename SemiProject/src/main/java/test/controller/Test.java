@@ -12,8 +12,8 @@ public class Test extends BaseController {
 		
 		
 		super.setRedirect(false);
-		// super.setViewPage("/WEB-INF/register.jsp");
-		super.setViewPage("/WEB-INF/error.jsp");
+		super.setViewPage("/WEB-INF/register.jsp");
+		//super.setViewPage("/WEB-INF/error.jsp");
 
 	}
 

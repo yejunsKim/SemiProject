@@ -38,10 +38,6 @@ $(function(){
 	
 	$('span.error').hide();
 	$('input#name').focus();
-	
- //	$('input#name').bind('blur', function(){ alert('name 에 있던 포커스를 잃어버렸습니다-1.'); });
- // 또는
- // $('input#name').blur(function(){ alert('name 에 있던 포커스를 잃어버렸습니다-2.'); });
  
     $('input#name').blur((e) => { 
 	   
@@ -101,8 +97,6 @@ $(function(){
 	
 	
 	$('input#password').blur((e) => { 
-			   
-	 // alert($(e.target).val());
 		
 	    const regExp_password = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$/g;
 		// 숫자/문자/특수문자 포함 형태의 8~15자리 이내의 암호 정규표현식 객체 생성
@@ -114,7 +108,7 @@ $(function(){
 				
 			$('table#tblUserRegister :input').prop('disabled', true);
 			$(e.target).prop('disabled', false);
-			$(e.target).val('').focus();
+			//$(e.target).val('').focus();
 				
 		//	$(e.target).next().show();
 		//  또는
@@ -141,8 +135,8 @@ $(function(){
 			$('input#password').prop('disabled', false);
 			$(e.target).prop('disabled', false);
 			
-			$('input#password').val('').focus();
-			$(e.target).val('');
+			//$('input#password').val('').focus();
+			//$(e.target).val('');
 				
 		//	$(e.target).next().show();
 		//  또는
@@ -354,7 +348,6 @@ $(function(){
 	});// end of $('img#postcodeSearch').click(function(){})---------------
 
 	
-    $(function() {
 
 	 /////////////////////////////////////////////////////////////
 	 
@@ -687,13 +680,13 @@ span#idCheck, #emailCheck {
 					<tr>
 						<td>비밀번호&nbsp; <span class="star">*</span></td>
 						<td>
-							<input type="text" id="password" maxlength="30" class="requiredInfo">
+							<input type="password" id="password" maxlength="30" class="requiredInfo">
 							<span class="error">영문자,숫자,특수기호가 혼합된 8~15 비밀번호를 입력해주세요</span>
 					</td>
 					</tr>
 						<td>비밀번호 확인&nbsp;  <span class="star">*</span></td>
 						<td>
-							<input type="text" id="passwordCheck" maxlength="30" class="requiredInfo">
+							<input type="password" id="passwordCheck" maxlength="30" class="requiredInfo">
 							<span class="error">비밀번호가 일치하지 않습니다</span>
 					</td>
 					<tr>
