@@ -18,7 +18,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="icon" type="image/png" sizes="32x32" href="<%= ctxPath%>/images/header/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="<%= ctxPath%>/images/header/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
 
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/bootstrap-4.6.2-dist/css/bootstrap.min.css" > 
@@ -80,7 +79,7 @@
      
      
      <div class="row">
-       <div class="col-md-3	" id="sideinfo">
+       <div class="col-md-3" id="sideinfo">
        	 <%-- 로그인 시작 --%>
          <div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
 
@@ -115,15 +114,15 @@
 								<%-- ==== 아이디 찾기, 비밀번호 찾기 ==== --%>
 								<tr>
 									<td colspan="3" style="padding:3% 0.5%;font-size:13px;">
-										<a style="cursor: pointer;"
+										<a href="<%= ctxPath %>/idFind.jsp" style="cursor: pointer;"
 										data-toggle="modal" data-target="#userIdfind"
 										data-dismiss="modal">아이디찾기</a> 
 										/
 										<a style="cursor: pointer;"
 										data-toggle="modal" data-target="#passwdFind"
 										data-dismiss="modal" data-backdrop="static">비밀번호찾기</a>
-										<p class="space" style="width:50px;display:inline-block;"></p>
-										<a href="/">회원가입</a>
+										
+										<a href="<%= ctxPath %>/register.jsp" style="margin-left:30px;">회원가입</a>
 									</td>
 								</tr>
 

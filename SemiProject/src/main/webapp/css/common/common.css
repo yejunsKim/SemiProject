@@ -9,12 +9,12 @@ body {
 
 div#sideinfo { 
 	background-color: #1c1c1c;  
-    min-height: 800px; 
+    min-height: 600px; 
 }
                   
 div#maininfo { 
 	background-color: #F5F5F5; 
-    min-height: 800px; 
+    min-height: 600px; 
     width: 100%;
     padding:0;
 }  
@@ -68,3 +68,4 @@ table.outline th {background-color: #e6e6e6;}
 }
 
 .bgcol {background-color: LightGray;}
+
