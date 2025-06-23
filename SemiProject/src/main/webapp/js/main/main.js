@@ -10,6 +10,7 @@ $(function(){
 	});
 	
 	myCarousel.addEventListener('slide.bs.carousel', function () {
-	  // do something...
-	})
-});;
+	  
+	});
+	
+});
