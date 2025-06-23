@@ -88,9 +88,14 @@ local.properties
 *.zip
 *.tar.gz
 *.rar
+*.classpath
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
 
 # End of https://www.toptal.com/developers/gitignore/api/java,eclipse
+
+##### commit 제외파일 #####
+/SemiProject/src/main/java/common/controller/FrontController.java
+/SemiProject/src/main/webapp/WEB-INF/Command.properties
