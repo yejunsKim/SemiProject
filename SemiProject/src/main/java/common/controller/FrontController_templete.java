@@ -31,7 +31,7 @@ import java.util.Properties;
 		}) // 	@WebInitParam(name = "PropertyConfig", value = "C:/git/SemiProject/SemiProject/src/main/webapp/WEB-INF/Command.properties",
 
 
-public class FrontController extends HttpServlet {
+public class FrontController_templete extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> cmdMap = new HashMap<>(); // command Map 을 만든것.
 	
