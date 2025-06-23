@@ -26,6 +26,10 @@
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.css" />
 <script type="text/javascript" src="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
 
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+
+
 <script type="text/javascript">
 
 let b_idcheck_click = false;
@@ -370,7 +374,7 @@ $(function(){
 
 		 // === 첫번째 방법(jquery Ajax) === //
 		 $.ajax({
-			url:"idDuplicateCheck.up",
+			url:"idDuplicateCheck.do",
 			data:{"id":$('input#id').val()},  // data 속성은 http://localhost:9090/MyMVC/user/idDuplicateCheck.up 로 전송해야할 데이터를 말한다.   
 			type:"post", // type 을 생략하면 type:"get" 이다.
 			async:true,  // async:true 가 비동기 방식을 말한다. async 을 생략하면 기본값이 비동기 방식인 async:true 이다.
@@ -445,7 +449,7 @@ $(function(){
 		
 		// === 두번째 방법(jquery Ajax) === //
 		$.ajax({
-			url:"emailDuplicateCheck.up",
+			url:"emailDuplicateCheck.do",
 			data:{"email":$('input#email').val()},
 			type:"post",
 		//	async:true, 
@@ -498,7 +502,11 @@ $(function(){
 
 // Function Declaration
 // "가입하기" 버튼 클릭시 호출되는 함수
-function goRegister() {
+function register() {
+	 b_idcheck_click = true;
+
+	 b_emailcheck_click = true;
+	
 	
 	// **** 필수입력사항에 모두 입력이 되었는지 검사하기 시작 **** //
 	let b_requiredInfo = true;
@@ -513,7 +521,7 @@ function goRegister() {
 	});
 	
 	if(!b_requiredInfo) {
-		return; // goRegister() 함수를 종료한다.
+		return; // register() 함수를 종료한다.
 	}
 	// **** 필수입력사항에 모두 입력이 되었는지 검사하기 끝 **** //
 	
@@ -523,7 +531,7 @@ function goRegister() {
 		// "아이디중복확인" 을 클릭 안 했을 경우
 		
 		alert("아이디 중복확인을 클릭하셔야 합니다.");
-		return; // goRegister() 함수를 종료한다.
+		return; // register() 함수를 종료한다.
 	}
 	// **** "아이디중복확인" 을 클릭했는지 검사하기 끝 **** //
 	
@@ -533,7 +541,7 @@ function goRegister() {
 		// "이메일중복확인" 을 클릭 안 했을 경우
 		
 		alert("이메일 중복확인을 클릭하셔야 합니다.");
-		return; // goRegister() 함수를 종료한다.
+		return; // register() 함수를 종료한다.
 	}	
     // **** "이메일중복확인" 을 클릭했는지 검사하기 끝 **** //
 	
@@ -556,7 +564,7 @@ function goRegister() {
 	}// end of for---------------------
 	
 	if(!b_addressInfo) {
-		return; // goRegister() 함수를 종료한다.
+		return; // register() 함수를 종료한다.
 	}
 	// **** 우편번호 및 주소에 값을 입력했는지 검사하기 시작 **** //
 	
@@ -564,10 +572,10 @@ function goRegister() {
 	
 	const form = document.registerForm;
 	form.method = "post";
- //	form.action = "userRegister.up";
+ 	form.action = "user/userRegister.do";
     form.submit();
 	
-}// end of function goRegister()-----------------------------
+}// end of function register()-----------------------------
 
 </script>
 
@@ -727,8 +735,8 @@ span#idCheck, #emailCheck {
 					</tr>
 					<tr>
 	                    <td colspan="2" class="text-center">
-	                       <input type="button" class="btn btn-success btn-lg mr-5" value="가입하기" onclick="goRegister()" />
-	                       <input type="reset"  class="btn btn-danger btn-lg" value="취소하기" onclick="goReset()" />
+	                       <input type="button" class="btn btn-success btn-lg mr-5" value="가입하기" onclick="register()" />
+	                       <input type="reset"  class="btn btn-danger btn-lg" value="취소하기" onclick="reset()" />
 	                    </td>
               		</tr>
 					
