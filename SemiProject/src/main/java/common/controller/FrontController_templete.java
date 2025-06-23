@@ -1,14 +1,5 @@
 package common.controller;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletConfig;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebInitParam;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -19,6 +10,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebInitParam;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 /**
  * Servlet implementation class FrontController
  */
@@ -26,7 +26,7 @@ import java.util.Properties;
 		description = "사용자가 웹에서 *.do 을 했을 경우 이 서블릿이 응답을 해주도록 한다.", 
 		urlPatterns = { "*.do" }, 
 		initParams = { 
-				@WebInitParam(name = "PropertyConfig", value = "/Users/dong/git/SemiProject/SemiProject/src/main/webapp/WEB-INF/Command.properties",
+				@WebInitParam(name = "PropertyConfig", value = "/Users/chaehayeong/git/SemiProject/SemiProject/src/main/webapp/WEB-INF/Command.properties",
 								description = "*.do 에 대한 클래스의 매핑파일")
 		}) // 	@WebInitParam(name = "PropertyConfig", value = "C:/git/SemiProject/SemiProject/src/main/webapp/WEB-INF/Command.properties",
 
