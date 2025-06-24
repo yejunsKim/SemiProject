@@ -50,7 +50,7 @@ public class PasswordFind extends BaseController {
 	
 		
 		super.setRedirect(false);
-		super.setViewPage("/WEB-INF/pwFind.jsp");
+		super.setViewPage("/WEB-INF/PasswordFind.jsp");
 
 	}
 
