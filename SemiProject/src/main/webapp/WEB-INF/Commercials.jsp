@@ -23,7 +23,7 @@
 <!--  Bootstrap JS (마지막) -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<%-- <jsp:include page="header.jsp" />     --%>
+ <jsp:include page="header.jsp" />
     
     <div class="container">
 		
@@ -83,6 +83,6 @@
 	</div>
  
     
- <%--  <jsp:include page="footer1.jsp" />     --%>
+ <jsp:include page="footer.jsp" /> 
 <%--     <script type="text/javascript" src="<%= ctxPath %>/js/login/login.js"></script>
  --%>    
