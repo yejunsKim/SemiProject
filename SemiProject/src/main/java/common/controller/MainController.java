@@ -13,11 +13,9 @@ public class MainController extends BaseController {
 		UserDAO = new UserDAO_imple();
 	}
 	
-	@Override
-	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		super.setRedirect(false);
-		super.setViewPage("/WEB-INF/main.jsp");
-		
-	}
+    @Override
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        super.setRedirect(false);
+        super.setViewPage("/WEB-INF/main.jsp");
+    }
 }
