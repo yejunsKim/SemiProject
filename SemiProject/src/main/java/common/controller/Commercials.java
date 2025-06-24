@@ -31,7 +31,7 @@ public class Commercials extends BaseController{
 		
 			
 			super.setRedirect(false);
-			super.setViewPage("/WEB-INF/main.jsp");
+			super.setViewPage("/WEB-INF/Commercials.jsp");
 		}catch (SQLException e) {
 			e.printStackTrace();
 			
