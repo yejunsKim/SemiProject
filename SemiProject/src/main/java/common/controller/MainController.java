@@ -5,15 +5,15 @@ import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import myshop.model.ProductDAO;
-import myshop.model.ProductDAO_imple;
+import user.model.userDAO;
+import user.model.userDAO_imple;
 
 public class MainController extends BaseController {
 
-	private ProductDAO pdao;
+	private userDAO pdao;
 	
 	public MainController() {
-		pdao = new ProductDAO_imple();
+		pdao = new userDAO_imple();
 	}
 	
 	@Override

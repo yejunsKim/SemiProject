@@ -1,4 +1,4 @@
-package myshop.model;
+package user.model;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 import util.security.AES256;
 import util.security.SecretMyKey;
 
-public class ProductDAO_imple implements ProductDAO {
+public class userDAO_imple implements userDAO {
 	
 	private DataSource ds;  // DataSource ds 는 아파치톰캣이 제공하는 DBCP(DB Connection Pool)이다. 
 	private Connection conn;
@@ -25,7 +25,7 @@ public class ProductDAO_imple implements ProductDAO {
 	
 	private AES256 aes; // AES256 양방향 통신을 위한 객체생성
 	
-	public ProductDAO_imple() {
+	public userDAO_imple() {
 		
 		try {
 			Context initContext = new InitialContext();

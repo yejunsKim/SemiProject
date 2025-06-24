@@ -1,4 +1,4 @@
-package myshop.controller;
+package myshop.domain;
 
 public class ImageVO  {
 

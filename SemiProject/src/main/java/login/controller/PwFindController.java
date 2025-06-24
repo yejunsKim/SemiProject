@@ -1,19 +1,20 @@
-package common.controller;
+package login.controller;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import common.controller.BaseController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import myshop.model.ProductDAO;
-import myshop.model.ProductDAO_imple;
+import user.model.userDAO;
+import user.model.userDAO_imple;
 
 public class PwFindController extends BaseController {
 
-	private ProductDAO pdao;
+	private userDAO pdao;
 	
 	public PwFindController() {
-		pdao = new ProductDAO_imple();
+		pdao = new userDAO_imple();
 	}
 	
 	@Override
