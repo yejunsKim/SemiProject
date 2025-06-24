@@ -9,12 +9,12 @@ import shop.domain.CategoryVO;
 import shop.model.ProductDAO;
 import shop.model.ProductDAO_imple;
 
-public class MainController extends BaseController{
+public class Commercials extends BaseController{
 
 	//private ProductDAO productdao = new ProductDAO_imple();
 		private ProductDAO productdao;
 		
-		public MainController() {
+		public Commercials() {
 			productdao = new ProductDAO_imple();
 		}
 	

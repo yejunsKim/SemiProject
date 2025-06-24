@@ -9,7 +9,7 @@
 %>
 
 <%-- 직접 만든 css --%>
-<link rel="stylesheet" type="text/css" href="<%= ctxPath%>/css/main/main.css" />
+<link rel="stylesheet" type="text/css" href="<%= ctxPath%>/css/Commercials/Commercials.css" />
 <!-- Bootstrap 4 CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
 
