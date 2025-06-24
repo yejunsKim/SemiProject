@@ -12,11 +12,11 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import user.domain.userVO;
+import user.domain.UserVO;
 import util.security.AES256;
 import util.security.SecretMyKey;
 
-public class userDAO_imple implements userDAO {
+public class UserDAO_imple implements UserDAO {
 
 
 	private DataSource ds;  // DataSource ds 는 아파치톰캣이 제공하는 DBCP(DB Connection Pool)이다. 
@@ -26,7 +26,7 @@ public class userDAO_imple implements userDAO {
 	private AES256 aes; // 양방향일 때 사용!
 	
 	// 생성자
-	public userDAO_imple() {
+	public UserDAO_imple() {
 		try {
 			System.out.println("📌 DAO 생성자 진입");
 			
@@ -59,7 +59,7 @@ public class userDAO_imple implements userDAO {
 
 	
 	@Override
-	public int registerUser(userVO user) throws SQLException {
+	public int registerUser(UserVO user) throws SQLException {
 		int result = 0;
 		
 		try {

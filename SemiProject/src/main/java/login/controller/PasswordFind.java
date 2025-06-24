@@ -6,15 +6,15 @@ import java.util.Map;
 import common.controller.BaseController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import user.model.userDAO;
-import user.model.userDAO_imple;
+import user.model.UserDAO;
+import user.model.UserDAO_imple;
 
 public class PasswordFind extends BaseController {
 
-	private userDAO userDAO;
+	private UserDAO UserDAO;
 	
 	public PasswordFind() {
-		userDAO = new userDAO_imple();
+		UserDAO = new UserDAO_imple();
 	}
 	
 	@Override
@@ -30,7 +30,7 @@ public class PasswordFind extends BaseController {
 			Map<String, String> paraMap = new HashMap<>();
 			paraMap.put("id", id);
 			paraMap.put("email", email);
-			int n = userDAO.pwFindUser(paraMap);
+			int n = UserDAO.pwFindUser(paraMap);
 			
 			if (n == 1) {
 				request.setAttribute("n", 1);

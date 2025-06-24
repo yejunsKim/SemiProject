@@ -1,6 +1,6 @@
 package user.domain;
 
-public class userVO {
+public class UserVO {
 	
 	private String id;
 	private String password;    // 비밀번호 (SHA-256 암호화 대상)

@@ -8,13 +8,13 @@ import common.controller.BaseController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import user.domain.userVO;
-import user.model.userDAO;
-import user.model.userDAO_imple;
+import user.domain.UserVO;
+import user.model.UserDAO;
+import user.model.UserDAO_imple;
 
 public class UserRegister extends BaseController {
 
-	private userDAO userDAO = new userDAO_imple();
+	private UserDAO UserDAO = new UserDAO_imple();
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
@@ -42,7 +42,7 @@ public class UserRegister extends BaseController {
 			String detailaddress = request.getParameter("detailaddress");
 			String extraaddress = request.getParameter("extraaddress");
 			
-			userVO user = new userVO();
+			UserVO user = new UserVO();
 			System.out.println(id+name+password);
 			
 			user.setName(name);
@@ -60,7 +60,7 @@ public class UserRegister extends BaseController {
 				
 				System.out.println("register 트라이 ㄱ");
 				
-				int n = userDAO.registerUser(user);
+				int n = UserDAO.registerUser(user);
 
 				if(n == 1) {
 /*					String clientip = request.getRemoteAddr();

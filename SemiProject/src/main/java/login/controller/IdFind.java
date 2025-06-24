@@ -6,15 +6,15 @@ import java.util.Map;
 import common.controller.BaseController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import user.model.userDAO;
-import user.model.userDAO_imple;
+import user.model.UserDAO;
+import user.model.UserDAO_imple;
 
 public class IdFind extends BaseController {
 
-	private userDAO userDAO;
+	private UserDAO UserDAO;
 	
 	public IdFind() {
-		userDAO = new userDAO_imple();
+		UserDAO = new UserDAO_imple();
 	}
 	
 	@Override
@@ -32,7 +32,7 @@ public class IdFind extends BaseController {
 			paraMap.put("name", name);
 			paraMap.put("email", email); // email이 후보식별자가 된다.
 			
-			String id = userDAO.findUserid(paraMap); // 위에 mdao를 가져와서 Map으로 보내야한다.
+			String id = UserDAO.findUserid(paraMap); // 위에 mdao를 가져와서 Map으로 보내야한다.
 			// 리턴값은 아이디값을 찾기위해서 String으로 찾아야한다.
 			
 			if(id != null) { // db에서 넘어온 값을 아까 찾기 화면으로 값들을 넘겨줘야한다.
