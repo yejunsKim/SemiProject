@@ -31,7 +31,7 @@ public class userDAO_imple implements userDAO {
 			
 			Context initContext = new InitialContext();
 		    Context envContext  = (Context)initContext.lookup("java:/comp/env");
-		    ds = (DataSource)envContext.lookup("jdbc/myoracle");
+		    ds = (DataSource)envContext.lookup("jdbc/semiproject");
 		    
 		    aes = new AES256(SecretMyKey.KEY);
 		    
@@ -80,7 +80,7 @@ public class userDAO_imple implements userDAO {
 			pstmt.setString(8, user.getDetailaddress());
 			pstmt.setString(9, user.getExtraaddress());
 			
-			result = pstmt.executeUpdate(sql);
+			result = pstmt.executeUpdate();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

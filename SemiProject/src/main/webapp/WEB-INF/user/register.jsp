@@ -572,7 +572,7 @@ function register() {
 	
 	const form = document.registerForm;
 	form.method = "post";
- 	form.action = "user/userRegister.do";
+ 	form.action =  "userRegister.do";
     form.submit();
 	
 }// end of function register()-----------------------------
@@ -580,6 +580,7 @@ function register() {
 </script>
 
 <%-- css 주기 --%>
+
 <head>
 <style type="text/css">
 @charset "UTF-8";
@@ -672,14 +673,14 @@ span#idCheck, #emailCheck {
 					<tr>
 						<td>성명&nbsp; <span class="star">*</span> </td>
 						<td>
-							<input type="text" id="name" maxlength="30" class="requiredInfo">
+							<input type="text" id="name" name='name' maxlength="30" class="requiredInfo">
 							<span class="error">필수 입력 사항입니다</span>
 						</td>
 					<tr>
 					<tr>
 						<td>아이디&nbsp; <span class="star">*</span> </td>
 						<td>
-					 		<input type="text" id="id" maxlength="30" class="requiredInfo">
+					 		<input type="text" id="id" name='id' maxlength="30" class="requiredInfo">
 							<%-- 아이디 중복체크 --%>
 							<span id="idCheck">아이디중복확인</span>
 	                        <span class="idCheckResult"></span>
@@ -688,7 +689,7 @@ span#idCheck, #emailCheck {
 					<tr>
 						<td>비밀번호&nbsp; <span class="star">*</span></td>
 						<td>
-							<input type="password" id="password" maxlength="30" class="requiredInfo">
+							<input type="password" id="password" name='password' maxlength="30" class="requiredInfo">
 							<span class="error">영문자,숫자,특수기호가 혼합된 8~15 비밀번호를 입력해주세요</span>
 					</td>
 					</tr>
@@ -700,7 +701,7 @@ span#idCheck, #emailCheck {
 					<tr>
 						<td>이메일&nbsp; <span class="star">*</span></td>
 						<td>
-							<input type="text" id="email" maxlength="30" class="requiredInfo">
+							<input type="text" id="email" name='email' maxlength="30" class="requiredInfo">
 							<span class="error">이메일 형식에 맞지 않습니다</span>
 							<%-- 이메일 중복체크 --%>
                        		<span id="emailCheck">이메일중복확인</span>
@@ -709,9 +710,9 @@ span#idCheck, #emailCheck {
 					</tr>
 						<td>연락처&nbsp; <span class="star">*</span></td>
 						<td>
-					 	   <input type="text" name="mobileHead" id="hp1" size="6" maxlength="3" value="010" readonly />&nbsp;-&nbsp; 
-	                       <input type="text" name="mobileMiddle" id="hp2" size="6" maxlength="4" />&nbsp;-&nbsp;
-	                       <input type="text" name="mobileLast" id="hp3" size="6" maxlength="4" />    
+					 	   <input type="text" name="mobileHead" id="hp1" name='hp1' size="6" maxlength="3" value="010" readonly />&nbsp;-&nbsp; 
+	                       <input type="text" name="mobileMiddle" id="hp2" name='hp2' size="6" maxlength="4" />&nbsp;-&nbsp;
+	                       <input type="text" name="mobileLast" id="hp3" name='hp3' size="6" maxlength="4" />    
 	                       <span class="error">휴대폰 형식이 아닙니다.</span>
 					</td>
 					<tr>

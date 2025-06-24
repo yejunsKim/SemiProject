@@ -1,10 +1,13 @@
 package user.controller;
 
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import common.controller.BaseController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import user.domain.userVO;
 import user.model.userDAO;
 import user.model.userDAO_imple;
@@ -40,6 +43,7 @@ public class UserRegister extends BaseController {
 			String extraaddress = request.getParameter("extraaddress");
 			
 			userVO user = new userVO();
+			System.out.println(id+name+password);
 			
 			user.setName(name);
 			user.setId(id);
@@ -59,20 +63,31 @@ public class UserRegister extends BaseController {
 				int n = userDAO.registerUser(user);
 
 				if(n == 1) {
+/*					String clientip = request.getRemoteAddr();
+					System.out.println("나의 IP 주소는 : "+clientip);
 					
-					// UserVo loginUser = userDAO.login(paraMap);
+					Map<String, String> paraMap = new HashMap<>();
+					paraMap.put("id", id);
+					paraMap.put("password", password);
+					paraMap.put("clientip", clientip);
 					
-					message = "signup~";
-					loc = request.getContextPath()+"error.jsp";
+					UserVo loginUser = userDAO.login(paraMap);
+					
+					HttpSession session = request.getSession();
+					session.setAttribute("loginUser", loginUser);
+					*/
+					message = "Signup~";
+					
 				}
 				
 				
-			} catch (Exception e) {
+			} catch (SQLException e) {
 				e.printStackTrace();
-				
+				message = "Failed for signup ";
 				loc = "javascript:history.back()";
-
 			}
+			request.setAttribute("message", message);
+			request.setAttribute("loc", loc);
 			
 			super.setRedirect(false);
 			super.setViewPage("/WEB-INF/msg.jsp");
@@ -80,7 +95,7 @@ public class UserRegister extends BaseController {
 		}
 		else {
 			
-			System.out.println("메소드 error >> (GET)");
+			System.out.println("!! 메소드가 (GET) 이므로 페이지 이동불가 !!");
 			
 			super.setRedirect(false);
 			super.setViewPage("/WEB-INF/user/register.jsp");
