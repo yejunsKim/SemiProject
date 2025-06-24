@@ -34,6 +34,11 @@
 <script type="text/javascript" src="<%= ctxPath%>/bootstrap-4.6.2-dist/js/bootstrap.bundle.min.js"></script> 
 <script type="text/javascript" src="<%= ctxPath%>/js/main/main.js"></script>
 
+<%-- jQueryUI CSS 및 JS --%>
+<link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.css" />
+<script type="text/javascript" src="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
+
+
 </head>
 <body>
    <!-- 상단 네비게이션 시작 -->
