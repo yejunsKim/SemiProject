@@ -7,6 +7,15 @@ public class CategoryVO {
 	private String categoryImagePath;	//카테고리이미지경로
 	
 	
+	public CategoryVO(){}
+	
+	public CategoryVO(int categoryNo, String categoryName, String categoryImagePath) {
+		super();
+		this.categoryNo = categoryNo;
+		this.categoryName = categoryName;
+		this.categoryImagePath = categoryImagePath;
+	}
+	
 	public int getCategoryNo() {
 		return categoryNo;
 	}
