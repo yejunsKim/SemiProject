@@ -5,7 +5,6 @@ import java.util.Map;
 
 import user.domain.UserVO;
 
-
 public interface UserDAO {
 	
 	// 회원가입 페이지에서 가입하기 버튼을 눌렀을 경우 user를 insert하는 메소드

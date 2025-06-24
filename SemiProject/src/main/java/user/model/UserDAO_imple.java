@@ -18,7 +18,6 @@ import util.security.SecretMyKey;
 
 public class UserDAO_imple implements UserDAO {
 
-
 	private DataSource ds;  // DataSource ds 는 아파치톰캣이 제공하는 DBCP(DB Connection Pool)이다. 
 	private Connection conn;
 	private PreparedStatement pstmt;

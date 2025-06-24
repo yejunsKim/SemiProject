@@ -18,9 +18,6 @@ public class UserVO {
 	private int status;  // 회원탈퇴유무   1: 사용가능(가입중) / 0:사용불능(탈퇴)
 	private int idle;    // 휴면유무  0 : 활동중  /  1 : 휴면중 
 	
-	
-	
-	
 	public String getId() {
 		return id;
 	}
