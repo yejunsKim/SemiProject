@@ -1,0 +1,6 @@
+@charset "UTF-8";
+
+.pwFindWrap {margin:65px auto 0;max-width:450px;width:100%;}
+.pwFindWrap > #pwFindFrm > .pwBox {display:flex;margin:25px 0;}
+.pwFindWrap > #pwFindFrm > .pwBox input {width:100%;}
+.pwFindWrap > #pwFindFrm > .pwBox p {max-width:150px;width:100%;}

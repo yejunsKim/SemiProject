@@ -116,10 +116,7 @@
 									<td colspan="3" style="padding:3% 0.5%;font-size:13px;">
 										<a href="<%= ctxPath %>/idFind.do" style="cursor: pointer;">아이디찾기</a> 
 										/
-										<a style="cursor: pointer;"
-										data-toggle="modal" data-target="#passwdFind"
-										data-dismiss="modal" data-backdrop="static">비밀번호찾기</a>
-										
+										<a href="<%= ctxPath %>/pwFind.do" style="cursor: pointer;">비밀번호찾기</a>
 										<a href="<%= ctxPath %>/register.jsp" style="margin-left:30px;">회원가입</a>
 									</td>
 								</tr>

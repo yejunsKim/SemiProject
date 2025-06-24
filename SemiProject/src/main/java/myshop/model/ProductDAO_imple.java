@@ -86,4 +86,38 @@ public class ProductDAO_imple implements ProductDAO {
 		return id;
 	}
 
+	// pwFind 했을 때, 해당 값이 있으면 1을 반환함.
+	@Override
+	public int pwFindUser(Map<String, String> paraMap) {
+		
+		int n = 0;
+		
+		try {
+			
+		  conn = ds.getConnection();
+		  String sql = " select * from users "
+		  			 + " where id = ? and email = ? ";
+		  
+		  pstmt = conn.prepareStatement(sql);
+		  pstmt.setString(1, paraMap.get("id"));
+		  pstmt.setString(2, paraMap.get("email"));
+		  
+		  rs = pstmt.executeQuery();
+		  
+		  if(rs.next()) {
+			  n = 1;
+		  }
+		  else {
+			  n = 0;
+		  }
+
+		  } catch(SQLException e) {
+	         e.printStackTrace();	   
+		  } finally {
+		  	  close();
+		  }
+		
+		return n;
+	}
+
 }
