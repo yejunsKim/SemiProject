@@ -54,25 +54,26 @@ public class ProductDAO_imple implements ProductDAO {
 		      }
 		 }// end of private void close()---------------
 
+
 	@Override
-	public String idFind(Map<String, String> paraMap) throws SQLException {
+	public String findUserid(Map<String, String> paraMap) throws SQLException {
 		
-		String userid = null;
+		String id = null;
 		
 		try {
 			
 		  conn = ds.getConnection();
 		  String sql = " select * from users "
-		  			 + " where name = ? and mobile = ? ";
+		  			 + " where name = ? and email = ? ";
 		  
 		  pstmt = conn.prepareStatement(sql);
 		  pstmt.setString(1, paraMap.get("name"));
-		  pstmt.setString(2, paraMap.get("mobile"));
+		  pstmt.setString(2, paraMap.get("email"));
 		  
 		  rs = pstmt.executeQuery();
 		  
 			  if(rs.next()) { // 있으면
-				  userid = rs.getString("userid"); //userid 에 userid를 담아서 보내야함
+				  id = rs.getString("id"); //userid 에 userid를 담아서 보내야함
 			  }	  
 		  }
 		  
@@ -82,7 +83,7 @@ public class ProductDAO_imple implements ProductDAO {
 		  	  close();
 		  }
 		
-		return userid;
+		return id;
 	}
 
 }

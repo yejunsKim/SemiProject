@@ -114,9 +114,7 @@
 								<%-- ==== 아이디 찾기, 비밀번호 찾기 ==== --%>
 								<tr>
 									<td colspan="3" style="padding:3% 0.5%;font-size:13px;">
-										<a href="<%= ctxPath %>/idFind.jsp" style="cursor: pointer;"
-										data-toggle="modal" data-target="#userIdfind"
-										data-dismiss="modal">아이디찾기</a> 
+										<a href="<%= ctxPath %>/idFind.do" style="cursor: pointer;">아이디찾기</a> 
 										/
 										<a style="cursor: pointer;"
 										data-toggle="modal" data-target="#passwdFind"
