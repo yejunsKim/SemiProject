@@ -9,11 +9,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import user.model.userDAO;
 import user.model.userDAO_imple;
 
-public class PwFindController extends BaseController {
+public class PasswordFind extends BaseController {
 
 	private userDAO userDAO;
 	
-	public PwFindController() {
+	public PasswordFind() {
 		userDAO = new userDAO_imple();
 	}
 	

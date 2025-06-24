@@ -4,7 +4,7 @@ import common.controller.BaseController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class checkEmaildDuplicate extends BaseController {
+public class CheckEmaildDuplicate extends BaseController {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {

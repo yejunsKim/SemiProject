@@ -9,11 +9,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import user.model.userDAO;
 import user.model.userDAO_imple;
 
-public class IdFindController extends BaseController {
+public class IdFind extends BaseController {
 
 	private userDAO userDAO;
 	
-	public IdFindController() {
+	public IdFind() {
 		userDAO = new userDAO_imple();
 	}
 	
