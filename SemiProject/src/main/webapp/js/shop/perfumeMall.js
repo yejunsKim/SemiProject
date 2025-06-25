@@ -71,10 +71,14 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 				// 데이터가 존재하는 경우
 				
 				$.each(json, function(_, item){
+					
+					//console.log(item.itemphotopath);
+					//  /images/item/LAVANDE31_500.png
+
 					v_html += `<div class='col-md-6 col-lg-3'>
 									<div class="card mb-3">
 										<a href="#" id="itemDetail">
-											<img src="/SemiProject_rdg${item.itemphotopath}" class="card-img-top" style="height: 350px; object-fit: cover;">
+											<img src="/SemiProject${item.itemphotopath}" class="card-img-top" style="height: 350px; object-fit: cover;">
 										</a>
 										<div class="card-body">
 										

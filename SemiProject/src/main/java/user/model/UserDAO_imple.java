@@ -183,6 +183,55 @@ public class UserDAO_imple implements UserDAO {
 		  return result;
 	}
 
+	public boolean checkIdDuplicate(String id) throws SQLException {
+		boolean isExists = true;
+		// true >> id 가 존재한다는 뜻
+		try {
+			conn = ds.getConnection(); 
+			// 아파치가 제공하는 데이터소스로 커넥션 완료.
+			
+			String sql = " select id " 
+					+ " from users "
+					+ " where id = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			
+			rs = pstmt.executeQuery();
+			
+			isExists = rs.next();
+			// false면 중복되지 않았다는 뜻.
+		} finally {
+			close();
+		}
+		return isExists;
+	}
+
+
+	@Override
+	public boolean checkEmailDuplicate(String email) throws SQLException {
+		boolean isExists = true;
+		// true >> email이 존재한다는 뜻. 추후 복호화된 email.
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " select id "
+					+ "from users "
+					+ "where email = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, email);
+			
+			rs = pstmt.executeQuery();
+			
+			isExists = rs.next();
+			// rs 값이 나오지 않으면 false(중복x)
+		} finally {
+			close();
+		}
+		
+		return isExists;
+	}
+
 
 
 }
