@@ -65,13 +65,14 @@
           </li> --%>
           <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle menufont_size text-primary" href="#" id="navbarDropdown" data-toggle="dropdown"> 
-                 Dropdown                                <%-- .text-primary 는 글자색으로 파랑색임 --%>  
+                 카테고리                                <%-- .text-primary 는 글자색으로 파랑색임 --%>  
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                 <a class="dropdown-item text-primary" href="<%= ctxPath%>/commercials.do">카테고리</a>
-                 <a class="dropdown-item text-primary" href="#">Another action</a>
+                 <a class="dropdown-item text-primary" href="#">10대</a>
+                 <a class="dropdown-item text-primary" href="#">20대</a>
                  <div class="dropdown-divider"></div>
-                 <a class="dropdown-item text-primary" href="#">Something else here</a>
+                 <a class="dropdown-item text-primary" href="#">남성</a>
+                 <a class="dropdown-item text-primary" href="#">여성</a>
               </div>
            </li>
         </ul>
