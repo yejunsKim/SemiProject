@@ -6,9 +6,9 @@
 }
 
 .carousel-inner img {
-    width: 100%;
-    height: 600px;
-    object-fit: cover;  /* 꽉 채우고 비율 유지, 넘치는 건 잘림 */
+    width: 200%;
+    height: 700px;
+    /* object-fit: cover;  꽉 채우고 비율 유지, 넘치는 건 잘림 */
     display: block;
     margin: 0 auto;
 }
