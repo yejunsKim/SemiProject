@@ -25,7 +25,7 @@
 
  <jsp:include page="header.jsp" />
     
-<div class="col-md-9">
+	<div class="container-fluid">		
 		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 		  <ol class="carousel-indicators">
 		 

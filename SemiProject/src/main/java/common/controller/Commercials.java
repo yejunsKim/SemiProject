@@ -23,11 +23,14 @@ public class Commercials extends BaseController{
 		try {
 			List<CategoryVO> categoryList= idao.imageSelectAll();
 			request.setAttribute("categoryList", categoryList);
-			   
 			
+			for( CategoryVO category : categoryList ) {
+
+			}
+		
 			
 			super.setRedirect(false);
-			super.setViewPage("/WEB-INF/header.jsp");
+			super.setViewPage("/WEB-INF/Commercials.jsp");
 		}catch (SQLException e) {
 			e.printStackTrace();
 			

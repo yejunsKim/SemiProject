@@ -38,81 +38,48 @@
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.css" />
 <script type="text/javascript" src="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
 
-<style>
-  .dropdown-menu {
-    width: 700px;
-    padding: 0;
-    border: none;
-  }
-
-  #commercialBanner img {
-    max-width: 100%;
-    height: 300px;
-    object-fit: contain;
-    display: block;
-    margin: 0 auto;
-  }
-
-  #commercialBanner .carousel-caption h5 {
-    font-weight: bold;
-    font-size: 22px;
-    text-shadow: 1px 1px 2px black;
-  }
-</style>
-
-<script>
-$(document).ready(function() {
-  $('.nav-item.dropdown').hover(function() {
-    $(this).addClass('show');
-    $(this).find('.dropdown-menu').addClass('show');
-  }, function() {
-    $(this).removeClass('show');
-    $(this).find('.dropdown-menu').removeClass('show');
-  });
-});
-</script>
 
 </head>
 <body>
-  <!-- 상단 네비게이션 시작 -->
+   <!-- 상단 네비게이션 시작 -->
    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+      
+      <!-- Brand/logo --> <!-- Font Awesome 6 Icons -->
       <a class="navbar-brand" href="<%= ctxPath %>/main.do" style="margin-right: 10%;"><img src="<%= ctxPath%>/images/header/favicon-32x32.png" /></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      
+      <!-- 아코디언 같은 Navigation Bar 만들기 -->
+       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
          <span class="navbar-toggler-icon"></span>
        </button>
+      
       <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav" style="font-size: 16pt;">
            <li class="nav-item active">
               <a class="nav-link menufont_size" href="<%= ctxPath %>/index.up">향수 둘러보기</a>
            </li>
-           <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle menufont_size text-primary" href="#" id="navbarDropdown" data-toggle="dropdown">Dropdown</a>
+           <%-- <li class="nav-item active">
+              <a class="nav-link menufont_size" href="<%= ctxPath %>/member/memberRegister.up">회원가입</a>
+           </li> --%>
+          <%-- <li class="nav-item">
+             <a class="nav-link menufont_size" href="<%= ctxPath %>/member/memberList.up">회원목록</a>
+          </li> --%>
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle menufont_size text-primary" href="#" id="navbarDropdown" data-toggle="dropdown"> 
+                 Dropdown                                <%-- .text-primary 는 글자색으로 파랑색임 --%>  
+              </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <c:if test="${not empty requestScope.categoryList}">
-                  <div id="commercialBanner" class="carousel slide" data-ride="carousel" data-interval="3000">
-                    <div class="carousel-inner">
-                      <c:forEach var="cvo" items="${categoryList}" varStatus="status">
-                        <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
-                          <img src="<%= ctxPath %>${cvo.categoryImagePath}" alt="...">
-                          <div class="carousel-caption d-none d-md-block">
-                            <h5>${cvo.categoryName}</h5>
-                          </div>
-                        </div>
-                      </c:forEach>
-                    </div>
-                  </div>
-                </c:if>
-                <a class="dropdown-item text-primary" href="#">Another action</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item text-primary" href="#">Something else here</a>
+                 <a class="dropdown-item text-primary" href="<%= ctxPath%>/commercials.do">카테고리</a>
+                 <a class="dropdown-item text-primary" href="#">Another action</a>
+                 <div class="dropdown-divider"></div>
+                 <a class="dropdown-item text-primary" href="#">Something else here</a>
               </div>
            </li>
         </ul>
       </div>
+      
        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:13%;">
    </nav>
    <!-- 상단 네비게이션 끝 -->
-
     <div class="container-fluid" id="container" style="position: relative;">
      
      
