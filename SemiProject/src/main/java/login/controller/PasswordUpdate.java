@@ -22,9 +22,7 @@ public class PasswordUpdate extends BaseController {
 				
 				String method = request.getMethod();
 				
-				// 자기 자신으로 변경된 비밀번호를 이쪽으로 보내서 "POST 방식이다"
 				if( "POST".equalsIgnoreCase(method) ) {
-					// 암호 변경하기 버튼을 클릭했을 경우 다시 들어온 값
 					
 					String new_password = request.getParameter("newPassword2");
 					
@@ -39,16 +37,39 @@ public class PasswordUpdate extends BaseController {
 					} catch(SQLException e) {
 						e.printStackTrace();
 					}
-							
-					request.setAttribute("result", result); // DB에서 받아온 값이 DML에서 1이 넘어온걸 setattr로 담아서 넘길거다.
+					
+					   if (result == 1) {
+	
+				            String message = "비밀번호가 성공적으로 변경되었습니다.";
+				            String loc = request.getContextPath() + "/main.do";
+
+				            request.setAttribute("message", message);
+				            request.setAttribute("loc", loc);
+
+				            super.setRedirect(false);
+				            super.setViewPage("/WEB-INF/msg.jsp");
+				            return;
+				        } 
+					    
+					    else {
+				            
+				            request.setAttribute("id", id);
+				            request.setAttribute("method", method);
+				            request.setAttribute("result", result);
+
+				            super.setRedirect(false);
+				            super.setViewPage("/WEB-INF/login/passwordUpdate.jsp");
+				            return;
+				        }
+						
 				}	
 				
-				request.setAttribute("id", id);
-				request.setAttribute("method", method);
-				
-				super.setRedirect(false);
-				super.setViewPage("/WEB-INF/login/passwordUpdate.jsp");
-				
-				
+				else {
+				        request.setAttribute("id", id);
+				        request.setAttribute("method", method);
+
+				        super.setRedirect(false);
+				        super.setViewPage("/WEB-INF/login/passwordUpdate.jsp");
+			   }				
 	}
 }

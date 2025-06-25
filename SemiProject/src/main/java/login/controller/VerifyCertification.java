@@ -29,7 +29,7 @@ public class VerifyCertification extends BaseController {
 			}
 			
 			else {
-				message = "발급된 인증코드가 아닙니다.\\n 인증코드를 다시 발급받으세요.";
+				message = "발급된 인증코드가 아닙니다. 인증코드를 다시 발급받으세요.";
 				loc = request.getContextPath() + "/login/passwordFind.do";
 			}
 			
