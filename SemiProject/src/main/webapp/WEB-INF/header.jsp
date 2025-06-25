@@ -54,7 +54,7 @@
       
       <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav" style="font-size: 16pt;">
-           <li class="nav-item active">
+           <li class="nav-item ac tive">
               <a class="nav-link menufont_size" href="<%= ctxPath %>/index.up">향수 둘러보기</a>
            </li>
            <%-- <li class="nav-item active">
