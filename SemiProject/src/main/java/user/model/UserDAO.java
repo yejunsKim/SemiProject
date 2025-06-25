@@ -17,4 +17,9 @@ public interface UserDAO {
 	// pwFind 했을 때, 해당 값이 있으면 1을 반환함.
 	int pwFindUser(Map<String, String> paraMap) throws SQLException;
 
+	// idCheck 버튼을 누를 시 id 중복 체크 메소드
+	public boolean checkIdDuplicate(String id) throws SQLException;
+
+	// idCheck 버튼을 누를 시 id 중복 체크 메소드
+	public boolean checkEmailDuplicate(String email) throws SQLException;
 }

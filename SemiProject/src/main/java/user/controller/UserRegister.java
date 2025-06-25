@@ -77,7 +77,6 @@ public class UserRegister extends BaseController {
 					session.setAttribute("loginUser", loginUser);
 					*/
 					message = "Signup~";
-					
 				}
 				
 				
