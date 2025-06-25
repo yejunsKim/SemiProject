@@ -157,4 +157,32 @@ public class UserDAO_imple implements UserDAO {
 	}
 
 
+	@Override
+	public int pwdUpdate(Map<String, String> paraMap) throws SQLException {
+		
+		int result = 0;
+		
+		try {
+			
+		  conn = ds.getConnection();
+		  String sql = " update users set password = ? "
+		  			 + " where id = ? ";
+
+		  pstmt = conn.prepareStatement(sql);
+		  pstmt.setString(1, paraMap.get("new_password"));
+		  pstmt.setString(2, paraMap.get("id"));
+		  
+		  result = pstmt.executeUpdate();
+		  
+		  } catch(SQLException e) {
+	         e.printStackTrace();	   
+		  } finally {
+		  	  close();
+		  }
+		
+		return result;
+	}
+
+
+
 }
