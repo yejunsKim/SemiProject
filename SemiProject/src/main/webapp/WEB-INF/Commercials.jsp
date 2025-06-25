@@ -13,7 +13,7 @@
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/css/Commercials/Commercials.css" />
 <!-- Bootstrap 4 CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-
+ 
 <!--  jQuery (먼저) -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
@@ -23,10 +23,9 @@
 <!--  Bootstrap JS (마지막) -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<%-- <jsp:include page="header.jsp" />     --%>
+ <%-- <jsp:include page="header.jsp" /> --%>
     
-    <div class="container">
-		
+	<div class="container-fluid">		
 		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 		  <ol class="carousel-indicators">
 		 
@@ -83,6 +82,6 @@
 	</div>
  
     
- <%--  <jsp:include page="footer1.jsp" />     --%>
-<%--     <script type="text/javascript" src="<%= ctxPath %>/js/login/login.js"></script>
+<%--  <jsp:include page="footer.jsp" /> 
+ --%><%--     <script type="text/javascript" src="<%= ctxPath %>/js/login/login.js"></script>
  --%>    
