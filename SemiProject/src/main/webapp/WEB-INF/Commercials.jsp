@@ -13,7 +13,7 @@
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/css/Commercials/Commercials.css" />
 <!-- Bootstrap 4 CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-
+ 
 <!--  jQuery (먼저) -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
@@ -23,10 +23,15 @@
 <!--  Bootstrap JS (마지막) -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<%-- <jsp:include page="header.jsp" />     --%>
+ <jsp:include page="header.jsp" />
+ <!-- Commercials.jsp의 header.jsp 바로 아래 -->
+<style>
+    #leftSide {
+        display: none !important;
+    }
+</style>
     
-    <div class="container">
-		
+<div class="col-md-9">
 		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 		  <ol class="carousel-indicators">
 		 
@@ -49,18 +54,26 @@
 		    	<c:forEach var="cvo" items="${ requestScope.categoryList}" varStatus="status">
 		    	  <c:if test="${status.index ==0 }">
 			    	  <div class="carousel-item active">
+			    	  
+			    	  <%-- 수정사항-rdg7203 --%>
+			    	  <a href="<%= ctxPath%>/item/mallHome.do?categoryNo=${cvo.categoryNo}">
 				      <img src="<%= ctxPath%>${cvo.categoryImagePath}" class="d-block w-100" alt="...">
+				      </a>
 				      <div class="carousel-caption d-none d-md-block">
-					    <h5>${cvo.categoryName }</h5>
-					  </div>		      
+					    <h5 style="font-size: 18px;">${cvo.categoryName }</h5>
+					  </div>
 				    </div>
 			     </c:if>
 			    
 			     <c:if test="${status.index >0 }">
 				    <div class="carousel-item">
+				    
+				      <%-- 수정사항-rdg7203 --%>
+				      <a href="<%= ctxPath%>/item/mallHome.do?categoryNo=${cvo.categoryNo}">
 				      <img src="<%= ctxPath%>${cvo.categoryImagePath}" class="d-block w-100" alt="...">
+				      </a>
 				      <div class="carousel-caption d-none d-md-block">
-					    <h5>${cvo.categoryName }</h5>
+					    <h5 style="font-size: 18px;">${cvo.categoryName}</h5>
 					  </div>		      
 				    </div>
 			     </c:if>
@@ -83,6 +96,6 @@
 	</div>
  
     
- <%--  <jsp:include page="footer1.jsp" />     --%>
-<%--     <script type="text/javascript" src="<%= ctxPath %>/js/login/login.js"></script>
+<%--  <jsp:include page="footer.jsp" /> 
+ --%><%--     <script type="text/javascript" src="<%= ctxPath %>/js/login/login.js"></script>
  --%>    
