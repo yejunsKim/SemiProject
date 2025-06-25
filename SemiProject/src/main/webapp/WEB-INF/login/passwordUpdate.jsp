@@ -20,9 +20,9 @@
 		<form name="passwordUp">
 			비밀번호 변경할 아이디:${requestScope.id}
 			<br>
-		  	비빌번호 : <input type="text" name="newPassword1">
+		  	비빌번호 : <input type="text" name="newPassword1" id="newPassword1">
 		  	<br>
-		  	비밀번호 재 확인 : <input type="text" name="newPassword2">
+		  	비밀번호 재 확인 : <input type="text" name="newPassword2" id="newPassword2">
 		  	<button type="button" name="passwordUp" class="btn btn-info passwordUp">변경하기</button>
 		</form>
 	</div>

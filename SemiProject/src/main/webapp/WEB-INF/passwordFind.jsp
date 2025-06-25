@@ -114,7 +114,7 @@ $(function(){
 				</div>
 			</c:if>
 			<c:if test="${requestScope.n == 0}"> 없습니다.</c:if>
-	   </form>
+	   </form> 
 	</div>
 
 	<%-- 인증하기 form --%>

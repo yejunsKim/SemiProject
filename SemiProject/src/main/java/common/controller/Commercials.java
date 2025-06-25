@@ -29,10 +29,10 @@ public class Commercials extends BaseController{
 
 			}
 		
-			
 			super.setRedirect(false);
 			super.setViewPage("/WEB-INF/Commercials.jsp");
-		}catch (SQLException e) {
+			
+		 }  catch (SQLException e) {
 			e.printStackTrace();
 			
 			super.setRedirect(true);
