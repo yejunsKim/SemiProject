@@ -64,6 +64,7 @@ public class PerfumeDisplayJSON extends BaseController {
 				jsonObj.put("itemphotopath", ivo.getItemPhotoPath());
 				jsonObj.put("volume", ivo.getVolume());
 				jsonObj.put("price", ivo.getPrice());
+				jsonObj.put("itemInfo", ivo.getItemInfo());
 				
 				jsonArr.put(jsonObj);
 				

@@ -27,4 +27,7 @@ public interface ItemDAO {
 	// 해당 카테고리번호에 맞는 카테고리명 가져오기
 	String getCategoryName(String categoryNo) throws SQLException;
 	
+	// 제품 1개 상세 정보 가져오기
+	ItemVO selectOneItemByItemNo(int itemNo) throws SQLException;	// <- ItemDAO 
+	
 }

@@ -127,7 +127,7 @@ public class ItemDAO_imple implements ItemDAO {
 		try {
 			conn = ds.getConnection();
 			
-			String sql = " SELECT itemno, itemName, itemphotopath, iteminfo, price, itemamount, volume, company, infoimg, categoryname "
+			String sql = " SELECT itemno, itemName, itemphotopath, itemInfo, price, itemamount, volume, company, infoimg, categoryname "
 					   + " FROM item I "
 					   + " JOIN category C "
 					   + " ON I.fk_category_no = C.categoryno "
@@ -158,7 +158,7 @@ public class ItemDAO_imple implements ItemDAO {
 				ivo.setItemNo(rs.getInt("itemno"));
 				ivo.setItemName(rs.getString("itemName"));
 				ivo.setItemPhotoPath(rs.getString("itemphotopath"));
-				ivo.setItemInfo(rs.getString("iteminfo"));
+				ivo.setItemInfo(rs.getString("itemInfo"));
 				ivo.setPrice(rs.getInt("price"));
 				ivo.setItemAmount(rs.getInt("itemamount"));
 				ivo.setVolume(rs.getInt("volume"));
@@ -248,7 +248,7 @@ public class ItemDAO_imple implements ItemDAO {
 		try {
 			conn = ds.getConnection();
 			
-			String sql = " SELECT itemno, itemName, itemphotopath, iteminfo, price, itemamount, volume, company, infoimg, categoryname "
+			String sql = " SELECT itemno, itemName, itemphotopath, itemInfo, price, itemamount, volume, company, infoimg, categoryname "
 					   + " FROM item I "
 					   + " JOIN category C "
 					   + " ON I.fk_category_no = C.categoryno "
@@ -279,7 +279,7 @@ public class ItemDAO_imple implements ItemDAO {
 				ivo.setItemNo(rs.getInt("itemno"));
 				ivo.setItemName(rs.getString("itemName"));
 				ivo.setItemPhotoPath(rs.getString("itemphotopath"));
-				ivo.setItemInfo(rs.getString("iteminfo"));
+				ivo.setItemInfo(rs.getString("itemInfo"));
 				ivo.setPrice(rs.getInt("price"));
 				ivo.setItemAmount(rs.getInt("itemamount"));
 				ivo.setVolume(rs.getInt("volume"));
@@ -300,7 +300,45 @@ public class ItemDAO_imple implements ItemDAO {
 		
 		return itemList;
 	}
+	
+	
+	// 제품 1개 상세 정보 가져오기
+	@Override
+	public ItemVO selectOneItemByItemNo(int itemno) throws SQLException {
+		ItemVO item = null;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " SELECT itemno, itemname, itemphotopath, price, volume, itemInfo, infoimg, itemamount "
+					   + " FROM item "
+					   + " WHERE itemno = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, itemno);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				item = new ItemVO();
+				item.setItemNo(rs.getInt("itemNo"));
+				item.setItemName(rs.getString("itemName"));
+				item.setItemPhotoPath(rs.getString("itemPhotoPath"));
+				item.setPrice(rs.getInt("price"));
+				item.setVolume(rs.getInt("volume"));
+				item.setItemInfo(rs.getString("itemInfo"));
+				item.setInfoImg(rs.getString("infoImg"));
+				item.setItemAmount(rs.getInt("itemAmount"));
+			}
+			
+		} finally {
+			close();
+		}
+		
+		return item;
+		
+	} // end of public ItemVO selectOneItemByItemNo(int itemNo) throws SQLException
 
-
+	
 	
 }

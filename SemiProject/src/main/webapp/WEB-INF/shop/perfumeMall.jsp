@@ -30,7 +30,7 @@
 		color: black;
 	}
 	
-	a#itemDetail {	/* 이미지랑, 제품명 */
+	a.itemDetail {	/* 이미지랑, 제품명 */
 		text-decoration: none;	/* 기본은 밑줄 없음  */
 		color: black;
 	}
@@ -67,5 +67,7 @@
 				</div>
 				
 			</div>
-
+		</div>
+	</div>
+		
 <jsp:include page="../footer.jsp" />
