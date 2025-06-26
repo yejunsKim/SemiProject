@@ -101,7 +101,7 @@
 
      <div class="text-center mb-5">
        <button type="button" class="btn btn-secondary" onclick="javascript:location.href='memberList.up'">회원목록[처음으로]</button> 
-       <button type="button" class="btn btn-success mx-5" onclick="javascript:history.back()">회원목록</button>
+       <button type="button" class="btn btn-success mx-5" onclick="javascript:history.back()">회원목록[뒤로!!]</button>
        <button type="button" class="btn btn-success mx-5" onclick="javascript:location.href='${requestScope.referer}'">회원목록[검색된결과]</button>  
      </div>
      
