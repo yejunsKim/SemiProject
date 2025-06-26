@@ -22,4 +22,7 @@ public interface UserDAO {
 
 	// idCheck 버튼을 누를 시 id 중복 체크 메소드
 	public boolean checkEmailDuplicate(String email) throws SQLException;
+
+	// 입력받은 id로 회원정보 리턴 메소드 
+	public UserVO selectOneUser(String id) throws SQLException;
 }

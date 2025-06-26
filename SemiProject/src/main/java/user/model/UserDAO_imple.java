@@ -80,8 +80,8 @@ public class UserDAO_imple implements UserDAO {
 			pstmt.setString(5, aes.encrypt(user.getMobile()));
 			pstmt.setString(6, user.getPostcode());
 			pstmt.setString(7, user.getAddress());
-			pstmt.setString(8, user.getDetailaddress());
-			pstmt.setString(9, user.getExtraaddress());
+			pstmt.setString(8, user.getAddressDetail());
+			pstmt.setString(9, user.getAddressExtra());
 			
 			result = pstmt.executeUpdate();
 			
@@ -211,6 +211,54 @@ public class UserDAO_imple implements UserDAO {
 		
 		return isExists;
 	}
+
+	// 입력받은 id로 회원정보 리턴 메소드 
+	@Override
+	public UserVO selectOneUser(String id) throws SQLException {
+		UserVO user = null;
+		
+		try{
+			conn = ds.getConnection();
+			
+			String sql = " select id, name, email, mobile, "
+					+ "                postcode, address, detailaddress, extraaddress, "
+					+ "                point, grade, to_char(registerday, 'yyyy-mm-dd') as registerday "
+					+ "        from users "
+					+ "        where ISDELETED = 'N'  and id = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, id);
+			
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()) {
+				user = new UserVO();
+				
+				user.setId(rs.getString("id"));
+				user.setName(rs.getString("name"));
+				user.setEmail(aes.decrypt(rs.getString("email")));
+				user.setMobile(aes.decrypt(rs.getString("mobile")));
+				
+				user.setPostcode(rs.getString("postcode"));
+				user.setAddress(rs.getString("address"));
+				user.setAddressDetail(rs.getString("detailaddress"));
+				user.setAddressExtra(rs.getString("extraaddress"));
+				
+				user.setPoint(rs.getInt("point"));
+				user.setGrade(rs.getString("grade"));
+				user.setRegisterday(rs.getString("registerday"));
+				
+			} //end of if(rs.next())
+			
+		} catch(GeneralSecurityException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}finally {
+			close();
+		}
+		
+		return user;
+	} // end of 회원정보상세페이지
 
 
 }

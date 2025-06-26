@@ -1,13 +1,10 @@
 package user.controller;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 import common.controller.BaseController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import user.domain.UserVO;
 import user.model.UserDAO;
 import user.model.UserDAO_imple;
@@ -15,6 +12,7 @@ import user.model.UserDAO_imple;
 public class UserRegister extends BaseController {
 
 	private UserDAO UserDAO = new UserDAO_imple();
+	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
@@ -52,8 +50,8 @@ public class UserRegister extends BaseController {
 			user.setMobile(mobile);
 			user.setPostcode(postcode);
 			user.setAddress(address);
-			user.setDetailaddress(detailaddress);
-			user.setExtraaddress(extraaddress);
+			user.setAddressDetail(detailaddress);
+			user.setAddressExtra(extraaddress);
 			
 			
 			try {
