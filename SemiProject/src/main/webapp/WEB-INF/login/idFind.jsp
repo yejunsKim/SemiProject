@@ -1,8 +1,12 @@
 <% 
   String ctxPath = request.getContextPath(); 
 %>
-<jsp:include page="../header.jsp" />
+<jsp:include page="../header2.jsp" />
 <link rel="stylesheet" type="text/css" href="<%= ctxPath %>/css/find/idFind.css" />
+<style>
+.headerNav {position:relative;}
+.btn.btn-success {width: 100%;margin: 25px 0 0;}
+</style>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
@@ -69,7 +73,7 @@ $(function(){
 
 	<div id="idBox" class="idBox">
 		<form name="idFindFrm">
-	
+			<p style="text-align:center;">아이디 찾기</p>
 			<ul style="list-style-type: none;">
 				<li style="margin: 25px 0"><label
 					style="display: inline-block; width: 90px;">성명</label> <input

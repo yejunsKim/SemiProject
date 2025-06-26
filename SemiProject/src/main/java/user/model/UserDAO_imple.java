@@ -77,8 +77,8 @@ public class UserDAO_imple implements UserDAO {
 			pstmt.setString(5, user.getMobile());
 			pstmt.setString(6, user.getPostcode());
 			pstmt.setString(7, user.getAddress());
-			pstmt.setString(8, user.getDetailaddress());
-			pstmt.setString(9, user.getExtraaddress());
+			pstmt.setString(8, user.getAddressDetail());
+			pstmt.setString(9, user.getAddressExtra());
 			
 			result = pstmt.executeUpdate();
 			

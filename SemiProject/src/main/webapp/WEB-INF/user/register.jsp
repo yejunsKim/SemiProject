@@ -36,6 +36,8 @@
 <style type="text/css">
 @charset "UTF-8";
 
+div.container {width:100%;max-width:initial;}
+form[name="registerForm"]{max-width:1200px;margin:0 auto;}
 div#registerForm {
 	text-align: center;
 }
@@ -101,9 +103,9 @@ span#idCheck, #emailCheck {
 }
 </style>
 </head>
-<jsp:include page="../header.jsp" />
+<jsp:include page="../header2.jsp" />
 
-<div class="container" id="registerDiv" style="background: black; width: 75%; margin-top: 4%">
+<div class="container" id="registerDiv" style="background: black;margin-top: 3%">
 	<form name="registerForm">
 		<table id="tblUserRegister">
 				<thead>

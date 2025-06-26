@@ -23,9 +23,10 @@
 <!--  Bootstrap JS (마지막) -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
- <%-- <jsp:include page="header.jsp" /> --%>
+ <jsp:include page="header2.jsp" />
     
 	<div class="container-fluid">		
+>>>>>>> refs/heads/main
 		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 		  <ol class="carousel-indicators">
 		 
@@ -48,18 +49,26 @@
 		    	<c:forEach var="cvo" items="${ requestScope.categoryList}" varStatus="status">
 		    	  <c:if test="${status.index ==0 }">
 			    	  <div class="carousel-item active">
+			    	  
+			    	  <%-- 수정사항-rdg7203 --%>
+			    	  <a href="<%= ctxPath%>/item/mallHome.do?categoryNo=${cvo.categoryNo}">
 				      <img src="<%= ctxPath%>${cvo.categoryImagePath}" class="d-block w-100" alt="...">
+				      </a>
 				      <div class="carousel-caption d-none d-md-block">
-					    <h5>${cvo.categoryName }</h5>
-					  </div>		      
+					    <h5 style="font-size: 18px;">${cvo.categoryName }</h5>
+					  </div>
 				    </div>
 			     </c:if>
 			    
 			     <c:if test="${status.index >0 }">
 				    <div class="carousel-item">
+				    
+				      <%-- 수정사항-rdg7203 --%>
+				      <a href="<%= ctxPath%>/item/mallHome.do?categoryNo=${cvo.categoryNo}">
 				      <img src="<%= ctxPath%>${cvo.categoryImagePath}" class="d-block w-100" alt="...">
+				      </a>
 				      <div class="carousel-caption d-none d-md-block">
-					    <h5>${cvo.categoryName }</h5>
+					    <h5 style="font-size: 18px;">${cvo.categoryName}</h5>
 					  </div>		      
 				    </div>
 			     </c:if>
@@ -81,7 +90,7 @@
 			
 	</div>
  
-    
+     <jsp:include page="footer.jsp" /> 
 <%--  <jsp:include page="footer.jsp" /> 
  --%><%--     <script type="text/javascript" src="<%= ctxPath %>/js/login/login.js"></script>
  --%>    

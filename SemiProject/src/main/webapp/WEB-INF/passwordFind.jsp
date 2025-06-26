@@ -3,7 +3,7 @@
 <% 
   String ctxPath = request.getContextPath(); 
 %>
-<jsp:include page="header.jsp" />
+<jsp:include page="header2.jsp" />
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <link rel="stylesheet" type="text/css" href="<%= ctxPath %>/css/find/pwFind.css" />
@@ -90,6 +90,7 @@ $(function(){
 
    <div class="pwFindWrap" id="pwFindWrap">
 	 <form id="pwFindFrm" name="pwFindFrm">
+	 		<p style="text-align:center;">비밀번호 찾기</p>
 			<div class="pwBox">
 				<p>아이디</p>
 				<input type="text" id="id" name="id">
