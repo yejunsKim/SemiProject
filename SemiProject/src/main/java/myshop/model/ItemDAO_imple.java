@@ -49,6 +49,44 @@ public class ItemDAO_imple implements ItemDAO {
 		}
 	}// end of private void close()---------------
 	
+	// 메인페이지에 보여지는 카테고리(이미지파일경로)을 조회(select)하는 메소드
+		@Override
+		public List<CategoryVO> imageSelectAll() throws SQLException {
+			
+			List<CategoryVO> categoryList = new ArrayList<>();
+			
+			try {
+				
+				  conn = ds.getConnection();
+				 
+				  String sql = " select categoryno, categoryname, categoryimagepath "
+				  		     + " from category "
+				  		     + " order by categoryno asc ";
+				  
+				  pstmt = conn.prepareStatement(sql);
+				  rs = pstmt.executeQuery();
+			
+				  
+			 while(rs.next()) {
+					  
+					  CategoryVO cvo = new CategoryVO();
+					    cvo.setCategoryNo(rs.getInt("categoryNo")); 
+					    cvo.setCategoryName(rs.getString("categoryName"));
+					    cvo.setCategoryImagePath(rs.getString("categoryImagePath"));
+
+					    categoryList.add(cvo); 
+					    
+				  }// end of while------------------
+				  
+			} finally {
+				close();
+			}
+			
+			return categoryList;
+			
+		}// end of public List<ImageVO> imageSelectAll() throws SQLException--------
+
+
 	
 	// 상품의 전체 개수를 알아온다.
 	@Override
@@ -141,44 +179,6 @@ public class ItemDAO_imple implements ItemDAO {
 		
 		return itemList;
 	}
-	
-	
-	// 메인페이지에 보여지는 카테고리(이미지파일경로)을 조회(select)하는 메소드
-	@Override
-	public List<CategoryVO> imageSelectAll() throws SQLException {
-		
-		List<CategoryVO> categoryList = new ArrayList<>();
-		
-		try {
-			
-			  conn = ds.getConnection();
-			 
-			  String sql = " select categoryno, categoryname, categoryimagepath "
-			  		     + " from category "
-			  		     + " order by categoryno asc ";
-			  
-			  pstmt = conn.prepareStatement(sql);
-			  rs = pstmt.executeQuery();
-		
-			  
-		 while(rs.next()) {
-				  
-				  CategoryVO cvo = new CategoryVO();
-				    cvo.setCategoryNo(rs.getInt("categoryNo")); 
-				    cvo.setCategoryName(rs.getString("categoryName"));
-				    cvo.setCategoryImagePath(rs.getString("categoryImagePath"));
-
-				    categoryList.add(cvo); 
-				    
-			  }// end of while------------------
-			  
-		} finally {
-			close();
-		}
-		
-		return categoryList;
-		
-	}// end of public List<ImageVO> imageSelectAll() throws SQLException--------
 	
 	
 	// 카테고리별 상품의 전체 개수를 알아온다.

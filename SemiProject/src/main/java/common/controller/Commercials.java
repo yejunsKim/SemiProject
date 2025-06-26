@@ -5,13 +5,18 @@ import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import myshop.domain.CategoryVO;
 import myshop.model.ItemDAO;
 import myshop.model.ItemDAO_imple;
-import myshop.domain.CategoryVO;
+
 
 public class Commercials extends BaseController{
 
+
 	//private ProductDAO productdao = new ProductDAO_imple();
+
+
 		private ItemDAO idao;
 		
 		public Commercials() {

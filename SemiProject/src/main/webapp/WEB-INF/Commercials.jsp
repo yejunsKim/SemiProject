@@ -23,6 +23,7 @@
 <!--  Bootstrap JS (마지막) -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+<<<<<<< HEAD
  <jsp:include page="header.jsp" />
  <!-- Commercials.jsp의 header.jsp 바로 아래 -->
 <style>
@@ -30,8 +31,15 @@
         display: none !important;
     }
 </style>
+=======
+ <%-- <jsp:include page="header.jsp" /> --%>
+>>>>>>> refs/heads/main
     
+<<<<<<< HEAD
 <div class="col-md-9">
+=======
+	<div class="container-fluid">		
+>>>>>>> refs/heads/main
 		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 		  <ol class="carousel-indicators">
 		 
