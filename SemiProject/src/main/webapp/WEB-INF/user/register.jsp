@@ -103,7 +103,7 @@ span#idCheck, #emailCheck {
 }
 </style>
 </head>
-<jsp:include page="../header2.jsp" />
+<jsp:include page="../header.jsp" />
 
 <div class="container" id="registerDiv" style="background: black;margin-top: 3%">
 	<form name="registerForm">
@@ -179,9 +179,9 @@ span#idCheck, #emailCheck {
 						<td>주소&nbsp;</td>
 						<td>
 	                       <input type="text" name="address" id="address" size="40" maxlength="200" placeholder="주소" /><br>
-                   		   <input type="text" name="detailAddress" id="detailAddress" size="40" maxlength="200" placeholder="상세주소" />
+                   		   <input type="text" name="detailAddress" id="addressDetail" size="40" maxlength="200" placeholder="상세주소" />
                    		   	&nbsp;
-                   		   <input type="text" name="extraAddress" id="extraAddress" size="40" maxlength="200" placeholder="참고항목" />            
+                   		   <input type="text" name="extraAddress" id="addressExtra" size="40" maxlength="200" placeholder="참고항목" />            
                      		<span class="error">주소를 입력하세요.</span>
                 		</td>
 					</tr>

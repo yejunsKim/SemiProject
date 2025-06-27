@@ -3,7 +3,7 @@
 <% 
   String ctxPath = request.getContextPath(); 
 %>
-<jsp:include page="header2.jsp" />
+<jsp:include page="header.jsp" />
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <link rel="stylesheet" type="text/css" href="<%= ctxPath %>/css/find/pwFind.css" />

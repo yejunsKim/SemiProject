@@ -1,7 +1,7 @@
 <% 
   String ctxPath = request.getContextPath(); 
 %>
-<jsp:include page="../header2.jsp" />
+<jsp:include page="../header.jsp" />
 <link rel="stylesheet" type="text/css" href="<%= ctxPath %>/css/find/idFind.css" />
 <style>
 .headerNav {position:relative;}

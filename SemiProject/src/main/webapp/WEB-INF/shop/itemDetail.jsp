@@ -8,7 +8,7 @@
     String ctxPath = request.getContextPath();
 %>
 
-<jsp:include page="../header2.jsp" />
+<jsp:include page="../header.jsp" />
 
 <%-- JavaScript --%>
 <script type="text/javascript">

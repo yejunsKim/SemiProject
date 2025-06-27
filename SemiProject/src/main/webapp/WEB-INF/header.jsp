@@ -37,57 +37,86 @@
 <%-- jQueryUI CSS 및 JS --%>
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.css" />
 <script type="text/javascript" src="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
+<style>
+	/* reset.css */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
 
+.container-fluid {padding:0;}
+.headerNav {position:fixed;top:0;background-color:#ddd;z-index:15;width:100%;padding:10px 25px;box-shadow:2px 2px 2px #000;}
+.headerUl {display:flex;justify-content:space-between;align-items:center;}
+.loginList {max-width:270px;width:100%;background-color:#fff;position:absolute;top:50%;left:50%;height:330px;padding:20px;box-shadow: 1px 3px 3px 2px #6f6363;border-radius:5px;transform:translate(-50%,-50%);z-index:15;}
+.loginList .loginBoxx .loginBTN {width:100%;border:0;border-radius:20px;background-color:#2c59e5;padding:15px 0;margin-top:5px;color:#fff;}
+.loginList .loginA {width:100%;display:flex;justify-content:space-between;align-items:center;margin:15px 0;}
+.loginList .loginA input {width:150px;}
+.form-outline {position:relative;}
+.form-control {max-width:150px;width:100%;padding:0 35px;}
+.fa-search {position:absolute;top:12px;left:10px;} 
+.loginBox {z-index:20;}
+.trTab {padding:10px 0;display:flex;justify-content:space-between;align-items:center;}
+</style>
+<script type="text/javascript">
+$(function() {
+	$('div.loginBox').hide();
+    let isMenuOpen = false;
+    
+    $(document).on("click",".logins", function(){
+    	 if (isMenuOpen) {
+    		 /* $('i.fa-solid').css('transform', 'rotate(0deg)'); */
+             $('div.loginBox').hide();
+         } else {
+        	 /* $('i.fa-solid').css('transform', 'rotate(90deg)'); */
+             $('div.loginBox').show();
+         }
+         isMenuOpen = !isMenuOpen;
+    });
+});
+</script>
 
 </head>
-<body>
-   <!-- 상단 네비게이션 시작 -->
-   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-      
-      <!-- Brand/logo --> <!-- Font Awesome 6 Icons -->
-      <a class="navbar-brand" href="<%= ctxPath %>/main.do" style="margin-right: 10%;"><img src="<%= ctxPath%>/images/header/favicon-32x32.png" /></a>
-      
-      <!-- 아코디언 같은 Navigation Bar 만들기 -->
-       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-         <span class="navbar-toggler-icon"></span>
-       </button>
-      
-      <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav" style="font-size: 16pt;">
-           <li class="nav-item active">
-              <a class="nav-link menufont_size" href="<%= ctxPath %>/index.up">향수 둘러보기</a>
-           </li>
-           <%-- <li class="nav-item active">
-              <a class="nav-link menufont_size" href="<%= ctxPath %>/member/memberRegister.up">회원가입</a>
-           </li> --%>
-          <%-- <li class="nav-item">
-             <a class="nav-link menufont_size" href="<%= ctxPath %>/member/memberList.up">회원목록</a>
-          </li> --%>
-          <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle menufont_size text-primary" href="#" id="navbarDropdown" data-toggle="dropdown"> 
-                 Dropdown                                <%-- .text-primary 는 글자색으로 파랑색임 --%>  
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                 <a class="dropdown-item text-primary" href="#">Action</a>
-                 <a class="dropdown-item text-primary" href="#">Another action</a>
-                 <div class="dropdown-divider"></div>
-                 <a class="dropdown-item text-primary" href="#">Something else here</a>
-              </div>
-           </li>
-        </ul>
-      </div>
-      
-       <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:13%;">
-   </nav>
-   <!-- 상단 네비게이션 끝 -->
-    <div class="container-fluid" id="container" style="position: relative;">
-     
-     
-     <div class="row">
-       <div class="col-md-3" id="sideinfo">
-       	 <%-- 로그인 시작 --%>
-         <div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
-
+	<body>
+		<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
 				<div class="loginTheme">
 					<form name="loginFrm" action="<%=ctxPath%>/login/login.up"
 						method="post">
@@ -99,7 +128,7 @@
 							</thead>
 
 							<tbody>
-								<tr>
+								<tr class="trTab">
 									<td>ID</td>
 									<td></td>
 									<td>
@@ -107,7 +136,7 @@
 										size="20" autocomplete="off" />
 									</td>
 								</tr>
-								<tr>
+								<tr class="trTab">
 									<td>암호</td>
 									<td></td>
 									<td>
@@ -142,6 +171,24 @@
 				</div>
 
 				</div>
+		 <nav class="headerNav">
+		 	<ul class="headerUl">
+		 		<li><a class="navbar-brand" href="<%= ctxPath %>/commercials.do" style="margin-right: 10%;"><img src="<%= ctxPath%>/images/header/favicon-32x32.png" /></a></li>
+		 		<div style="width:300px;display:flex;justify-content:space-between;align-items:center;">
+			 		<li>
+				 	  <div class="input-group">
+						    <div class="form-outline">
+						      <i class="fas fa-search"></i>
+						      <input type="search" id="form1" class="form-control" />
+						   </div>
+					  </div>
+					</li>
+					<il><img src="<%= ctxPath%>/images/header/cart.png" ></il>
+			 		<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">로그인</li>
+			 	</div>
+			</ul>
+		 </nav> 
          <%-- 로그인 끝 --%>
-         <div id="sidecontent" style="text-align: left; padding: 20px;"></div>
+         <%-- <div id="sidecontent" style="text-align: left; padding: 20px;"></div>--%>
+         
        </div>
