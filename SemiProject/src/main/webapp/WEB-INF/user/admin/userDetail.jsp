@@ -17,9 +17,7 @@
   
 </style>
 
-<script type="text/javascript">
-//문자보내기 추가시 작성시작
-</script>
+
 
 <div class="container">
 
