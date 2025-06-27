@@ -22,4 +22,7 @@ public interface UserDAO {
 
 	// idCheck 버튼을 누를 시 id 중복 체크 메소드
 	public boolean checkEmailDuplicate(String email) throws SQLException;
+
+	// 로그인 해욧
+	public UserVO login(Map<String, String> paraMap) throws SQLException;
 }

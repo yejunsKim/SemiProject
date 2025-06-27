@@ -16,8 +16,20 @@ public class UserVO {
 	private String grade;
 	private String registerday; 
 	private String passwordChanged; // 마지막으로 암호를 변경한 날짜  
-	private int isDeleted;  // 회원탈퇴유무   N: 사용가능(가입중) / Y:사용불능(탈퇴)
-	private int isDormant;    // 휴면유무  N : 활동중  /  Y : 휴면중 
+	private String isDeleted;  // 회원탈퇴유무   N: 사용가능(가입중) / Y:사용불능(탈퇴)
+	private String isDormant;    // 휴면유무  N : 활동중  /  Y : 휴면중 
+	
+	
+	// DAO 구현의 sql로 받아온 3개월 비밀번호 주기를 알아온 인스턴스
+	private boolean requirePasswordChange = false;
+	// 마지막으로 암호를 변경한 날짜가 3개월 지났다면 true이고 아니라면 false
+	public boolean isRequirePasswordChange() {
+		return requirePasswordChange;
+	}
+	public void setRequirePasswordChange(boolean requirePwdChange) {
+		this.requirePasswordChange = requirePwdChange;
+	}
+	
 	
 	public String getId() {
 		return id;
@@ -91,23 +103,23 @@ public class UserVO {
 	public void setRegisterday(String registerday) {
 		this.registerday = registerday;
 	}
+	public String getIsDeleted() {
+		return isDeleted;
+	}
+	public void setIsDeleted(String isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	public String getIsDormant() {
+		return isDormant;
+	}
+	public void setIsDormant(String isDormant) {
+		this.isDormant = isDormant;
+	}
 	public String getPasswordChanged() {
 		return passwordChanged;
 	}
 	public void setPasswordChanged(String passwordChanged) {
 		this.passwordChanged = passwordChanged;
-	}
-	public int getIsDeleted() {
-		return isDeleted;
-	}
-	public void setIsDeleted(int isDeleted) {
-		this.isDeleted = isDeleted;
-	}
-	public int getIsDormant() {
-		return isDormant;
-	}
-	public void setIsDormant(int isDormant) {
-		this.isDormant = isDormant;
 	}
 	
 

@@ -1,11 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <%
     String ctxPath = request.getContextPath();
 %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,9 +33,13 @@
 
 <script type="text/javascript" src="<%= ctxPath%>/js/main/main.js"></script>
 
+<!--  로그인 part js -->
+<script type="text/javascript" src="<%=ctxPath%>/js/login/login.js"></script>
+
 <%-- jQueryUI CSS 및 JS --%>
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.css" />
 <script type="text/javascript" src="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
+
 <style>
 	/* reset.css */
 html, body, div, span, applet, object, iframe,
@@ -111,6 +114,17 @@ $(function() {
          }
          isMenuOpen = !isMenuOpen;
     });
+    
+    if( ${empty sessionScope.loginuser} ) {
+		// 세션에 남겨놓은 유저가 있다면, 로컬로 남기겠다는 것.
+		const loginid = localStorage.getItem('saveid');
+		
+		if(loginid != null) { // 만약 세션 유저의 아이디가 있다면, 
+			$('input:text[name="id"]').val(loginid); //아이디 넣어주고,
+			$('input#saveid').prop("checked", true); //아이디저장 체크박스는 체크로 해두기
+		}
+	};
+	
 });
 </script>
 
@@ -118,9 +132,11 @@ $(function() {
 	<body>
 			<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
 				<div class="loginTheme">
-					<form name="loginFrm" action="/SemiProject/login/login.up"
+				  <c:if test="${empty sessionScope.loginUser}">
+					<form name="loginForm" action="<%=ctxPath%>/login/login.do"
 						method="post">
 						<table id="loginTbl">
+						
 							<thead>
 								<tr>
 									<th colspan="3">LOGIN</th>
@@ -132,7 +148,7 @@ $(function() {
 									<td>ID</td>
 									<td></td>
 									<td>
-									   <input type="text" name="userid" id="loginUserid"
+									   <input type="text" name="id" id="loginid"
 										size="20" autocomplete="off" />
 									</td>
 								</tr>
@@ -140,7 +156,7 @@ $(function() {
 									<td>암호</td>
 									<td></td>
 									<td>
-										<input type="password" name="pwd" id="loginPwd"
+										<input type="password" name="password" id="loginPwd"
 										size="20" />
 									</td>
 								</tr>
@@ -168,12 +184,46 @@ $(function() {
 							</tbody>
 						</table>
 					</form>
+				 </c:if>
+ 				 <c:if test="${not empty sessionScope.loginUser}">
+				  <table id="isLogin" style="width:100%;">
+				    <thead>
+				      <tr>
+				        <th colspan="3" style="text-align:center; font-size:18px;">
+				          ${sessionScope.loginUser.id}
+				        </th>
+				      </tr>
+				    </thead>
+				    <tbody>
+				      <tr>
+				        <td colspan="3" style="padding-top:10px;">
+				          <span style="font-weight:bold;">${sessionScope.loginUser.name}님</span>
+				          &nbsp;
+				          [<a href="javascript:goEditMyInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')">나의정보변경</a>]
+				        </td>
+				      </tr>
+				      <tr>
+				        <td colspan="3" style="padding-top:10px;">
+				          <span style="font-weight: bold;">포인트&nbsp;:</span>
+				          &nbsp;<fmt:formatNumber value="${sessionScope.loginUser.point}" pattern="###,###"/> POINT  
+				        </td>
+				      </tr>
+				      <tr>
+				        <td colspan="3" style="padding-top:10px;">
+				          <button type="button" class="btn btn-danger btn-sm" onclick="javascript:goLogOut('<%=ctxPath%>')">Logout</button>
+				        </td>
+				      </tr>
+				    </tbody>
+				  </table>
+				</c:if>
+
+				 
 				</div>
 
 				</div>
 		 <nav class="headerNav">
 		 	<ul class="headerUl">
-		 		<li><a class="navbar-brand" href="/SemiProject/commercials.do" style="margin-right: 10%;"><img src="/SemiProject/images/header/favicon-32x32.png" /></a></li>
+		 		<li><a class="navbar-brand" href="/SemiProject/main.do" style="margin-right: 10%;"><img src="/SemiProject/images/header/favicon-32x32.png" /></a></li>
 		 		<div style="width:300px;display:flex;justify-content:space-between;align-items:center;">
 			 		<li>
 				 	  <div class="input-group">
@@ -184,7 +234,14 @@ $(function() {
 					  </div>
 					</li>
 					<il><img src="/SemiProject/images/header/cart.png" ></il>
+				  <c:if test="${empty sessionScope.loginUser}">
+					
 			 		<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">로그인</li>
+			 	</c:if>
+			 	<c:if test="${not empty sessionScope.loginUser}">
+					
+			 		<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">내 정보</li>
+			 	</c:if>
 			 	</div>
 			</ul>
 		 </nav> 
