@@ -1,12 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%
     String ctxPath = request.getContextPath();
 %>
-
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,6 +31,7 @@
 <!-- Optional JavaScript -->
 <script type="text/javascript" src="<%= ctxPath%>/js/jquery-3.7.1.min.js"></script>
 <script type="text/javascript" src="<%= ctxPath%>/bootstrap-4.6.2-dist/js/bootstrap.bundle.min.js"></script> 
+
 <script type="text/javascript" src="<%= ctxPath%>/js/main/main.js"></script>
 
 <%-- jQueryUI CSS 및 JS --%>
@@ -168,27 +168,7 @@ $(function() {
 							</tbody>
 						</table>
 					</form>
-				</div>
 
-				</div>
-		 <nav class="headerNav">
-		 	<ul class="headerUl">
-		 		<li><a class="navbar-brand" href="<%= ctxPath %>/commercials.do" style="margin-right: 10%;"><img src="<%= ctxPath%>/images/header/favicon-32x32.png" /></a></li>
-		 		<div style="width:300px;display:flex;justify-content:space-between;align-items:center;">
-			 		<li>
-				 	  <div class="input-group">
-						    <div class="form-outline">
-						      <i class="fas fa-search"></i>
-						      <input type="search" id="form1" class="form-control" />
-						   </div>
-					  </div>
-					</li>
-					<il><img src="<%= ctxPath%>/images/header/cart.png" ></il>
-			 		<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">로그인</li>
-			 	</div>
-			</ul>
-		 </nav> 
-         <%-- 로그인 끝 --%>
-         <%-- <div id="sidecontent" style="text-align: left; padding: 20px;"></div>--%>
-         
-       </div>
+				<%-- 로그인 끝 --%>
+				<div id="sidecontent" style="text-align: left; padding: 20px;"></div>
+			</div>
