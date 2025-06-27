@@ -210,7 +210,7 @@ public class UserDAO_imple implements UserDAO {
 		return isExists;
 	}
 
-	// 입력받은 id로 회원정보 리턴 메소드 
+	// 회원정보상세페이지 메소드 
 	@Override
 	public UserVO selectOneUser(String id) throws SQLException {
 		UserVO user = null;
@@ -259,7 +259,7 @@ public class UserDAO_imple implements UserDAO {
 	} // end of 회원정보상세페이지
 
 
-
+	//로그인
 	@Override
 	public UserVO login(Map<String, String> paraMap) throws SQLException {
 		UserVO user = null;
@@ -346,6 +346,7 @@ public class UserDAO_imple implements UserDAO {
 	}
 
 
+	//비밀번호수정
 	public int pwdUpdate(Map<String, String> paraMap) throws SQLException {
 		
 		int result = 0;
