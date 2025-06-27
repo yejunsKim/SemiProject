@@ -175,7 +175,7 @@ $(function() {
 				</div>
 		 <nav class="headerNav">
 		 	<ul class="headerUl">
-		 		<li><a class="navbar-brand" href="/SemiProject/commercials.do" style="margin-right: 10%;"><img src="/SemiProject/images/header/favicon-32x32.png" /></a></li>
+		 		<li><a class="navbar-brand" href="/SemiProject/main.do" style="margin-right: 10%;"><img src="/SemiProject/images/header/favicon-32x32.png" /></a></li>
 		 		<div style="width:300px;display:flex;justify-content:space-between;align-items:center;">
 			 		<li>
 				 	  <div class="input-group">
