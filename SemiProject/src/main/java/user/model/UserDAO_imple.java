@@ -371,6 +371,48 @@ public class UserDAO_imple implements UserDAO {
 		
 		  return result;
 	}
+
+	// 회원정보수정
+	@Override
+	public int updateUser(UserVO user) throws SQLException {
+		int result = 0;
+
+		try {
+			 conn = ds.getConnection();
+			 
+			 String sql = " update user set name = ? "
+					    + "                     , password = ? "
+					    + "                     , email = ? "
+					    + "                     , mobile = ? "
+					    + "                     , postcode = ? " 
+					    + "                     , address = ? "
+					    + "                     , addressDetail = ? "
+					    + "                     , addressExtra = ? "
+					    + "                     , lastpwdchangedate = sysdate "
+					    + " where userid = ? ";
+			 
+			 pstmt = conn.prepareStatement(sql);
+				
+			 pstmt.setString(1, user.getName());
+			 pstmt.setString(2, Sha256.encrypt(user.getPassword()) ); // 암호를 SHA256 알고리즘으로 단방향 암호화 시킨다.
+			 pstmt.setString(3, aes.encrypt(user.getEmail()) );  // 이메일을 AES256 알고리즘으로 양방향 암호화 시킨다. 
+			 pstmt.setString(4, aes.encrypt(user.getMobile()) ); // 휴대폰번호를 AES256 알고리즘으로 양방향 암호화 시킨다. 
+			 pstmt.setString(5, user.getPostcode());
+			 pstmt.setString(6, user.getAddress());
+			 pstmt.setString(7, user.getAddressDetail());
+			 pstmt.setString(8, user.getAddressExtra());
+			 pstmt.setString(9, user.getId());
+			 
+			 result = pstmt.executeUpdate();
+			 
+		} catch(GeneralSecurityException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		return result;		
+	}
 	
 }
 
