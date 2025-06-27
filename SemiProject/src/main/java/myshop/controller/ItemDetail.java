@@ -43,7 +43,7 @@ public class ItemDetail extends BaseController {
 			
 			else {
 				String message = "등록된 상품이 없습니다.";
-				String loc = request.getContextPath()+"/main.do";
+				String loc = request.getContextPath()+"/commercials.do";
 				
 				request.setAttribute("message", message);
 				request.setAttribute("loc", loc);
