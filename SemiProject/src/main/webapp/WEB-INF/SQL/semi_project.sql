@@ -5,6 +5,8 @@ create table users (
     
 );
 
+select * from users;
+
 
 commit;
 

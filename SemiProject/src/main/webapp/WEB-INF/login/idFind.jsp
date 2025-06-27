@@ -1,10 +1,15 @@
 <% 
   String ctxPath = request.getContextPath(); 
 %>
+<jsp:include page="../header.jsp" />
 <link rel="stylesheet" type="text/css" href="<%= ctxPath %>/css/find/idFind.css" />
+<style>
+.headerNav {position:relative;}
+.btn.btn-success {width: 100%;margin: 25px 0 0;}
+</style>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<jsp:include page="header.jsp" />
+
 
 <script type="text/javascript" >
 $(function(){
@@ -53,7 +58,7 @@ $(function(){
 	
 	// 다 올바른 경우
 	const frm = document.idFindFrm;
-	frm.action = "<%= ctxPath%>/idFind.do";
+	frm.action = "<%= ctxPath%>/login/idFind.do";
 	frm.method = "POST";
 	frm.submit();
 }
@@ -68,7 +73,7 @@ $(function(){
 
 	<div id="idBox" class="idBox">
 		<form name="idFindFrm">
-	
+			<p style="text-align:center;">아이디 찾기</p>
 			<ul style="list-style-type: none;">
 				<li style="margin: 25px 0"><label
 					style="display: inline-block; width: 90px;">성명</label> <input
@@ -91,4 +96,4 @@ $(function(){
 
 </div>
 	
-<jsp:include page="footer.jsp" />
+<jsp:include page="../footer.jsp" />

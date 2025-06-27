@@ -39,8 +39,8 @@ public class UserRegister extends BaseController {
 			// 번호는 3개의 칸을 합쳐서 저장 '010'+'1234'+'5678'
 			String postcode = request.getParameter("postcode");
 			String address = request.getParameter("address");
-			String detailaddress = request.getParameter("detailaddress");
-			String extraaddress = request.getParameter("extraaddress");
+			String addressDetail = request.getParameter("addressDetail");
+			String addressExtra = request.getParameter("addressExtra");
 			
 			UserVO user = new UserVO();
 			System.out.println(id+name+password);
@@ -52,8 +52,8 @@ public class UserRegister extends BaseController {
 			user.setMobile(mobile);
 			user.setPostcode(postcode);
 			user.setAddress(address);
-			user.setDetailaddress(detailaddress);
-			user.setExtraaddress(extraaddress);
+			user.setAddressDetail(addressDetail);
+			user.setAddressExtra(addressExtra);
 			
 			
 			try {

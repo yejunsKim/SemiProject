@@ -9,17 +9,15 @@ public class UserVO {
 	private String mobile; // 연락처 (AES-256 암호화/복호화 대상) 
 	private String postcode;
 	private String address;
-	private String detailaddress;
-	private String extraaddress;
+	private String addressDetail;
+	private String addressExtra;
 
-	private int point;         
+	private int point;  
+	private String grade;
 	private String registerday; 
-	private String lastpwdchangedate; // 마지막으로 암호를 변경한 날짜  
-	private int status;  // 회원탈퇴유무   1: 사용가능(가입중) / 0:사용불능(탈퇴)
-	private int idle;    // 휴면유무  0 : 활동중  /  1 : 휴면중 
-	
-	
-	
+	private String passwordChanged; // 마지막으로 암호를 변경한 날짜  
+	private int isDeleted;  // 회원탈퇴유무   N: 사용가능(가입중) / Y:사용불능(탈퇴)
+	private int isDormant;    // 휴면유무  N : 활동중  /  Y : 휴면중 
 	
 	public String getId() {
 		return id;
@@ -63,17 +61,17 @@ public class UserVO {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public String getDetailaddress() {
-		return detailaddress;
+	public String getAddressDetail() {
+		return addressDetail;
 	}
-	public void setDetailaddress(String detailaddress) {
-		this.detailaddress = detailaddress;
+	public void setAddressDetail(String addressDetail) {
+		this.addressDetail = addressDetail;
 	}
-	public String getExtraaddress() {
-		return extraaddress;
+	public String getAddressExtra() {
+		return addressExtra;
 	}
-	public void setExtraaddress(String extraaddress) {
-		this.extraaddress = extraaddress;
+	public void setAddressExtra(String addressExtra) {
+		this.addressExtra = addressExtra;
 	}
 	public int getPoint() {
 		return point;
@@ -81,30 +79,38 @@ public class UserVO {
 	public void setPoint(int point) {
 		this.point = point;
 	}
+	public String getGrade() {
+		return grade;
+	}
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
 	public String getRegisterday() {
 		return registerday;
 	}
 	public void setRegisterday(String registerday) {
 		this.registerday = registerday;
 	}
-	public String getLastpwdchangedate() {
-		return lastpwdchangedate;
+	public String getPasswordChanged() {
+		return passwordChanged;
 	}
-	public void setLastpwdchangedate(String lastpwdchangedate) {
-		this.lastpwdchangedate = lastpwdchangedate;
+	public void setPasswordChanged(String passwordChanged) {
+		this.passwordChanged = passwordChanged;
 	}
-	public int getStatus() {
-		return status;
+	public int getIsDeleted() {
+		return isDeleted;
 	}
-	public void setStatus(int status) {
-		this.status = status;
+	public void setIsDeleted(int isDeleted) {
+		this.isDeleted = isDeleted;
 	}
-	public int getIdle() {
-		return idle;
+	public int getIsDormant() {
+		return isDormant;
 	}
-	public void setIdle(int idle) {
-		this.idle = idle;
+	public void setIsDormant(int isDormant) {
+		this.isDormant = isDormant;
 	}
 	
+
 	
-}
+	
+} 
