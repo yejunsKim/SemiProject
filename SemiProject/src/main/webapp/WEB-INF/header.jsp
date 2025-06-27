@@ -1,11 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <%
     String ctxPath = request.getContextPath();
 %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,6 +32,9 @@
 <script type="text/javascript" src="<%= ctxPath%>/bootstrap-4.6.2-dist/js/bootstrap.bundle.min.js"></script> 
 
 <script type="text/javascript" src="<%= ctxPath%>/js/main/main.js"></script>
+
+<!--  로그인 part js -->
+<script type="text/javascript" src="<%=ctxPath%>/js/login/login.js"></script>
 
 <%-- jQueryUI CSS 및 JS --%>
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.css" />
@@ -127,83 +129,6 @@ $(function() {
 </script>
 
 </head>
-<<<<<<< HEAD
-	<body>
-			<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
-				<div class="loginTheme">
-					<form name="loginFrm" action="/SemiProject/login/login.up"
-						method="post">
-						<table id="loginTbl">
-							<thead>
-								<tr>
-									<th colspan="3">LOGIN</th>
-								</tr>
-							</thead>
-
-							<tbody>
-								<tr class="trTab">
-									<td>ID</td>
-									<td></td>
-									<td>
-									   <input type="text" name="userid" id="loginUserid"
-										size="20" autocomplete="off" />
-									</td>
-								</tr>
-								<tr class="trTab">
-									<td>암호</td>
-									<td></td>
-									<td>
-										<input type="password" name="pwd" id="loginPwd"
-										size="20" />
-									</td>
-								</tr>
-
-								
-								<tr>
-									<td colspan="3" style="padding:3% 0.5%;font-size:13px;">
-										<a href="/SemiProject/login/idFind.do" style="cursor: pointer;">아이디찾기</a> 
-										/
-										<a href="/SemiProject/login/passwordFind.do" style="cursor: pointer;">비밀번호찾기</a>
-										<a href="/SemiProject/user/userRegister.do" style="margin-left:30px;">회원가입</a>
-									</td>
-								</tr>
-
-								<tr>
-									<td colspan="3">
-									<input type="checkbox" id="saveid"
-										name="saveid" />&nbsp;
-										<label for="saveid">아이디저장</label>
-										<button type="button" id="btnSubmit"
-											class="btn btn-dark btn-sm ml-3">로그인
-										</button>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</form>
-				</div>
-
-				</div>
-		 <nav class="headerNav">
-		 	<ul class="headerUl">
-		 		<li><a class="navbar-brand" href="/SemiProject/main.do" style="margin-right: 10%;"><img src="/SemiProject/images/header/favicon-32x32.png" /></a></li>
-		 		<div style="width:300px;display:flex;justify-content:space-between;align-items:center;">
-			 		<li>
-				 	  <div class="input-group">
-						    <div class="form-outline">
-						      <i class="fas fa-search"></i>
-						      <input type="search" id="form1" class="form-control" />
-						   </div>
-					  </div>
-					</li>
-					<il><img src="/SemiProject/images/header/cart.png" ></il>
-			 		<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">로그인</li>
-			 	</div>
-			</ul>
-		 </nav> 
-          
-       </div>
-=======
 	<body>
 			<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
 				<div class="loginTheme">
@@ -309,18 +234,10 @@ $(function() {
 					  </div>
 					</li>
 					<il><img src="/SemiProject/images/header/cart.png" ></il>
-				  <c:if test="${empty sessionScope.loginUser}">
-					
 			 		<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">로그인</li>
-			 	</c:if>
-			 	<c:if test="${not empty sessionScope.loginUser}">
-					
-			 		<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">내 정보</li>
-			 	</c:if>
 			 	</div>
 			</ul>
 		 </nav> 
           
        </div>
->>>>>>> refs/heads/main
 	</div>
