@@ -41,7 +41,7 @@ public class PasswordUpdate extends BaseController {
 					   if (result == 1) {
 	
 				            String message = "비밀번호가 성공적으로 변경되었습니다.";
-				            String loc = request.getContextPath() + "/main.do";
+				            String loc = request.getContextPath() + "/commercials.do";
 
 				            request.setAttribute("message", message);
 				            request.setAttribute("loc", loc);

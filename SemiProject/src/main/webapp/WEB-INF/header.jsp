@@ -116,7 +116,7 @@ $(function() {
 
 </head>
 	<body>
-			<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
+		<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
 				<div class="loginTheme">
 					<form name="loginFrm" action="/SemiProject/login/login.up"
 						method="post">

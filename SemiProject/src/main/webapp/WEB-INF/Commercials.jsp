@@ -32,7 +32,7 @@
 </style>
 
 
-<div class="col-md-12">
+<div class="col-md-12" style="padding:0;">
 	<div class="container-fluid">		
 		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 		  <ol class="carousel-indicators">
