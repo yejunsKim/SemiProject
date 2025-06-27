@@ -234,7 +234,14 @@ $(function() {
 					  </div>
 					</li>
 					<il><img src="/SemiProject/images/header/cart.png" ></il>
+				  <c:if test="${empty sessionScope.loginUser}">
+					
 			 		<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">로그인</li>
+			 	</c:if>
+			 	<c:if test="${not empty sessionScope.loginUser}">
+					
+			 		<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">내 정보</li>
+			 	</c:if>
 			 	</div>
 			</ul>
 		 </nav> 
