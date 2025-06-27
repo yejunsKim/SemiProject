@@ -23,7 +23,7 @@
 <!--  Bootstrap JS (마지막) -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
- <%-- <jsp:include page="header.jsp" /> --%>
+ <jsp:include page="header.jsp" />
     
 	<div class="container-fluid">		
 		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
