@@ -24,9 +24,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
  <jsp:include page="header.jsp" />
-<<<<<<< HEAD
-    
-=======
  <!-- Commercials.jsp의 header.jsp 바로 아래 -->
 <style>
     #leftSide {
@@ -36,7 +33,6 @@
 
 
 <div class="col-md-12">
->>>>>>> refs/heads/main
 	<div class="container-fluid">		
 		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 		  <ol class="carousel-indicators">
