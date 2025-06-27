@@ -3,7 +3,7 @@
 <% 
   String ctxPath = request.getContextPath(); 
 %>
-
+<jsp:include page="header.jsp" />
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <link rel="stylesheet" type="text/css" href="<%= ctxPath %>/css/find/pwFind.css" />
@@ -25,14 +25,15 @@ $(function(){
 
 	
 	$('button.btn-success').click(function(){
-		goFind();
+		    pwFind();
 	});
 	
 	$('input:text[name="email"]').bind('keyup',function(e){
 		if(e.keyCode == 13){
-			goFind();
+			pwFind();
 		}
 	});
+	
 	
 }); 
 
@@ -56,7 +57,7 @@ $(function(){
 	
 	// 다 올바른 경우
 	const frm = document.pwFindFrm;
-	frm.action = "<%=ctxPath%>/pwFind.do";
+	frm.action = "<%=ctxPath%>/login/passwordFind.do";
 	frm.method = "POST";
 	frm.submit();
   }
@@ -66,12 +67,30 @@ $(function(){
 		$('div#div_findResult').empty();
 	<%-- 해당 태그내에 값들을 싹 비우는것.--%>
 	}
-</script>
+	
+	// === 인증하기 버튼 클릭 시 이벤트 첳리해주기 시작 == //
+	$(document).on('click', 'button.btn-info', function() {
+    const input_confirmCode = $('input:text[name="input_confirmCode"]').val().trim();
 
-<jsp:include page="header.jsp" />
+    if (input_confirmCode == "") {
+        alert("인증코드를 입력하세요");
+        return;
+    }
+
+    const frm = document.verifyCertificationFrm;
+    frm.userCertificationCode.value = input_confirmCode;
+    frm.id.value = $('input:text[name="id"]').val();
+
+    frm.action = "<%= ctxPath%>/login/verifyCertification.do";
+    frm.method = "post";
+    frm.submit();
+	});
+
+</script>
 
    <div class="pwFindWrap" id="pwFindWrap">
 	 <form id="pwFindFrm" name="pwFindFrm">
+	 		<p style="text-align:center;">비밀번호 찾기</p>
 			<div class="pwBox">
 				<p>아이디</p>
 				<input type="text" id="id" name="id">
@@ -90,13 +109,21 @@ $(function(){
 			<c:if test="${requestScope.n == 1}">
 				<div>
 					<p>인증코드가 ${requestScope.email} 로 발송되었습니다.<br> 인증코드를 입력해주세요</p>
-					<input type="text" name="pri" id="pri" val="인증코드를 입력해주세요">
-					<button type="button" class="btn btn-success" onclick="goSubmit()">인증하기</button>
+					<input type="text" name="input_confirmCode" />
+					<br><br>
+					<button type="button" class="btn btn-info">인증하기</button>
 				</div>
 			</c:if>
 			<c:if test="${requestScope.n == 0}"> 없습니다.</c:if>
-	   </form>
+	   </form> 
 	</div>
+
+	<%-- 인증하기 form --%>
+	<form name="verifyCertificationFrm">
+		<input type="hidden" name ="userCertificationCode" />
+		<input type="hidden" name ="id" />
+	</form>
+	
 
 </div>
 <jsp:include page="footer.jsp" />

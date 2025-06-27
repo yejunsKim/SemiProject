@@ -52,7 +52,7 @@ public class IdFind extends BaseController {
 		// 아이디찾기에서 get 일때 안보이고, post로 아이디 찾을때 나오도록 해야해서 넘겨줘야 한다.
 		
 		super.setRedirect(false);
-		super.setViewPage("/WEB-INF/idFind.jsp");
+		super.setViewPage("/WEB-INF/login/idFind.jsp");
 	}
 
 }

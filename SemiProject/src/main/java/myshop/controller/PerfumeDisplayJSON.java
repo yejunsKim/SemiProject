@@ -25,22 +25,33 @@ public class PerfumeDisplayJSON extends BaseController {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-	//	String categoryName = request.getParameter("categoryName");	// "10대" "20대" "남성" "여성"
+		String categoryName = request.getParameter("categoryName");	// "전체 향수 목록"		"10대" "20대" "남성" "여성"
+	//	System.out.println("확인용 categoryName => " + categoryName);
+		
 		String start = request.getParameter("start");
 		String len = request.getParameter("len");
 		
-		
 		Map<String, String> paraMap = new HashMap<>();
-	//	paraMap.put("categoryName", categoryName);	// "10대" "20대" "남성" "여성"
 		paraMap.put("start", start);	// start "1" "9" "17" "25" "33"
-		
 		String end = String.valueOf(Integer.parseInt(start) + Integer.parseInt(len) - 1); 
 		paraMap.put("end", end);		// end => start + len - 1;
 										// end   "8" "16" "24" "32"
 		
-		List<ItemVO> itemList = idao.selectBycategoryName(paraMap);
+		List<ItemVO> itemList;
 		
 		JSONArray jsonArr = new JSONArray();	// []
+		
+		if(!categoryName.equals("전체 향수 목록")) {	// categoryName 값이 있을 때
+			
+			paraMap.put("categoryName", categoryName);	// "10대" "20대" "남성" "여성"
+			
+			itemList = idao.selectBycategoryName2(paraMap);
+		}
+		
+		else {	// categoryName 값이 "전체 향수 목록" 즉, 전체 상품 구할 때
+			
+			itemList = idao.selectBycategoryName(paraMap);
+		}
 		
 		if(itemList.size() > 0) {
 			
@@ -53,6 +64,7 @@ public class PerfumeDisplayJSON extends BaseController {
 				jsonObj.put("itemphotopath", ivo.getItemPhotoPath());
 				jsonObj.put("volume", ivo.getVolume());
 				jsonObj.put("price", ivo.getPrice());
+				jsonObj.put("itemInfo", ivo.getItemInfo());
 				
 				jsonArr.put(jsonObj);
 				

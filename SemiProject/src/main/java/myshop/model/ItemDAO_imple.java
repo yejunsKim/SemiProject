@@ -88,9 +88,9 @@ public class ItemDAO_imple implements ItemDAO {
 
 
 	
-	// 카테고리별 상품의 전체 개수를 알아온다.
+	// 상품의 전체 개수를 알아온다.
 	@Override
-	public int totalTenCount(int i) throws SQLException {
+	public int totalCount() throws SQLException {
 		
 		int totalCount = 0;
 		
@@ -127,7 +127,7 @@ public class ItemDAO_imple implements ItemDAO {
 		try {
 			conn = ds.getConnection();
 			
-			String sql = " SELECT itemno, itemName, itemphotopath, iteminfo, price, itemamount, volume, company, infoimg, categoryname "
+			String sql = " SELECT itemno, itemName, itemphotopath, itemInfo, price, itemamount, volume, company, infoimg, categoryname "
 					   + " FROM item I "
 					   + " JOIN category C "
 					   + " ON I.fk_category_no = C.categoryno "
@@ -158,7 +158,7 @@ public class ItemDAO_imple implements ItemDAO {
 				ivo.setItemNo(rs.getInt("itemno"));
 				ivo.setItemName(rs.getString("itemName"));
 				ivo.setItemPhotoPath(rs.getString("itemphotopath"));
-				ivo.setItemInfo(rs.getString("iteminfo"));
+				ivo.setItemInfo(rs.getString("itemInfo"));
 				ivo.setPrice(rs.getInt("price"));
 				ivo.setItemAmount(rs.getInt("itemamount"));
 				ivo.setVolume(rs.getInt("volume"));
@@ -179,5 +179,166 @@ public class ItemDAO_imple implements ItemDAO {
 		
 		return itemList;
 	}
+	
+	
+	// 카테고리별 상품의 전체 개수를 알아온다.
+	@Override
+	public int totalCount(String categoryNo) throws SQLException {
+		
+		int totalCount = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " select count(*) "
+					   + " from item "
+					   + " where fk_category_no = to_number(?) ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, categoryNo);
+			
+			rs = pstmt.executeQuery();
+			
+			rs.next();
+			
+			totalCount = rs.getInt(1);
+			
+		} finally {
+			close();
+		}
+		
+		return totalCount;
+	}
+	
+	
+	// 해당 카테고리번호에 맞는 카테고리명 가져오기
+	@Override
+	public String getCategoryName(String categoryNo) throws SQLException {
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " select categoryName "
+					   + " from category "
+					   + " where categoryNo = to_number(?) ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, categoryNo);
+			
+			rs = pstmt.executeQuery();
+			
+			rs.next();
+			
+			categoryNo = rs.getString(1);
+			
+		} finally {
+			close();
+		}
+		
+		return categoryNo;
+	}
+	
+	
+	// 카테고리별 더보기 방식(페이징처리)으로 상품정보를 8개씩 잘라서(start ~ end) 조회해오기
+	@Override
+	public List<ItemVO> selectBycategoryName2(Map<String, String> paraMap) throws SQLException {
+		
+		List<ItemVO> itemList = new ArrayList<>();
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " SELECT itemno, itemName, itemphotopath, itemInfo, price, itemamount, volume, company, infoimg, categoryname "
+					   + " FROM item I "
+					   + " JOIN category C "
+					   + " ON I.fk_category_no = C.categoryno "
+					   + " WHERE categoryName = ? "
+					   + " ORDER BY itemno DESC "
+					   + " OFFSET (?-1) * ? ROW "
+					   + " FETCH NEXT ? ROW ONLY " ;
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			int start = Integer.parseInt(paraMap.get("start"));
+			int end = Integer.parseInt(paraMap.get("end"));
+			
+			int PAGE_NO = end/(end - start + 1);
+			int PAGE_SIZE = end - start + 1;
+			
+			pstmt.setString(1, paraMap.get("categoryName"));
+			pstmt.setInt(2,PAGE_NO);
+			pstmt.setInt(3,PAGE_SIZE);
+			pstmt.setInt(4,PAGE_SIZE);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				ItemVO ivo = new ItemVO();
+				
+				ivo.setItemNo(rs.getInt("itemno"));
+				ivo.setItemName(rs.getString("itemName"));
+				ivo.setItemPhotoPath(rs.getString("itemphotopath"));
+				ivo.setItemInfo(rs.getString("itemInfo"));
+				ivo.setPrice(rs.getInt("price"));
+				ivo.setItemAmount(rs.getInt("itemamount"));
+				ivo.setVolume(rs.getInt("volume"));
+				ivo.setCompany(rs.getString("company"));
+				ivo.setInfoImg(rs.getString("infoimg"));
+				
+				CategoryVO categvo = new CategoryVO();
+				categvo.setCategoryName(rs.getString("categoryname"));
+				ivo.setCategvo(categvo);
+				
+				itemList.add(ivo);
+			}// end of while(rs.next())------------------------------------
+			
+			
+		} finally {
+			close();
+		}
+		
+		return itemList;
+	}
+	
+	
+	// 제품 1개 상세 정보 가져오기
+	@Override
+	public ItemVO selectOneItemByItemNo(int itemno) throws SQLException {
+		ItemVO item = null;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " SELECT itemno, itemname, itemphotopath, price, volume, itemInfo, infoimg, itemamount "
+					   + " FROM item "
+					   + " WHERE itemno = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, itemno);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				item = new ItemVO();
+				item.setItemNo(rs.getInt("itemNo"));
+				item.setItemName(rs.getString("itemName"));
+				item.setItemPhotoPath(rs.getString("itemPhotoPath"));
+				item.setPrice(rs.getInt("price"));
+				item.setVolume(rs.getInt("volume"));
+				item.setItemInfo(rs.getString("itemInfo"));
+				item.setInfoImg(rs.getString("infoImg"));
+				item.setItemAmount(rs.getInt("itemAmount"));
+			}
+			
+		} finally {
+			close();
+		}
+		
+		return item;
+		
+	} // end of public ItemVO selectOneItemByItemNo(int itemNo) throws SQLException
+
+	
 	
 }

@@ -1,6 +1,9 @@
 @charset "UTF-8";
 
-.pwFindWrap {margin:65px auto 0;max-width:450px;width:100%;}
-.pwFindWrap > #pwFindFrm > .pwBox {display:flex;margin:25px 0;}
-.pwFindWrap > #pwFindFrm > .pwBox input {width:100%;}
+.headerNav {position:relative;}
+.pwFindWrap {margin:7% auto;max-width:500px;width:100%;}
+.pwFindWrap > #pwFindFrm {padding:6.5%;border:1px solid #ddd;border-radius:20px;}
+.pwFindWrap > #pwFindFrm > .pwBox {display:flex;align-items:center;}
+.pwFindWrap > #pwFindFrm > .pwBox input {width:100%;margin:15px 0;}
 .pwFindWrap > #pwFindFrm > .pwBox p {max-width:150px;width:100%;}
+.btn.btn-success {width:100%;margin:25px 0 0;}

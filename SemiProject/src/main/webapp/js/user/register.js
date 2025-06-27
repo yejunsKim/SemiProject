@@ -266,7 +266,7 @@ $(function(){
 	$('input#address').attr('readonly', true);
 	
 	// 참고항목을 읽기전용(readonly)로 만들기 
-	$('input#extraAddress').attr('readonly', true);
+	$('input#addressExtra').attr('readonly', true);
 	
 	// ==== "우편번호찾기"를 클릭했을때 이벤트 처리하기 ==== //
 	$('img#postcodeSearch').click(function(){
@@ -302,17 +302,17 @@ $(function(){
 		                extraAddr = ' (' + extraAddr + ')';
 		            }
 		            // 조합된 참고항목을 해당 필드에 넣는다.
-		            document.getElementById("extraAddress").value = extraAddr;
+		            document.getElementById("addressExtra").value = addressExtra;
 		        
 		        } else {
-		            document.getElementById("extraAddress").value = '';
+		            document.getElementById("addressExtra").value = '';
 		        }
 
 		        // 우편번호와 주소 정보를 해당 필드에 넣는다.
 		        document.getElementById('postcode').value = data.zonecode;
 		        document.getElementById("address").value = addr;
 		        // 커서를 상세주소 필드로 이동한다.
-		        document.getElementById("detailAddress").focus();
+		        document.getElementById("addressDetail").focus();
 		    }
 		}).open();
 				

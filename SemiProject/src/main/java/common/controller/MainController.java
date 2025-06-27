@@ -7,11 +7,11 @@ import user.model.UserDAO_imple;
 
 public class MainController extends BaseController {
 
-	private UserDAO pdao;
+	private UserDAO UserDAO;
 	
 	public MainController() {
-		pdao = new UserDAO_imple();
-	}
+		UserDAO = new UserDAO_imple();
+	} 
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -20,4 +20,5 @@ public class MainController extends BaseController {
 		super.setViewPage("/WEB-INF/main.jsp");
 		
 	}
+	
 }
