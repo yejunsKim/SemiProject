@@ -1,6 +1,7 @@
 package user.model;
 
 import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,9 +16,9 @@ import javax.sql.DataSource;
 import user.domain.UserVO;
 import util.security.AES256;
 import util.security.SecretMyKey;
+import util.security.Sha256;
 
 public class UserDAO_imple implements UserDAO {
-
 
 	private DataSource ds;  // DataSource ds 는 아파치톰캣이 제공하는 DBCP(DB Connection Pool)이다. 
 	private Connection conn;
@@ -73,13 +74,13 @@ public class UserDAO_imple implements UserDAO {
 			
 			pstmt.setString(1, user.getName());
 			pstmt.setString(2, user.getId());
-			pstmt.setString(3, user.getPassword());
-			pstmt.setString(4, user.getEmail());
-			pstmt.setString(5, user.getMobile());
+			pstmt.setString(3, Sha256.encrypt(user.getPassword()));
+			pstmt.setString(4, aes.encrypt(user.getEmail()));
+			pstmt.setString(5, aes.encrypt(user.getMobile()));
 			pstmt.setString(6, user.getPostcode());
 			pstmt.setString(7, user.getAddress());
-			pstmt.setString(8, user.getDetailaddress());
-			pstmt.setString(9, user.getExtraaddress());
+			pstmt.setString(8, user.getAddressDetail());
+			pstmt.setString(9, user.getAddressExtra());
 			
 			result = pstmt.executeUpdate();
 			
@@ -105,7 +106,7 @@ public class UserDAO_imple implements UserDAO {
 		  
 		  pstmt = conn.prepareStatement(sql);
 		  pstmt.setString(1, paraMap.get("name"));
-		  pstmt.setString(2, paraMap.get("email"));
+		  pstmt.setString(2, aes.encrypt(paraMap.get("email")));
 		  
 		  rs = pstmt.executeQuery();
 		  
@@ -114,7 +115,7 @@ public class UserDAO_imple implements UserDAO {
 			  }	  
 		  }
 		  
-		  catch(SQLException e) {
+		  catch(SQLException | GeneralSecurityException | UnsupportedEncodingException e) {
 	         e.printStackTrace();	   
 		  } finally {
 		  	  close();
@@ -137,7 +138,7 @@ public class UserDAO_imple implements UserDAO {
 		  
 		  pstmt = conn.prepareStatement(sql);
 		  pstmt.setString(1, paraMap.get("id"));
-		  pstmt.setString(2, paraMap.get("email"));
+		  pstmt.setString(2, aes.encrypt(paraMap.get("email")));
 		  
 		  rs = pstmt.executeQuery();
 		  
@@ -148,7 +149,7 @@ public class UserDAO_imple implements UserDAO {
 			  n = 0;
 		  }
 
-		  } catch(SQLException e) {
+		  } catch(SQLException | GeneralSecurityException | UnsupportedEncodingException e) {
 	         e.printStackTrace();	   
 		  } finally {
 		  	  close();
@@ -195,12 +196,14 @@ public class UserDAO_imple implements UserDAO {
 					+ "from users "
 					+ "where email = ? ";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, email);
+			pstmt.setString(1, aes.encrypt(email));
 			
 			rs = pstmt.executeQuery();
 			
 			isExists = rs.next();
 			// rs 값이 나오지 않으면 false(중복x)
+		} catch (GeneralSecurityException | UnsupportedEncodingException e) {
+			e.printStackTrace();
 		} finally {
 			close();
 		}
@@ -208,5 +211,31 @@ public class UserDAO_imple implements UserDAO {
 		return isExists;
 	}
 
+
+	@Override
+	public int pwdUpdate(Map<String, String> paraMap) throws SQLException {
+		
+		int result = 0;
+		
+		try {
+			
+		  conn = ds.getConnection();
+		  String sql = " update users set password = ? "
+		  			 + " where id = ? ";
+
+		  pstmt = conn.prepareStatement(sql);
+		  pstmt.setString(1, paraMap.get("new_password"));
+		  pstmt.setString(2, paraMap.get("id"));
+		  
+		  result = pstmt.executeUpdate();
+		  
+		  } catch(SQLException e) {
+	         e.printStackTrace();	   
+		  } finally {
+		  	  close();
+		  }
+		
+		  return result;
+	}
 
 }
