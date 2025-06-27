@@ -57,16 +57,5 @@ public abstract class BaseController implements InterCommand{
 		}
 	}
 	
-/*	//// 로그인 유무를 반환해주는 메소드
-	public boolean checkLogin(HttpServletRequest request) {
-		
-		HttpSession session = request.getSession();
-		MemberVO loginUser = (MemberVO) session.getAttribute("loginUser");
-		
-		if(loginUser != null) {
-			return true;
-		}
-		else return false;
-	}
-*/
+
 }
