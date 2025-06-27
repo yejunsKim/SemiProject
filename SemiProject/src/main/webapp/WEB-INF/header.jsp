@@ -116,9 +116,9 @@ $(function() {
 
 </head>
 	<body>
-		<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
+			<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
 				<div class="loginTheme">
-					<form name="loginFrm" action="<%=ctxPath%>/login/login.up"
+					<form name="loginFrm" action="/SemiProject/login/login.up"
 						method="post">
 						<table id="loginTbl">
 							<thead>
@@ -145,13 +145,13 @@ $(function() {
 									</td>
 								</tr>
 
-								<%-- ==== 아이디 찾기, 비밀번호 찾기 ==== --%>
+								
 								<tr>
 									<td colspan="3" style="padding:3% 0.5%;font-size:13px;">
-										<a href="<%= ctxPath %>/login/idFind.do" style="cursor: pointer;">아이디찾기</a> 
+										<a href="/SemiProject/login/idFind.do" style="cursor: pointer;">아이디찾기</a> 
 										/
-										<a href="<%= ctxPath %>/login/passwordFind.do" style="cursor: pointer;">비밀번호찾기</a>
-										<a href="<%= ctxPath %>/user/userRegister.do" style="margin-left:30px;">회원가입</a>
+										<a href="/SemiProject/login/passwordFind.do" style="cursor: pointer;">비밀번호찾기</a>
+										<a href="/SemiProject/user/userRegister.do" style="margin-left:30px;">회원가입</a>
 									</td>
 								</tr>
 
@@ -168,7 +168,26 @@ $(function() {
 							</tbody>
 						</table>
 					</form>
+				</div>
 
-				<%-- 로그인 끝 --%>
-				<div id="sidecontent" style="text-align: left; padding: 20px;"></div>
-			</div>
+				</div>
+		 <nav class="headerNav">
+		 	<ul class="headerUl">
+		 		<li><a class="navbar-brand" href="/SemiProject/commercials.do" style="margin-right: 10%;"><img src="/SemiProject/images/header/favicon-32x32.png" /></a></li>
+		 		<div style="width:300px;display:flex;justify-content:space-between;align-items:center;">
+			 		<li>
+				 	  <div class="input-group">
+						    <div class="form-outline">
+						      <i class="fas fa-search"></i>
+						      <input type="search" id="form1" class="form-control" />
+						   </div>
+					  </div>
+					</li>
+					<il><img src="/SemiProject/images/header/cart.png" ></il>
+			 		<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">로그인</li>
+			 	</div>
+			</ul>
+		 </nav> 
+          
+       </div>
+	</div>

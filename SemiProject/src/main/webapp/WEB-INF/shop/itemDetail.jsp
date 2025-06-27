@@ -41,7 +41,7 @@
 </script>
 
 	<div class="col-md-12" style="background-color: #f5f5f5;padding-top:80px;">
-		<div class="col-md-9" style="background-color: #f5f5f5;">
+		<div class="col-md-12" style="background-color: #f5f5f5;">
 		<div class="d-flex">
 			<div class="col-8 my-5" style="border-right: 1px solid #ccc;">
 				<img class="mt-4" src="<%= ctxPath%>${item.itemPhotoPath}" class="img-fluid" style="height: 500px; width: 80%;">

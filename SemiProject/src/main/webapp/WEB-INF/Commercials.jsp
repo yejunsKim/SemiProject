@@ -31,8 +31,8 @@
     }
 </style>
 
-   
-<div class="col-md-9">
+
+<div class="col-md-12">
 	<div class="container-fluid">		
 		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 		  <ol class="carousel-indicators">
@@ -93,7 +93,6 @@
 		</div>
 		
 		<br><br>
-		
 			
 	</div>
  
