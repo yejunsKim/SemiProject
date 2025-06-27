@@ -2,10 +2,6 @@ package user.model;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
-<<<<<<< HEAD
-import java.security.NoSuchAlgorithmException;
-=======
->>>>>>> refs/heads/main
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -217,7 +213,6 @@ public class UserDAO_imple implements UserDAO {
 
 
 	@Override
-<<<<<<< HEAD
 	public UserVO login(Map<String, String> paraMap) throws SQLException {
 		UserVO user = null;
 		try {
@@ -303,7 +298,6 @@ public class UserDAO_imple implements UserDAO {
 	}
 
 
-=======
 	public int pwdUpdate(Map<String, String> paraMap) throws SQLException {
 		
 		int result = 0;
@@ -329,5 +323,4 @@ public class UserDAO_imple implements UserDAO {
 		  return result;
 	}
 
->>>>>>> refs/heads/main
 }

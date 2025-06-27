@@ -1,17 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <%
     String ctxPath = request.getContextPath();
 %>
-<<<<<<< HEAD
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-=======
->>>>>>> refs/heads/main
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,76 +39,7 @@
 <%-- jQueryUI CSS 및 JS --%>
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.css" />
 <script type="text/javascript" src="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
-<<<<<<< HEAD
 
-<script type="text/javascript">
-$(()=>{
-	
-	if( ${empty sessionScope.loginuser} ) {
-		// 세션에 남겨놓은 유저가 있다면, 로컬로 남기겠다는 것.
-		const loginid = localStorage.getItem('saveid');
-		
-		if(loginid != null) { // 만약 세션 유저의 아이디가 있다면, 
-			$('input:text[name="id"]').val(loginid); //아이디 넣어주고,
-			$('input#saveid').prop("checked", true); //아이디저장 체크박스는 체크로 해두기
-		}
-	};
-	
-	
-});
-
-</script>
-
-</head>
-<body>
-   <!-- 상단 네비게이션 시작 -->
-   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-      
-      <!-- Brand/logo --> <!-- Font Awesome 6 Icons -->
-      <a class="navbar-brand" href="<%= ctxPath %>/main.do" style="margin-right: 10%;"><img src="<%= ctxPath%>/images/header/favicon-32x32.png" /></a>
-      
-      <!-- 아코디언 같은 Navigation Bar 만들기 -->
-       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-         <span class="navbar-toggler-icon"></span>
-       </button>
-      
-      <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav" style="font-size: 16pt;">
-           <li class="nav-item active">
-              <a class="nav-link menufont_size" href="<%= ctxPath %>/index.up">향수 둘러보기</a>
-           </li>
-           <%-- <li class="nav-item active">
-              <a class="nav-link menufont_size" href="<%= ctxPath %>/member/memberRegister.up">회원가입</a>
-           </li> --%>
-          <%-- <li class="nav-item">
-             <a class="nav-link menufont_size" href="<%= ctxPath %>/member/memberList.up">회원목록</a>
-          </li> --%>
-          <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle menufont_size text-primary" href="#" id="navbarDropdown" data-toggle="dropdown"> 
-                 Dropdown                                <%-- .text-primary 는 글자색으로 파랑색임 --%>  
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                 <a class="dropdown-item text-primary" href="#">Action</a>
-                 <a class="dropdown-item text-primary" href="#">Another action</a>
-                 <div class="dropdown-divider"></div>
-                 <a class="dropdown-item text-primary" href="#">Something else here</a>
-              </div>
-           </li>
-        </ul>
-      </div>
-      
-       <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:13%;">
-   </nav>
-   <!-- 상단 네비게이션 끝 -->
-    <div class="container-fluid" id="container" style="position: relative;">
-     
-     
-     <div class="row">
-       <div class="col-md-3" id="sideinfo">
-       	 <%-- 로그인 시작 --%>
-         <div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
-
-=======
 <style>
 	/* reset.css */
 html, body, div, span, applet, object, iframe,
@@ -190,20 +114,26 @@ $(function() {
          }
          isMenuOpen = !isMenuOpen;
     });
+    
+    if( ${empty sessionScope.loginuser} ) {
+		// 세션에 남겨놓은 유저가 있다면, 로컬로 남기겠다는 것.
+		const loginid = localStorage.getItem('saveid');
+		
+		if(loginid != null) { // 만약 세션 유저의 아이디가 있다면, 
+			$('input:text[name="id"]').val(loginid); //아이디 넣어주고,
+			$('input#saveid').prop("checked", true); //아이디저장 체크박스는 체크로 해두기
+		}
+	};
+	
 });
 </script>
 
 </head>
 	<body>
 			<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
->>>>>>> refs/heads/main
 				<div class="loginTheme">
-<<<<<<< HEAD
 				  <c:if test="${empty sessionScope.loginUser}">
 					<form name="loginForm" action="<%=ctxPath%>/login/login.do"
-=======
-					<form name="loginFrm" action="/SemiProject/login/login.up"
->>>>>>> refs/heads/main
 						method="post">
 						<table id="loginTbl">
 						
@@ -256,36 +186,36 @@ $(function() {
 					</form>
 				 </c:if>
  				 <c:if test="${not empty sessionScope.loginUser}">
-  <table id="isLogin" style="width:100%;">
-    <thead>
-      <tr>
-        <th colspan="3" style="text-align:center; font-size:18px;">
-          ${sessionScope.loginUser.id}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td colspan="3" style="padding-top:10px;">
-          <span style="font-weight:bold;">${sessionScope.loginUser.name}님</span>
-          &nbsp;
-          [<a href="javascript:goEditMyInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')">나의정보변경</a>]
-        </td>
-      </tr>
-      <tr>
-        <td colspan="3" style="padding-top:10px;">
-          <span style="font-weight: bold;">포인트&nbsp;:</span>
-          &nbsp;<fmt:formatNumber value="${sessionScope.loginUser.point}" pattern="###,###"/> POINT  
-        </td>
-      </tr>
-      <tr>
-        <td colspan="3" style="padding-top:10px;">
-          <button type="button" class="btn btn-danger btn-sm" onclick="javascript:goLogOut('<%=ctxPath%>')">Logout</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</c:if>
+				  <table id="isLogin" style="width:100%;">
+				    <thead>
+				      <tr>
+				        <th colspan="3" style="text-align:center; font-size:18px;">
+				          ${sessionScope.loginUser.id}
+				        </th>
+				      </tr>
+				    </thead>
+				    <tbody>
+				      <tr>
+				        <td colspan="3" style="padding-top:10px;">
+				          <span style="font-weight:bold;">${sessionScope.loginUser.name}님</span>
+				          &nbsp;
+				          [<a href="javascript:goEditMyInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')">나의정보변경</a>]
+				        </td>
+				      </tr>
+				      <tr>
+				        <td colspan="3" style="padding-top:10px;">
+				          <span style="font-weight: bold;">포인트&nbsp;:</span>
+				          &nbsp;<fmt:formatNumber value="${sessionScope.loginUser.point}" pattern="###,###"/> POINT  
+				        </td>
+				      </tr>
+				      <tr>
+				        <td colspan="3" style="padding-top:10px;">
+				          <button type="button" class="btn btn-danger btn-sm" onclick="javascript:goLogOut('<%=ctxPath%>')">Logout</button>
+				        </td>
+				      </tr>
+				    </tbody>
+				  </table>
+				</c:if>
 
 				 
 				</div>
@@ -293,7 +223,7 @@ $(function() {
 				</div>
 		 <nav class="headerNav">
 		 	<ul class="headerUl">
-		 		<li><a class="navbar-brand" href="/SemiProject/commercials.do" style="margin-right: 10%;"><img src="/SemiProject/images/header/favicon-32x32.png" /></a></li>
+		 		<li><a class="navbar-brand" href="/SemiProject/main.do" style="margin-right: 10%;"><img src="/SemiProject/images/header/favicon-32x32.png" /></a></li>
 		 		<div style="width:300px;display:flex;justify-content:space-between;align-items:center;">
 			 		<li>
 				 	  <div class="input-group">
