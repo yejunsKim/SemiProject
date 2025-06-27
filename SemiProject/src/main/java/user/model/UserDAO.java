@@ -25,4 +25,6 @@ public interface UserDAO {
 
 	// 입력받은 id로 회원정보 리턴 메소드 
 	public UserVO selectOneUser(String id) throws SQLException;
+	// 로그인 해욧
+	public UserVO login(Map<String, String> paraMap) throws SQLException;
 }

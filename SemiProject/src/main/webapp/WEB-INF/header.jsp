@@ -38,7 +38,6 @@
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.css" />
 <script type="text/javascript" src="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
 
-
 <style>
 	/* reset.css */
 html, body, div, span, applet, object, iframe,
@@ -113,10 +112,22 @@ $(function() {
          }
          isMenuOpen = !isMenuOpen;
     });
+    
+    if( ${empty sessionScope.loginuser} ) {
+		// 세션에 남겨놓은 유저가 있다면, 로컬로 남기겠다는 것.
+		const loginid = localStorage.getItem('saveid');
+		
+		if(loginid != null) { // 만약 세션 유저의 아이디가 있다면, 
+			$('input:text[name="id"]').val(loginid); //아이디 넣어주고,
+			$('input#saveid').prop("checked", true); //아이디저장 체크박스는 체크로 해두기
+		}
+	};
+	
 });
 </script>
 
 </head>
+<<<<<<< HEAD
 	<body>
 			<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
 				<div class="loginTheme">
@@ -192,4 +203,124 @@ $(function() {
 		 </nav> 
           
        </div>
+=======
+	<body>
+			<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
+				<div class="loginTheme">
+				  <c:if test="${empty sessionScope.loginUser}">
+					<form name="loginForm" action="<%=ctxPath%>/login/login.do"
+						method="post">
+						<table id="loginTbl">
+						
+							<thead>
+								<tr>
+									<th colspan="3">LOGIN</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<tr class="trTab">
+									<td>ID</td>
+									<td></td>
+									<td>
+									   <input type="text" name="id" id="loginid"
+										size="20" autocomplete="off" />
+									</td>
+								</tr>
+								<tr class="trTab">
+									<td>암호</td>
+									<td></td>
+									<td>
+										<input type="password" name="password" id="loginPwd"
+										size="20" />
+									</td>
+								</tr>
+
+								
+								<tr>
+									<td colspan="3" style="padding:3% 0.5%;font-size:13px;">
+										<a href="/SemiProject/login/idFind.do" style="cursor: pointer;">아이디찾기</a> 
+										/
+										<a href="/SemiProject/login/passwordFind.do" style="cursor: pointer;">비밀번호찾기</a>
+										<a href="/SemiProject/user/userRegister.do" style="margin-left:30px;">회원가입</a>
+									</td>
+								</tr>
+
+								<tr>
+									<td colspan="3">
+									<input type="checkbox" id="saveid"
+										name="saveid" />&nbsp;
+										<label for="saveid">아이디저장</label>
+										<button type="button" id="btnSubmit"
+											class="btn btn-dark btn-sm ml-3">로그인
+										</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+				 </c:if>
+ 				 <c:if test="${not empty sessionScope.loginUser}">
+				  <table id="isLogin" style="width:100%;">
+				    <thead>
+				      <tr>
+				        <th colspan="3" style="text-align:center; font-size:18px;">
+				          ${sessionScope.loginUser.id}
+				        </th>
+				      </tr>
+				    </thead>
+				    <tbody>
+				      <tr>
+				        <td colspan="3" style="padding-top:10px;">
+				          <span style="font-weight:bold;">${sessionScope.loginUser.name}님</span>
+				          &nbsp;
+				          [<a href="javascript:goEditMyInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')">나의정보변경</a>]
+				        </td>
+				      </tr>
+				      <tr>
+				        <td colspan="3" style="padding-top:10px;">
+				          <span style="font-weight: bold;">포인트&nbsp;:</span>
+				          &nbsp;<fmt:formatNumber value="${sessionScope.loginUser.point}" pattern="###,###"/> POINT  
+				        </td>
+				      </tr>
+				      <tr>
+				        <td colspan="3" style="padding-top:10px;">
+				          <button type="button" class="btn btn-danger btn-sm" onclick="javascript:goLogOut('<%=ctxPath%>')">Logout</button>
+				        </td>
+				      </tr>
+				    </tbody>
+				  </table>
+				</c:if>
+
+				 
+				</div>
+
+				</div>
+		 <nav class="headerNav">
+		 	<ul class="headerUl">
+		 		<li><a class="navbar-brand" href="/SemiProject/main.do" style="margin-right: 10%;"><img src="/SemiProject/images/header/favicon-32x32.png" /></a></li>
+		 		<div style="width:300px;display:flex;justify-content:space-between;align-items:center;">
+			 		<li>
+				 	  <div class="input-group">
+						    <div class="form-outline">
+						      <i class="fas fa-search"></i>
+						      <input type="search" id="form1" class="form-control" />
+						   </div>
+					  </div>
+					</li>
+					<il><img src="/SemiProject/images/header/cart.png" ></il>
+				  <c:if test="${empty sessionScope.loginUser}">
+					
+			 		<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">로그인</li>
+			 	</c:if>
+			 	<c:if test="${not empty sessionScope.loginUser}">
+					
+			 		<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">내 정보</li>
+			 	</c:if>
+			 	</div>
+			</ul>
+		 </nav> 
+          
+       </div>
+>>>>>>> refs/heads/main
 	</div>
