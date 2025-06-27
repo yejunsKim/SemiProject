@@ -21,12 +21,8 @@ public interface UserDAO {
 	public boolean checkIdDuplicate(String id) throws SQLException;
 
 	// idCheck 버튼을 누를 시 id 중복 체크 메소드
-<<<<<<< HEAD
 	public boolean checkEmailDuplicate(String email) throws SQLException;
 
 	// 입력받은 id로 회원정보 리턴 메소드 
 	public UserVO selectOneUser(String id) throws SQLException;
-=======
-	public boolean checkEmailDuplicate(String email) throws SQLException;
->>>>>>> refs/heads/main
 }

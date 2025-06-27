@@ -16,11 +16,7 @@ public class UserVO {
 	private String grade;
 	private String registerday; 
 	private String passwordChanged; // 마지막으로 암호를 변경한 날짜  
-<<<<<<< HEAD
-	private int isDeleted;  // 회원탈퇴유무   N: 사용가능(가입중) / Y:사용불가능(탈퇴)
-=======
 	private int isDeleted;  // 회원탈퇴유무   N: 사용가능(가입중) / Y:사용불능(탈퇴)
->>>>>>> refs/heads/main
 	private int isDormant;    // 휴면유무  N : 활동중  /  Y : 휴면중 
 	
 	public String getId() {

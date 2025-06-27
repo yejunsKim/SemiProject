@@ -91,74 +91,6 @@ public class UserDAO_imple implements UserDAO {
 		
 		return result;
 	}
-<<<<<<< HEAD
-
-
-	@Override
-	public String findUserid(Map<String, String> paraMap) throws SQLException {
-		
-		String id = null;
-		
-		try {
-			
-		  conn = ds.getConnection();
-		  String sql = " select * from users "
-		  			 + " where name = ? and email = ? ";
-		  
-		  pstmt = conn.prepareStatement(sql);
-		  pstmt.setString(1, paraMap.get("name"));
-		  pstmt.setString(2, aes.encrypt(paraMap.get("email")) );
-		  
-		  rs = pstmt.executeQuery();
-		  
-			  if(rs.next()) { // 있으면
-				  id = rs.getString("id"); //userid 에 userid를 담아서 보내야함
-			  }	  
-		  }
-		  
-		catch(GeneralSecurityException | UnsupportedEncodingException e ) {
-			e.printStackTrace();	   
-		  } finally {
-		  	  close();
-		  }
-		
-		return id;
-	}
-
-	// pwFind 했을 때, 해당 값이 있으면 1을 반환함.
-	@Override
-	public int pwFindUser(Map<String, String> paraMap) {
-		
-		int n = 0;
-		
-		try {
-			
-		  conn = ds.getConnection();
-		  String sql = " select * from users "
-		  			 + " where id = ? and email = ? ";
-		  
-		  pstmt = conn.prepareStatement(sql);
-		  pstmt.setString(1, paraMap.get("id"));
-		  pstmt.setString(2, aes.encrypt(paraMap.get("email")));
-		  
-		  rs = pstmt.executeQuery();
-		  
-		  if(rs.next()) {
-			  n = 1;
-		  }
-		  else {
-			  n = 0;
-		  }
-
-		  } catch(SQLException|GeneralSecurityException | UnsupportedEncodingException e ) {
-	         e.printStackTrace();	   
-		  } finally {
-		  	  close();
-		  }
-		
-		return n;
-=======
-
 
 	@Override
 	public String findUserid(Map<String, String> paraMap) throws SQLException {
@@ -223,7 +155,6 @@ public class UserDAO_imple implements UserDAO {
 		  }
 		
 		return n;
->>>>>>> refs/heads/main
 	}
 
 
@@ -270,11 +201,7 @@ public class UserDAO_imple implements UserDAO {
 			
 			isExists = rs.next();
 			// rs 값이 나오지 않으면 false(중복x)
-<<<<<<< HEAD
 		  } catch(SQLException|GeneralSecurityException | UnsupportedEncodingException e ) {
-=======
-		} catch (GeneralSecurityException | UnsupportedEncodingException e) {
->>>>>>> refs/heads/main
 			e.printStackTrace();
 		} finally {
 			close();
@@ -283,7 +210,6 @@ public class UserDAO_imple implements UserDAO {
 		return isExists;
 	}
 
-<<<<<<< HEAD
 	// 입력받은 id로 회원정보 리턴 메소드 
 	@Override
 	public UserVO selectOneUser(String id) throws SQLException {
@@ -333,7 +259,6 @@ public class UserDAO_imple implements UserDAO {
 	} // end of 회원정보상세페이지
 
 
-=======
 
 	@Override
 	public int pwdUpdate(Map<String, String> paraMap) throws SQLException {
@@ -360,6 +285,6 @@ public class UserDAO_imple implements UserDAO {
 		
 		  return result;
 	}
-
->>>>>>> refs/heads/main
+	
 }
+
