@@ -26,7 +26,7 @@
      </c:if>
      
      <c:if test="${not empty requestScope.userVO}">
-        <p class="text-center h3 my-5">::: ${requestScope.userVO.name} 님의 회원 상세정보 :::</p>
+        <p class="text-center h3 my-5"> ${requestScope.userVO.name} 님의 회원 상세정보 </p>
         
         <table class="table table-bordered" style="width: 60%; margin: 0 auto;">
            <tr>

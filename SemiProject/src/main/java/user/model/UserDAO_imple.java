@@ -219,7 +219,7 @@ public class UserDAO_imple implements UserDAO {
 			conn = ds.getConnection();
 			
 			String sql = " select id, name, email, mobile, "
-					+ "                postcode, address, detailaddress, extraaddress, "
+					+ "                postcode, address, addressDetail, addressExtra, "
 					+ "                point, grade, to_char(registerday, 'yyyy-mm-dd') as registerday "
 					+ "        from users "
 					+ "        where ISDELETED = 'N'  and id = ? ";
@@ -240,8 +240,8 @@ public class UserDAO_imple implements UserDAO {
 				
 				user.setPostcode(rs.getString("postcode"));
 				user.setAddress(rs.getString("address"));
-				user.setAddressDetail(rs.getString("detailaddress"));
-				user.setAddressExtra(rs.getString("extraaddress"));
+				user.setAddressDetail(rs.getString("addressDetail"));
+				user.setAddressExtra(rs.getString("addressExtra"));
 				
 				user.setPoint(rs.getInt("point"));
 				user.setGrade(rs.getString("grade"));
