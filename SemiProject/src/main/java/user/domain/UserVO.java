@@ -16,6 +16,7 @@ public class UserVO {
 	private String grade;
 	private String registerday; 
 	private String passwordChanged; // 마지막으로 암호를 변경한 날짜  
+<<<<<<< HEAD
 	private String isDeleted;  // 회원탈퇴유무   N: 사용가능(가입중) / Y:사용불능(탈퇴)
 	private String isDormant;    // 휴면유무  N : 활동중  /  Y : 휴면중 
 	
@@ -31,6 +32,10 @@ public class UserVO {
 	}
 	
 	
+=======
+	private int isDeleted;  // 회원탈퇴유무   N: 사용가능(가입중) / Y:사용불능(탈퇴)
+	private int isDormant;    // 휴면유무  N : 활동중  /  Y : 휴면중 
+>>>>>>> refs/heads/main
 	
 	public String getId() {
 		return id;
@@ -110,16 +115,32 @@ public class UserVO {
 	public void setPasswordChanged(String passwordChanged) {
 		this.passwordChanged = passwordChanged;
 	}
+<<<<<<< HEAD
 	public String getIsDeleted() {
+=======
+	public int getIsDeleted() {
+>>>>>>> refs/heads/main
 		return isDeleted;
 	}
+<<<<<<< HEAD
 	public void setIsDeleted(String isDeleted) {
+=======
+	public void setIsDeleted(int isDeleted) {
+>>>>>>> refs/heads/main
 		this.isDeleted = isDeleted;
 	}
+<<<<<<< HEAD
 	public String getIsDormant() {
+=======
+	public int getIsDormant() {
+>>>>>>> refs/heads/main
 		return isDormant;
 	}
+<<<<<<< HEAD
 	public void setIsDormant(String isDormant) {
+=======
+	public void setIsDormant(int isDormant) {
+>>>>>>> refs/heads/main
 		this.isDormant = isDormant;
 	}
 	

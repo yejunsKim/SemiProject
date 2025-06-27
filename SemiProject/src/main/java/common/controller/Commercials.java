@@ -5,11 +5,17 @@ import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import myshop.domain.CategoryVO;
 import myshop.model.ItemDAO;
 import myshop.model.ItemDAO_imple;
 
+
 public class Commercials extends BaseController{
+
+
+	//private ProductDAO productdao = new ProductDAO_imple();
+
 
 		private ItemDAO idao;
 		
@@ -28,10 +34,10 @@ public class Commercials extends BaseController{
 
 			}
 		
-			
 			super.setRedirect(false);
 			super.setViewPage("/WEB-INF/Commercials.jsp");
-		}catch (SQLException e) {
+			
+		 }  catch (SQLException e) {
 			e.printStackTrace();
 			
 			super.setRedirect(true);

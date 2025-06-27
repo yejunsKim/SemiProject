@@ -1,12 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%
     String ctxPath = request.getContextPath();
 %>
+<<<<<<< HEAD
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+=======
+>>>>>>> refs/heads/main
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,6 +37,7 @@
 <!-- Optional JavaScript -->
 <script type="text/javascript" src="<%= ctxPath%>/js/jquery-3.7.1.min.js"></script>
 <script type="text/javascript" src="<%= ctxPath%>/bootstrap-4.6.2-dist/js/bootstrap.bundle.min.js"></script> 
+
 <script type="text/javascript" src="<%= ctxPath%>/js/main/main.js"></script>
 
 <!--  로그인 part js -->
@@ -40,6 +46,7 @@
 <%-- jQueryUI CSS 및 JS --%>
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.css" />
 <script type="text/javascript" src="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
+<<<<<<< HEAD
 
 <script type="text/javascript">
 $(()=>{
@@ -108,9 +115,95 @@ $(()=>{
        	 <%-- 로그인 시작 --%>
          <div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
 
+=======
+<style>
+	/* reset.css */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.container-fluid {padding:0;}
+.headerNav {position:fixed;top:0;background-color:#ddd;z-index:15;width:100%;padding:10px 25px;box-shadow:2px 2px 2px #000;}
+.headerUl {display:flex;justify-content:space-between;align-items:center;}
+.loginList {max-width:270px;width:100%;background-color:#fff;position:absolute;top:50%;left:50%;height:330px;padding:20px;box-shadow: 1px 3px 3px 2px #6f6363;border-radius:5px;transform:translate(-50%,-50%);z-index:15;}
+.loginList .loginBoxx .loginBTN {width:100%;border:0;border-radius:20px;background-color:#2c59e5;padding:15px 0;margin-top:5px;color:#fff;}
+.loginList .loginA {width:100%;display:flex;justify-content:space-between;align-items:center;margin:15px 0;}
+.loginList .loginA input {width:150px;}
+.form-outline {position:relative;}
+.form-control {max-width:150px;width:100%;padding:0 35px;}
+.fa-search {position:absolute;top:12px;left:10px;} 
+.loginBox {z-index:20;}
+.trTab {padding:10px 0;display:flex;justify-content:space-between;align-items:center;}
+</style>
+<script type="text/javascript">
+$(function() {
+	$('div.loginBox').hide();
+    let isMenuOpen = false;
+    
+    $(document).on("click",".logins", function(){
+    	 if (isMenuOpen) {
+    		 /* $('i.fa-solid').css('transform', 'rotate(0deg)'); */
+             $('div.loginBox').hide();
+         } else {
+        	 /* $('i.fa-solid').css('transform', 'rotate(90deg)'); */
+             $('div.loginBox').show();
+         }
+         isMenuOpen = !isMenuOpen;
+    });
+});
+</script>
+
+</head>
+	<body>
+			<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
+>>>>>>> refs/heads/main
 				<div class="loginTheme">
+<<<<<<< HEAD
 				  <c:if test="${empty sessionScope.loginUser}">
 					<form name="loginForm" action="<%=ctxPath%>/login/login.do"
+=======
+					<form name="loginFrm" action="/SemiProject/login/login.up"
+>>>>>>> refs/heads/main
 						method="post">
 						<table id="loginTbl">
 						
@@ -121,7 +214,7 @@ $(()=>{
 							</thead>
 
 							<tbody>
-								<tr>
+								<tr class="trTab">
 									<td>ID</td>
 									<td></td>
 									<td>
@@ -129,7 +222,7 @@ $(()=>{
 										size="20" autocomplete="off" />
 									</td>
 								</tr>
-								<tr>
+								<tr class="trTab">
 									<td>암호</td>
 									<td></td>
 									<td>
@@ -138,13 +231,13 @@ $(()=>{
 									</td>
 								</tr>
 
-								<%-- ==== 아이디 찾기, 비밀번호 찾기 ==== --%>
+								
 								<tr>
 									<td colspan="3" style="padding:3% 0.5%;font-size:13px;">
-										<a href="<%= ctxPath %>/login/idFind.do" style="cursor: pointer;">아이디찾기</a> 
+										<a href="/SemiProject/login/idFind.do" style="cursor: pointer;">아이디찾기</a> 
 										/
-										<a href="<%= ctxPath %>/login/passwordFind.do" style="cursor: pointer;">비밀번호찾기</a>
-										<a href="<%= ctxPath %>/user/userRegister.do" style="margin-left:30px;">회원가입</a>
+										<a href="/SemiProject/login/passwordFind.do" style="cursor: pointer;">비밀번호찾기</a>
+										<a href="/SemiProject/user/userRegister.do" style="margin-left:30px;">회원가입</a>
 									</td>
 								</tr>
 
@@ -198,6 +291,23 @@ $(()=>{
 				</div>
 
 				</div>
-         <%-- 로그인 끝 --%>
-         <div id="sidecontent" style="text-align: left; padding: 20px;"></div>
+		 <nav class="headerNav">
+		 	<ul class="headerUl">
+		 		<li><a class="navbar-brand" href="/SemiProject/commercials.do" style="margin-right: 10%;"><img src="/SemiProject/images/header/favicon-32x32.png" /></a></li>
+		 		<div style="width:300px;display:flex;justify-content:space-between;align-items:center;">
+			 		<li>
+				 	  <div class="input-group">
+						    <div class="form-outline">
+						      <i class="fas fa-search"></i>
+						      <input type="search" id="form1" class="form-control" />
+						   </div>
+					  </div>
+					</li>
+					<il><img src="/SemiProject/images/header/cart.png" ></il>
+			 		<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">로그인</li>
+			 	</div>
+			</ul>
+		 </nav> 
+          
        </div>
+	</div>

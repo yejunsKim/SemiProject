@@ -10,11 +10,30 @@ $(function(){
 	// === 스크롤 이벤트 발생시키기 시작 === //
 	$(window).scroll(function(){
 		
-		if( $(window).scrollTop() == $(document).height() - $(window).height() ) {
+		// 스크롤탑의 위치값
+	//	console.log("$(window).scrollTop() => ", $(window).scrollTop());
+		
+		// 보여주어야할 문서의 높이값(ㄷ보기를 해주므로 append 되어져서 높이가 계속 증가 될 것이다)
+	//	console.log("$(window).scrollTop() => ", $(document).scrollTop());
+		
+		// 웹브라우저의 높이값(디바이스마다 다르게 표현되는 고정값)
+	//	console.log("$(document).height() => ", $(document).height());
+		
+	//	console.log("$(window).height() =>", $(window).height())
+		
+		// 아래는 스크롤되어진 스크롤탑의 위치값이 웹브라우저창의 높이만큼 내려갔을 경우를 알아보는 것이다.
+	//	console.log( "$(window).scrollTop() => ", $(window).scrollTop() );
+	//	console.log( "$(document).height() - $(window).height() => ", ( $(document).height() - $(window).height() ) );
+		
+		// 아래는 만약에 위의 값이 제대로 안나오는 경우 이벤트가 발생되는 숫자를 만들기 위해서 스크롤탑의 위치값에 +1 을 더해서 보정해준 것이다. 
+	//	console.log( "$(window).scrollTop() + 1  => " + ( $(window).scrollTop() + 1  ) );
+	//	console.log( "$(document).height() - $(window).height() => " + ( $(document).height() - $(window).height() ) ); 
+		
+	//	if( $(window).scrollTop() == $(document).height() - $(window).height() ) {
 		// 만약에 위의 값대로 잘 안되면 아래의 것을 하도록 한다. 
-	//	if( $(window).scrollTop() + 1 >= $(document).height() - $(window).height() ) { 
+		if( $(window).scrollTop() + 1 >= $(document).height() - $(window).height() ) { 
 			
-			if($('span#totalHITCount').text() != $('span#countHIT').text()) {
+			if($('span#totalCount').text() != $('span#countHIT').text()) {
 				start += lenHIT;
 			//	alert(start);
 				
@@ -49,7 +68,7 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 	$.ajax({
 		url:"perfumeDisplayJSON.do",
 	//	type:"get"
-		data:{/*"categoryName":"10대",*/
+		data:{"categoryName":categoryName,
 			  "start":start,	// 1
 			  "len":lenHIT},	// 8
 		dataType:"json",
@@ -59,10 +78,7 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 			
 			if(start == 1 && json.length == 0) {
 				// 처음부터 데이터가 존재하지 않는 경우
-				/*
-					if(start == 1 && json == null) 이 아님!!
-					if(start == 1 && json.length == 0) 로 해야 함 !!!
-				*/
+				
 				v_html = `현재 상품 준비중 입니다...`;
 				$('div#displayHIT').html(v_html);
 			}
@@ -74,16 +90,16 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 					
 					//console.log(item.itemphotopath);
 					//  /images/item/LAVANDE31_500.png
-
+					
 					v_html += `<div class='col-md-6 col-lg-3'>
 									<div class="card mb-3">
-										<a href="#" id="itemDetail">
+										<a href="/SemiProject/item/itemDetail.do?itemno=${item.itemno}" class="itemDetail">
 											<img src="/SemiProject${item.itemphotopath}" class="card-img-top" style="height: 350px; object-fit: cover;">
 										</a>
 										<div class="card-body">
 										
 											<h5 class="card-title">
-												<a href="#" id="itemDetail">
+												<a href="/SemiProject/item/itemDetail.do?itemno=${item.itemno}" class="itemDetail">
 													<span>${item.itemno}</span><br>
 													${item.itemname}<br>
 												</a>
@@ -106,8 +122,8 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 				// span#countHIT 에 지금까지 출력된 상품의 개수를 누적해서 기록한다.
 				$('span#countHIT').text( Number($('span#countHIT').text()) + json.length );
 				
-				// 스크롤을 계속하여 countHIT 값과 totalHITCount 값이 일치하는 경우
-				if($("span#countHIT").text() == $("span#totalHITCount").text()) {
+				// 스크롤을 계속하여 countHIT 값과 totalCount 값이 일치하는 경우
+				if($("span#countHIT").text() == $("span#totalCount").text()) {
 					$('span#end').html("더이상 조회할 제품이 없습니다.");
 				}
 			}// end of else if(json.length > 0)---------------------
