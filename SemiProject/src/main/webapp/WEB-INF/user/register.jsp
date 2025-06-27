@@ -159,9 +159,9 @@ span#idCheck, #emailCheck {
 					</tr>
 						<td>연락처&nbsp; <span class="star">*</span></td>
 						<td>
-					 	   <input type="text" name="mobileHead" id="hp1" name='hp1' size="6" maxlength="3" value="010" readonly />&nbsp;-&nbsp; 
-	                       <input type="text" name="mobileMiddle" id="hp2" name='hp2' size="6" maxlength="4" />&nbsp;-&nbsp;
-	                       <input type="text" name="mobileLast" id="hp3" name='hp3' size="6" maxlength="4" />    
+					 	   <input type="text" id="hp1" name='hp1' size="6" maxlength="3" value="010" readonly />&nbsp;-&nbsp; 
+	                       <input type="text" id="hp2" name='hp2' size="6" maxlength="4" />&nbsp;-&nbsp;
+	                       <input type="text" id="hp3" name='hp3' size="6" maxlength="4" />    
 	                       <span class="error">휴대폰 형식이 아닙니다.</span>
 					</td>
 					<tr>

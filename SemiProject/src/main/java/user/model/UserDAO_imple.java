@@ -1,6 +1,8 @@
 package user.model;
 
 import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +17,7 @@ import javax.sql.DataSource;
 import user.domain.UserVO;
 import util.security.AES256;
 import util.security.SecretMyKey;
+import util.security.Sha256;
 
 public class UserDAO_imple implements UserDAO {
 
@@ -78,8 +81,8 @@ public class UserDAO_imple implements UserDAO {
 			pstmt.setString(5, user.getMobile());
 			pstmt.setString(6, user.getPostcode());
 			pstmt.setString(7, user.getAddress());
-			pstmt.setString(8, user.getDetailaddress());
-			pstmt.setString(9, user.getExtraaddress());
+			pstmt.setString(8, user.getAddressDetail());
+			pstmt.setString(9, user.getAddressExtra());
 			
 			result = pstmt.executeUpdate();
 			
@@ -206,6 +209,92 @@ public class UserDAO_imple implements UserDAO {
 		}
 		
 		return isExists;
+	}
+
+
+	@Override
+	public UserVO login(Map<String, String> paraMap) throws SQLException {
+		UserVO user = null;
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " SELECT id, name, point, registerday, passwordChangeGap, email, mobile, postcode, "
+					+ "       address, addressDetail, addressExtra, lastlogingap, isDormant "
+					+ " FROM ( "
+					+ "    SELECT id, name, point, registerday, "
+					+ "           TRUNC(MONTHS_BETWEEN(SYSDATE, passwordChanged)) AS passwordChangeGap, "
+					+ "           isDormant, email, mobile, postcode, "
+					+ "           address, addressDetail, addressExtra "
+					+ "    FROM Users "
+					+ "    WHERE id = ? AND password like ? "
+					+ ") U "
+					+ " CROSS JOIN ( "
+					+ "    SELECT TRUNC(MONTHS_BETWEEN(SYSDATE, MAX(lastLogin))) AS lastlogingap "
+					+ "    FROM login_history "
+					+ "    WHERE id = ? "
+					+ ") H ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, paraMap.get("id"));
+			pstmt.setString(2, Sha256.encrypt(paraMap.get("password")));
+			pstmt.setString(3, paraMap.get("id"));
+
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				System.out.println("로그인 되었음!!");
+				user = new UserVO();
+				
+				user.setId(rs.getString("id"));
+				user.setName(rs.getString("name"));
+				user.setPoint(rs.getInt("point"));
+				user.setRegisterday(rs.getString("registerday"));
+				 
+				if(rs.getInt("passwordChangeGap") > 3) {
+					// 비밀번호를 변경한지 3개월이 넘었을 경우,
+					user.setRequirePasswordChange(true);
+				}
+				user.setEmail(aes.decrypt(rs.getString("email")));
+				user.setMobile(aes.decrypt(rs.getString("mobile")));
+				user.setPostcode(rs.getString("postcode"));
+				user.setAddress(rs.getString("address"));
+				user.setAddressDetail(rs.getString("addressDetail"));
+				user.setAddressExtra(rs.getString("addressExtra"));
+				// ==== 휴면이 아닌 회원만 login_history(로그인기록) 테이블에 insert 하기 시작 ==== // 
+				if( rs.getInt("lastlogingap") < 12 ) {
+					sql = " insert into login_history(loginHistoryNo, id, ip) "
+							+ " values(login_history_seq.nextval, ?, ?) ";
+					 
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, paraMap.get("id"));
+					pstmt.setString(2, paraMap.get("ip"));
+					 
+					pstmt.executeUpdate();
+				 }// ==== 휴면이 아닌 회원만 login_history(로그인기록) 테이블에 insert 하기 끝 ==== //
+				 else { // 마지막으로 로그인 한 날짜시간이 현재시각으로 부터 1년이 지났으면 휴면으로 지정 
+					 user.setIsDormant("Y");
+					 
+					 if(rs.getString("isDormant") == "Y") {
+					     // === tbl_member 테이블의 isDormant 컬럼의 값을 1로 변경하기 === //
+						 sql = " update users set isDormant = 'Y' "
+						 	 + " where id = ? ";
+						 
+						 pstmt = conn.prepareStatement(sql);
+						 pstmt.setString(1, paraMap.get("id"));
+						 
+						 pstmt.executeUpdate();
+					 }
+				 }
+			 }// end of if(rs.next())---------------------------
+				
+		} catch(GeneralSecurityException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		return user;
 	}
 
 

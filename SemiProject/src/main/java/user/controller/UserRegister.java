@@ -52,8 +52,8 @@ public class UserRegister extends BaseController {
 			user.setMobile(mobile);
 			user.setPostcode(postcode);
 			user.setAddress(address);
-			user.setDetailaddress(detailaddress);
-			user.setExtraaddress(extraaddress);
+			user.setAddressDetail(detailaddress);
+			user.setAddressExtra(extraaddress);
 			
 			
 			try {
