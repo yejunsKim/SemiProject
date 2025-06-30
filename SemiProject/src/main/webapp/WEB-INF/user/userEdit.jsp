@@ -180,7 +180,7 @@ span#idCheck, #emailCheck {
 				<tr>
                     <td colspan="2" class="text-center">
                        <input type="button" class="btn btn-success btn-lg mr-5" value="수정하기" onclick="edit()" />
-                       <input type="reset"  class="btn btn-danger btn-lg" value="취소하기" onclick="reset()" />
+                       <input type="reset"  class="btn btn-danger btn-lg" value="원래대로" onclick="reset()" />
                     </td>
            		</tr>
 		
