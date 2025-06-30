@@ -36,5 +36,14 @@ public interface ItemDAO {
 	
 	// 장바구니 목록 가져오기(select)
 	List<CartVO> selectItemCart(String fk_users_id) throws SQLException;
-	
+
+	//카테고리 조회
+	List<CategoryVO> getCategoryList() throws SQLException;
+
+	//제품번호 채번하기
+	int getItemNo() throws SQLException;
+
+	//제품정보 insert하기(제품등록)
+	int itemInsert(ItemVO itemVO) throws SQLException;
+
 }
