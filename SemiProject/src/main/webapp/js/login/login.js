@@ -42,8 +42,24 @@ function loginLocalStorage() {
 }
 
 
-function goLogOut(ctx_Path) { // 로그아웃 페이지로 이동~
+function LogOut(ctx_Path) { // 로그아웃 페이지로 이동~
 	location.href = `${ctx_Path}/login/logout.do`;
 }
 
+// 나의정보 수정하기 팝업창 띄우는 메소드
+function editInfo(id, ctxPath) {
+
+	   const url = `${ctxPath}/user/userEdit.do?id=${id}`;
+	   
+	   // 너비 800, 높이 680 인 팝업창을 화면 가운데 위치시키기
+	   const width = 800;
+	   const height = 680;
+	   
+	   const left = Math.ceil((window.screen.width - width)/2);  // 정수로 만듬 
+	   const top = Math.ceil((window.screen.height - height)/2); // 정수로 만듬
+	   window.open(url, "editInfo", 
+	               `left=${left}, top=${top}, 
+				    width=${width}, height=${height}`);
+	
+}
 
