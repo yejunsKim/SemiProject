@@ -17,6 +17,14 @@ public class MallHome extends BaseController {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
+		String referer = request.getHeader("Referer");
+		
+		if(referer == null) {
+			super.setRedirect(true);
+			super.setViewPage(request.getContextPath() + "/main.do");
+			return;	// 종료
+		}
+		
 		String categoryNo = request.getParameter("categoryNo");
 		String categoryName = "";
 		

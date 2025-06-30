@@ -13,6 +13,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import myshop.domain.CartVO;
 import myshop.domain.CategoryVO;
 import myshop.domain.ItemVO;
 
@@ -338,6 +339,119 @@ public class ItemDAO_imple implements ItemDAO {
 		return item;
 		
 	} // end of public ItemVO selectOneItemByItemNo(int itemNo) throws SQLException
+	
+	
+	// 장바구니 담기 
+	@Override
+	public int insertCartOne(Map<String, String> paraMap) throws SQLException {
+		
+		int n = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " SELECT cartno"
+					   + " FROM cart"
+					   + " WHERE fk_users_id = ? AND fk_item_no = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, paraMap.get("fk_users_id"));
+			pstmt.setInt(2, Integer.parseInt(paraMap.get("fk_item_no")));
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {	// 장바구니에 이미 같은 제품이 존재하는 경우
+				
+				sql = " UPDATE cart set cartamount = to_number(?) "
+					+ " WHERE cartno = ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, paraMap.get("cartamount"));	// 제품 수량 추가 증가가 아닌 선택한 수량이 들어가게 끔 sql문 작성함.
+				pstmt.setInt(2, rs.getInt("cartno"));
+				
+				n = pstmt.executeUpdate();
+			}
+			
+			else {	// 장바구니에 제품을 새로 추가하는 경우
+				
+				sql = " INSERT INTO cart(cartno, fk_users_id, fk_item_no, cartamount, cartdate)"
+					+ " VALUES(CART_SEQ.nextval, ?, to_number(?), to_number(?), sysdate) ";
+				
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, paraMap.get("fk_users_id"));
+				pstmt.setString(2, paraMap.get("fk_item_no"));
+				pstmt.setString(3, paraMap.get("cartamount"));
+				
+				n = pstmt.executeUpdate();
+			}
+			
+		} finally {
+			close();
+		}
+		
+		return n;
+	}// end of public int insertCartOne(Map<String, String> paraMap) throws SQLException------------------
+	
+	
+	// 장바구니 목록 가져오기(select)
+	@Override
+	public List<CartVO> selectItemCart(String fk_users_id) throws SQLException {
+		
+		List<CartVO> cartList = null;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " SELECT C.cartno, I.itemPhotoPath, I.itemName, I.price, C.cartamount, "
+					   + " TO_CHAR(C.cartdate, 'yyyy-mm-dd') AS cartdate, U.grade "
+					   + " FROM cart C "
+					   + " JOIN users U ON C.fk_users_id = U.id "
+					   + " JOIN item I ON C.fk_item_no = I.itemNo "
+					   + " WHERE fk_users_id = ? "
+					   + " ORDER BY C.cartno DESC ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, fk_users_id);
+			
+			rs = pstmt.executeQuery();
+			
+			int cnt = 0;
+			while(rs.next()) {
+				cnt++;
+				
+				if(cnt == 1) {
+					cartList = new ArrayList<>();
+				}
+				
+				ItemVO ivo = new ItemVO();
+				ivo.setItemPhotoPath(rs.getString("itemPhotoPath"));
+				ivo.setItemName(rs.getString("itemName"));
+				ivo.setPrice(rs.getInt("price"));
+				
+				// 등급에 따른 포인트 계산
+				ivo.setUserItemPoint(rs.getString("grade"));
+				
+				
+				CartVO cvo = new CartVO();
+				cvo.setCartno(rs.getInt("cartno"));
+				cvo.setCartamount(rs.getInt("cartamount"));
+				cvo.setCartdate(rs.getString("cartdate")); // TO_CHAR 했으므로 String으로 받기
+				
+				cvo.setIvo(ivo);
+				
+				cartList.add(cvo);
+			}// end of while(rs.next())----------------------
+			
+		} finally {
+			close();
+		}
+		
+		return cartList;
+	}// end of public List<CartVO> selectItemCart(String fk_users_id) throws SQLException-------------------
 
 	
 	

@@ -4,6 +4,10 @@
 <%
     String ctxPath = request.getContextPath();
 %>
+<style>
+.formBox {margin:0 auto;max-width:700px;padding:5% 5%;}
+#newPassword1, #newPassword2 {margin:2% auto;} 
+</style>
 
 <script type="text/javascript">
   $(function(){
@@ -33,7 +37,7 @@
 </script>
 	
 	<div style="margin:150px auto 0;">
-		<form name="passwordUp">
+		<form name="passwordUp" clas="formBox">
 			비밀번호 변경할 아이디: ${requestScope.id}
 			<input type="hidden" name="id" value="${requestScope.id}" />
 			<br>

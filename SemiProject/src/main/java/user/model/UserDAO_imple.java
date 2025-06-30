@@ -309,7 +309,7 @@ public class UserDAO_imple implements UserDAO {
 		  			 + " where id = ? ";
 
 		  pstmt = conn.prepareStatement(sql);
-		  pstmt.setString(1, paraMap.get("new_password"));
+		  pstmt.setString(1, Sha256.encrypt(paraMap.get("new_password")));
 		  pstmt.setString(2, paraMap.get("id"));
 		  
 		  result = pstmt.executeUpdate();

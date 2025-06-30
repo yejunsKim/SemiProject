@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import myshop.domain.CartVO;
 import myshop.domain.CategoryVO;
 import myshop.domain.ItemVO;
 
@@ -29,5 +30,11 @@ public interface ItemDAO {
 	
 	// 제품 1개 상세 정보 가져오기
 	ItemVO selectOneItemByItemNo(int itemNo) throws SQLException;	// <- ItemDAO 
+	
+	// 장바구니 담기 
+	int insertCartOne(Map<String, String> paraMap) throws SQLException;
+	
+	// 장바구니 목록 가져오기(select)
+	List<CartVO> selectItemCart(String fk_users_id) throws SQLException;
 	
 }
