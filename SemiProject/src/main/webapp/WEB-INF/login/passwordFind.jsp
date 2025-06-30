@@ -3,7 +3,7 @@
 <% 
   String ctxPath = request.getContextPath(); 
 %>
-<jsp:include page="header.jsp" />
+<jsp:include page="../header.jsp" />
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <link rel="stylesheet" type="text/css" href="<%= ctxPath %>/css/find/pwFind.css" />
@@ -39,7 +39,8 @@ $(function(){
 
  function pwFind() {
 	
-	const id = $('input:text[name="id"]').val().trim();
+	 const id = $('form[name="pwFindFrm"] input[name="id"]').val().trim();
+		console.log("아이디 값:", id); // 콘솔 디버깅
 	if (id == ""){
 		alert('아이디를 입력하십시오.');
 		return; 
@@ -126,4 +127,5 @@ $(function(){
 	
 
 </div>
-<jsp:include page="footer.jsp" />
+>>>>>>> refs/heads/yejun12348888
+<jsp:include page="../footer.jsp" />

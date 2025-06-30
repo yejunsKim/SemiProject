@@ -24,8 +24,9 @@ public class PasswordUpdate extends BaseController {
 				
 				if( "POST".equalsIgnoreCase(method) ) {
 					
-					String new_password = request.getParameter("newPassword2");
+					String new_password = request.getParameter("newPassword1");
 					
+					System.out.println(id);
 					Map<String, String> paraMap = new HashMap<>();
 					paraMap.put("new_password", new_password);
 					paraMap.put("id", id);
@@ -53,6 +54,7 @@ public class PasswordUpdate extends BaseController {
 					    
 					    else {
 				            
+					    	System.out.println("변경 안되는 중이오.");
 				            request.setAttribute("id", id);
 				            request.setAttribute("method", method);
 				            request.setAttribute("result", result);

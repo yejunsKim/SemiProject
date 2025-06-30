@@ -13,6 +13,10 @@
 .itemLeft {position:relative;}
 .itemLeft::after{content:"";display:inline-block;width:1px;height:100%;background-color:#ddd;position:absolute;right:5%;top:1%;}
 </style>
+<<<<<<< HEAD
+=======
+
+>>>>>>> refs/heads/main
 
 <%-- JavaScript --%>
 <script type="text/javascript">
@@ -43,6 +47,50 @@
        });
      });
 </script>
+<<<<<<< HEAD
+=======
+
+	<div class="col-md-12" style="background-color: #f5f5f5;padding-top:80px;">
+		<div class="col-md-12" style="background-color: #f5f5f5;">
+		<div class="d-flex">
+			<div class="col-8 my-5" style="border-right: 1px solid #ccc;">
+				<img class="mt-4" src="<%= ctxPath%>${item.itemPhotoPath}" class="img-fluid" style="height: 500px; width: 80%;">
+			</div>
+		
+			<div class="col-4 my-5">
+				<div class="d-flex justify-content-between mt-5">
+					<span style="font-size: 15pt; font-weight: bold;">${item.itemNo}</span>
+					<span style="font-size: 13pt;"><fmt:formatNumber value="${item.price}" pattern="#,###" /> 원</span>
+				</div>
+				
+				<div class="my-3" style="font-size: 15pt;">${item.itemName}</div>
+				
+				 <div class="py-2 pl-3" style="background-color: white;padding-top:16px !important;padding-bottom:16px !important;">
+               용량&nbsp;: <span style="padding-left:84px;">${item.volume}</span> 
+            </div>
+
+				
+				<form id="cartPush">
+					<!-- 제품명 -->
+					<input type="hidden" name="itemName" value="itemName입력">
+				
+					<!-- 가격 -->
+					<input type="hidden" name="price" value="price입력">
+				
+					<!-- 용량 -->
+					<input type="hidden" name="volume" value="volume입력">
+				
+					<!-- 수량 입력 -->
+					<div class="bg-white p-3 d-flex align-items-center mb-2" style="gap: 10px;">
+					  	<label for="quantity" class="mb-0" style="min-width: 80px;">수량&nbsp;:</label>
+					  	<select id="quantity" name="quantity" class="border-0 p-0" 
+					          style="box-shadow: none; width: 100px; text-align: center;">
+					    	<c:forEach var="itemAmount" begin="1" end="${item.itemAmount}">
+					      		<option value="${itemAmount}">${itemAmount}</option>
+					    	</c:forEach>
+					  	</select>
+					</div>
+>>>>>>> refs/heads/main
 
    <div class="col-md-12" style="background-color: #f5f5f5;padding-top:80px;">
       <div class="col-md-12" style="background-color: #f5f5f5;">
