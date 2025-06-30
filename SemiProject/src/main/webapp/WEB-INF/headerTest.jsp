@@ -199,7 +199,7 @@ $(function() {
 				        <td colspan="3" style="padding-top:10px;">
 				          <span style="font-weight:bold;">${sessionScope.loginUser.name}님</span>
 				          &nbsp;
-				          [<a href="javascript:editInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')">나의정보변경</a>]
+				          [<a href="javascript:goEditMyInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')">나의정보변경</a>]
 				        </td>
 				      </tr>
 				      <tr>
@@ -224,7 +224,7 @@ $(function() {
 		 <nav class="headerNav">
 		 	<ul class="headerUl">
 		 		<li><a class="navbar-brand" href="/SemiProject/main.do" style="margin-right: 10%;"><img src="/SemiProject/images/header/favicon-32x32.png" /></a></li>
-		 		<div style="width:300px;display:flex;justify-content:space-between;align-items:center;">
+		 		<div style="width:380px;display:flex;justify-content:space-between;align-items:center;">
 			 		<li>
 				 	  <div class="input-group">
 						    <div class="form-outline">
@@ -233,16 +233,20 @@ $(function() {
 						   </div>
 					  </div>
 					</li>
-					<il><img src="/SemiProject/images/header/cart.png" ></il>
-				  <c:if test="${empty sessionScope.loginUser}">
+					<c:if test="${empty sessionScope.loginUser}">
+					<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">로그인</li>
+					</c:if>
 					
-			 		<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">로그인</li>
-			 	</c:if>
-			 	<c:if test="${not empty sessionScope.loginUser}">
-					
-			 		<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">내 정보</li>
-			 	</c:if>
-
+					<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.id == 'admin'}">
+						<%-- header아이디에 따라 관리자 창 보이는곳 수정시작 --%>
+						<jsp:include page="headerAdmin.jsp" />
+				 	 	<%-- header아이디에 따라 관리자 창 보이는곳 수정 끝 --%>
+			 	 	</c:if>
+			 	 	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.id != 'admin'}">
+						<%-- header아이디에 따라 일반유저 창 보이는곳 수정시작 --%>
+						<jsp:include page="headerUser.jsp" />
+				 	 	<%-- header아이디에 따라 일반유정 창 보이는곳 수정 끝 --%>
+			 	 	</c:if>
 			 	</div>
 			</ul>
 		 </nav> 

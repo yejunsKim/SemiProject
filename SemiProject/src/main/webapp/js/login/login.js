@@ -1,4 +1,3 @@
-
 $(function() {
 	// 로그인 버튼 클릭 시
 	$('button#btnSubmit').click(() => {
@@ -62,4 +61,3 @@ function editInfo(id, ctxPath) {
 				    width=${width}, height=${height}`);
 	
 }
-

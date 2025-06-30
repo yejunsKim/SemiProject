@@ -22,7 +22,8 @@
 <!--  Bootstrap JS (마지막) -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
- <jsp:include page="header.jsp" />
+ <%-- 250627 헤더테스트로인한 수정 --%>
+ <jsp:include page="headerTest.jsp" />
  <!-- Commercials.jsp의 header.jsp 바로 아래 -->
 <style>
     #leftSide {
@@ -31,7 +32,7 @@
 </style>
 
 
-<div class="col-md-12">
+<div class="col-md-12" style="padding:0;">
 	<div class="container-fluid">		
 		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 		  <ol class="carousel-indicators">
