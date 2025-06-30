@@ -37,7 +37,7 @@
 </script>
 	
 	<div style="margin:150px auto 0;">
-		<form name="passwordUp" clas="formBox">
+		<form name="passwordUp" class="formBox">
 			비밀번호 변경할 아이디: ${requestScope.id}
 			<input type="hidden" name="id" value="${requestScope.id}" />
 			<br>

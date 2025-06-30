@@ -44,18 +44,17 @@ public abstract class BaseController implements InterCommand{
 	public void setViewPage(String viewPage) {
 	   this.viewPage = viewPage;
 	}
-	
-	
-	//// 로그인 유무를 반환해주는 메소드
+
 	public boolean checkLogin(HttpServletRequest request) {
-		
+
 		HttpSession session = request.getSession();
 		UserVO loginUser = (UserVO) session.getAttribute("loginUser");
 		
 		if(loginUser != null) {
 			return true;
+		}else {
+		return false;
 		}
-		else return false;
 	}
 
 }

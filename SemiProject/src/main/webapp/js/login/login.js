@@ -48,6 +48,7 @@ function LogOut(ctx_Path) { // 로그아웃 페이지로 이동~
 // 나의정보 수정하기 팝업창 띄우는 메소드
 function editInfo(id, ctxPath) {
 
+
 	   const url = `${ctxPath}/user/userrEdit.do?id=${id}`;
 	   
 	   // 너비 800, 높이 680 인 팝업창을 화면 가운데 위치시키기
@@ -61,4 +62,3 @@ function editInfo(id, ctxPath) {
 				    width=${width}, height=${height}`);
 	
 }
-

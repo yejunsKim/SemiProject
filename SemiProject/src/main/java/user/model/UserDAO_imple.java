@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.naming.Context;
@@ -309,7 +311,7 @@ public class UserDAO_imple implements UserDAO {
 		  			 + " where id = ? ";
 
 		  pstmt = conn.prepareStatement(sql);
-		  pstmt.setString(1, Sha256.encrypt(paraMap.get("new_password")));
+		  pstmt.setString(1, Sha256.encrypt(paraMap.get("new_password")) );
 		  pstmt.setString(2, paraMap.get("id"));
 		  
 		  result = pstmt.executeUpdate();
@@ -322,5 +324,224 @@ public class UserDAO_imple implements UserDAO {
 		
 		  return result;
 	}
+	
+	
+	   // 페이징 처리를 위한 검색이 있는 또는 검색이 없는 회원에 대한 총 페이지 수 알아오기 //
+	   @Override
+	   public int getTotalUser(Map<String, String> paraMap) throws SQLException {
+
+	      int totalPage = 0;
+	      
+	      try {
+	         conn = ds.getConnection();
+	         
+	         String sql = " select ceil(count(*)/?) "
+	                    + " from users "
+	                    + " where id != 'admin' ";
+	         
+	         String colname = paraMap.get("searchType");
+	         String searchWord = paraMap.get("searchWord");
+	         
+	         if("email".equals(colname) && !"".equals(searchWord)) {
+	            // 검색대상이 email 인 경우
+	            searchWord = aes.encrypt(searchWord);
+	         }
+	         
+	         if(!"".equals(colname) && !"".equals(searchWord)) {
+	            sql += " and " + colname +" like '%'|| ? ||'%' ";
+	            
+	         }
+	         
+	         pstmt = conn.prepareStatement(sql);
+	         
+	         pstmt.setInt(1, Integer.parseInt(paraMap.get("sizePerPage")));
+	         
+	         if(!"".equals(colname) && !"".equals(searchWord)) {
+	            // 검색이 있는 경우
+	            pstmt.setString(2, searchWord);
+	         }
+	                  
+	         rs = pstmt.executeQuery();
+	         
+	         rs.next();
+	         
+	         totalPage = rs.getInt(1);
+	         
+	      } catch(GeneralSecurityException | UnsupportedEncodingException e) {
+	         e.printStackTrace();
+	       } finally {
+	         close();
+	      }
+	      
+	      return totalPage;
+	      
+	   }
+
+	   // **** 페이징 처리를 한 모든 회원 목록 또는 검색한 회원목록 보여주기
+	   @Override
+	   public List<UserVO> select_User_paging(Map<String, String> paraMap) throws SQLException {
+
+	      List<UserVO> userList = new ArrayList<>();
+	      
+	      try {
+	         conn = ds.getConnection();
+	         
+	         String sql = " select id, name, email, grade "
+	                    + " from users "
+	                    + " where id != 'admin' ";
+	         
+	         String colname = paraMap.get("searchType");
+	         String searchWord = paraMap.get("searchWord");
+	         
+	         if("email".equals(colname) && !"".equals(searchWord)) {
+	            // 검색대상이 email 인 경우
+	            searchWord = aes.encrypt(searchWord);
+	         }
+	         
+	         if(!"".equals(colname) && !"".equals(searchWord)) {
+	            sql += " and " + colname +" like '%'|| ? ||'%' ";
+	            
+	         }
+	         
+	         sql += " order by registerday desc "
+	              + " OFFSET (?-1)*? ROW "
+	              + " FETCH NEXT ? ROW ONLY ";
+	                  
+	         pstmt = conn.prepareStatement(sql);
+	         
+	         int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+	         int sizePerPage = Integer.parseInt(paraMap.get("sizePerPage"));
+	         
+	         if(!"".equals(colname) && !"".equals(searchWord)) {
+	            // 검색이 있는 경우
+	            pstmt.setString(1, searchWord);
+	            pstmt.setInt(2, currentShowPageNo);
+	            pstmt.setInt(3, sizePerPage); 
+	            pstmt.setInt(4, sizePerPage);
+	         }
+	         else {
+	            // 검색이 없는 경우
+	            pstmt.setInt(1, currentShowPageNo);
+	            pstmt.setInt(2, sizePerPage); 
+	            pstmt.setInt(3, sizePerPage);
+	         }
+	         
+	         rs = pstmt.executeQuery();
+	         
+	         while(rs.next()) {
+	            
+	            UserVO uservo = new UserVO();
+	               // id, name, email, grade
+	            uservo.setId(rs.getString("id"));
+	            uservo.setName(rs.getString("name"));
+	            uservo.setEmail(aes.decrypt(rs.getString("email"))); // 복호화 
+	            uservo.setGrade(rs.getString("grade"));
+	                
+	            userList.add(uservo);
+	            
+	         } // end of while(rs.next())
+	         
+	      } catch(GeneralSecurityException | UnsupportedEncodingException e) {
+	         e.printStackTrace();
+	       } finally {
+	         close();
+	      }
+	      
+	      return userList;
+	      
+	   } // end of public List<UserVO> select_User_paging(Map<String, String> paraMap) throws SQLException
+
+
+	   /* >>> 뷰단(memberList.jsp)에서 "페이징 처리시 보여주는 순번 공식" 에서 사용하기 위해 
+	    검색이 있는 또는 검색이 없는 회원의 총개수 알아오기 시작 <<< */
+	   @Override
+	   public int getTotalUserCount(Map<String, String> paraMap) throws SQLException {
+
+	      int totalUserCount = 0;
+	      
+	      try {
+	         conn = ds.getConnection();
+	         
+	         String sql = " select count(*) "
+	                    + " from users "
+	                    + " where id != 'admin' ";
+	         
+	         String colname = paraMap.get("searchType");
+	         String searchWord = paraMap.get("searchWord");
+	         
+	         if("email".equals(colname) && !"".equals(searchWord)) {
+	            // 검색대상이 email 인 경우
+	            searchWord = aes.encrypt(searchWord);
+	         }
+	         
+	         if(!"".equals(colname) && !"".equals(searchWord)) {
+	            sql += " and " + colname +" like '%'|| ? ||'%' ";            
+	         }
+	         
+	         pstmt = conn.prepareStatement(sql);
+	                  
+	         if(!"".equals(colname) && !"".equals(searchWord)) {
+	            // 검색이 있는 경우
+	            pstmt.setString(1, searchWord);
+	         }
+	                  
+	         rs = pstmt.executeQuery();
+	         
+	         rs.next();
+	         
+	         totalUserCount = rs.getInt(1);
+	         
+	      } catch(GeneralSecurityException | UnsupportedEncodingException e) {
+	         e.printStackTrace();
+	       } finally {
+	         close();
+	      }
+	      
+	      return totalUserCount;
+	      
+	   } // end of public int getTotalUserCount(Map<String, String> paraMap) throws SQLException
+
+
+	// 회원정보수정
+			@Override
+			public int updateUser(UserVO user) throws SQLException {
+				int result = 0;
+
+				try {
+					 conn = ds.getConnection();
+					 
+					 String sql = " update Users set name = ? "
+							    + "                  , password = ? "
+							    + "                  , email = ? "
+							    + "                  , mobile = ? "
+							    + "                  , postcode = ? " 
+							    + "                  , address = ? "
+							    + "                  , addressDetail = ? "
+							    + "                  , addressExtra = ? "
+							    + "                  , passwordChanged = sysdate "
+							    + " where id = ? ";
+					 
+					 pstmt = conn.prepareStatement(sql);
+						
+					 pstmt.setString(1, user.getName());
+					 pstmt.setString(2, Sha256.encrypt(user.getPassword()) ); // 암호를 SHA256 알고리즘으로 단방향 암호화 시킨다.
+					 pstmt.setString(3, aes.encrypt(user.getEmail()) );  // 이메일을 AES256 알고리즘으로 양방향 암호화 시킨다. 
+					 pstmt.setString(4, aes.encrypt(user.getMobile()) ); // 휴대폰번호를 AES256 알고리즘으로 양방향 암호화 시킨다. 
+					 pstmt.setString(5, user.getPostcode());
+					 pstmt.setString(6, user.getAddress());
+					 pstmt.setString(7, user.getAddressDetail());
+					 pstmt.setString(8, user.getAddressExtra());
+					 pstmt.setString(9, user.getId());
+					 
+					 result = pstmt.executeUpdate();
+					 
+				} catch(GeneralSecurityException | UnsupportedEncodingException e) {
+					e.printStackTrace();
+				} finally {
+					close();
+				}
+				
+				return result;		
+			}
 
 }
