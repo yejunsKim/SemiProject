@@ -105,7 +105,7 @@ span#idCheck, #emailCheck {
 </head>
 <jsp:include page="../header.jsp" />
 
-<div class="container" id="registerDiv" style="background: black;margin-top: 3%">
+<div class="container" id="registerDiv" style="background: black;margin-top: 5%">
 	<form name="registerForm">
 		<table id="tblUserRegister">
 				<thead>
@@ -187,7 +187,7 @@ span#idCheck, #emailCheck {
 					</tr>
 					<tr>
 	                    <td colspan="2" class="text-center">
-	                       <input type="button" class="btn btn-success btn-lg mr-5" value="가입하기" onclick="register()" />
+	                       <input type="button" class="btn btn-success btn-lg mr-5" value="수정하기" onclick="register()" />
 	                       <input type="reset"  class="btn btn-danger btn-lg" value="취소하기" onclick="reset()" />
 	                    </td>
               		</tr>

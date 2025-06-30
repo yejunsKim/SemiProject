@@ -1,9 +1,6 @@
 
-let b_idcheck_click = false;
-// "아이디중복확인" 을 클릭했는지, 클릭을 안했는지 여부를 알아오기 위한 용도
-
-let b_emailcheck_click = false;
-// "이메일중복확인" 을 클릭했는지, 클릭을 안했는지 여부를 알아오기 위한 용도
+let b_emailcheck_click = true; 
+// 회원 수정의 이메일은 자동으로 받아오기 때문에, 건들지만 않으면 true가 맞다.
 
 $(function(){
 	
@@ -18,7 +15,7 @@ $(function(){
 		if(name == "") {
 			// 입력하지 않거나 공백만 입력했을 경우
 			
-			$('table#tblUserRegister :input').prop('disabled', true);
+			$('table#tblUserEdit :input').prop('disabled', true);
 			$(e.target).prop('disabled', false);
 			$(e.target).val('').focus();
 			
@@ -28,7 +25,7 @@ $(function(){
 		}
 		else {
 			// 공백이 아닌 글자를 입력했을 경우
-			$('table#tblUserRegister :input').prop('disabled', false);
+			$('table#tblUserEdit :input').prop('disabled', false);
 			
 		 // $(e.target).next().hide();
 		 // 또는
@@ -37,34 +34,6 @@ $(function(){
 			
 	});	// end of $('input#name').blur((e) => {})-------------------
 	
-	
-	
-	$('input#id').blur((e) => { 
-		   
-	 // alert($(e.target).val());
-			
-		const id = $(e.target).val().trim();
-		if(id == "") {
-			// 입력하지 않거나 공백만 입력했을 경우
-				
-			$('table#tblUserRegister :input').prop('disabled', true);
-			$(e.target).prop('disabled', false);
-			$(e.target).val('').focus();
-				
-		//	$(e.target).next().next().next().show();
-		//  또는
-		    $(e.target).parent().find('span.error').show();
-		}
-		else {
-			// 공백이 아닌 글자를 입력했을 경우
-			$('table#tblUserRegister :input').prop('disabled', false);
-				
-	     // $(e.target).next().next().next().hide();
-		 // 또는
-			$(e.target).parent().find('span.error').hide();
-		}
-				
-	});	// end of $('input#id').blur((e) => {})-------------------
 	
 	
 	$('input#password').blur((e) => { 
@@ -77,7 +46,7 @@ $(function(){
 		if(!bool) {
 			// 암호가 정규표현식에 위배된 경우
 				
-			$('table#tblUserRegister :input').prop('disabled', true);
+			$('table#tblUserEdit :input').prop('disabled', true);
 			$(e.target).prop('disabled', false);
 			//$(e.target).val('').focus();
 				
@@ -87,7 +56,7 @@ $(function(){
 		}
 		else {
 			// 암호가 정규표현식에 맞는 경우
-			$('table#tblUserRegister :input').prop('disabled', false);
+			$('table#tblUserEdit :input').prop('disabled', false);
 				
 	     // $(e.target).next().hide();
 		 // 또는
@@ -102,7 +71,7 @@ $(function(){
 		if( $('input#password').val() != $(e.target).val() ) {
 			// 암호와 암호확인값이 틀린 경우
 				
-			$('table#tblUserRegister :input').prop('disabled', true);
+			$('table#tblUserEdit :input').prop('disabled', true);
 			$('input#password').prop('disabled', false);
 			$(e.target).prop('disabled', false);
 			
@@ -115,7 +84,7 @@ $(function(){
 		}
 		else {
 			// 암호와 암호확인값이 같은 경우
-			$('table#tblUserRegister :input').prop('disabled', false);
+			$('table#tblUserEdit :input').prop('disabled', false);
 				
 	     // $(e.target).next().hide();
 		 // 또는
@@ -135,7 +104,7 @@ $(function(){
 		if(!bool) {
 			// 이메일이 정규표현식에 위배된 경우
 				
-			$('table#tblUserRegister :input').prop('disabled', true);
+			$('table#tblUserEdit :input').prop('disabled', true);
 			$(e.target).prop('disabled', false);
 			$(e.target).val('').focus();
 				
@@ -145,7 +114,7 @@ $(function(){
 		}
 		else {
 			// 이메일이 정규표현식에 맞는 경우
-			$('table#tblUserRegister :input').prop('disabled', false);
+			$('table#tblUserEdit :input').prop('disabled', false);
 				
 	     // $(e.target).next().hide();
 		 // 또는
@@ -166,7 +135,7 @@ $(function(){
 		if(!bool) {
 			// 연락처 국번이 정규표현식에 위배된 경우
 				
-			$('table#tblUserRegister :input').prop('disabled', true);
+			$('table#tblUserEdit :input').prop('disabled', true);
 			$(e.target).prop('disabled', false);
 			$(e.target).val('').focus();
 				
@@ -176,7 +145,7 @@ $(function(){
 		}
 		else {
 			// 연락처 국번이 정규표현식에 맞는 경우
-			$('table#tblUserRegister :input').prop('disabled', false);
+			$('table#tblUserEdit :input').prop('disabled', false);
 				
 	     // $(e.target).next().hide();
 		 // 또는
@@ -198,7 +167,7 @@ $(function(){
 		if(!bool) {
 			// 연락처 마지막 4자리가 정규표현식에 위배된 경우
 				
-			$('table#tblUserRegister :input').prop('disabled', true);
+			$('table#tblUserEdit :input').prop('disabled', true);
 			$(e.target).prop('disabled', false);
 			$(e.target).val('').focus();
 				
@@ -208,7 +177,7 @@ $(function(){
 		}
 		else {
 			// 연락처 마지막 4자리가 정규표현식에 맞는 경우
-			$('table#tblUserRegister :input').prop('disabled', false);
+			$('table#tblUserEdit :input').prop('disabled', false);
 				
 	     // $(e.target).next().hide();
 		 // 또는
@@ -231,7 +200,7 @@ $(function(){
 		if(!bool) {
 			// 우편번호가 정규표현식에 위배된 경우
 				
-			$('table#tblUserRegister :input').prop('disabled', true);
+			$('table#tblUserEdit :input').prop('disabled', true);
 			$(e.target).prop('disabled', false);
 			$(e.target).val('').focus();
 				
@@ -241,7 +210,7 @@ $(function(){
 		}
 		else {
 			// 우편번호가 정규표현식에 맞는 경우
-			$('table#tblUserRegister :input').prop('disabled', false);
+			$('table#tblUserEdit :input').prop('disabled', false);
 				
 	     // $(e.target).next().next().hide();
 		 // 또는
@@ -333,7 +302,7 @@ $(function(){
 		 $.ajax({
 			url:"checkIdDuplicate.do",
 			data:{"id":$('input#id').val().trim()},  
-			// data 속성은 http://localhost:9090/SemiProject/user/userRegister.do 로 
+			// data 속성은 http://localhost:9090/SemiProject/user/userEdit.do 로 
 			// 전송해야할 데이터를 말한다.   
 			type:"post", // type 을 생략하면 type:"get" 이다.
 			async:true,   
@@ -383,7 +352,7 @@ $(function(){
 		$.ajax({
 			url:"checkEmailDuplicate.do",
 			data:{"email":$('input#email').val().trim()},
-			// data 속성은 http://localhost:9090/SemiProject/user/userRegister.do 로 
+			// data 속성은 http://localhost:9090/SemiProject/user/userEdit.do 로 
 			// 전송해야할 데이터를 말한다.
 			type:"post",
 			async:true, 
@@ -428,7 +397,7 @@ $(function(){
 
 // Function Declaration
 // "가입하기" 버튼 클릭시 호출되는 함수
-function register() {
+function edit() {
 	
 	// **** 필수입력사항에 모두 입력이 되었는지 검사하기 시작 **** //
 	let b_requiredInfo = true;
@@ -443,58 +412,23 @@ function register() {
 	});
 	
 	if(!b_requiredInfo) {
-		return; // register() 함수를 종료한다.
+		return; // edit() 함수를 종료한다.
 	}
 	// **** 필수입력사항에 모두 입력이 되었는지 검사하기 끝 **** //
-	
-	
-	// **** "아이디중복확인" 을 클릭했는지 검사하기 시작 **** //
-	if(!b_idcheck_click) {
-		// "아이디중복확인" 을 클릭 안 했을 경우
+
 		
-		alert("아이디 중복확인을 클릭하셔야 합니다.");
-		return; // register() 함수를 종료한다.
-	}
-	// **** "아이디중복확인" 을 클릭했는지 검사하기 끝 **** //
-	
-	
-	// **** "이메일중복확인" 을 클릭했는지 검사하기 시작 **** //
-	if(!b_emailcheck_click) {
+	if(!b_emailcheck_click) { // 이메일을 바꾼 경우에만!!
 		// "이메일중복확인" 을 클릭 안 했을 경우
 		
 		alert("이메일 중복확인을 클릭하셔야 합니다.");
-		return; // register() 함수를 종료한다.
+		return; // edit() 함수를 종료한다.
 	}	
     // **** "이메일중복확인" 을 클릭했는지 검사하기 끝 **** //
 	
 	
-	/* **** 우편번호 및 주소에 값을 입력했는지 검사하기 시작 **** //
-	let b_addressInfo = true;
-	
-	const arr_addressInfo = [];
-	arr_addressInfo.push($('input#postcode').val());
-	arr_addressInfo.push($('input#address').val());
-	arr_addressInfo.push($('input#detailAddress').val());
-	arr_addressInfo.push($('input#extraAddress').val());
-	
-	for(let addressInfo of arr_addressInfo) {
-		if(addressInfo.trim() == "") {
-			alert("우편번호 및 주소를 입력하셔야 합니다.");
-			b_addressInfo = false;
-			break;
-		}
-	}// end of for---------------------
-	
-	if(!b_addressInfo) {
-		return; // register() 함수를 종료한다.
-	}
-	// **** 우편번호 및 주소에 값을 입력했는지 검사하기 시작 **** /*/
-	
-	
-	
-	const form = document.registerForm;
+	const form = document.editForm;
 	form.method = "post";
- 	form.action =  "userRegister.do";
+ 	form.action =  "userEditSubmit.do";
     form.submit();
 	
-}// end of function register()-----------------------------
+}// end of function edit()-----------------------------
