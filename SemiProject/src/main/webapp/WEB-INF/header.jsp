@@ -199,7 +199,7 @@ $(function() {
 				        <td colspan="3" style="padding-top:10px;">
 				          <span style="font-weight:bold;">${sessionScope.loginUser.name}님</span>
 				          &nbsp;
-				          [<a href="javascript:goEditMyInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')">나의정보변경</a>]
+				          [<a href="javascript:editInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')">나의정보변경</a>]
 				        </td>
 				      </tr>
 				      <tr>
@@ -210,7 +210,7 @@ $(function() {
 				      </tr>
 				      <tr>
 				        <td colspan="3" style="padding-top:10px;">
-				          <button type="button" class="btn btn-danger btn-sm" onclick="javascript:goLogOut('<%=ctxPath%>')">Logout</button>
+				          <button type="button" class="btn btn-danger btn-sm" onclick="javascript:LogOut('<%=ctxPath%>')">Logout</button>
 				        </td>
 				      </tr>
 				    </tbody>
@@ -234,14 +234,12 @@ $(function() {
 					  </div>
 					</li>
 					<il><img src="/SemiProject/images/header/cart.png" ></il>
-				  <c:if test="${empty sessionScope.loginUser}">
-					
-			 		<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">로그인</li>
-			 	</c:if>
-			 	<c:if test="${not empty sessionScope.loginUser}">
-					
-			 		<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">내 정보</li>
-			 	</c:if>
+ 					 <c:if test="${empty sessionScope.loginUser}">
+			 			<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">로그인</li>
+			 		</c:if>
+ 					 <c:if test="${not empty sessionScope.loginUser}">
+			 			<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">내 정보</li>
+			 		</c:if>
 			 	</div>
 			</ul>
 		 </nav> 
