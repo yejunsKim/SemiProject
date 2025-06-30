@@ -453,102 +453,102 @@ public class ItemDAO_imple implements ItemDAO {
 		return cartList;
 	}// end of public List<CartVO> selectItemCart(String fk_users_id) throws SQLException-------------------
 
+	
 	//카테고리 조회
-
-		@Override
-		public List<CategoryVO> getCategoryList() throws SQLException {
-			List<CategoryVO> categoryList = new ArrayList<>();
-			 
-			try {
-				conn = ds.getConnection();
-				
-				String sql = " select categoryNo, categoryName, categoryImagePath  "
-						   + " from category ";
-				
-				pstmt = conn.prepareStatement(sql);
-				
-				rs = pstmt.executeQuery();
-				
-				while(rs.next()) {
-					CategoryVO cvo = new CategoryVO();
-					cvo.setCategoryNo(rs.getInt("categoryNo"));
-					cvo.setCategoryName(rs.getString("categoryName"));
-					cvo.setCategoryImagePath(rs.getString("categoryImagePath"));
-					
-					
-					categoryList.add(cvo);
-				}
-				
-				
-			} finally {
-				close();
-			}
+	@Override
+	public List<CategoryVO> getCategoryList() throws SQLException {
+		List<CategoryVO> categoryList = new ArrayList<>();
 		 
-		return categoryList;
-		}//end of 	public List<CategoryVO> getCategoryList() throws SQLException 
-
-		//제품번호 채번하기
-		@Override
-		public int getItemNo() throws SQLException {
-
-			int itemNo =0;
+		try {
+			conn = ds.getConnection();
 			
-			try{
-				conn=ds.getConnection();
+			String sql = " select categoryNo, categoryName, categoryImagePath  "
+					   + " from category ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				CategoryVO cvo = new CategoryVO();
+				cvo.setCategoryNo(rs.getInt("categoryNo"));
+				cvo.setCategoryName(rs.getString("categoryName"));
+				cvo.setCategoryImagePath(rs.getString("categoryImagePath"));
 				
-				String sql = " select item_seq.nextval As itemNo "
-						+ " from dual ";
 				
-				pstmt = conn.prepareStatement(sql);
-				rs = pstmt.executeQuery();
-				
-				rs.next();
-				
-				itemNo = rs.getInt("itemNo");
-				
-			}finally {
-				close();
+				categoryList.add(cvo);
 			}
 			
-			return itemNo;
-		}//end of 제품번호 채번하기
-
-		
-		//제품정보 insert하기(제품등록)
-		@Override
-		public int itemInsert(ItemVO itemVO) throws SQLException {
-			int result = 0;
-		      
-		      try {
-		         conn = ds.getConnection();
-		         
-		        
-		         
-		         String sql = " insert into item(itemNo, itemName, fk_category_no,"
-		         		+ " company, itemPhotoPath, infoImg , itemInfo, itemAmount, price, volume) "
-		         	    + " values(?,?,?,?,?,?,?,?,?,?) ";
-		         
-		         pstmt = conn.prepareStatement(sql);
-		         
-		         pstmt.setInt(1, itemVO.getItemNo());
-		         pstmt.setString(2, itemVO.getItemName());
-		         pstmt.setInt(3, itemVO.getFk_catagory_no());    
-		         pstmt.setString(4, itemVO.getCompany()); 
-		         pstmt.setString(5, itemVO.getItemPhotoPath());    
-		         pstmt.setString(6, itemVO.getInfoImg()); 
-		         pstmt.setString(7, itemVO.getItemInfo()); 
-		         pstmt.setInt(8, itemVO.getItemAmount());
-		         pstmt.setInt(9, itemVO.getPrice());
-		         pstmt.setInt(10, itemVO.getVolume());
-		         
-		         result = pstmt.executeUpdate();
-		         
-		      } finally {
-		         close();
-		      }
-		      
-		      return result;
+			
+		} finally {
+			close();
 		}
+	 
+	return categoryList;
+	}//end of 	public List<CategoryVO> getCategoryList() throws SQLException 
+
+	//제품번호 채번하기
+	@Override
+	public int getItemNo() throws SQLException {
+
+		int itemNo =0;
+		
+		try{
+			conn=ds.getConnection();
+			
+			String sql = " select item_seq.nextval As itemNo "
+					+ " from dual ";
+			
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			rs.next();
+			
+			itemNo = rs.getInt("itemNo");
+			
+		}finally {
+			close();
+		}
+		
+		return itemNo;
+	}//end of 제품번호 채번하기
 
 	
+	//제품정보 insert하기(제품등록)
+	@Override
+	public int itemInsert(ItemVO itemVO) throws SQLException {
+		int result = 0;
+	      
+	      try {
+	         conn = ds.getConnection();
+	         
+	        
+	         
+	         String sql = " insert into item(itemNo, itemName, fk_category_no,"
+	         		+ " company, itemPhotoPath, infoImg , itemInfo, itemAmount, price, volume) "
+	         	    + " values(?,?,?,?,?,?,?,?,?,?) ";
+	         
+	         pstmt = conn.prepareStatement(sql);
+	         
+	         pstmt.setInt(1, itemVO.getItemNo());
+	         pstmt.setString(2, itemVO.getItemName());
+	         pstmt.setInt(3, itemVO.getFk_catagory_no());    
+	         pstmt.setString(4, itemVO.getCompany()); 
+	         pstmt.setString(5, itemVO.getItemPhotoPath());    
+	         pstmt.setString(6, itemVO.getInfoImg()); 
+	         pstmt.setString(7, itemVO.getItemInfo()); 
+	         pstmt.setInt(8, itemVO.getItemAmount());
+	         pstmt.setInt(9, itemVO.getPrice());
+	         pstmt.setInt(10, itemVO.getVolume());
+	         
+	         result = pstmt.executeUpdate();
+	         
+	      } finally {
+	         close();
+	      }
+	      
+	      return result;
+	}
+
+
 }

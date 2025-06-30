@@ -40,6 +40,26 @@
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.css" />
 <script type="text/javascript" src="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
 
+<script>
+function editInfo(id, ctxPath) {
+
+
+	   const url = `${ctxPath}/user/userEdit.do?id=${id}`;
+	   
+	   // 너비 800, 높이 680 인 팝업창을 화면 가운데 위치시키기
+	   const width = 800;
+	   const height = 680;
+	   
+	   const left = Math.ceil((window.screen.width - width)/2);  // 정수로 만듬 
+	   const top = Math.ceil((window.screen.height - height)/2); // 정수로 만듬
+	   window.open(url, "editInfo", 
+	               `left=${left}, top=${top}, 
+				    width=${width}, height=${height}`);
+	
+}
+
+</script>
+
 <style>
 	/* reset.css */
 html, body, div, span, applet, object, iframe,
