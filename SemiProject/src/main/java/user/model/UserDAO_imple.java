@@ -297,30 +297,72 @@ public class UserDAO_imple implements UserDAO {
 		return user;
 	}
 
-
 	public int pwdUpdate(Map<String, String> paraMap) throws SQLException {
-		
-		int result = 0;
-		
-		try {
-			
-		  conn = ds.getConnection();
-		  String sql = " update users set password = ? "
-		  			 + " where id = ? ";
+	      
+	      int result = 0;
+	      
+	      try {
+	         
+	        conn = ds.getConnection();
+	        String sql = " update users set password = ? "
+	                  + " where id = ? ";
 
-		  pstmt = conn.prepareStatement(sql);
-		  pstmt.setString(1, paraMap.get("new_password"));
-		  pstmt.setString(2, paraMap.get("id"));
-		  
-		  result = pstmt.executeUpdate();
-		  
-		  } catch(SQLException e) {
-	         e.printStackTrace();	   
-		  } finally {
-		  	  close();
-		  }
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, Sha256.encrypt(paraMap.get("new_password")) );
+	        pstmt.setString(2, paraMap.get("id"));
+	        
+	        result = pstmt.executeUpdate();
+	        
+	        } catch(SQLException e) {
+	            e.printStackTrace();      
+	        } finally {
+	             close();
+	        }
+	      
+	        return result;
+	   }
+	
+	// 회원정보수정
+		@Override
+		public int updateUser(UserVO user) throws SQLException {
+			int result = 0;
+
+			try {
+				 conn = ds.getConnection();
+				 
+				 String sql = " update Users set name = ? "
+						    + "                  , password = ? "
+						    + "                  , email = ? "
+						    + "                  , mobile = ? "
+						    + "                  , postcode = ? " 
+						    + "                  , address = ? "
+						    + "                  , addressDetail = ? "
+						    + "                  , addressExtra = ? "
+						    + "                  , passwordChanged = sysdate "
+						    + " where id = ? ";
+				 
+				 pstmt = conn.prepareStatement(sql);
+					
+				 pstmt.setString(1, user.getName());
+				 pstmt.setString(2, Sha256.encrypt(user.getPassword()) ); // 암호를 SHA256 알고리즘으로 단방향 암호화 시킨다.
+				 pstmt.setString(3, aes.encrypt(user.getEmail()) );  // 이메일을 AES256 알고리즘으로 양방향 암호화 시킨다. 
+				 pstmt.setString(4, aes.encrypt(user.getMobile()) ); // 휴대폰번호를 AES256 알고리즘으로 양방향 암호화 시킨다. 
+				 pstmt.setString(5, user.getPostcode());
+				 pstmt.setString(6, user.getAddress());
+				 pstmt.setString(7, user.getAddressDetail());
+				 pstmt.setString(8, user.getAddressExtra());
+				 pstmt.setString(9, user.getId());
+				 
+				 result = pstmt.executeUpdate();
+				 
+			} catch(GeneralSecurityException | UnsupportedEncodingException e) {
+				e.printStackTrace();
+			} finally {
+				close();
+			}
+			
+			return result;		
+		}
 		
-		  return result;
 	}
 
-}

@@ -25,4 +25,7 @@ public interface UserDAO {
 
 	// 로그인 해욧
 	public UserVO login(Map<String, String> paraMap) throws SQLException;
+	
+	// 회원정보수정
+	public int updateUser(UserVO user) throws SQLException;
 }
