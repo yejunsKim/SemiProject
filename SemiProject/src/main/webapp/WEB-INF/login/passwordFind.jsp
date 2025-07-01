@@ -23,7 +23,14 @@ $(function(){
 		<%-- idfind class파일에서 setAttribute에서 name과 email을 넘겨줘서 여기서 쓸 수 있었다.--%>
 	} 
 
-	
+	$(function() {
+	      const loginid = localStorage.getItem('saveid');
+	      if (loginid != null && loginid !== "") {
+	         $('.loginBox input:text[name="id"]').val(loginid);
+	         $('input#saveid').prop("checked", true); 
+	      }
+	});
+
 	$('button.btn-success').click(function(){
 		    pwFind();
 	});

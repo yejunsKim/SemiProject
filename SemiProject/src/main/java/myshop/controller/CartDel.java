@@ -39,6 +39,8 @@ public class CartDel extends BaseController {
 			
 			String cartno = request.getParameter("cartno");
 			
+			System.out.println(cartno);
+			
 			// 장바구니에서 특정 제품 삭제하기
 			int n = idao.cartDelete(cartno);
 			
