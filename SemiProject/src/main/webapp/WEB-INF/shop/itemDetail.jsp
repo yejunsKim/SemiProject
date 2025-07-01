@@ -8,7 +8,7 @@
     String ctxPath = request.getContextPath();
 %>
 
-<jsp:include page="../header.jsp" />
+<jsp:include page="../headerTest.jsp" />
 <style>
 .itemLeft {position:relative;}
 .itemLeft::after{content:"";display:inline-block;width:1px;height:100%;background-color:#ddd;position:absolute;right:5%;top:1%;}

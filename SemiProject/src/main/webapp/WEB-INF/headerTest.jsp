@@ -199,7 +199,7 @@ $(function() {
 				        <td colspan="3" style="padding-top:10px;">
 				          <span style="font-weight:bold;">${sessionScope.loginUser.name}님</span>
 				          &nbsp;
-				          [<a href="javascript:goEditMyInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')">나의정보변경</a>]
+				          [<a href="javascript:editInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')">나의정보변경</a>]
 				        </td>
 				      </tr>
 				      <tr>
@@ -241,11 +241,6 @@ $(function() {
 						<%-- header아이디에 따라 관리자 창 보이는곳 수정시작 --%>
 						<jsp:include page="headerAdmin.jsp" />
 				 	 	<%-- header아이디에 따라 관리자 창 보이는곳 수정 끝 --%>
-			 	 	</c:if>
-			 	 	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.id != 'admin'}">
-						<%-- header아이디에 따라 일반유저 창 보이는곳 수정시작 --%>
-						<jsp:include page="headerUser.jsp" />
-				 	 	<%-- header아이디에 따라 일반유정 창 보이는곳 수정 끝 --%>
 			 	 	</c:if>
 			 	</div>
 			</ul>

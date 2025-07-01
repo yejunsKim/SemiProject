@@ -17,7 +17,8 @@ public class UserOneDetail extends BaseController {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-
+		
+		
 	}
 
 }
