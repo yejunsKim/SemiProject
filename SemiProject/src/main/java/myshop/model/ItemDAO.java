@@ -52,5 +52,9 @@ public interface ItemDAO {
 	 //로그인 유저의 장바구니 조회.	
 	List<CartVO> getOrderItem(String id) throws SQLException;
 
+	 // 트랜잭션으로 주문 insert & 재고감소 & 장바구니삭제 & 포인트적립
+	int insertOrderUpdate(Map<String, String> paraMap)throws SQLException;
+
+
 
 }

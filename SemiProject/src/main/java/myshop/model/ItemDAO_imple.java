@@ -619,5 +619,14 @@ public class ItemDAO_imple implements ItemDAO {
 		return getOrderItemList;
 	}
 
+	 // 트랜잭션으로 주문 insert & 재고감소 & 장바구니삭제 & 포인트적립
+	@Override
+	public int insertOrderUpdate(Map<String, String> paraMap) throws SQLException {
+		int n = 0;
+		
+	      
+	      return n;
+	}
+
 
 }
