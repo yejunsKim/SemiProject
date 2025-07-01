@@ -9,6 +9,11 @@
 %>
 
 <jsp:include page="../header.jsp" />
+<style>
+.itemLeft {position:relative;}
+.itemLeft::after{content:"";display:inline-block;width:1px;height:100%;background-color:#ddd;position:absolute;right:5%;top:1%;}
+</style>
+
 
 <%-- JavaScript --%>
 <script type="text/javascript">
@@ -55,9 +60,10 @@
 				
 				<div class="my-3" style="font-size: 15pt;">${item.itemName}</div>
 				
-				<div class="py-2 pl-3" style="background-color: white;">
-					용량&nbsp;: <span class="pl-5">${item.volume}</span> 
-				</div>
+				 <div class="py-2 pl-3" style="background-color: white;padding-top:16px !important;padding-bottom:16px !important;">
+               용량&nbsp;: <span style="padding-left:84px;">${item.volume}</span> 
+            </div>
+
 				
 				<form id="cartPush">
 					<!-- 제품명 -->
