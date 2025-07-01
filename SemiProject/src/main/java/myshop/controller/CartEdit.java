@@ -1,5 +1,8 @@
 package myshop.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONObject;
 
 import common.controller.BaseController;
@@ -8,11 +11,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import myshop.model.ItemDAO;
 import myshop.model.ItemDAO_imple;
 
-public class CartDel extends BaseController {
+public class CartEdit extends BaseController {
 	
 	private ItemDAO idao = null;
 	
-	public CartDel() {
+	public CartEdit() {
 		idao = new ItemDAO_imple();
 	}
 	
@@ -21,9 +24,8 @@ public class CartDel extends BaseController {
 		
 		String method = request.getMethod();
 		
-		if(!"POST".equalsIgnoreCase(method)) {
-			// GET 방식이라면
-		
+		if(!"POST".equalsIgnoreCase(method)) {	// GET 방식일 경우
+			
 			String message = "비정상적인 경로로 들어왔습니다";
 			String loc = "javascript:history.back()";
 			
@@ -35,19 +37,22 @@ public class CartDel extends BaseController {
 		}
 		
 		else if("POST".equalsIgnoreCase(method) && super.checkLogin(request)) {
-			// POST 방식이고, 로그인을 했다라면
+			// POST 방식이고, 로그인 했으면
 			
 			String cartno = request.getParameter("cartno");
+			String cartamount = request.getParameter("cartamount");
 			
-			System.out.println(cartno);
+			Map<String, String> paraMap = new HashMap<>();
+			paraMap.put("cartno", cartno);
+			paraMap.put("cartamount", cartamount);
 			
-			// 장바구니에서 특정 제품 삭제하기
-			int n = idao.cartDelete(cartno);
+			// 장바구니 테이블에서 선택 제품의 주문량 변경시키기
+			int n = idao.amountUpdate(paraMap);
 			
-			JSONObject jsonobj = new JSONObject();
-			jsonobj.put("n", n);
+			JSONObject jsobj = new JSONObject();	// {}
+			jsobj.put("n", n);	// {"n":1}
 			
-			String json = jsonobj.toString();
+			String json = jsobj.toString();
 			
 			request.setAttribute("json", json);
 			

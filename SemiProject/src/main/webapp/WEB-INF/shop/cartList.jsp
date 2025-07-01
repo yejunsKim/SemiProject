@@ -189,6 +189,59 @@
 		
 	}// end of function cartDel(cartno)------------------------------
 	
+	
+	// 장바구니 제품 수량 변경하기
+	function amountUpdate(obj) {
+		
+		const index = $('button.amountUpdate').index(obj);	// 인덱스
+		
+		const cartno = $('input:checkbox[name="selectedItems"]').eq(index).val();	// 제품번호
+		
+		const cartamount = $('input[name="quantity" ]').eq(index).val();			// 제품 주문 수량
+		
+		const regExp = /^[0-9]+$/g;  // 숫자만 체크하는 정규표현식
+		const bool = regExp.test(cartamount);
+		
+		if(!bool) {
+			alert("수량을 제대로 입력하세요.");
+			location.href="javascript:history.go(0)";
+			return; // amountUpdate 함수 종료
+		}
+		
+		const itemAmount = $('input[name="maxAmount"]').eq(index).val();			// 제품 재고
+		
+		if(Number(cartamount) > Number(itemAmount)) {
+			alert("제품 재고가 부족하여 진행할 수 없습니다.");
+			location.href="javascript:history.go(0)";
+			return; // amountUpdate 함수 종료
+		}
+		
+		if(cartamount == "0") {
+			// 해당 장바구니 번호 비우기
+			cartDel(cartno);	// 해당 장바구니 번호 비우기
+		}
+		else {
+			$.ajax({
+				url:"<%= ctxPath%>/item/cartEdit.do",
+				type:"post",
+				data:{"cartno":cartno,
+					  "cartamount":cartamount},
+				dataType:"json",
+				success:function(json){
+					if(json.n == 1){
+						alert("주문수량이 변경되었습니다.");
+						location.href = "<%= ctxPath%>/item/cartList.do";	// 장바구니 보기 페이지로 간다.
+					}
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+			});
+		}
+		
+	}
+	
+	
 </script>
 
 </head>
@@ -230,8 +283,9 @@
 								<td><fmt:formatNumber pattern="#,###">${cart.ivo.price}</fmt:formatNumber>원</td>
 								<td><fmt:formatNumber pattern="#,###">${cart.ivo.itemPoint}</fmt:formatNumber> Point</td>
 								<td>
-									<input type="number" name="quantity_item001" value="${cart.cartamount}" min="1" style="width: 60px;" />	
-									<button type="button">변경</button>
+									<input type="number" name="quantity" value="${cart.cartamount}" min="1" style="width: 60px;" />	
+									<button type="button" class="amountUpdate" onclick="amountUpdate(this)">변경</button>
+									<input type="hidden" name="maxAmount" value="${cart.ivo.itemAmount}" />
 								</td>
 								<td>${cart.cartdate}</td>
 								<td>
@@ -246,10 +300,10 @@
 		<div class="select-shipping">
 			<div>
 				<strong>선택상품을 : </strong>
-				<button type="submit" name="action" value="delete">삭제하기</button>
+				<button type="button" name="Delaction" value="delete">삭제하기</button>
 			</div>
 			<div>
-				<button type="submit" name="action" value="clear">장바구니 비우기</button>
+				<button type="button" name="action" value="clear">장바구니 비우기</button>
 			</div>
 		</div>
 		

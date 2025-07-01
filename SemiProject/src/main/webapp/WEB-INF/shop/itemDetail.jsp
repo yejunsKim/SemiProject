@@ -63,19 +63,12 @@
 				</div>
 				
 				<div class="my-3" style="font-size: 15pt;">${item.itemName}</div>
-
-				<div class="py-2 pl-3" style="background-color: white;">
-					용량&nbsp;: <span class="pl-5">${item.volume}ml</span> 
+				
+				<div class="py-2 pl-3" style="background-color: white;padding-top:16px !important;padding-bottom:16px !important;">
+					용량&nbsp;: <span style="padding-left:84px;">${item.volume}ml</span> 
 				</div>
 
-				 <div class="py-2 pl-3" style="background-color: white;padding-top:16px !important;padding-bottom:16px !important;">
-               용량&nbsp;: <span style="padding-left:84px;">${item.volume}</span> 
-            </div>
 
- 				<form id="cartPush" method="post" action="<%= ctxPath%>/item/cartAdd.do"> 
- 					<%-- 로그인 했을 경우 id값 가져오기 --%>
-					<input type="hidden" name="id" value="${loginUser.id}" />
-					
 					<%-- 제품번호 --%>
 					<input type="hidden" name="itemNo" value="${item.itemNo}">
 				
