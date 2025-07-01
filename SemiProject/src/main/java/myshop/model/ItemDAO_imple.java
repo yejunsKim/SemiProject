@@ -577,4 +577,47 @@ public class ItemDAO_imple implements ItemDAO {
 	}// end of public int cartDelete(String cartno) throws SQLException--------------------------
 
 
+	 //로그인 유저의 장바구니 조회.	
+	@Override
+	public List<CartVO> getOrderItem(String id) throws SQLException {
+		
+		List<CartVO> getOrderItemList = new ArrayList<>();
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql  =" select cartno, fk_users_id, itemno, cartamount, itemname, ITEMPHOTOPATH, price"
+					+ " from cart c join item i on c.fk_item_no = i.itemno "
+					+ " where c.fk_users_id = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			
+	        rs = pstmt.executeQuery();
+
+	        while(rs.next()) {
+	            CartVO cvo = new CartVO();
+	            cvo.setCartno(rs.getInt("cartno"));
+	            cvo.setFk_users_id(rs.getString("fk_users_id"));
+	            cvo.setCartamount(rs.getInt("cartamount"));
+
+	            ItemVO ivo = new ItemVO();
+	            ivo.setItemName(rs.getString("itemname"));
+	            ivo.setItemPhotoPath(rs.getString("itemphotopath"));
+	            ivo.setPrice(rs.getInt("price"));
+
+	            cvo.setIvo(ivo);
+
+	            getOrderItemList.add(cvo);
+	        }
+			
+
+		} finally {
+			close();
+		}
+		
+		return getOrderItemList;
+	}
+
+
 }

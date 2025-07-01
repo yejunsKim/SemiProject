@@ -72,8 +72,8 @@
                용량&nbsp;: <span style="padding-left:84px;">${item.volume}</span> 
             </div>
 
-				<form id="cartPush" method="post" action="<%= ctxPath%>/item/cartList.do">
-					<%-- 로그인 했을 경우 id값 가져오기 --%>
+ 				<form id="cartPush" method="post" action="<%= ctxPath%>/item/cartAdd.do"> 
+ 					<%-- 로그인 했을 경우 id값 가져오기 --%>
 					<input type="hidden" name="id" value="${loginUser.id}" />
 					
 					<%-- 제품번호 --%>

@@ -49,4 +49,8 @@ public interface ItemDAO {
 	// 장바구니에서 특정 제품 삭제하기
 	int cartDelete(String cartno) throws SQLException;
 
+	 //로그인 유저의 장바구니 조회.	
+	List<CartVO> getOrderItem(String id) throws SQLException;
+
+
 }
