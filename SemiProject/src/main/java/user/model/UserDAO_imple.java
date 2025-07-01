@@ -589,7 +589,4 @@ public class UserDAO_imple implements UserDAO {
 		return user;
 	}// end of public MemberVO selectMember(String userid) throws SQLException -----
 
-			
-			
-			
 }
