@@ -45,5 +45,8 @@ public interface ItemDAO {
 
 	//제품정보 insert하기(제품등록)
 	int itemInsert(ItemVO itemVO) throws SQLException;
+	
+	// 장바구니에서 특정 제품 삭제하기
+	int cartDelete(String cartno) throws SQLException;
 
 }

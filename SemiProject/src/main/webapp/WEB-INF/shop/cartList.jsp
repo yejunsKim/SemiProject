@@ -122,18 +122,72 @@
 	
 	$(function(){
 		
-		
+		$('input:checkbox[name="selectedItems"]').click(function(){	// 제품 체크박스 상태에 따라 전체 체크박스 연동
+			
+			let all_check = false;
+			
+			$('input:checkbox[name="selectedItems"]').each(function(index, elmt){
+				
+				const cartno_checked = $(elmt).prop("checked");
+				
+				if(!cartno_checked) {
+					$('input:checkbox[id="allCheckOrNone"]').prop("checked", false);
+					all_check = true;
+					return false;	// break;
+				}
+				
+			});
+			
+			if(!all_check) {
+				$('input:checkbox[id="allCheckOrNone"]').prop("checked", true);
+			}
+			
+		});// end of $('input.checkbox[name="selectedItems"]').click(function()})------------------------
 		
 	});// end of $(function(){})-------------------------
 	
 	
 	// Function Declaration
+	
+	// 장바구니 제품 왼쪽 상단 전부 체크 or 해제하기
 	function allCheckBox() {
 		
 		const bool = $('input:checkbox[id="allCheckOrNone"]').is(":checked");
 		
 		$('input:checkbox[name="selectedItems"]').prop("checked", bool);
 	}// end of function allCheckBox()-------------------------
+	
+	
+	// 장바구니에서 특정 제품 삭제하기
+	function cartDel(cartno) {
+		
+		const itemName = $(event.target).parent().parent().find("div#cart_itemName").text();
+		
+		if( confirm(`\${itemName} 을[를] 삭제하시겠습니까?`) ) {
+			
+			$.ajax({	// 삭제 클래스 만들기
+				url:"<%= ctxPath%>/item/cartDel.do",
+				type:"post",
+				data:{"cartno":cartno},
+				dataType:"json",
+				success:function(json){
+					
+					if(json.n == 1) {	// 성공시 삭제된 채로 다시 장바구니 목록으로
+						location.href = "<%= ctxPath%>/item/cartList.do";
+					}
+					
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+			});
+		}
+		
+		else {
+			alert(`장바구니에서 \${itemName} 제품 삭제를 취소하셨습니다.`);
+		}
+		
+	}// end of function cartDel(cartno)------------------------------
 	
 </script>
 
@@ -172,7 +226,7 @@
 							<tr>
 								<td><input type="checkbox" name="selectedItems" value="${cart.cartno}" /></td>
 								<td><img src="<%= ctxPath%>${cart.ivo.itemPhotoPath}" alt="상품 이미지" style="width: 120px; height: auto;" /></td>
-								<td><div>${cart.ivo.itemName}</div></td>
+								<td><div id="cart_itemName">${cart.ivo.itemName}</div></td>
 								<td><fmt:formatNumber pattern="#,###">${cart.ivo.price}</fmt:formatNumber>원</td>
 								<td><fmt:formatNumber pattern="#,###">${cart.ivo.itemPoint}</fmt:formatNumber> Point</td>
 								<td>
@@ -181,7 +235,7 @@
 								</td>
 								<td>${cart.cartdate}</td>
 								<td>
-									<button type="button">삭제</button>
+									<button type="button" id="cartDelete" onclick="cartDel('${cart.cartno}')">삭제</button>
 								</td>
 							</tr>
 						</c:forEach>
