@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" 
 	pageEncoding="UTF-8"%>
 
@@ -67,7 +66,7 @@
 					용량&nbsp;: <span style="padding-left:84px;">${item.volume}ml</span> 
 				</div>
 
-
+				<form id="cartPush" method="post" action="<%= ctxPath%>/item/cartAdd.do">
 					<%-- 제품번호 --%>
 					<input type="hidden" name="itemNo" value="${item.itemNo}">
 				
