@@ -13,6 +13,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import myshop.domain.CartVO;
 import myshop.domain.CategoryVO;
 import myshop.domain.ItemVO;
 
@@ -338,103 +339,242 @@ public class ItemDAO_imple implements ItemDAO {
 		return item;
 		
 	} // end of public ItemVO selectOneItemByItemNo(int itemNo) throws SQLException
-
-	//카테고리 조회
-
-		@Override
-		public List<CategoryVO> getCategoryList() throws SQLException {
-			List<CategoryVO> categoryList = new ArrayList<>();
-			 
-			try {
-				conn = ds.getConnection();
+	
+	
+	// 장바구니 담기 
+	@Override
+	public int insertCartOne(Map<String, String> paraMap) throws SQLException {
+		
+		int n = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " SELECT cartno"
+					   + " FROM cart"
+					   + " WHERE fk_users_id = ? AND fk_item_no = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, paraMap.get("fk_users_id"));
+			pstmt.setInt(2, Integer.parseInt(paraMap.get("fk_item_no")));
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {	// 장바구니에 이미 같은 제품이 존재하는 경우
 				
-				String sql = " select categoryNo, categoryName, categoryImagePath  "
-						   + " from category ";
+				sql = " UPDATE cart set cartamount = to_number(?) "
+					+ " WHERE cartno = ? ";
 				
 				pstmt = conn.prepareStatement(sql);
 				
-				rs = pstmt.executeQuery();
+				pstmt.setString(1, paraMap.get("cartamount"));	// 제품 수량 추가 증가가 아닌 선택한 수량이 들어가게 끔 sql문 작성함.
+				pstmt.setInt(2, rs.getInt("cartno"));
 				
-				while(rs.next()) {
-					CategoryVO cvo = new CategoryVO();
-					cvo.setCategoryNo(rs.getInt("categoryNo"));
-					cvo.setCategoryName(rs.getString("categoryName"));
-					cvo.setCategoryImagePath(rs.getString("categoryImagePath"));
-					
-					
-					categoryList.add(cvo);
+				n = pstmt.executeUpdate();
+			}
+			
+			else {	// 장바구니에 제품을 새로 추가하는 경우
+				
+				sql = " INSERT INTO cart(cartno, fk_users_id, fk_item_no, cartamount, cartdate)"
+					+ " VALUES(CART_SEQ.nextval, ?, to_number(?), to_number(?), sysdate) ";
+				
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, paraMap.get("fk_users_id"));
+				pstmt.setString(2, paraMap.get("fk_item_no"));
+				pstmt.setString(3, paraMap.get("cartamount"));
+				
+				n = pstmt.executeUpdate();
+			}
+			
+		} finally {
+			close();
+		}
+		
+		return n;
+	}// end of public int insertCartOne(Map<String, String> paraMap) throws SQLException------------------
+	
+	
+	// 장바구니 목록 가져오기(select)
+	@Override
+	public List<CartVO> selectItemCart(String fk_users_id) throws SQLException {
+		
+		List<CartVO> cartList = null;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " SELECT C.cartno, I.itemPhotoPath, I.itemName, I.price, C.cartamount, "
+					   + " TO_CHAR(C.cartdate, 'yyyy-mm-dd') AS cartdate, U.grade "
+					   + " FROM cart C "
+					   + " JOIN users U ON C.fk_users_id = U.id "
+					   + " JOIN item I ON C.fk_item_no = I.itemNo "
+					   + " WHERE fk_users_id = ? "
+					   + " ORDER BY C.cartno DESC ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, fk_users_id);
+			
+			rs = pstmt.executeQuery();
+			
+			int cnt = 0;
+			while(rs.next()) {
+				cnt++;
+				
+				if(cnt == 1) {
+					cartList = new ArrayList<>();
 				}
 				
+				ItemVO ivo = new ItemVO();
+				ivo.setItemPhotoPath(rs.getString("itemPhotoPath"));
+				ivo.setItemName(rs.getString("itemName"));
+				ivo.setPrice(rs.getInt("price"));
 				
-			} finally {
-				close();
-			}
-		 
-		return categoryList;
-		}//end of 	public List<CategoryVO> getCategoryList() throws SQLException 
-
-		//제품번호 채번하기
-		@Override
-		public int getItemNo() throws SQLException {
-
-			int itemNo =0;
+				// 등급에 따른 포인트 계산
+				ivo.setUserItemPoint(rs.getString("grade"));
+				
+				
+				CartVO cvo = new CartVO();
+				cvo.setCartno(rs.getInt("cartno"));
+				cvo.setCartamount(rs.getInt("cartamount"));
+				cvo.setCartdate(rs.getString("cartdate")); // TO_CHAR 했으므로 String으로 받기
+				
+				cvo.setIvo(ivo);
+				
+				cartList.add(cvo);
+			}// end of while(rs.next())----------------------
 			
-			try{
-				conn=ds.getConnection();
-				
-				String sql = " select item_seq.nextval As itemNo "
-						+ " from dual ";
-				
-				pstmt = conn.prepareStatement(sql);
-				rs = pstmt.executeQuery();
-				
-				rs.next();
-				
-				itemNo = rs.getInt("itemNo");
-				
-			}finally {
-				close();
-			}
-			
-			return itemNo;
-		}//end of 제품번호 채번하기
-
-		
-		//제품정보 insert하기(제품등록)
-		@Override
-		public int itemInsert(ItemVO itemVO) throws SQLException {
-			int result = 0;
-		      
-		      try {
-		         conn = ds.getConnection();
-		         
-		        
-		         
-		         String sql = " insert into item(itemNo, itemName, fk_category_no,"
-		         		+ " company, itemPhotoPath, infoImg , itemInfo, itemAmount, price, volume) "
-		         	    + " values(?,?,?,?,?,?,?,?,?,?) ";
-		         
-		         pstmt = conn.prepareStatement(sql);
-		         
-		         pstmt.setInt(1, itemVO.getItemNo());
-		         pstmt.setString(2, itemVO.getItemName());
-		         pstmt.setInt(3, itemVO.getFk_catagory_no());    
-		         pstmt.setString(4, itemVO.getCompany()); 
-		         pstmt.setString(5, itemVO.getItemPhotoPath());    
-		         pstmt.setString(6, itemVO.getInfoImg()); 
-		         pstmt.setString(7, itemVO.getItemInfo()); 
-		         pstmt.setInt(8, itemVO.getItemAmount());
-		         pstmt.setInt(9, itemVO.getPrice());
-		         pstmt.setInt(10, itemVO.getVolume());
-		         
-		         result = pstmt.executeUpdate();
-		         
-		      } finally {
-		         close();
-		      }
-		      
-		      return result;
+		} finally {
+			close();
 		}
+		
+		return cartList;
+	}// end of public List<CartVO> selectItemCart(String fk_users_id) throws SQLException-------------------
 
 	
+	//카테고리 조회
+	@Override
+	public List<CategoryVO> getCategoryList() throws SQLException {
+		List<CategoryVO> categoryList = new ArrayList<>();
+		 
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " select categoryNo, categoryName, categoryImagePath  "
+					   + " from category ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				CategoryVO cvo = new CategoryVO();
+				cvo.setCategoryNo(rs.getInt("categoryNo"));
+				cvo.setCategoryName(rs.getString("categoryName"));
+				cvo.setCategoryImagePath(rs.getString("categoryImagePath"));
+				
+				
+				categoryList.add(cvo);
+			}
+			
+			
+		} finally {
+			close();
+		}
+	 
+	return categoryList;
+	}//end of 	public List<CategoryVO> getCategoryList() throws SQLException 
+
+	//제품번호 채번하기
+	@Override
+	public int getItemNo() throws SQLException {
+
+		int itemNo =0;
+		
+		try{
+			conn=ds.getConnection();
+			
+			String sql = " select item_seq.nextval As itemNo "
+					+ " from dual ";
+			
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			rs.next();
+			
+			itemNo = rs.getInt("itemNo");
+			
+		}finally {
+			close();
+		}
+		
+		return itemNo;
+	}//end of 제품번호 채번하기
+
+	
+	//제품정보 insert하기(제품등록)
+	@Override
+	public int itemInsert(ItemVO itemVO) throws SQLException {
+		int result = 0;
+	      
+	      try {
+	         conn = ds.getConnection();
+	         
+	        
+	         
+	         String sql = " insert into item(itemNo, itemName, fk_category_no,"
+	         		+ " company, itemPhotoPath, infoImg , itemInfo, itemAmount, price, volume) "
+	         	    + " values(?,?,?,?,?,?,?,?,?,?) ";
+	         
+	         pstmt = conn.prepareStatement(sql);
+	         
+	         pstmt.setInt(1, itemVO.getItemNo());
+	         pstmt.setString(2, itemVO.getItemName());
+	         pstmt.setInt(3, itemVO.getFk_catagory_no());    
+	         pstmt.setString(4, itemVO.getCompany()); 
+	         pstmt.setString(5, itemVO.getItemPhotoPath());    
+	         pstmt.setString(6, itemVO.getInfoImg()); 
+	         pstmt.setString(7, itemVO.getItemInfo()); 
+	         pstmt.setInt(8, itemVO.getItemAmount());
+	         pstmt.setInt(9, itemVO.getPrice());
+	         pstmt.setInt(10, itemVO.getVolume());
+	         
+	         result = pstmt.executeUpdate();
+	         
+	      } finally {
+	         close();
+	      }
+	      
+	      return result;
+	}
+	
+	
+	// 장바구니에서 특정 제품 삭제하기
+	@Override
+	public int cartDelete(String cartno) throws SQLException {
+		
+		int n = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " DELETE FROM cart "
+					   + " WHERE cartno = to_number(?) ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, cartno);
+			
+			n = pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+		
+		return n;
+	}// end of public int cartDelete(String cartno) throws SQLException--------------------------
+
+
 }
