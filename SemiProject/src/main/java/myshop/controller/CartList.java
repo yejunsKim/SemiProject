@@ -1,5 +1,6 @@
 package myshop.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import common.controller.BaseController;
@@ -49,6 +50,10 @@ public class CartList extends BaseController {
 			
 			// 장바구니 목록 가져오기(select)
 			List<CartVO> cartList = idao.selectItemCart(fk_users_id);
+			
+			if (cartList == null) {
+				cartList = new ArrayList<>();
+			}
 			
 			int totalPrice = 0;
 			int totalPoint = 0;

@@ -51,5 +51,8 @@ public interface ItemDAO {
 	
 	// 장바구니 테이블에서 선택 제품의 주문량 변경시키기
 	int amountUpdate(Map<String, String> paraMap) throws SQLException;
+	
+	// 장바구니 모두 비우기
+	int cartAllDelete(String id) throws SQLException;
 
 }
