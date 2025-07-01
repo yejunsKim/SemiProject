@@ -20,14 +20,14 @@ public class ItemDetail extends BaseController {
 		
 		String referer = request.getHeader("Referer");
 		
-		if(referer == null) {
+		if(referer == null) {	// 주소 직접 입력 방지
 			super.setRedirect(true);
 			super.setViewPage(request.getContextPath() + "/main.do");
 			return;	// 종료
 		}
 		
 		else {
-			String s_itemno = request.getParameter("itemno");
+			String s_itemno = request.getParameter("itemno");	// itemno 값 가져옴!
 			
 			if(s_itemno != null) {
 				int itemno = Integer.parseInt(s_itemno);
