@@ -37,8 +37,11 @@ public interface UserDAO {
 
 	/* >>> 뷰단(userList.jsp)에서 "페이징 처리시 보여주는 순번 공식" 에서 사용하기 위해 
     검색이 있는 또는 검색이 없는 회원의 총개수 알아오기 시작 <<< */
-   public int getTotalUserCount(Map<String, String> paraMap) throws SQLException;
+    public int getTotalUserCount(Map<String, String> paraMap) throws SQLException;
 
 	// **** 페이징 처리를 한 모든 회원 목록 또는 검색한 회원목록 보여주기 **** //
 	public List<UserVO> select_User_paging(Map<String, String> paraMap) throws SQLException;
+
+	// userDatail을 위한 id로 userVO 끌고오기.
+	public UserVO selectUser(String id) throws SQLException;
 }

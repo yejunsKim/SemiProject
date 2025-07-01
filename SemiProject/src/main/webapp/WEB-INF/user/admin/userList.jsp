@@ -62,10 +62,10 @@
 		// alert(userid);
 
 		
-		const frm = document.userOneDetail_frm;
+		const frm = document.userDetail_frm;
 		frm.id.value = id;
 		
-		frm.action = "${pageContext.request.contextPath}/user/userOneDetail.do";
+		frm.action = "${pageContext.request.contextPath}/user/admin/userDetail.do";
 		frm.method = "POST";
 		frm.submit();
 		
@@ -99,7 +99,6 @@
 	
 		<form name="user_search_frm">
 			<select name="searchType">
-	         	<option value="">검색대상</option>
 	         	<option value="name">회원명</option>
 	         	<option value="id">아이디</option>
 	         	<option value="email">이메일</option>
@@ -163,7 +162,7 @@
 		
 	</div>
 	
-	<form name="userOneDetail_frm">
+	<form name="userDetail_frm">
 		<input type="hidden" name="id" />
 	</form>
 	

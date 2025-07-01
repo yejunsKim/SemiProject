@@ -503,45 +503,93 @@ public class UserDAO_imple implements UserDAO {
 
 
 	// 회원정보수정
-			@Override
-			public int updateUser(UserVO user) throws SQLException {
-				int result = 0;
+	@Override
+	public int updateUser(UserVO user) throws SQLException {
+		int result = 0;
 
-				try {
-					 conn = ds.getConnection();
-					 
-					 String sql = " update Users set name = ? "
-							    + "                  , password = ? "
-							    + "                  , email = ? "
-							    + "                  , mobile = ? "
-							    + "                  , postcode = ? " 
-							    + "                  , address = ? "
-							    + "                  , addressDetail = ? "
-							    + "                  , addressExtra = ? "
-							    + "                  , passwordChanged = sysdate "
-							    + " where id = ? ";
-					 
-					 pstmt = conn.prepareStatement(sql);
-						
-					 pstmt.setString(1, user.getName());
-					 pstmt.setString(2, Sha256.encrypt(user.getPassword()) ); // 암호를 SHA256 알고리즘으로 단방향 암호화 시킨다.
-					 pstmt.setString(3, aes.encrypt(user.getEmail()) );  // 이메일을 AES256 알고리즘으로 양방향 암호화 시킨다. 
-					 pstmt.setString(4, aes.encrypt(user.getMobile()) ); // 휴대폰번호를 AES256 알고리즘으로 양방향 암호화 시킨다. 
-					 pstmt.setString(5, user.getPostcode());
-					 pstmt.setString(6, user.getAddress());
-					 pstmt.setString(7, user.getAddressDetail());
-					 pstmt.setString(8, user.getAddressExtra());
-					 pstmt.setString(9, user.getId());
-					 
-					 result = pstmt.executeUpdate();
-					 
-				} catch(GeneralSecurityException | UnsupportedEncodingException e) {
-					e.printStackTrace();
-				} finally {
-					close();
-				}
+		try {
+			 conn = ds.getConnection();
+			 
+			 String sql = " update Users set name = ? "
+					    + "                  , password = ? "
+					    + "                  , email = ? "
+					    + "                  , mobile = ? "
+					    + "                  , postcode = ? " 
+					    + "                  , address = ? "
+					    + "                  , addressDetail = ? "
+					    + "                  , addressExtra = ? "
+					    + "                  , passwordChanged = sysdate "
+					    + " where id = ? ";
+			 
+			 pstmt = conn.prepareStatement(sql);
 				
-				return result;		
-			}
+			 pstmt.setString(1, user.getName());
+			 pstmt.setString(2, Sha256.encrypt(user.getPassword()) ); // 암호를 SHA256 알고리즘으로 단방향 암호화 시킨다.
+			 pstmt.setString(3, aes.encrypt(user.getEmail()) );  // 이메일을 AES256 알고리즘으로 양방향 암호화 시킨다. 
+			 pstmt.setString(4, aes.encrypt(user.getMobile()) ); // 휴대폰번호를 AES256 알고리즘으로 양방향 암호화 시킨다. 
+			 pstmt.setString(5, user.getPostcode());
+			 pstmt.setString(6, user.getAddress());
+			 pstmt.setString(7, user.getAddressDetail());
+			 pstmt.setString(8, user.getAddressExtra());
+			 pstmt.setString(9, user.getId());
+			 
+			 result = pstmt.executeUpdate();
+			 
+		} catch(GeneralSecurityException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		return result;		
+	}
 
+	@Override
+	public UserVO selectUser(String id) throws SQLException {
+		UserVO user = null;
+		
+		try {
+			 conn = ds.getConnection();
+			 
+			 String sql = "   SELECT id, name, point, grade, "
+			 			+ "			 To_Char(registerday, 'yyyy-mm-dd') as registerday,"
+				 		+ "          isDormant, email, mobile, postcode, address, addressDetail, addressExtra "
+				 		+ "   FROM Users "
+				 		+ "   WHERE isDeleted = 'N' AND id = ? ";
+			 
+			 pstmt = conn.prepareStatement(sql);
+			 
+			 pstmt.setString(1, id);
+
+			 rs = pstmt.executeQuery();
+			 
+			 if(rs.next()) {
+				 user = new UserVO(); // 다시 선언하고,
+				 System.out.println("id 파라미터: " + id);
+
+				 user.setId(rs.getString("id"));
+				 user.setName(rs.getString("name"));
+				 user.setPoint(rs.getInt("point"));
+				 user.setGrade(rs.getString("grade"));
+				 user.setRegisterday(rs.getString("registerday"));
+				 
+				 user.setEmail(aes.decrypt(rs.getString("email")));
+				 user.setMobile(aes.decrypt(rs.getString("mobile")));
+				 user.setPostcode(rs.getString("postcode"));
+				 user.setAddress(rs.getString("address"));
+				 user.setAddressDetail(rs.getString("addressDetail"));
+				 user.setAddressExtra(rs.getString("addressExtra"));
+			 }
+			
+		} catch(GeneralSecurityException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return user;
+	}// end of public MemberVO selectMember(String userid) throws SQLException -----
+
+			
+			
+			
 }
