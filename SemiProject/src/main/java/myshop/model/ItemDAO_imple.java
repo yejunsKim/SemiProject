@@ -603,6 +603,32 @@ public class ItemDAO_imple implements ItemDAO {
 		
 		return n;
 	}
+	
+	
+	// 장바구니 모두 비우기
+	@Override
+	public int cartAllDelete(String id) throws SQLException {
+		
+		int n = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " DELETE FROM cart "
+					   + " WHERE fk_users_id = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, id);
+			
+			n = pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+		
+		return n;
+	}
 
 
 }

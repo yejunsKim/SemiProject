@@ -112,7 +112,6 @@
 	.select-shipping {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
 		margin: 20px 0;
 	}
 
@@ -239,7 +238,44 @@
 			});
 		}
 		
-	}
+	}// end of function amountUpdate(obj)---------------------------
+	
+	
+	// 장바구니 모두 비우기
+	function allDel() {
+		
+		const id = "${sessionScope.loginUser.id}";
+		
+		const is_cartList = ${not empty requestScope.cartList};
+		
+		if(!is_cartList) {
+			alert("장바구니가 이미 비어있습니다.");
+		}
+		else{
+			if( confirm(`장바구니를 모두 비우시겠습니까?`) ) {
+				
+				$.ajax({
+					url:"<%= ctxPath%>/item/cartAllDel.do",
+					type:"post",
+					data:{"id":id},
+					dataType:"json",
+					success:function(json){
+						if(json.n > 1){
+							alert("장바구니를 모두 비웠습니다.");
+							location.href = "<%= ctxPath%>/item/cartList.do";	// 장바구니 보기 페이지로 간다.
+						}
+					},
+					error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}
+				});
+			}
+			else{
+				alert("취소되었습니다.");
+			}
+		}
+		
+	}// end of function allDel()-----------------------------
 	
 	
 </script>
@@ -298,12 +334,8 @@
 		</table>
 		
 		<div class="select-shipping">
-			<div>
-				<strong>선택상품을 : </strong>
-				<button type="button" name="Delaction" value="delete">삭제하기</button>
-			</div>
-			<div>
-				<button type="button" name="action" value="clear">장바구니 비우기</button>
+			<div style="margin-left: auto;">
+				<button type="button" name="allDelete" onclick="allDel()">장바구니 비우기</button>
 			</div>
 		</div>
 		
@@ -316,7 +348,7 @@
 				<tr style="border-bottom: 1px solid #ddd;"> 
 					<th style="padding: 10px; width: 25%;">총 상품금액</th>
 					<th style="padding: 10px; width: 25%;">총 적립 포인트</th>
-					<th style="padding: 10px; width: 50%;">결제 예정 포인트</th>
+					<th style="padding: 10px; width: 50%;">결제 예정 금액</th>
 				</tr>
 			</thead>
 			
@@ -324,7 +356,7 @@
 				<tr>
 					<td style="padding: 15px;"><strong><fmt:formatNumber pattern="#,###">${requestScope.totalPrice}</fmt:formatNumber></strong>원</td>
 					<td style="padding: 15px;"><fmt:formatNumber pattern="#,###">${requestScope.totalPoint}</fmt:formatNumber> Point</td>
-					<td style="padding: 15px; color: red; font-weight: bold;">= <fmt:formatNumber pattern="#,###">${requestScope.totalPrice}</fmt:formatNumber> Point</td>
+					<td style="padding: 15px; color: red; font-weight: bold;">= <fmt:formatNumber pattern="#,###">${requestScope.totalPrice}</fmt:formatNumber>원</td>
 				</tr>
 			</tbody>
 		</table>
