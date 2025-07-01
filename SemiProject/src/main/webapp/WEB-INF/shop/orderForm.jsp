@@ -8,7 +8,7 @@
     String ctxPath = request.getContextPath();
 %>
 
-<jsp:include page="../../header.jsp" />
+<jsp:include page="../header.jsp" />
 
 <style>
 
@@ -38,8 +38,14 @@
 
 </style>
 
+<script type="text/javascript">
+
+	
+	
+</script>
+
 	<div class="col-md-12" id="divOrder" style="background-color: #f5f5f5;padding-top:80px;">
-      	<form name="orderFrm" >
+      	<form name="orderFrm" action="post">
       	
       		<%-- 배송지 --%>
       		<div class="section">
@@ -93,7 +99,7 @@
 		                    </td>
 		                </tr>
 		                
-		                <tr style="border-bottom: 1px solid;">
+		                <tr style="border-bottom: 1px solid">
 		                    <td>이메일&nbsp;<span class="star">*</span></td>
 		                    <td>
 		                       <input type="text" name="email" id="email" maxlength="60" class="requiredInfo" value="${sessionScope.loginuser.email}" /> 
@@ -103,67 +109,80 @@
 		                       <span id="emailCheckResult"></span>
 		                    </td>
 		                </tr>
-		                
-		                <tr class="h5" >
-	                   		<td>주문상품</td>
-	                	</tr>
-		                
-		                <tr style="border-bottom: 1px solid">
-        					<!-- 이미지 -->
-        					<td style="width: 120px; padding-right: 20px; vertical-align: top;">
-            					<img src="<%= ctxPath%>/images/item/도손.png" alt="테스트 상품" style="width:100px;" />
-        					</td>
-
-        					<!-- 설명 -->
-        					<td style="vertical-align: top;">
-	            				<strong>향수 이름</strong><br/>
-	           					<span>가격/수량<br/></span>
-        					</td>
-    					</tr>
-    					
-    					<tr class="h5" >
-	                   		<td>결제금액</td>
-	                	</tr>
-	                	
-	                	<tr style="border-bottom: 1px solid">
-	                		<td>
-	                			<div style="margin-bottom: 10px;">
-            						<span>결제금액</span>
-            						<span style="margin-left: 30px;">가격</span>
-        						</div>
-        						<div>
-            						<span>배송비</span>
-           	 						<span style="margin-left: 34px;">무료</span>
-        						</div>
-	                		</td>
-	                	</tr>
-	                	
-	                	<tr class="h5" >
-	                   		<td>결제수단</td>
-	                	</tr>
-	                	
-	                	<tr style="border-bottom: 1px solid">
-	                		<td><button>카드결제</button></td>
-	                	</tr>
-	                	
-	                	<!-- 개인정보 동의 및 결제 버튼 -->
-						<tr class="h5">
-                    		<td colspan="2">
-                       			<label for="agree">이용약관에 동의합니다</label>&nbsp;&nbsp;<input type="checkbox" id="agree" />
-                    		</td>
-                		</tr>
-                
-                		<tr>
-                    		<td colspan="2">
-                       			<iframe src="<%= ctxPath%>/iframe_agree/agree.html" width="100%" height="150px" style="border: solid 1px navy;"></iframe>
-                    		</td>
-                		</tr>
-	                	
 	                </tbody>	                
            		</table>
-    
 	    	</div>
+	    	
+	    	<!-- 주문상품 -->
+			<div class="section">
+				<table id="tblOrder">
+					<tr class="h5">
+                   		<td>배송지</td>
+                	</tr>
+					<tr style="border-bottom: 1px solid">
+						<td style="width: 100px;">
+							<img src="images/sample.jpg" alt="테스트 상품" style="width:100px;" />
+						</td>
+						<td>
+							<strong>테스트 상품 (예시)</strong><br/>
+							상품 설명이 여기에 들어갑니다.
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+			<!-- 결제정보 -->
+			<div class="section">
+				<table id="tblOrder">
+					<tr class="h5">
+                   		<td>결제정보</td>
+                	</tr>
+					<tr>
+						<td>상품금액</td>
+						<td style="text-align: right;">57,375원</td>
+					</tr>
+					<tr>
+						<td>배송비</td>
+						<td style="text-align: right;">0원</td>
+					</tr>
+					<tr style="border-bottom: 1px solid">
+						<td><strong>최종 결제 금액</strong></td>
+						<td style="text-align: right;"><strong>57,375원</strong></td>
+					</tr>
+				</table>
+			</div>
+			
+			<!-- 결제수단 -->
+			<div class="section">
+				<table id="tblOrder">
+					<tr class="h5" >
+                   		<td>결제수단</td>
+                	</tr>
+                	<tr style="border-bottom: 1px solid">
+                		<td><button>카드결제</button></td>
+                	</tr>
+				</table>
+			</div>
+		
+			<!-- 개인정보 동의 및 결제 버튼 -->
+			<div>
+				<table id="tblOrder">
+					<tr class="h5" >
+                   		<td colspan="2">
+                    		<label for="agree">이용약관에 동의합니다</label>&nbsp;&nbsp;<input type="checkbox" id="agree" />
+                   		</td>
+               		</tr>
+               		<tr>
+                   		<td colspan="2">
+                      		<iframe src="<%= ctxPath%>/iframe_agree/agree.html" width="100%" height="150px" style="border: solid 1px navy;"></iframe>
+                   		</td>
+               		</tr>
+				</table>
+				
+			</div>
+		
    		</form>
+   		
 	</div>
 
-<jsp:include page="../../footer.jsp" />
+<jsp:include page="../footer.jsp" />

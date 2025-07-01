@@ -1,4 +1,4 @@
-package user.controller;
+package myshop.controller;
 
 import common.controller.BaseController;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,7 +10,7 @@ public class OrderForm extends BaseController {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		super.setRedirect(false);
-		super.setViewPage("/WEB-INF/user/order/orderForm.jsp");
+		super.setViewPage("/WEB-INF/shop/orderForm.jsp");
 
 	}
 
