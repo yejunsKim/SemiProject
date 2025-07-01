@@ -10,6 +10,14 @@
 <script type="text/javascript">
 $(function(){
 
+	$(function() {
+		const loginid = localStorage.getItem('saveid');
+		if (loginid != null && loginid !== "") {
+			$('.loginBox input:text[name="id"]').val(loginid);
+			$('input#saveid').prop("checked", true); 
+		}
+	});
+	
 	const method = "${requestScope.method}";
 
 	if(method == "GET") {
