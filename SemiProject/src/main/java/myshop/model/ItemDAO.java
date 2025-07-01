@@ -29,5 +29,13 @@ public interface ItemDAO {
 	
 	// 제품 1개 상세 정보 가져오기
 	ItemVO selectOneItemByItemNo(int itemNo) throws SQLException;	// <- ItemDAO 
-	
+
+	//카테고리 조회
+	List<CategoryVO> getCategoryList() throws SQLException;
+
+	//제품번호 채번하기
+	int getItemNo() throws SQLException;
+
+	//제품정보 insert하기(제품등록)
+	int itemInsert(ItemVO itemVO) throws SQLException;
 }

@@ -34,7 +34,7 @@
 <script type="text/javascript" src="<%= ctxPath%>/js/main/main.js"></script>
 
 <!--  로그인 part js -->
-<script type="text/javascript" src="<%=ctxPath%>/js/login/login.js"></script>
+<script type="text/javascript" src="<%= ctxPath%>/js/login/login.js"></script>
 
 <%-- jQueryUI CSS 및 JS --%>
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.css" />
@@ -115,7 +115,7 @@ $(function() {
          isMenuOpen = !isMenuOpen;
     });
     
-    if( ${empty sessionScope.loginuser} ) {
+    if( ${empty sessionScope.loginUser} ) {
 		// 세션에 남겨놓은 유저가 있다면, 로컬로 남기겠다는 것.
 		const loginid = localStorage.getItem('saveid');
 		
