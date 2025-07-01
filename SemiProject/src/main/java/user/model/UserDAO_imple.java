@@ -545,4 +545,50 @@ public class UserDAO_imple implements UserDAO {
             return result;      
          }
 
+
+         @Override
+     	public UserVO selectUser(String id) throws SQLException {
+     		UserVO user = null;
+     		
+     		try {
+     			 conn = ds.getConnection();
+     			 
+     			 String sql = "   SELECT id, name, point, grade, "
+     			 			+ "			 To_Char(registerday, 'yyyy-mm-dd') as registerday,"
+     				 		+ "          isDormant, email, mobile, postcode, address, addressDetail, addressExtra "
+     				 		+ "   FROM Users "
+     				 		+ "   WHERE isDeleted = 'N' AND id = ? ";
+     			 
+     			 pstmt = conn.prepareStatement(sql);
+     			 
+     			 pstmt.setString(1, id);
+
+     			 rs = pstmt.executeQuery();
+     			 
+     			 if(rs.next()) {
+     				 user = new UserVO(); // 다시 선언하고,
+     				 System.out.println("id 파라미터: " + id);
+
+     				 user.setId(rs.getString("id"));
+     				 user.setName(rs.getString("name"));
+     				 user.setPoint(rs.getInt("point"));
+     				 user.setGrade(rs.getString("grade"));
+     				 user.setRegisterday(rs.getString("registerday"));
+     				 
+     				 user.setEmail(aes.decrypt(rs.getString("email")));
+     				 user.setMobile(aes.decrypt(rs.getString("mobile")));
+     				 user.setPostcode(rs.getString("postcode"));
+     				 user.setAddress(rs.getString("address"));
+     				 user.setAddressDetail(rs.getString("addressDetail"));
+     				 user.setAddressExtra(rs.getString("addressExtra"));
+     			 }
+     			
+     		} catch(GeneralSecurityException | UnsupportedEncodingException e) {
+     			e.printStackTrace();
+     		} finally {
+     			close();
+     		}
+     		return user;
+     	}// end of public MemberVO selectMember(String userid) throws SQLException -----
+
 }

@@ -41,4 +41,7 @@ public interface UserDAO {
 
    // **** 페이징 처리를 한 모든 회원 목록 또는 검색한 회원목록 보여주기 **** //
    public List<UserVO> select_User_paging(Map<String, String> paraMap) throws SQLException;
+
+   // userDatail을 위한 id로 userVO 끌고오기.
+   public UserVO selectUser(String id) throws SQLException;
 }
