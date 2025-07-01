@@ -127,5 +127,4 @@ $(function(){
 	
 
 </div>
->>>>>>> refs/heads/yejun12348888
 <jsp:include page="../footer.jsp" />
