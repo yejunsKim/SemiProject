@@ -352,12 +352,12 @@ public class ItemDAO_imple implements ItemDAO {
 			
 			String sql = " SELECT cartno"
 					   + " FROM cart"
-					   + " WHERE fk_users_id = ? AND fk_item_no = ? ";
+					   + " WHERE fk_users_id = ? AND fk_item_no = to_number(?) ";
 			
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, paraMap.get("fk_users_id"));
-			pstmt.setInt(2, Integer.parseInt(paraMap.get("fk_item_no")));
+			pstmt.setString(2, paraMap.get("fk_item_no"));
 			
 			rs = pstmt.executeQuery();
 			
