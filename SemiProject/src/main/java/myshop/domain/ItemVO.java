@@ -15,6 +15,8 @@ public class ItemVO {
     
     private CategoryVO categvo; 		// 카테고리VO
     
+    private int ItemPoint;				// 사용자의 등급에 따른 제품별 적립 포인트(개당)
+    
     public ItemVO() {}
 
 	public ItemVO(int itemNo, String itemName, String itemPhotoPath, String itemInfo, int price, int itemAmount,
@@ -119,12 +121,24 @@ public class ItemVO {
 	public void setFk_catagory_no(int fk_catagory_no) {
 		this.fk_catagory_no = fk_catagory_no;
 	}
-    
-    
+
+	public void setUserItemPoint(String grade) {	// 고객 등급별 제품 구매시 적립 포인트(개당) 계산
+		
+		if("bronze".equalsIgnoreCase(grade)) {
+			ItemPoint = (int) (price * 0.05);
+		}
+		else if("silver".equalsIgnoreCase(grade)) {
+			ItemPoint = (int) (price * 0.07);
+		}
+		else if("gold".equalsIgnoreCase(grade)) {
+			ItemPoint = (int) (price * 0.1);
+		}
+	}
+	
+	public int getItemPoint() {
+		return ItemPoint;
+	}
 	
 	
-	
-    
-    
     
 }
