@@ -44,4 +44,5 @@ public interface UserDAO {
 
    // userDatail을 위한 id로 userVO 끌고오기.
    public UserVO selectUser(String id) throws SQLException;
+   
 }
