@@ -698,9 +698,9 @@ public class ItemDAO_imple implements ItemDAO {
 	        	  pstmt.close();
 	        	  
 	        	  if(itemNo != null) {
-	        		  sql = " inset into order_items (orderItemNO, orderNo, itemNo, quantity,"
+	        		  sql = " insert into order_items (orderItemNO, orderNo, itemNo, quantity,"
 	        		  		+ "	orderPrice,	deliveryNo) "
-	        		  		+ " value  (order_item_seq.nextval, to_number(?), ?, ?, "
+	        		  		+ " values (order_item_seq.nextval, order_seq.currval, ?, ?, "
 	        		  		+ " ?, delivery_seq.nextval) ";
 	        		  
 	        		  pstmt = conn.prepareStatement(sql);
@@ -728,14 +728,14 @@ public class ItemDAO_imple implements ItemDAO {
 	        	  
 	        	  // 장바구니 삭제
 	        	  if(n3 ==1 ) {
-	        		  String cartno_join = "'" + String.join("','", cartnoArr) + "'";
-	                  sql = "DELETE FROM cart WHERE cartno IN (" + cartno_join + ")";
+	        		  String cartno_join = String.join(",", cartnoArr);
+	        		  sql = " DELETE FROM cart WHERE cartno IN (" + cartno_join + ") ";
 	                  pstmt = conn.prepareStatement(sql);
 	                  n4 = pstmt.executeUpdate();
 	                  pstmt.close();
 	                  
-	                  if (n4 == cartnoArr.length) {
-	                      n4 = 1;
+	                  if (n4 >= cartnoArr.length) {
+	                	  n4 = 1;
 	                  }
 	        	  }
 	        	  
