@@ -54,5 +54,14 @@ public interface ItemDAO {
 	
 	// 장바구니 모두 비우기
 	int cartAllDelete(String id) throws SQLException;
+	
+	//로그인 유저의 장바구니 조회.
+	List<CartVO> getOrderItem(String id) throws SQLException;
+
+	// 30일 지난 장바구니 항목 먼저 삭제
+	void deleteOldCart(String fk_users_id) throws SQLException;
+	
+	// 로그인한 유저의 주문 내역의 총 페이지수 알아오기
+	int getTotalPage(String id) throws SQLException;
 
 }
