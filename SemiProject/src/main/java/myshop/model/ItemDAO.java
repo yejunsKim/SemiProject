@@ -55,4 +55,8 @@ public interface ItemDAO {
 	// 장바구니 모두 비우기
 	int cartAllDelete(String id) throws SQLException;
 
+	 //로그인 유저의 장바구니 조회.	
+	public List<ItemVO> getOrderItem(String id, String[] selectedCartNoArray)throws SQLException;
+
+		
 }

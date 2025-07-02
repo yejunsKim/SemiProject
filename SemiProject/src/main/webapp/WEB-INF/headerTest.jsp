@@ -87,7 +87,7 @@ table {
 }
 
 .container-fluid {padding:0;}
-.headerNav {position:fixed;top:0;background-color:#ddd;z-index:15;width:100%;padding:10px 25px;box-shadow:2px 2px 2px #000;}
+.headerNav {position:absolute;top:0;background-color:#ddd;z-index:15;width:100%;padding:10px 25px;box-shadow:2px 2px 2px #000;}
 .headerUl {display:flex;justify-content:space-between;align-items:center;}
 .loginList {max-width:270px;width:100%;background-color:#fff;position:absolute;top:50%;left:50%;height:330px;padding:20px;box-shadow: 1px 3px 3px 2px #6f6363;border-radius:5px;transform:translate(-50%,-50%);z-index:15;}
 .loginList .loginBoxx .loginBTN {width:100%;border:0;border-radius:20px;background-color:#2c59e5;padding:15px 0;margin-top:5px;color:#fff;}

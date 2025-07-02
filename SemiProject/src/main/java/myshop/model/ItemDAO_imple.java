@@ -630,5 +630,64 @@ public class ItemDAO_imple implements ItemDAO {
 		return n;
 	}
 
+	// 로그인 유저의 장바구니 조회.	
+
+	@Override
+	public List<ItemVO> getOrderItem(String id, String[] selectedCartNoArray) throws SQLException {
+
+	    List<ItemVO> getOrderItemList = new ArrayList<>();
+
+	    if(selectedCartNoArray == null || selectedCartNoArray.length == 0) {
+	        return getOrderItemList;
+	    }
+
+	    try {
+	        conn = ds.getConnection();
+
+	        StringBuilder placeholders = new StringBuilder();
+	        for (int i = 0; i < selectedCartNoArray.length; i++) {
+	            placeholders.append("?");
+	            if (i < selectedCartNoArray.length - 1) {
+	                placeholders.append(",");
+	            }
+	        }
+
+	        String sql = "SELECT cartno, fk_users_id, itemno, cartamount, itemname, ITEMPHOTOPATH, price, volume"
+	                   + " FROM cart c "
+	                   + " JOIN item i ON c.fk_item_no = i.itemno "
+	                   + " WHERE c.fk_users_id = ? "
+	                   + " AND cartno IN (" + placeholders.toString() + ")";
+
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, id);
+	        for (int i = 0; i < selectedCartNoArray.length; i++) {
+	            pstmt.setString(i + 2, selectedCartNoArray[i]);
+	        }
+
+	        rs = pstmt.executeQuery();
+
+	        while(rs.next()) {
+	           /* CartVO cvo = new CartVO();
+	            cvo.setCartno(rs.getInt("cartno"));
+	            cvo.setFk_users_id(rs.getString("fk_users_id"));
+	            cvo.setCartamount(rs.getInt("cartamount"));*/
+
+	            ItemVO ivo = new ItemVO();
+	            ivo.setItemName(rs.getString("itemname"));
+	            ivo.setItemPhotoPath(rs.getString("itemphotopath"));
+	            ivo.setPrice(rs.getInt("price"));
+	            ivo.setVolume(rs.getInt("volume"));
+	            
+	            //cvo.setIvo(ivo);
+
+	            getOrderItemList.add(ivo);
+	        }
+
+	    } finally {
+	        close();
+	    }
+
+	    return getOrderItemList;
+	}
 
 }
