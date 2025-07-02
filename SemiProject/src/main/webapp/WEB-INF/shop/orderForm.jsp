@@ -100,211 +100,220 @@
 		
 		$('input#postcode').blur((e) => { 
 			
-			 // const regExp_hp3 = /^[0-9]{4}$/;
+ 		//	const regExp_hp3 = /^[0-9]{4}$/;
+		// 	또는
+			const regExp_postcode = /^\d{5}$/;
+			// 숫자 5자리만 들어오도록 정규표현식 객체 생성
+				
+			const bool = regExp_postcode.test($(e.target).val());
+				
+			if(!bool) {
+				// 우편번호가 정규표현식에 위배된 경우
+						
+				$('table#tblOrder :input').prop('disabled', true);
+				$(e.target).prop('disabled', false);
+				$(e.target).val('').focus();
+						
+			//	$(e.target).next().show();
+			//  또는
+			    $(e.target).parent().find('span.error').show();
+			}
+			else {
+				// 우편번호가 정규표현식에 맞는 경우
+				$('table#tblOrder :input').prop('disabled', false);
+					
+		     // $(e.target).next().next().hide();
 			 // 또는
-				const regExp_postcode = /^\d{5}$/;
-				// 숫자 5자리만 들어오도록 정규표현식 객체 생성
+				$(e.target).parent().find('span.error').hide();
+			}
+						
+		});	// end of $('input#postcode').blur((e) => {})-------------------
+			
+			
+		//////////////////////////////////////////////////////////////////////
+			
+		/*	
+	        >>>> .prop() 와 .attr() 의 차이 <<<<	         
+	             .prop() ==> form 태그내에 사용되어지는 엘리먼트의 disabled, selected, checked 의 속성값 확인 또는 변경하는 경우에 사용함. 
+	             .attr() ==> 그 나머지 엘리먼트의 속성값 확인 또는 변경하는 경우에 사용함.
+		*/
 				
-				const bool = regExp_postcode.test($(e.target).val());
-				
-				if(!bool) {
-					// 우편번호가 정규표현식에 위배된 경우
-						
-					$('table#tblOrder :input').prop('disabled', true);
-					$(e.target).prop('disabled', false);
-					$(e.target).val('').focus();
-						
-				//	$(e.target).next().show();
-				//  또는
-				    $(e.target).parent().find('span.error').show();
-				}
-				else {
-					// 우편번호가 정규표현식에 맞는 경우
-					$('table#tblOrder :input').prop('disabled', false);
-						
-			     // $(e.target).next().next().hide();
-				 // 또는
-					$(e.target).parent().find('span.error').hide();
-				}
-						
-			});	// end of $('input#postcode').blur((e) => {})-------------------
-			
-			
-			//////////////////////////////////////////////////////////////////////
-			
-			/*	
-		        >>>> .prop() 와 .attr() 의 차이 <<<<	         
-		             .prop() ==> form 태그내에 사용되어지는 엘리먼트의 disabled, selected, checked 의 속성값 확인 또는 변경하는 경우에 사용함. 
-		             .attr() ==> 그 나머지 엘리먼트의 속성값 확인 또는 변경하는 경우에 사용함.
-			*/
-			
-			// 우편번호를 읽기전용(readonly)로 만들기 
-			$('input#postcode').attr('readonly', true);
-			
-			// 주소를 읽기전용(readonly)로 만들기 
-			$('input#address').attr('readonly', true);
-			
-			// 참고항목을 읽기전용(readonly)로 만들기 
-			$('input#addressExtra').attr('readonly', true);
-			
-			// ==== "우편번호찾기"를 클릭했을때 이벤트 처리하기 ==== //
-			$('img#postcodeSearch').click(function(){
-				new daum.Postcode({
-				    oncomplete: function(data) {
-				        // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-				        // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-				        // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-				        let addr = ''; // 주소 변수
-				        let extraAddr = ''; // 참고항목 변수
-
-				        //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-				        if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-				            addr = data.roadAddress;
-				        } else { // 사용자가 지번 주소를 선택했을 경우(J)
-				            addr = data.jibunAddress;
-				        }
-
-				        // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-				        if(data.userSelectedType === 'R'){
-				            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-				            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-				            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-				                extraAddr += data.bname;
-				            }
-				            // 건물명이 있고, 공동주택일 경우 추가한다.
-				            if(data.buildingName !== '' && data.apartment === 'Y'){
-				                extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-				            }
-				            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-				            if(extraAddr !== ''){
-				                extraAddr = ' (' + extraAddr + ')';
-				            }
-				            // 조합된 참고항목을 해당 필드에 넣는다.
-				            document.getElementById("addressExtra").value = addressExtra;
-				        
-				        } else {
-				            document.getElementById("addressExtra").value = '';
-				        }
-
-				        // 우편번호와 주소 정보를 해당 필드에 넣는다.
-				        document.getElementById('postcode').value = data.zonecode;
-				        document.getElementById("address").value = addr;
-				        // 커서를 상세주소 필드로 이동한다.
-				        document.getElementById("addressDetail").focus();
-				    }
-				}).open();
-						
-			});// end of $('img#postcodeSearch').click(function(){})---------------
-			
-			$('input#hp2').blur((e) => { 
-				
-			    const regExp_hp2 = /^[1-9][0-9]{3}$/; 
-				// 연락처 국번( 숫자 4자리인데 첫번째 숫자는 1-9 이고 나머지는 0-9) 정규표현식 객체 생성
-				
-				const bool = regExp_hp2.test($(e.target).val());
-				
-				if(!bool) {
-					// 연락처 국번이 정규표현식에 위배된 경우
-						
-					$('table#tblOrder :input').prop('disabled', true);
-					$(e.target).prop('disabled', false);
-					$(e.target).val('').focus();
-						
-				//	$(e.target).next().show();
-				//  또는
-				    $(e.target).parent().find('span.error').show();
-				}
-				else {
-					// 연락처 국번이 정규표현식에 맞는 경우
-					$('table#tblOrder :input').prop('disabled', false);
-						
-			     // $(e.target).next().hide();
-				 // 또는
-					$(e.target).parent().find('span.error').hide();
-				}
-						
-			});	// end of $('input#hp2').blur((e) => {})-------------------	
-			
-			
-			$('input#hp3').blur((e) => { 
-						
-			 // const regExp_hp3 = /^[0-9]{4}$/;
-			 // 또는
-				const regExp_hp3 = /^\d{4}$/;
-				// 연락처 마지막 4자리( 숫자만 되어야 함) 정규표현식 객체 생성
-				
-				const bool = regExp_hp3.test($(e.target).val());
-				
-				if(!bool) {
-					// 연락처 마지막 4자리가 정규표현식에 위배된 경우
-						
-					$('table#tblOrder :input').prop('disabled', true);
-					$(e.target).prop('disabled', false);
-					$(e.target).val('').focus();
-						
-				//	$(e.target).next().show();
-				//  또는
-				    $(e.target).parent().find('span.error').show();
-				}
-				else {
-					// 연락처 마지막 4자리가 정규표현식에 맞는 경우
-					$('table#tblOrder :input').prop('disabled', false);
-						
-			     // $(e.target).next().hide();
-				 // 또는
-					$(e.target).parent().find('span.error').hide();
-				}
-						
-			});	// end of $('input#hp3').blur((e) => {})-------------------	
-			
-			$('input#email').blur((e) => { 
-				
-			    const regExp_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i; 
-				// 이메일 정규표현식 객체 생성
-				
-				const bool = regExp_email.test($(e.target).val());
-				
-				if(!bool) {
-					// 이메일이 정규표현식에 위배된 경우
-						
-					$('table#tblOrder :input').prop('disabled', true);
-					$(e.target).prop('disabled', false);
-					$(e.target).val('').focus();
-						
-				//	$(e.target).next().show();
-				//  또는
-				    $(e.target).parent().find('span.error').show();
-				}
-				else {
-					// 이메일이 정규표현식에 맞는 경우
-					$('table#tblOrder :input').prop('disabled', false);
-						
-			     // $(e.target).next().hide();
-				 // 또는
-					$(e.target).parent().find('span.error').hide();
-				}
-						
-			});	// end of $('input#email').blur((e) => {})-------------------	
-			
-			
-		 	 // 결제하기 버튼을 눌렀을 때 약관에 동의 했는지
-		 	$('#btnOrderSubmit').click(function(e) {
-		        if (!$('#agree').is(':checked')) {
-		            e.preventDefault(); // form 전송 막기
-		            alert("이용약관에 동의해야 결제가 가능합니다.");
-		            $('#agree').focus();
-		            return false;
-		        }
-		        // 약관에 동의한 경우에는 그냥 submit됨
-		    });
+		// 우편번호를 읽기전용(readonly)로 만들기 
+		$('input#postcode').attr('readonly', true);
 		
+		// 주소를 읽기전용(readonly)로 만들기 
+		$('input#address').attr('readonly', true);
+		
+		// 참고항목을 읽기전용(readonly)로 만들기 
+		$('input#addressExtra').attr('readonly', true);
+				
+		// ==== "우편번호찾기"를 클릭했을때 이벤트 처리하기 ==== //
+		$('img#postcodeSearch').click(function(){
+			new daum.Postcode({
+			    oncomplete: function(data) {
+			        // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+			        // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+			        // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+			        let addr = ''; // 주소 변수
+			        let extraAddr = ''; // 참고항목 변수
+
+			        //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+			        if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+			            addr = data.roadAddress;
+			        } else { // 사용자가 지번 주소를 선택했을 경우(J)
+			            addr = data.jibunAddress;
+			        }
+
+			        // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+			        if(data.userSelectedType === 'R'){
+			            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+			            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+			            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+			                extraAddr += data.bname;
+			            }
+			            // 건물명이 있고, 공동주택일 경우 추가한다.
+			            if(data.buildingName !== '' && data.apartment === 'Y'){
+			                extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+			            }
+			            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+			            if(extraAddr !== ''){
+			                extraAddr = ' (' + extraAddr + ')';
+			            }
+			            // 조합된 참고항목을 해당 필드에 넣는다.
+			            document.getElementById("addressExtra").value = extraAddr;
+			        
+			        } else {
+			            document.getElementById("addressExtra").value = '';
+			        }
+
+			        // 우편번호와 주소 정보를 해당 필드에 넣는다.
+			        document.getElementById('postcode').value = data.zonecode;
+			        document.getElementById("address").value = addr;
+			        // 커서를 상세주소 필드로 이동한다.
+			        document.getElementById("addressDetail").focus();
+			    }
+			}).open();
+					
+		});// end of $('img#postcodeSearch').click(function(){})---------------
+			
+		$('input#hp2').blur((e) => { 
+			
+		    const regExp_hp2 = /^[1-9][0-9]{3}$/; 
+			// 연락처 국번( 숫자 4자리인데 첫번째 숫자는 1-9 이고 나머지는 0-9) 정규표현식 객체 생성
+			
+			const bool = regExp_hp2.test($(e.target).val());
+			
+			if(!bool) {
+				// 연락처 국번이 정규표현식에 위배된 경우
+					
+				$('table#tblOrder :input').prop('disabled', true);
+				$(e.target).prop('disabled', false);
+				$(e.target).val('').focus();
+					
+			//	$(e.target).next().show();
+			//  또는
+			    $(e.target).parent().find('span.error').show();
+			}
+			else {
+				// 연락처 국번이 정규표현식에 맞는 경우
+				$('table#tblOrder :input').prop('disabled', false);
+					
+		     // $(e.target).next().hide();
+			 // 또는
+				$(e.target).parent().find('span.error').hide();
+			}
+					
+		});	// end of $('input#hp2').blur((e) => {})-------------------	
+			
+			
+		$('input#hp3').blur((e) => { 
+					
+		 // const regExp_hp3 = /^[0-9]{4}$/;
+		 // 또는
+			const regExp_hp3 = /^\d{4}$/;
+			// 연락처 마지막 4자리( 숫자만 되어야 함) 정규표현식 객체 생성
+			
+			const bool = regExp_hp3.test($(e.target).val());
+			
+			if(!bool) {
+				// 연락처 마지막 4자리가 정규표현식에 위배된 경우
+					
+				$('table#tblOrder :input').prop('disabled', true);
+				$(e.target).prop('disabled', false);
+				$(e.target).val('').focus();
+					
+			//	$(e.target).next().show();
+			//  또는
+			    $(e.target).parent().find('span.error').show();
+			}
+			else {
+				// 연락처 마지막 4자리가 정규표현식에 맞는 경우
+				$('table#tblOrder :input').prop('disabled', false);
+					
+		     // $(e.target).next().hide();
+			 // 또는
+				$(e.target).parent().find('span.error').hide();
+			}
+					
+		});	// end of $('input#hp3').blur((e) => {})-------------------	
+			
+		$('input#email').blur((e) => { 
+			
+		    const regExp_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i; 
+			// 이메일 정규표현식 객체 생성
+			
+			const bool = regExp_email.test($(e.target).val());
+			
+			if(!bool) {
+				// 이메일이 정규표현식에 위배된 경우
+					
+				$('table#tblOrder :input').prop('disabled', true);
+				$(e.target).prop('disabled', false);
+				$(e.target).val('').focus();
+					
+			//	$(e.target).next().show();
+			//  또는
+			    $(e.target).parent().find('span.error').show();
+			}
+			else {
+				// 이메일이 정규표현식에 맞는 경우
+				$('table#tblOrder :input').prop('disabled', false);
+					
+		     // $(e.target).next().hide();
+			 // 또는
+				$(e.target).parent().find('span.error').hide();
+			}
+					
+		});	// end of $('input#email').blur((e) => {})-------------------	
+			
+			
+	 	// 결제하기 버튼을 눌렀을 때 약관에 동의 했는지
+	 	$('#btnOrderSubmit').click(function(e) {
+	        if (!$('#agree').is(':checked')) {
+	            e.preventDefault(); // form 전송 막기
+	            alert("이용약관에 동의해야 결제가 가능합니다.");
+	            $('#agree').focus();
+	            return false;
+	        }
+	        // 약관에 동의한 경우에는 그냥 submit됨
+	    });
+		
+		
+		// 현재주소지로 변경 버튼을 눌렀을 때
+	 	$('#btnUseCurrentAddress').click(function() {
+ 	    	document.getElementById("postcode").value = '${sessionScope.loginUser.postcode}';
+	 	    document.getElementById("address").value = '${sessionScope.loginUser.address}';
+	 	    document.getElementById("addressDetail").value = '${sessionScope.loginUser.addressDetail}';
+	 	    document.getElementById("addressExtra").value = '${sessionScope.loginUser.addressExtra}';
+	 	});
+			
 	}); // end of $(function(){})--------------------------------
 	
 </script>
 
 	<div class="col-md-12" id="divOrder" style="background-color: #f5f5f5;padding-top:80px;">
-      	<form name="orderFrm" action="post">
+      	<form name="orderFrm" method="post">
       	
       		<%-- 배송지 --%>
       		<div class="section">
@@ -382,15 +391,18 @@
 					<tr class="h5">
                    		<td>주문상품</td>
                 	</tr>
-					<tr style="border-bottom: 1px solid">
-						<td style="width: 100px;">
-							<img src="images/sample.jpg" style="width:100px;" />
-						</td>
-						<td>
-							<strong>테스트 상품 (예시)</strong><br/>
-							상품 설명이 여기에 들어갑니다.
-						</td>
-					</tr>
+					<c:forEach var="cart" items="${orderItemList}">
+						<tr style="border-bottom: 1px solid">
+							<td style="width: 100px;">
+								<img src="<%= ctxPath %>${cart.item.imageFileName}" style="width:100px;" />
+							</td>
+							<td>
+								<strong>${cart.item.itemName}</strong><br/>
+								수량: ${cart.quantity}<br/>
+								가격: <fmt:formatNumber value="${cart.item.price}" type="number" />원
+							</td>
+						</tr>
+					</c:forEach>
 				</table>
 			</div>
 			
@@ -401,7 +413,7 @@
                    		<td>결제정보</td>
                 	</tr>
 					<tr>
-						<td>상품금액</td>
+						<td>상품총금액</td>
 						<td style="text-align: right;">57,375원</td>
 					</tr>
 					<tr>

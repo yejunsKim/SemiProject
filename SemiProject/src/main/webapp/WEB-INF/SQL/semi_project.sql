@@ -170,3 +170,5 @@ FROM item
 WHERE itemNo = 1;
 
 SELECT * FROM item WHERE itemno = 1;
+
+desc order_history;
