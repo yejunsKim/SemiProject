@@ -8,7 +8,7 @@
     //    /SemiProject_rdg
 %>
 
-<jsp:include page="../headerTest.jsp" />
+<jsp:include page="../header.jsp" />
 
 <%-- 직접 만든 JS --%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/shop/perfumeMall.js"></script>

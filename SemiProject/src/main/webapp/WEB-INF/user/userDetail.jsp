@@ -3,8 +3,7 @@
 <%
 	String ctxPath = request.getContextPath(); 
 %>
-<jsp:include page="../headerTest.jsp" />
-
+<jsp:include page="../header.jsp" />
 
 
 </div>

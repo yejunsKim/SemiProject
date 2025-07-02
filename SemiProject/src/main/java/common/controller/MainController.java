@@ -24,6 +24,10 @@ public class MainController extends BaseController {
 		try {
 			List<CategoryVO> categoryList= itemDAO.imageSelectAll();
 			request.setAttribute("categoryList", categoryList);
+			if (request.getServletContext().getAttribute("categoryList") == null) {
+				request.getServletContext().setAttribute("categoryList", categoryList);
+			}
+
 			
 			for( CategoryVO category : categoryList ) {
 

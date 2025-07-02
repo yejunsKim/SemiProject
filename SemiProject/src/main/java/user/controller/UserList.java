@@ -48,7 +48,8 @@ public class UserList extends BaseController {
 				if(searchType == null || 
 						   (!"name".equals(searchType) &&
 							!"id".equals(searchType) &&
-						    !"email".equals(searchType) ) ) {
+						    !"email".equals(searchType) && 
+						    !"grade".equals(searchType) )) {
 							searchType = "";
 						}
 						
