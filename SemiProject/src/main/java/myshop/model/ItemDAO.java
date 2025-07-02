@@ -51,8 +51,8 @@ public interface ItemDAO {
 
 
 	 //로그인 유저의 장바구니 조회.	
-	List<CartVO> getOrderItem(String id) throws SQLException;
-
+	public List<CartVO> getOrderItem(String id, String[] cartnoArr)throws SQLException;
+	
 	 // 트랜잭션으로 주문 insert & 재고감소 & 장바구니삭제 & 포인트적립
 	int insertOrderUpdate(Map<String, String> paraMap)throws SQLException;
 
@@ -61,5 +61,8 @@ public interface ItemDAO {
 
 	// 주문번호 채번
 	int get_order_seq() throws SQLException;
+
+	//30일  지난 장바구니 항목 먼저 삭제
+	void deleteOldCart(String fk_users_id)throws SQLException;
 
 }

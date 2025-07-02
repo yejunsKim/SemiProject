@@ -253,7 +253,7 @@
 	
 	<div class="text-center my-3" style="font-size: 10pt;">장바구니에 담긴 상품은 30일 동안 보관됩니다.</div>
 	
-	<form name="CartList" method="POST">	<%-- action="추후 추가" --%>
+	<form name="CartList" method="POST" action="<%=ctxPath%>/item/orderForm.do">	
 		<table>
 			<thead>
 				<tr>

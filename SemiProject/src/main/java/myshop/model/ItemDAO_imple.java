@@ -607,20 +607,37 @@ public class ItemDAO_imple implements ItemDAO {
 
 	 //로그인 유저의 장바구니 조회.	
 	@Override
-	public List<CartVO> getOrderItem(String id) throws SQLException {
-		
-		List<CartVO> getOrderItemList = new ArrayList<>();
-		
-		try {
-			conn = ds.getConnection();
-			
-			String sql  =" select cartno, fk_users_id, itemno, cartamount, itemname, ITEMPHOTOPATH, price"
-					+ " from cart c join item i on c.fk_item_no = i.itemno "
-					+ " where c.fk_users_id = ? ";
-			
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, id);
-			
+	public List<CartVO> getOrderItem(String id, String[] cartnoArr) throws SQLException {
+
+	    List<CartVO> getOrderItemList = new ArrayList<>();
+
+	    if(cartnoArr == null || cartnoArr.length == 0) {
+	        return getOrderItemList;
+	    }
+
+	    try {
+	        conn = ds.getConnection();
+
+	        StringBuilder placeholders = new StringBuilder();
+	        for (int i = 0; i < cartnoArr.length; i++) {
+	            placeholders.append("?");
+	            if (i < cartnoArr.length - 1) {
+	                placeholders.append(",");
+	            }
+	        }
+
+	        String sql = "SELECT cartno, fk_users_id, itemno, cartamount, itemname, ITEMPHOTOPATH, price "
+	                   + " FROM cart c "
+	                   + " JOIN item i ON c.fk_item_no = i.itemno "
+	                   + " WHERE c.fk_users_id = ? "
+	                   + " AND cartno IN (" + placeholders.toString() + ")";
+
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, id);
+	        for (int i = 0; i < cartnoArr.length; i++) {
+	            pstmt.setString(i + 2, cartnoArr[i]);
+	        }
+
 	        rs = pstmt.executeQuery();
 
 	        while(rs.next()) {
@@ -638,13 +655,12 @@ public class ItemDAO_imple implements ItemDAO {
 
 	            getOrderItemList.add(cvo);
 	        }
-			
 
-		} finally {
-			close();
-		}
-		
-		return getOrderItemList;
+	    } finally {
+	        close();
+	    }
+
+	    return getOrderItemList;
 	}
 
 	 // 트랜잭션으로 주문 insert & 재고감소 & 장바구니삭제 & 포인트적립
@@ -727,17 +743,28 @@ public class ItemDAO_imple implements ItemDAO {
 	      	}
 	        	  
 	        	  // 장바구니 삭제
-	        	  if(n3 ==1 ) {
-	        		  String cartno_join = String.join(",", cartnoArr);
-	        		  sql = " DELETE FROM cart WHERE cartno IN (" + cartno_join + ") ";
-	                  pstmt = conn.prepareStatement(sql);
-	                  n4 = pstmt.executeUpdate();
-	                  pstmt.close();
-	                  
-	                  if (n4 >= cartnoArr.length) {
-	                	  n4 = 1;
-	                  }
-	        	  }
+	      	if(n3 == 1) {
+	      	    StringBuilder placeholders = new StringBuilder();
+	      	    for (int i = 0; i < cartnoArr.length; i++) {
+	      	        placeholders.append("?");
+	      	        if (i < cartnoArr.length - 1) {
+	      	            placeholders.append(",");
+	      	        }
+	      	    }
+
+	      	    sql = "DELETE FROM cart WHERE cartno IN (" + placeholders.toString() + ")";
+	      	    pstmt = conn.prepareStatement(sql);
+	      	    for (int i = 0; i < cartnoArr.length; i++) {
+	      	        pstmt.setString(i + 1, cartnoArr[i]);
+	      	    }
+
+	      	    n4 = pstmt.executeUpdate();
+	      	    pstmt.close();
+
+	      	    if (n4 >= cartnoArr.length) {
+	      	        n4 = 1;
+	      	    }
+	      	}
 	        	  
 	        	  //사용자 포인트 적립
 	        	  if(n4==1) {
@@ -766,7 +793,6 @@ public class ItemDAO_imple implements ItemDAO {
 	        	  
 		} catch(SQLException e) {
 				
-				// 8. **** SQL 장애 발생시 rollback 하기(rollback) ****
 				conn.rollback();
 				
 				conn.setAutoCommit(true); // 자동커밋으로 전환 
@@ -806,5 +832,26 @@ public class ItemDAO_imple implements ItemDAO {
 			
 		return seq;
 	}
+
+	//30일  지난 장바구니 항목 먼저 삭제
+	@Override
+	   public void deleteOldCart(String fk_users_id) throws SQLException {
+	      
+	      try {
+	         conn = ds.getConnection();
+	         
+	         String sql = " delete from cart"
+	                  + " where fk_users_id = ? "
+	                  + " and cartdate < sysdate - 30";
+	         
+	         pstmt = conn.prepareStatement(sql);
+	         pstmt.setString(1, fk_users_id);
+	         
+	         pstmt.executeUpdate();
+	         
+	      } finally {
+	         close();
+	      }
+	   }// end of public void deleteOldCart(String fk_users_id) throws SQLException-------------------
 
 }
