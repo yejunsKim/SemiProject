@@ -10,6 +10,14 @@
 <script type="text/javascript">
 $(function(){
 
+	$(function() {
+		const loginid = localStorage.getItem('saveid');
+		if (loginid != null && loginid !== "") {
+			$('.loginBox input:text[name="id"]').val(loginid);
+			$('input#saveid').prop("checked", true); 
+		}
+	});
+	
 	const method = "${requestScope.method}";
 
 	if(method == "GET") {
@@ -23,7 +31,6 @@ $(function(){
 		<%-- idfind class파일에서 setAttribute에서 name과 email을 넘겨줘서 여기서 쓸 수 있었다.--%>
 	} 
 
-	
 	$('button.btn-success').click(function(){
 		    pwFind();
 	});
@@ -33,7 +40,6 @@ $(function(){
 			pwFind();
 		}
 	});
-	
 	
 }); 
 
@@ -80,7 +86,7 @@ $(function(){
 
     const frm = document.verifyCertificationFrm;
     frm.userCertificationCode.value = input_confirmCode;
-    frm.id.value = $('input:text[name="id"]').val();
+    frm.id.value = $('form[name="pwFindFrm"] input[name="id"]').val();
 
     frm.action = "<%= ctxPath%>/login/verifyCertification.do";
     frm.method = "post";

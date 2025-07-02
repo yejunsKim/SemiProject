@@ -13,7 +13,7 @@ public class UserVO {
 	private String addressExtra;
 
 	private int point;  
-	private String grade;
+	private String grade;   // bronze silver gold
 	private String registerday; 
 	private String passwordChanged; // 마지막으로 암호를 변경한 날짜  
 	private String isDeleted;  // 회원탈퇴유무   N: 사용가능(가입중) / Y:사용불능(탈퇴)

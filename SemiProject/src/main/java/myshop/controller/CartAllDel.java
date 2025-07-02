@@ -8,11 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import myshop.model.ItemDAO;
 import myshop.model.ItemDAO_imple;
 
-public class CartDel extends BaseController {
+public class CartAllDel extends BaseController {
 	
 	private ItemDAO idao = null;
 	
-	public CartDel() {
+	public CartAllDel() {
 		idao = new ItemDAO_imple();
 	}
 	
@@ -37,12 +37,10 @@ public class CartDel extends BaseController {
 		else if("POST".equalsIgnoreCase(method) && super.checkLogin(request)) {
 			// POST 방식이고, 로그인을 했다라면
 			
-			String cartno = request.getParameter("cartno");
+			String id = request.getParameter("id");
 			
-			System.out.println(cartno);
-			
-			// 장바구니에서 특정 제품 삭제하기
-			int n = idao.cartDelete(cartno);
+			// 장바구니 모두 비우기
+			int n = idao.cartAllDelete(id);
 			
 			JSONObject jsonobj = new JSONObject();
 			jsonobj.put("n", n);

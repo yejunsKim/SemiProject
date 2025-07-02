@@ -350,14 +350,14 @@ public class ItemDAO_imple implements ItemDAO {
 		try {
 			conn = ds.getConnection();
 			
-			String sql = " SELECT cartno"
-					   + " FROM cart"
-					   + " WHERE fk_users_id = ? AND fk_item_no = ? ";
+			String sql = " SELECT cartno "
+					   + " FROM cart "
+					   + " WHERE fk_users_id = ? AND fk_item_no = to_number(?) ";
 			
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, paraMap.get("fk_users_id"));
-			pstmt.setInt(2, Integer.parseInt(paraMap.get("fk_item_no")));
+			pstmt.setString(2, paraMap.get("fk_item_no"));
 			
 			rs = pstmt.executeQuery();
 			
@@ -376,7 +376,7 @@ public class ItemDAO_imple implements ItemDAO {
 			
 			else {	// 장바구니에 제품을 새로 추가하는 경우
 				
-				sql = " INSERT INTO cart(cartno, fk_users_id, fk_item_no, cartamount, cartdate)"
+				sql = " INSERT INTO cart(cartno, fk_users_id, fk_item_no, cartamount, cartdate) "
 					+ " VALUES(CART_SEQ.nextval, ?, to_number(?), to_number(?), sysdate) ";
 				
 				pstmt = conn.prepareStatement(sql);
@@ -405,7 +405,7 @@ public class ItemDAO_imple implements ItemDAO {
 		try {
 			conn = ds.getConnection();
 			
-			String sql = " SELECT C.cartno, I.itemPhotoPath, I.itemName, I.price, C.cartamount, "
+			String sql = " SELECT C.cartno, I.itemPhotoPath, I.itemName, I.price, I.itemAmount, C.cartamount, "
 					   + " TO_CHAR(C.cartdate, 'yyyy-mm-dd') AS cartdate, U.grade "
 					   + " FROM cart C "
 					   + " JOIN users U ON C.fk_users_id = U.id "
@@ -431,6 +431,7 @@ public class ItemDAO_imple implements ItemDAO {
 				ivo.setItemPhotoPath(rs.getString("itemPhotoPath"));
 				ivo.setItemName(rs.getString("itemName"));
 				ivo.setPrice(rs.getInt("price"));
+				ivo.setItemAmount(rs.getInt("itemAmount"));
 				
 				// 등급에 따른 포인트 계산
 				ivo.setUserItemPoint(rs.getString("grade"));
@@ -575,6 +576,118 @@ public class ItemDAO_imple implements ItemDAO {
 		
 		return n;
 	}// end of public int cartDelete(String cartno) throws SQLException--------------------------
+	
+	
+	// 장바구니 테이블에서 선택 제품의 주문량 변경시키기
+	@Override
+	public int amountUpdate(Map<String, String> paraMap) throws SQLException {
+		
+		int n = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " UPDATE cart SET cartamount = to_number(?) "
+					   + " WHERE cartno = to_number(?) ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, paraMap.get("cartamount"));
+			pstmt.setString(2, paraMap.get("cartno"));
+			
+			n = pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+		
+		return n;
+	}
+	
+	
+	// 장바구니 모두 비우기
+	@Override
+	public int cartAllDelete(String id) throws SQLException {
+		
+		int n = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " DELETE FROM cart "
+					   + " WHERE fk_users_id = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, id);
+			
+			n = pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+		
+		return n;
+	}
 
+	// 로그인 유저의 장바구니 조회.	
+
+	@Override
+	public List<ItemVO> getOrderItem(String id, String[] selectedCartNoArray) throws SQLException {
+
+	    List<ItemVO> getOrderItemList = new ArrayList<>();
+
+	    if(selectedCartNoArray == null || selectedCartNoArray.length == 0) {
+	        return getOrderItemList;
+	    }
+
+	    try {
+	        conn = ds.getConnection();
+
+	        StringBuilder placeholders = new StringBuilder();
+	        for (int i = 0; i < selectedCartNoArray.length; i++) {
+	            placeholders.append("?");
+	            if (i < selectedCartNoArray.length - 1) {
+	                placeholders.append(",");
+	            }
+	        }
+
+	        String sql = "SELECT cartno, fk_users_id, itemno, cartamount, itemname, ITEMPHOTOPATH, price, volume"
+	                   + " FROM cart c "
+	                   + " JOIN item i ON c.fk_item_no = i.itemno "
+	                   + " WHERE c.fk_users_id = ? "
+	                   + " AND cartno IN (" + placeholders.toString() + ")";
+
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, id);
+	        for (int i = 0; i < selectedCartNoArray.length; i++) {
+	            pstmt.setString(i + 2, selectedCartNoArray[i]);
+	        }
+
+	        rs = pstmt.executeQuery();
+
+	        while(rs.next()) {
+	           /* CartVO cvo = new CartVO();
+	            cvo.setCartno(rs.getInt("cartno"));
+	            cvo.setFk_users_id(rs.getString("fk_users_id"));
+	            cvo.setCartamount(rs.getInt("cartamount"));*/
+
+	            ItemVO ivo = new ItemVO();
+	            ivo.setItemName(rs.getString("itemname"));
+	            ivo.setItemPhotoPath(rs.getString("itemphotopath"));
+	            ivo.setPrice(rs.getInt("price"));
+	            ivo.setVolume(rs.getInt("volume"));
+	            
+	            //cvo.setIvo(ivo);
+
+	            getOrderItemList.add(ivo);
+	        }
+
+	    } finally {
+	        close();
+	    }
+
+	    return getOrderItemList;
+	}
 
 }
