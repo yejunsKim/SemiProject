@@ -5,7 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<jsp:include page="../../headerTest.jsp" />   
+<jsp:include page="../../header.jsp" />   
 
 <head>
     <meta charset="UTF-8">

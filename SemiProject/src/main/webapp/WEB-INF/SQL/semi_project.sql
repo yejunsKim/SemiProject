@@ -68,6 +68,7 @@ CREATE TABLE Item (
 
 commit;
 
+<<<<<<< HEAD
 desc users;
 select * from users;
 
@@ -172,3 +173,7 @@ WHERE itemNo = 1;
 SELECT * FROM item WHERE itemno = 1;
 
 desc order_history;
+=======
+select id, name, email, grade from users;
+
+>>>>>>> refs/heads/main

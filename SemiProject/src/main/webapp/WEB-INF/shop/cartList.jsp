@@ -146,6 +146,8 @@
 		});// end of $('input.checkbox[name="selectedItems"]').click(function()})------------------------
 		
 		
+		
+		
 	});// end of $(function(){})-------------------------
 	
 	
@@ -278,44 +280,44 @@
 			}
 		}
 		
-	}// end of function allDel()-----------------------------
+		// ==== 장바구니에서 제품 주문하기 ==== //
+	     function order_selected() {
+	      
+	      const $checked = $('input[name="selectedItems"]:checked');
+	   
+	      if ($checked.length === 0) {
+	         alert("주문할 상품을 선택해주세요.");
+	         return;
+	      }
+	   
+	      const $form = $('form[name="CartList"]');
+	   
+	      // 기존에 추가된 hidden input 제거
+	      $form.find("input[type='hidden'][name^='send_']").remove();
+	   
+	      $checked.each(function() {
+	         const itemNo = $(this).val(); 
+	         const $row = $(this).closest('tr');
+	   
+	         const itemName = $row.find('div#cart_itemName').text();  // ✅ 수정됨
+	         const quantity = $row.find('input[name="quantity"]').val();
+	         const priceText = $row.find('td').eq(3).text().replace(/원|,/g, "").trim();
+	         const orderPrice = parseInt(priceText);
+	   
+	         $form.append(`<input type="hidden" name="send_cartno" value="${itemNo}">`);
+	         $form.append(`<input type="hidden" name="send_itemName_${itemNo}" value="${itemName}">`);
+	         $form.append(`<input type="hidden" name="send_quantity_${itemNo}" value="${quantity}">`);
+	         $form.append(`<input type="hidden" name="send_price_${itemNo}" value="${orderPrice}">`);
+	      });
+	   
+	      $form.submit();
+	      
+	   }
 	
+		
+		
+}// end of function allDel()-----------------------------
 	
-	// ==== 장바구니에서 제품 주문하기 ==== //
-  	function goOrder() {
-		
-		const $checked = $('input[name="selectedItems"]:checked');
-		
-		if ($checked.length === 0) {
-			alert("주문할 상품을 선택해주세요.");
-			return;
-		}
-		
-		const $form = $('form[name="CartList"]');
-	
-		// 기존에 추가된 hidden input 제거
-		$form.find("input[type='hidden'][name^='send_']").remove();
-		
-		$checked.each(function() {
-			
-			const itemNo = $(this).val(); 
-			const $row = $(this).closest('tr');
-	
-			const itemName = $row.find('div#cart_itemName').text();  // ✅ 수정됨
-			const quantity = $row.find('input[name="quantity"]').val();
-			const priceText = $row.find('td').eq(3).text().replace(/원|,/g, "").trim();
-			const orderPrice = parseInt(priceText);
-	
-			$form.append(`<input type="hidden" name="send_cartno" value="${itemNo}">`);
-			$form.append(`<input type="hidden" name="send_itemName_${itemNo}" value="${itemName}">`);
-			$form.append(`<input type="hidden" name="send_quantity_${itemNo}" value="${quantity}">`);
-			$form.append(`<input type="hidden" name="send_price_${itemNo}" value="${orderPrice}">`);
-		
-		});
-	
-		$form.submit();
-		
-	} // end of function goOrder()
 	
 </script>
 
@@ -328,7 +330,7 @@
 	
 	<div class="text-center my-3" style="font-size: 10pt;">장바구니에 담긴 상품은 30일 동안 보관됩니다.</div>
 	
-	<form name="CartList" method="POST" action="<%= ctxPath %>/item/orderForm.do">	<%-- action="추후 추가" --%>
+	<form name="CartList" method="POST" action="<%=ctxPath%>/item/orderForm.do">	<%-- action="추후 추가" --%>
 		<table>
 			<thead>
 				<tr>
@@ -401,7 +403,7 @@
 		</table> --%>
 		
 		<div class="btn-row">
-			<button type="button" name="order_selected" class="btn" onclick="goOrder()">선택상품주문</button>
+			<button type="submit" name="order_selected" class="btn" >선택상품주문</button>
 			<button type="button" onclick="location.href='<%= ctxPath%>/item/mallHome.do'" class="btn">쇼핑계속하기</button>
 		</div>
 	</form>

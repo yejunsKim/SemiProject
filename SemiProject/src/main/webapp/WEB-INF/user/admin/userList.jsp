@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<jsp:include page="../../headerTest.jsp" /> 
+<jsp:include page="../../header.jsp" /> 
 
 <style>
 	
@@ -102,6 +102,7 @@
 	         	<option value="name">회원명</option>
 	         	<option value="id">아이디</option>
 	         	<option value="email">이메일</option>
+	         	<option value="grade">회원등급</option>
 	      	</select>
       		&nbsp;
       		<input type="text" name="searchWord" />

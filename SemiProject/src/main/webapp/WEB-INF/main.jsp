@@ -23,7 +23,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
  <%-- 250627 헤더테스트로인한 수정 --%>
- <jsp:include page="headerTest.jsp" />
+ <jsp:include page="header.jsp" />
  <!-- Commercials.jsp의 header.jsp 바로 아래 -->
 <style>
     #leftSide {
@@ -53,7 +53,7 @@
 		  <div class="carousel-inner">
 		
 		    <c:if test="${not empty requestScope.categoryList}">
-		    	<c:forEach var="cvo" items="${ requestScope.categoryList}" varStatus="status">
+		    	<c:forEach var="cvo" items="${requestScope.categoryList}" varStatus="status">
 		    	  <c:if test="${status.index ==0 }">
 			    	  <div class="carousel-item active">
 			    	  

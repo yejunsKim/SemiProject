@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
 
@@ -95,6 +95,8 @@
 				$(e.target).parent().find('span.error').hide();
 			}
 					
+			
+			
 		});	// end of $('input#name').blur((e) => {})-------------------
 		
 		
@@ -308,12 +310,31 @@
 	 	    document.getElementById("addressExtra").value = '${sessionScope.loginUser.addressExtra}';
 	 	});
 			
+		// 포인트 입력하는 input에 pattern을 넣는 방법.(###,###)처럼
+	 	$('#usePoint').on('input', function() {
+	 	    // 입력된 값에서 숫자만 추출 (쉼표나 POINT 제거)
+	 	    let raw = $(this).val().replace(/[^\d]/g, "");
+
+	 	    // 정수로 변환
+	 	    let inputPoint = parseInt(raw || 0);
+
+	 	    // 최대 포인트보다 크면 보유 포인트로 되돌리기
+	 	    if (inputPoint > ${sessionScope.loginUser.point}) {
+	 	        inputPoint = ${sessionScope.loginUser.point};
+	 	    }
+
+	 	    // 다시 쉼표 붙여서 보여주기
+	 	    let formatted = inputPoint.toLocaleString();
+	 	    $(this).val(formatted);
+	 	});
+	
+
 	}); // end of $(function(){})--------------------------------
 	
 </script>
 
 	<div class="col-md-12" id="divOrder" style="background-color: #f5f5f5;padding-top:80px;">
-      	<form name="orderFrm" method="post">
+      	<form name="orderFrm" method="post" action="">
       	
       		<%-- 배송지 --%>
       		<div class="section">
@@ -391,18 +412,24 @@
 					<tr class="h5">
                    		<td>주문상품</td>
                 	</tr>
-					<c:forEach var="cart" items="${orderItemList}">
-						<tr style="border-bottom: 1px solid">
+                	<c:forEach var="item" items="${requestScope.orderItemList}">
+                		<tr style="border-bottom: 1px solid">
 							<td style="width: 100px;">
-								<img src="<%= ctxPath %>${cart.item.imageFileName}" style="width:100px;" />
-							</td>
-							<td>
-								<strong>${cart.item.itemName}</strong><br/>
-								수량: ${cart.quantity}<br/>
-								가격: <fmt:formatNumber value="${cart.item.price}" type="number" />원
+								<span>
+									<img src="<%= ctxPath%>${item.itemPhotoPath}" alt="상품 이미지" style="width: 60px; height: auto;" />
+									
+								</span>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								<span>
+									${item.itemName}&nbsp;${item.volume}ml
+								</span>
+							    &nbsp;&nbsp;&nbsp;
+							    <span> 
+									<fmt:formatNumber value="${item.price}" pattern="###,###"/>원
+								</span>
 							</td>
 						</tr>
-					</c:forEach>
+                	</c:forEach>
 				</table>
 			</div>
 			
@@ -413,12 +440,28 @@
                    		<td>결제정보</td>
                 	</tr>
 					<tr>
-						<td>상품총금액</td>
+						<td>상품금액</td>
 						<td style="text-align: right;">57,375원</td>
 					</tr>
 					<tr>
 						<td>배송비</td>
 						<td style="text-align: right;">0원</td>
+					</tr>
+					<tr>
+						<td>포인트</td>
+						<td style="text-align: right;">
+							<span>보유 포인트:&nbsp;
+								<strong style="color: navy;">
+									<fmt:formatNumber value="${sessionScope.loginUser.point}" pattern="###,###"/> POINT
+								</strong>
+							</span>
+							&nbsp;&nbsp;&nbsp;
+							<span>사용:
+								<input type="text" name="usePoint" id="usePoint" 
+									   style="width: 100px; text-align: right; margin-left: 10px;" 
+									   value="${sessionScope.loginUser.point}" />&nbsp;POINT
+							</span>
+						</td>
 					</tr>
 					<tr style="border-bottom: 1px solid">
 						<td><strong>최종 결제 금액</strong></td>
