@@ -30,7 +30,7 @@ $(function(){
 		$('input:text[name="email"]').val("${requestScope.email}");
 		<%-- idfind class파일에서 setAttribute에서 name과 email을 넘겨줘서 여기서 쓸 수 있었다.--%>
 	} 
-	
+
 	$('button.btn-success').click(function(){
 		    pwFind();
 	});

@@ -44,7 +44,6 @@ public abstract class BaseController implements InterCommand{
 	public void setViewPage(String viewPage) {
 	   this.viewPage = viewPage;
 	}
-	
 
 	public boolean checkLogin(HttpServletRequest request) {
 
@@ -57,6 +56,4 @@ public abstract class BaseController implements InterCommand{
 		return false;
 		}
 	}
-	
-	
 }

@@ -17,6 +17,7 @@
 
 <%-- JavaScript --%>
 <script type="text/javascript">
+
 	$(function() {
 		
 		$('button#btnScrollTop').hide(); // 위로 가기 버튼 숨기기
@@ -42,7 +43,9 @@
     		$('#btnMoreItem').show(); // 제품 상세이미지 보기 버튼 보여주기
     		$(this).hide(); // 맨 위로 이동 버튼 숨기기
     	});
-  	});
+    	
+  	})// end of ;$(function() {})--------------------------
+	
 </script>
 
 	<div class="col-md-12" style="background-color: #f5f5f5;padding-top:80px;">
@@ -60,22 +63,15 @@
 				
 				<div class="my-3" style="font-size: 15pt;">${item.itemName}</div>
 				
-				 <div class="py-2 pl-3" style="background-color: white;padding-top:16px !important;padding-bottom:16px !important;">
-               용량&nbsp;: <span style="padding-left:84px;">${item.volume}</span> 
-            </div>
+				<div class="py-2 pl-3" style="background-color: white;padding-top:16px !important;padding-bottom:16px !important;">
+					용량&nbsp;: <span style="padding-left:84px;">${item.volume}ml</span> 
+				</div>
 
+				<form id="cartPush" method="post" action="<%= ctxPath%>/item/cartAdd.do">
+					<%-- 제품번호 --%>
+					<input type="hidden" name="itemNo" value="${item.itemNo}">
 				
-				<form id="cartPush">
-					<!-- 제품명 -->
-					<input type="hidden" name="itemName" value="itemName입력">
-				
-					<!-- 가격 -->
-					<input type="hidden" name="price" value="price입력">
-				
-					<!-- 용량 -->
-					<input type="hidden" name="volume" value="volume입력">
-				
-					<!-- 수량 입력 -->
+					<%-- 수량 입력 --%>
 					<div class="bg-white p-3 d-flex align-items-center mb-2" style="gap: 10px;">
 					  	<label for="quantity" class="mb-0" style="min-width: 80px;">수량&nbsp;:</label>
 					  	<select id="quantity" name="quantity" class="border-0 p-0" 
@@ -86,7 +82,7 @@
 					  	</select>
 					</div>
 
-					<!-- 장바구니 담기 버튼 -->
+					<%-- 장바구니 담기 버튼 --%>
 					<button type="submit" class="btn btn-dark w-100 py-3" style="font-weight: bold;">장바구니 담기</button>
 				</form>
 				

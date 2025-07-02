@@ -40,6 +40,26 @@
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.css" />
 <script type="text/javascript" src="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
 
+<script>
+function editInfo(id, ctxPath) {
+
+
+	   const url = `${ctxPath}/user/userEdit.do?id=${id}`;
+	   
+	   // 너비 800, 높이 680 인 팝업창을 화면 가운데 위치시키기
+	   const width = 800;
+	   const height = 680;
+	   
+	   const left = Math.ceil((window.screen.width - width)/2);  // 정수로 만듬 
+	   const top = Math.ceil((window.screen.height - height)/2); // 정수로 만듬
+	   window.open(url, "editInfo", 
+	               `left=${left}, top=${top}, 
+				    width=${width}, height=${height}`);
+	
+}
+
+</script>
+
 <style>
 	/* reset.css */
 html, body, div, span, applet, object, iframe,
@@ -286,14 +306,16 @@ $(function() {
 						<jsp:include page="headerAdmin.jsp" />
 				 	 	<%-- header아이디에 따라 관리자 창 보이는곳 수정 끝 --%>
 			 	 	</c:if>
-			 	 	
-			 	 	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.id != 'admin'}">
-						<%-- header아이디에 따라 관리자 창 보이는곳 수정시작 --%>
-						<li><img src="/SemiProject/images/header/cart.png" ></li>
-						<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">내 메뉴보기</li>
-						<li class="userFunc" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">카테고리</li>
-				 	 	<%-- header아이디에 따라 관리자 창 보이는곳 수정 끝 --%>
-			 	 	</c:if>
+
+					  </div>
+					</li>
+					<il><img src="/SemiProject/images/header/cart.png" ></il>
+ 					 <c:if test="${empty sessionScope.loginUser}">
+			 			<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">로그인</li>
+			 		</c:if>
+ 					 <c:if test="${not empty sessionScope.loginUser}">
+			 			<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">내 정보</li>
+			 		</c:if>
 			 	</div>
 			</ul>
 		 </nav> 
