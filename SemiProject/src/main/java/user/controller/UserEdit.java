@@ -35,7 +35,9 @@ public class UserEdit extends BaseController {
 				super.setViewPage("/WEB-INF/msg.jsp");
 			}
 			
-		}else {
+		}
+		
+		else {
 			
 			String message ="로그인이 필요합니다";
 			String loc = "javascript:history.back()";
@@ -45,7 +47,9 @@ public class UserEdit extends BaseController {
 			
 			super.setRedirect(false);
 			super.setViewPage("/WEB-INF/msg.jsp");
+			
 		}
+		
 		
 	}
 

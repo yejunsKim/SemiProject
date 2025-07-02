@@ -10,3 +10,5 @@ select * from users;
 
 commit;
 
+select id, name, email, grade from users;
+

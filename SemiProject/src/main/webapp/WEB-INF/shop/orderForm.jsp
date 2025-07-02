@@ -1,6 +1,8 @@
+
+<%@page import="java.awt.event.ItemEvent"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
 
@@ -95,6 +97,8 @@
 				$(e.target).parent().find('span.error').hide();
 			}
 					
+			
+			
 		});	// end of $('input#name').blur((e) => {})-------------------
 		
 		
@@ -288,28 +292,57 @@
 		});	// end of $('input#email').blur((e) => {})-------------------	
 			
 			
-	 	// 결제하기 버튼을 눌렀을 때 약관에 동의 했는지
+	 	// 결제하기 버튼을 눌렀을 때 배송지가 입력되었는지, 약관에 동의 했는지
 	 	$('#btnOrderSubmit').click(function(e) {
-	        if (!$('#agree').is(':checked')) {
-	         // e.preventDefault(); // form 전송 막기 --------김윤호 0702 수정 이부분 없어도 될 것 같습니다. return false; 라서
+		    if ( $('#name').val().trim() === "") {
+		       alert("받는 사람을 입력해주세요.");
+		       $('#name').focus();
+		       e.preventDefault();
+		       return false;
+		    }
+		
+		    if ( $('#postcode').val().trim() === "") {
+		       alert("우편번호를 입력해주세요.");
+		       $('#postcode').focus();
+		       e.preventDefault();
+		       return false;
+		    } 
+		
+		    if ($('#address').val().trim() === "") {
+		       alert("주소를 입력해주세요.");
+		       $('#address').focus();
+		       e.preventDefault();
+		       return false;
+		    }
+		
+		    if ( $('#addressDetail').val().trim() === "") {
+		       alert("상세주소를 입력해주세요.");
+		       $('#addressDetail').focus();
+		       e.preventDefault();
+		       return false;
+		    }
+		    
+		   /*  if ( $('#addressExtra').val().trim() === "") {
+			       alert("참고항목(동)를 입력해주세요.");
+			       $('#addressDetail').focus();
+			       e.preventDefault();
+			       return false;
+			    }
+		 */
+ 		   if ($('#email').val().trim() === "") {
+		       alert("이메일을 입력해주세요.");
+		       $('#email').focus();
+		       e.preventDefault();
+		       return false;
+ 		   }
+
+	 		// 약관에 동의 했는지
+	 		if (!$('#agree').is(':checked')) {
+	            e.preventDefault(); // form 전송 막기
 	            alert("이용약관에 동의해야 결제가 가능합니다.");
 	            $('#agree').focus();
 	            return false;
 	        }
-	        /*
-	        else {	// 김윤호 0702 - 수정사항 
-	        	e.preventDefault(); // form 전송 막기
-	        	
-	        	const 최종결제금액 = 0;	// ${}로 값 가져오기
-	        	
-	        	const userid = '${sessionScope.loginUser.id}';
-	        	
-	        	window.opener.location.href = `javascript:goCoinPurchaseEnd("${ctxPath}", "${coinmoney}", "${userid}")`;
-	    		
-	    		self.close();// 자신의 팝업창을 닫는 것이다.
-	        	
-	        }
-	        */
 	        // 약관에 동의한 경우에는 그냥 submit됨
 	    });
 		
@@ -322,12 +355,70 @@
 	 	    document.getElementById("addressExtra").value = '${sessionScope.loginUser.addressExtra}';
 	 	});
 			
+		// 포인트 입력하는 input에 pattern을 넣는 방법.(###,###)처럼
+	 	$('#usePoint').on('input', function() {
+	 	    // 입력된 값에서 숫자만 추출 (쉼표나 POINT 제거)
+	 	    let raw = $(this).val().replace(/[^\d]/g, "");
+
+	 	    // 정수로 변환
+	 	    let inputPoint = parseInt(raw || 0);
+
+	 	    // 최대 포인트보다 크면 보유 포인트로 되돌리기
+	 	    if (inputPoint > ${sessionScope.loginUser.point}) {
+	 	        inputPoint = ${sessionScope.loginUser.point};
+	 	    }
+
+	 	    // 다시 쉼표 붙여서 보여주기
+	 	    let formatted = inputPoint.toLocaleString();
+	 	    $(this).val(formatted);
+	 	});
+		
+		// totalPrice와 finalPrice의 합.
+
 	}); // end of $(function(){})--------------------------------
-	
+window.addEventListener('DOMContentLoaded', function() {
+    const priceSpans = document.querySelectorAll('.item-price');
+    const totalPriceEl = document.querySelector('#totalPrice');
+    const finalPriceEl = document.querySelector('#finalPrice');
+    const usePointInput = document.querySelector('#usePoint');
+    const maxPoint = ${sessionScope.loginUser.point};
+
+    function calcTotalPrice() {
+        let total = 0;
+        priceSpans.forEach(span => {
+            const raw = span.getAttribute('data-price');
+            total += parseInt(raw);
+        });
+        return total;
+    }
+
+    function updatePrices() {
+        const total = calcTotalPrice();
+        const usedPoint = parseInt(usePointInput.value.replace(/[^\d]/g, '')) || 0;
+        const adjustedUsed = usedPoint > maxPoint ? maxPoint : usedPoint;
+        const final = Math.max(total - adjustedUsed, 0);
+
+        // 가격 표시
+        totalPriceEl.textContent = total.toLocaleString() + '원';
+        finalPriceEl.innerHTML = '<strong>' + final.toLocaleString() + '원</strong>';
+    }
+
+    // 포인트 입력 시마다 금액 업데이트
+    usePointInput.addEventListener('input', () => {
+        let raw = usePointInput.value.replace(/[^\d]/g, '');
+        let num = parseInt(raw || 0);
+        if (num > maxPoint) num = maxPoint;
+        usePointInput.value = num.toLocaleString();
+        updatePrices();
+    });
+
+    // 초기 실행
+    updatePrices();
+});
 </script>
 
 	<div class="col-md-12" id="divOrder" style="background-color: #f5f5f5;padding-top:80px;">
-      	<form name="orderFrm" method="post">
+      	<form name="orderFrm" method="post" action="">
       	
       		<%-- 배송지 --%>
       		<div class="section">
@@ -380,7 +471,7 @@
 		                    <td>연락처&nbsp;<span class="star">*</span></td>
 		                    <td>
 		                       	<input type="text" id="hp1" name='hp1' size="6" maxlength="3" value="010" readonly />&nbsp;-&nbsp; 
-		      		 			<input type="text" name="hp2" id="hp2" size="6" maxlength="4" value="${fn:substring(sessionScope.loginUser.mobile, 3, 7)}" />&nbsp;-&nbsp; 
+								<input type="text" name="hp2" id="hp2" size="6" maxlength="4" value="${fn:substring(sessionScope.loginUser.mobile, 3, 7)}" />&nbsp;-&nbsp; 
                        			<input type="text" name="hp3" id="hp3" size="6" maxlength="4" value="${fn:substring(sessionScope.loginUser.mobile, 7, 11)}" />    
                        			<span class="error">휴대폰 형식이 아닙니다.</span>
 		                    </td>
@@ -405,18 +496,23 @@
 					<tr class="h5">
                    		<td>주문상품</td>
                 	</tr>
-					<c:forEach var="cart" items="${orderItemList}">
-						<tr style="border-bottom: 1px solid">
+                	<c:forEach var="item" items="${requestScope.orderItemList}">
+                		<tr style="border-bottom: 1px solid">
 							<td style="width: 100px;">
-								<img src="<%= ctxPath %>${cart.item.imageFileName}" style="width:100px;" />
-							</td>
-							<td>
-								<strong>${cart.item.itemName}</strong><br/>
-								수량: ${cart.quantity}<br/>
-								가격: <fmt:formatNumber value="${cart.item.price}" type="number" />원
+								<span>
+									<img src="<%= ctxPath%>${item.itemPhotoPath}" alt="상품 이미지" style="width: 60px; height: auto;" />
+								</span>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								<span class="item-price" data-price="${item.price}">
+									${item.itemName}&nbsp;${item.volume}ml
+								</span>
+							    &nbsp;&nbsp;&nbsp;
+							    <span> 
+									<fmt:formatNumber value="${item.price}" pattern="###,###"/>원
+								</span>
 							</td>
 						</tr>
-					</c:forEach>
+                	</c:forEach>
 				</table>
 			</div>
 			
@@ -427,16 +523,32 @@
                    		<td>결제정보</td>
                 	</tr>
 					<tr>
-						<td>상품총금액</td>
-						<td style="text-align: right;">57,375원</td>
+						<td>상품금액</td>
+						<td id="totalPrice" style="text-align: right;"></td>
 					</tr>
 					<tr>
 						<td>배송비</td>
-						<td style="text-align: right;">0원</td>
+						<td style="text-align: right;">무료</td>
+					</tr>
+					<tr>
+						<td>포인트</td>
+						<td style="text-align: right;">
+							<span>보유 포인트:&nbsp;
+								<strong style="color: navy;">
+									<fmt:formatNumber value="${sessionScope.loginUser.point}" pattern="###,###"/> POINT
+								</strong>
+							</span>
+							&nbsp;&nbsp;&nbsp;
+							<span>사용:
+								<input type="text" name="usePoint" id="usePoint" 
+									   style="width: 100px; text-align: right; margin-left: 10px;" 
+									   value="${sessionScope.loginUser.point}" />&nbsp;POINT
+							</span>
+						</td>
 					</tr>
 					<tr style="border-bottom: 1px solid">
 						<td><strong>최종 결제 금액</strong></td>
-						<td style="text-align: right;"><strong>57,375원</strong></td>
+						<td id="finalPrice" name="finalPrice" style="text-align: right;"><strong></strong></td>
 					</tr>
 				</table>
 			</div>

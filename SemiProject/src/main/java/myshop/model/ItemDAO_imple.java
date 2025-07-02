@@ -631,50 +631,6 @@ public class ItemDAO_imple implements ItemDAO {
 	}
 	
 	
-	 
-	 //로그인 유저의 장바구니 조회.	
-	@Override
-	public List<CartVO> getOrderItem(String id) throws SQLException {
-		
-		List<CartVO> getOrderItemList = new ArrayList<>();
-		
-		try {
-			conn = ds.getConnection();
-			
-			String sql  =" select cartno, fk_users_id, itemno, cartamount, itemname, ITEMPHOTOPATH, price"
-					+ " from cart c join item i on c.fk_item_no = i.itemno "
-					+ " where c.fk_users_id = ? ";
-			
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, id);
-			
-	        rs = pstmt.executeQuery();
-
-	        while(rs.next()) {
-	            CartVO cvo = new CartVO();
-	            cvo.setCartno(rs.getInt("cartno"));
-	            cvo.setFk_users_id(rs.getString("fk_users_id"));
-	            cvo.setCartamount(rs.getInt("cartamount"));
-
-	            ItemVO ivo = new ItemVO();
-	            ivo.setItemName(rs.getString("itemname"));
-	            ivo.setItemPhotoPath(rs.getString("itemphotopath"));
-	            ivo.setPrice(rs.getInt("price"));
-
-	            cvo.setIvo(ivo);
-
-	            getOrderItemList.add(cvo);
-	        }
-			
-
-		} finally {
-			close();
-		}
-		
-		return getOrderItemList;
-	}
-	
-	
 	// 30일 지난 장바구니 항목 먼저 삭제
 	@Override
 	public void deleteOldCart(String fk_users_id) throws SQLException {
@@ -728,5 +684,64 @@ public class ItemDAO_imple implements ItemDAO {
 		
 	}// end of public int getTotalPage(String id) throws SQLException----------------------------
 
+	// 로그인 유저의 장바구니 조회.	
+
+	@Override
+	public List<ItemVO> getOrderItem(String id, String[] selectedCartNoArray) throws SQLException {
+
+	    List<ItemVO> getOrderItemList = new ArrayList<>();
+
+	    if(selectedCartNoArray == null || selectedCartNoArray.length == 0) {
+	        return getOrderItemList;
+	    }
+
+	    try {
+	        conn = ds.getConnection();
+
+	        StringBuilder placeholders = new StringBuilder();
+	        for (int i = 0; i < selectedCartNoArray.length; i++) {
+	            placeholders.append("?");
+	            if (i < selectedCartNoArray.length - 1) {
+	                placeholders.append(",");
+	            }
+	        }
+
+	        String sql = "SELECT cartno, fk_users_id, itemno, cartamount, itemname, ITEMPHOTOPATH, price, volume"
+	                   + " FROM cart c "
+	                   + " JOIN item i ON c.fk_item_no = i.itemno "
+	                   + " WHERE c.fk_users_id = ? "
+	                   + " AND cartno IN (" + placeholders.toString() + ")";
+
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, id);
+	        for (int i = 0; i < selectedCartNoArray.length; i++) {
+	            pstmt.setString(i + 2, selectedCartNoArray[i]);
+	        }
+
+	        rs = pstmt.executeQuery();
+
+	        while(rs.next()) {
+	           /* CartVO cvo = new CartVO();
+	            cvo.setCartno(rs.getInt("cartno"));
+	            cvo.setFk_users_id(rs.getString("fk_users_id"));
+	            cvo.setCartamount(rs.getInt("cartamount"));*/
+
+	            ItemVO ivo = new ItemVO();
+	            ivo.setItemName(rs.getString("itemname"));
+	            ivo.setItemPhotoPath(rs.getString("itemphotopath"));
+	            ivo.setPrice(rs.getInt("price"));
+	            ivo.setVolume(rs.getInt("volume"));
+	            
+	            //cvo.setIvo(ivo);
+
+	            getOrderItemList.add(ivo);
+	        }
+
+	    } finally {
+	        close();
+	    }
+
+	    return getOrderItemList;
+	}
 
 }
