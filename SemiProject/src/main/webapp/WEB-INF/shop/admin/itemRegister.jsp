@@ -16,6 +16,7 @@
         border-bottom: 2px solid #eee;
         padding-bottom: 10px;
         text-align: left;
+        padding-top:60px;
     }
 
 	 table#ItemInput {

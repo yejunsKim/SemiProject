@@ -19,6 +19,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+<jsp:include page="../header.jsp"></jsp:include>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/bootstrap-4.6.2-dist/css/bootstrap.min.css" > 
 
@@ -32,6 +33,7 @@
 <%-- jQueryUI CSS 및 JS --%>
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.css" />
 <script type="text/javascript" src="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
+
 
 <style type="text/css">
 
@@ -112,7 +114,6 @@
 	.select-shipping {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
 		margin: 20px 0;
 	}
 
@@ -143,6 +144,9 @@
 			}
 			
 		});// end of $('input.checkbox[name="selectedItems"]').click(function()})------------------------
+		
+		
+		
 		
 	});// end of $(function(){})-------------------------
 	
@@ -239,7 +243,80 @@
 			});
 		}
 		
-	}
+	}// end of function amountUpdate(obj)---------------------------
+	
+	
+	// 장바구니 모두 비우기
+	function allDel() {
+		
+		const id = "${sessionScope.loginUser.id}";
+		
+		const is_cartList = ${not empty requestScope.cartList};
+		
+		if(!is_cartList) {
+			alert("장바구니가 이미 비어있습니다.");
+		}
+		else{
+			if( confirm(`장바구니를 모두 비우시겠습니까?`) ) {
+				
+				$.ajax({
+					url:"<%= ctxPath%>/item/cartAllDel.do",
+					type:"post",
+					data:{"id":id},
+					dataType:"json",
+					success:function(json){
+						if(json.n > 1){
+							alert("장바구니를 모두 비웠습니다.");
+							location.href = "<%= ctxPath%>/item/cartList.do";	// 장바구니 보기 페이지로 간다.
+						}
+					},
+					error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}
+				});
+			}
+			else{
+				alert("취소되었습니다.");
+			}
+		}
+		
+		// ==== 장바구니에서 제품 주문하기 ==== //
+	     function order_selected() {
+	      
+	      const $checked = $('input[name="selectedItems"]:checked');
+	   
+	      if ($checked.length === 0) {
+	         alert("주문할 상품을 선택해주세요.");
+	         return;
+	      }
+	   
+	      const $form = $('form[name="CartList"]');
+	   
+	      // 기존에 추가된 hidden input 제거
+	      $form.find("input[type='hidden'][name^='send_']").remove();
+	   
+	      $checked.each(function() {
+	         const itemNo = $(this).val(); 
+	         const $row = $(this).closest('tr');
+	   
+	         const itemName = $row.find('div#cart_itemName').text();  // ✅ 수정됨
+	         const quantity = $row.find('input[name="quantity"]').val();
+	         const priceText = $row.find('td').eq(3).text().replace(/원|,/g, "").trim();
+	         const orderPrice = parseInt(priceText);
+	   
+	         $form.append(`<input type="hidden" name="send_cartno" value="${itemNo}">`);
+	         $form.append(`<input type="hidden" name="send_itemName_${itemNo}" value="${itemName}">`);
+	         $form.append(`<input type="hidden" name="send_quantity_${itemNo}" value="${quantity}">`);
+	         $form.append(`<input type="hidden" name="send_price_${itemNo}" value="${orderPrice}">`);
+	      });
+	   
+	      $form.submit();
+	      
+	   }
+	
+		
+		
+}// end of function allDel()-----------------------------
 	
 	
 </script>
@@ -253,7 +330,11 @@
 	
 	<div class="text-center my-3" style="font-size: 10pt;">장바구니에 담긴 상품은 30일 동안 보관됩니다.</div>
 	
+<<<<<<< HEAD
 	<form name="CartList" method="POST" action="<%=ctxPath%>/item/orderForm.do">	
+=======
+	<form name="CartList" method="POST" action="<%=ctxPath%>/item/orderForm.do">	<%-- action="추후 추가" --%>
+>>>>>>> refs/heads/main
 		<table>
 			<thead>
 				<tr>
@@ -261,7 +342,7 @@
 					<th style="width: 15%;">이미지</th>
 					<th style="width: 15%;">향수명</th>
 					<th style="width: 10%;">상품금액(개당)</th>
-					<th style="width: 10%;">포인트</th>
+					<th style="width: 10%;">최대 적립 포인트</th>
 					<th style="width: 15%;">수량</th>
 					<th style="width: 15%;">등록날짜</th>
 					<th style="width: 10%;">비우기</th>
@@ -298,25 +379,21 @@
 		</table>
 		
 		<div class="select-shipping">
-			<div>
-				<strong>선택상품을 : </strong>
-				<button type="button" name="Delaction" value="delete">삭제하기</button>
-			</div>
-			<div>
-				<button type="button" name="action" value="clear">장바구니 비우기</button>
+			<div style="margin-left: auto;">
+				<button type="button" name="allDelete" onclick="allDel()">장바구니 비우기</button>
 			</div>
 		</div>
 		
 		<hr style="border: solid 1px black;">
 		
-		<table style="width: 100%; text-align: center; font-size: 15pt; margin-top: 30px; 
+<%-- 		<table style="width: 100%; text-align: center; font-size: 15pt; margin-top: 30px; 
 				border-collapse: collapse; border: 1px solid gray;">
 		
 			<thead>
 				<tr style="border-bottom: 1px solid #ddd;"> 
 					<th style="padding: 10px; width: 25%;">총 상품금액</th>
 					<th style="padding: 10px; width: 25%;">총 적립 포인트</th>
-					<th style="padding: 10px; width: 50%;">결제 예정 포인트</th>
+					<th style="padding: 10px; width: 50%;">결제 예정 금액</th>
 				</tr>
 			</thead>
 			
@@ -324,13 +401,13 @@
 				<tr>
 					<td style="padding: 15px;"><strong><fmt:formatNumber pattern="#,###">${requestScope.totalPrice}</fmt:formatNumber></strong>원</td>
 					<td style="padding: 15px;"><fmt:formatNumber pattern="#,###">${requestScope.totalPoint}</fmt:formatNumber> Point</td>
-					<td style="padding: 15px; color: red; font-weight: bold;">= <fmt:formatNumber pattern="#,###">${requestScope.totalPrice}</fmt:formatNumber> Point</td>
+					<td style="padding: 15px; color: red; font-weight: bold;">= <fmt:formatNumber pattern="#,###">${requestScope.totalPrice}</fmt:formatNumber>원</td>
 				</tr>
 			</tbody>
-		</table>
+		</table> --%>
 		
 		<div class="btn-row">
-			<button type="submit" name="action" value="order_selected" class="btn">선택상품주문</button>
+			<button type="submit" name="order_selected" class="btn" >선택상품주문</button>
 			<button type="button" onclick="location.href='<%= ctxPath%>/item/mallHome.do'" class="btn">쇼핑계속하기</button>
 		</div>
 	</form>

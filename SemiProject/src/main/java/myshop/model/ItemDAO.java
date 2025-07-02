@@ -50,8 +50,6 @@ public interface ItemDAO {
 	int cartDelete(String cartno) throws SQLException;
 
 
-	 //로그인 유저의 장바구니 조회.	
-	public List<CartVO> getOrderItem(String id, String[] cartnoArr)throws SQLException;
 	
 	 // 트랜잭션으로 주문 insert & 재고감소 & 장바구니삭제 & 포인트적립
 	int insertOrderUpdate(Map<String, String> paraMap)throws SQLException;
@@ -65,4 +63,12 @@ public interface ItemDAO {
 	//30일  지난 장바구니 항목 먼저 삭제
 	void deleteOldCart(String fk_users_id)throws SQLException;
 
+	
+	// 장바구니 모두 비우기
+	int cartAllDelete(String id) throws SQLException;
+
+	 //로그인 유저의 장바구니 조회.	
+	public List<ItemVO> getOrderItem(String id, String[] selectedCartNoArray)throws SQLException;
+
+		
 }

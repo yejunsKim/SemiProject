@@ -35,17 +35,16 @@
 <script type="text/javascript" src="<%= ctxPath%>/js/main/main.js"></script>
 
 <!--  로그인 part js -->
-<script type="text/javascript" src="<%= ctxPath%>/js/login/login.js"></script>
+<script type="text/javascript" src="<%=ctxPath%>/js/login/login.js"></script>
 
 <%-- jQueryUI CSS 및 JS --%>
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.css" />
 <script type="text/javascript" src="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
 
-<script>
+<script type="text/javascript">
 function editInfo(id, ctxPath) {
 
-
-	   const url = `${ctxPath}/user/userEdit.do?id=${id}`;
+	   const url = `<%=ctxPath%>/user/userEdit.do?id=${sessionScope.loginUser.id}`;
 	   
 	   // 너비 800, 높이 680 인 팝업창을 화면 가운데 위치시키기
 	   const width = 800;
@@ -53,10 +52,8 @@ function editInfo(id, ctxPath) {
 	   
 	   const left = Math.ceil((window.screen.width - width)/2);  // 정수로 만듬 
 	   const top = Math.ceil((window.screen.height - height)/2); // 정수로 만듬
-	   window.open(url, "editInfo", 
-	               `left=${left}, top=${top}, 
-				    width=${width}, height=${height}`);
-	
+	   window.open(url, "editInfo", `left=${left}, top=${top}, 
+			   width=${width}, height=${height}`);
 }
 
 </script>
@@ -119,9 +116,17 @@ table {
 .fa-search {position:absolute;top:12px;left:10px;} 
 .loginBox {z-index:20;}
 .trTab {padding:10px 0;display:flex;justify-content:space-between;align-items:center;}
+
+.userFunc {border: 1px solid #bbb;padding: 10px 15px;border-radius: 15px;background: #8444e9;color: #fff;cursor: pointer}
+.userTab {position: fixed;right:0;height:860px;background:#fff;top:65px;width:150px;border-left:1px solid #ddd;z-index:20;}
+.userTab p a {padding:40px 13px;border-bottom:1px solid #ddd;cursor:pointer;display:block;text-align:center;}
+.userTab p:hover, .userTab p:hover a {background-color:#000;color:#fff}
+
 </style>
 <script type="text/javascript">
 $(function() {
+	
+	
 	$('div.loginBox').hide();
     let isMenuOpen = false;
     
@@ -136,7 +141,7 @@ $(function() {
          isMenuOpen = !isMenuOpen;
     });
     
-    if( ${empty sessionScope.loginUser} ) {
+    if( ${empty sessionScope.loginuser} ) {
 		// 세션에 남겨놓은 유저가 있다면, 로컬로 남기겠다는 것.
 		const loginid = localStorage.getItem('saveid');
 		
@@ -146,11 +151,62 @@ $(function() {
 		}
 	};
 	
+	<%-- 유저가 로그인 후 카테고리 메뉴버튼 클릭시 메뉴 나타나도록 추가--%>
+	let userOpen = sessionStorage.getItem("userOpen") === "true";
+
+	if (userOpen) {
+		$('.userTab').show();
+	} else {
+		$('.userTab').hide();
+	}
+
+	$(document).on("click", ".userFunc", function() {
+		userOpen = !userOpen;
+
+		if (userOpen) {
+			$('.userTab').show();
+		} else {
+			$('.userTab').hide();
+		}
+
+		// 세션에 상태 저장입니당
+		
+		sessionStorage.setItem("userOpen", userOpen);
+	});
+	
+	
+	const pageurl = window.location.search
+	console.log(pageurl);
+	
 });
+
+function SearchItems() {
+    const searchID = $('input[name="searchID"]').val().trim();
+
+    if (searchID === "") {
+        alert("검색어를 입력해주세요.");
+        return;
+    }
+
+    const srcFrm = document.forms["searchFrm"];
+    srcFrm.action = "/SemiProject/item/searchItem.do";
+    srcFrm.method = "get";
+    srcFrm.submit();
+}
 </script>
 
 </head>
 	<body>
+			<div class="userTab">
+				<p><a href="${pageContext.request.contextPath}/item/mallHome.do">전체</a></p>
+				<c:forEach var="cvo" items="${applicationScope.categoryList}" varStatus="status">
+					<p class="categoryNo=${cvo.categoryNo}">
+						<a href="${pageContext.request.contextPath}/item/mallHome.do?categoryNo=${cvo.categoryNo}">
+						${cvo.categoryName}
+						</a>
+					</p>
+				</c:forEach>
+			</div>
 			<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
 				<div class="loginTheme">
 				  <c:if test="${empty sessionScope.loginUser}">
@@ -169,16 +225,14 @@ $(function() {
 									<td>ID</td>
 									<td></td>
 									<td>
-									   <input type="text" name="id" id="loginid"
-										size="20" autocomplete="off" />
+									   <input type="text" name="id" id="loginid" size="20" autocomplete="off" />
 									</td>
 								</tr>
 								<tr class="trTab">
 									<td>암호</td>
 									<td></td>
 									<td>
-										<input type="password" name="password" id="loginPwd"
-										size="20" />
+										<input type="password" name="password" id="loginPwd" size="20" />
 									</td>
 								</tr>
 
@@ -219,8 +273,7 @@ $(function() {
 				      <tr>
 				        <td colspan="3" style="padding-top:10px;">
 				          <span style="font-weight:bold;">${sessionScope.loginUser.name}님</span>
-				          &nbsp;
-				          [<a href="javascript:editInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')">나의정보변경</a>]
+				          &nbsp;[<a href="javascript:editInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')">나의정보변경</a>]
 				        </td>
 				      </tr>
 				      <tr>
@@ -245,25 +298,39 @@ $(function() {
 		 <nav class="headerNav">
 		 	<ul class="headerUl">
 		 		<li><a class="navbar-brand" href="/SemiProject/main.do" style="margin-right: 10%;"><img src="/SemiProject/images/header/favicon-32x32.png" /></a></li>
-		 		<div style="width:300px;display:flex;justify-content:space-between;align-items:center;">
+		 		<div style="width:550px;display:flex;justify-content:space-between;align-items:center;">
 			 		<li>
 				 	  <div class="input-group">
-						    <div class="form-outline">
-						      <i class="fas fa-search"></i>
-						      <input type="search" id="form1" class="form-control" />
-						   </div>
+						<form name="searchFrm" id="searchFrm" style="display:flex;">
+						  <input type="text" name="searchID" id="searchID" placeholder="검색어를 입력하세요">
+						  <i class="fas fa-search"></i>
+						  <button type="button" onclick="SearchItems()" style="width:50px;">검색</button>
+						</form>
 					  </div>
 					</li>
-					<il><img src="/SemiProject/images/header/cart.png" ></il>
- 					 <c:if test="${empty sessionScope.loginUser}">
-			 			<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">로그인</li>
-			 		</c:if>
- 					 <c:if test="${not empty sessionScope.loginUser}">
-			 			<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">내 정보</li>
-			 		</c:if>
+					<c:if test="${empty sessionScope.loginUser}">
+					<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">로그인</li>
+					</c:if>
+					
+					<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.id == 'admin'}">
+						<%-- header아이디에 따라 관리자 창 보이는곳 수정시작 --%>
+						<jsp:include page="headerAdmin.jsp" />
+				 	 	<%-- header아이디에 따라 관리자 창 보이는곳 수정 끝 --%>
+			 	 	</c:if>
+			 	 	
+			 	 	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.id != 'admin'}">
+						<%-- header아이디에 따라 관리자 창 보이는곳 수정시작 --%>
+						<li><img src="/SemiProject/images/header/cart.png" ></li>						
+						<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">내 메뉴보기</li>
+						<li class="userFunc" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">카테고리</li>
+				 	 	<%-- header아이디에 따라 관리자 창 보이는곳 수정 끝 --%>
+			 	 	</c:if>
 			 	</div>
 			</ul>
 		 </nav> 
           
        </div>
 	</div>
+	
+	
+>>>>>>> refs/heads/main
