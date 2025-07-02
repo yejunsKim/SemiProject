@@ -56,9 +56,10 @@ public interface ItemDAO {
 	 // 트랜잭션으로 주문 insert & 재고감소 & 장바구니삭제 & 포인트적립
 	int insertOrderUpdate(Map<String, String> paraMap)throws SQLException;
 
-
-	
 	// 장바구니 테이블에서 선택 제품의 주문량 변경시키기
 	int amountUpdate(Map<String, String> paraMap) throws SQLException;
+
+	// 주문번호 채번
+	int get_order_seq() throws SQLException;
 
 }
