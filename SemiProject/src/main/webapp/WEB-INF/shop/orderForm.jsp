@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
 
@@ -95,256 +95,246 @@
 				$(e.target).parent().find('span.error').hide();
 			}
 					
+			
+			
 		});	// end of $('input#name').blur((e) => {})-------------------
 		
 		
 		$('input#postcode').blur((e) => { 
 			
-			 // const regExp_hp3 = /^[0-9]{4}$/;
+ 		//	const regExp_hp3 = /^[0-9]{4}$/;
+		// 	또는
+			const regExp_postcode = /^\d{5}$/;
+			// 숫자 5자리만 들어오도록 정규표현식 객체 생성
+				
+			const bool = regExp_postcode.test($(e.target).val());
+				
+			if(!bool) {
+				// 우편번호가 정규표현식에 위배된 경우
+						
+				$('table#tblOrder :input').prop('disabled', true);
+				$(e.target).prop('disabled', false);
+				$(e.target).val('').focus();
+						
+			//	$(e.target).next().show();
+			//  또는
+			    $(e.target).parent().find('span.error').show();
+			}
+			else {
+				// 우편번호가 정규표현식에 맞는 경우
+				$('table#tblOrder :input').prop('disabled', false);
+					
+		     // $(e.target).next().next().hide();
 			 // 또는
-				const regExp_postcode = /^\d{5}$/;
-				// 숫자 5자리만 들어오도록 정규표현식 객체 생성
+				$(e.target).parent().find('span.error').hide();
+			}
+						
+		});	// end of $('input#postcode').blur((e) => {})-------------------
+			
+			
+		//////////////////////////////////////////////////////////////////////
+			
+		/*	
+	        >>>> .prop() 와 .attr() 의 차이 <<<<	         
+	             .prop() ==> form 태그내에 사용되어지는 엘리먼트의 disabled, selected, checked 의 속성값 확인 또는 변경하는 경우에 사용함. 
+	             .attr() ==> 그 나머지 엘리먼트의 속성값 확인 또는 변경하는 경우에 사용함.
+		*/
 				
-				const bool = regExp_postcode.test($(e.target).val());
-				
-				if(!bool) {
-					// 우편번호가 정규표현식에 위배된 경우
-						
-					$('table#tblOrder :input').prop('disabled', true);
-					$(e.target).prop('disabled', false);
-					$(e.target).val('').focus();
-						
-				//	$(e.target).next().show();
-				//  또는
-				    $(e.target).parent().find('span.error').show();
-				}
-				else {
-					// 우편번호가 정규표현식에 맞는 경우
-					$('table#tblOrder :input').prop('disabled', false);
-						
-			     // $(e.target).next().next().hide();
-				 // 또는
-					$(e.target).parent().find('span.error').hide();
-				}
-						
-			});	// end of $('input#postcode').blur((e) => {})-------------------
-			
-			
-			//////////////////////////////////////////////////////////////////////
-			
-			/*	
-		        >>>> .prop() 와 .attr() 의 차이 <<<<	         
-		             .prop() ==> form 태그내에 사용되어지는 엘리먼트의 disabled, selected, checked 의 속성값 확인 또는 변경하는 경우에 사용함. 
-		             .attr() ==> 그 나머지 엘리먼트의 속성값 확인 또는 변경하는 경우에 사용함.
-			*/
-			
-			// 우편번호를 읽기전용(readonly)로 만들기 
-			$('input#postcode').attr('readonly', true);
-			
-			// 주소를 읽기전용(readonly)로 만들기 
-			$('input#address').attr('readonly', true);
-			
-			// 참고항목을 읽기전용(readonly)로 만들기 
-			$('input#addressExtra').attr('readonly', true);
-			
-			// ==== "우편번호찾기"를 클릭했을때 이벤트 처리하기 ==== //
-			$('img#postcodeSearch').click(function(){
-				new daum.Postcode({
-				    oncomplete: function(data) {
-				        // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-				        // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-				        // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-				        let addr = ''; // 주소 변수
-				        let extraAddr = ''; // 참고항목 변수
-
-				        //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-				        if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-				            addr = data.roadAddress;
-				        } else { // 사용자가 지번 주소를 선택했을 경우(J)
-				            addr = data.jibunAddress;
-				        }
-
-				        // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-				        if(data.userSelectedType === 'R'){
-				            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-				            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-				            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-				                extraAddr += data.bname;
-				            }
-				            // 건물명이 있고, 공동주택일 경우 추가한다.
-				            if(data.buildingName !== '' && data.apartment === 'Y'){
-				                extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-				            }
-				            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-				            if(extraAddr !== ''){
-				                extraAddr = ' (' + extraAddr + ')';
-				            }
-				            // 조합된 참고항목을 해당 필드에 넣는다.
-				            document.getElementById("addressExtra").value = addressExtra;
-				        
-				        } else {
-				            document.getElementById("addressExtra").value = '';
-				        }
-
-				        // 우편번호와 주소 정보를 해당 필드에 넣는다.
-				        document.getElementById('postcode').value = data.zonecode;
-				        document.getElementById("address").value = addr;
-				        // 커서를 상세주소 필드로 이동한다.
-				        document.getElementById("addressDetail").focus();
-				    }
-				}).open();
-						
-			});// end of $('img#postcodeSearch').click(function(){})---------------
-			
-			$('input#hp2').blur((e) => { 
-				
-			    const regExp_hp2 = /^[1-9][0-9]{3}$/; 
-				// 연락처 국번( 숫자 4자리인데 첫번째 숫자는 1-9 이고 나머지는 0-9) 정규표현식 객체 생성
-				
-				const bool = regExp_hp2.test($(e.target).val());
-				
-				if(!bool) {
-					// 연락처 국번이 정규표현식에 위배된 경우
-						
-					$('table#tblOrder :input').prop('disabled', true);
-					$(e.target).prop('disabled', false);
-					$(e.target).val('').focus();
-						
-				//	$(e.target).next().show();
-				//  또는
-				    $(e.target).parent().find('span.error').show();
-				}
-				else {
-					// 연락처 국번이 정규표현식에 맞는 경우
-					$('table#tblOrder :input').prop('disabled', false);
-						
-			     // $(e.target).next().hide();
-				 // 또는
-					$(e.target).parent().find('span.error').hide();
-				}
-						
-			});	// end of $('input#hp2').blur((e) => {})-------------------	
-			
-			
-			$('input#hp3').blur((e) => { 
-						
-			 // const regExp_hp3 = /^[0-9]{4}$/;
-			 // 또는
-				const regExp_hp3 = /^\d{4}$/;
-				// 연락처 마지막 4자리( 숫자만 되어야 함) 정규표현식 객체 생성
-				
-				const bool = regExp_hp3.test($(e.target).val());
-				
-				if(!bool) {
-					// 연락처 마지막 4자리가 정규표현식에 위배된 경우
-						
-					$('table#tblOrder :input').prop('disabled', true);
-					$(e.target).prop('disabled', false);
-					$(e.target).val('').focus();
-						
-				//	$(e.target).next().show();
-				//  또는
-				    $(e.target).parent().find('span.error').show();
-				}
-				else {
-					// 연락처 마지막 4자리가 정규표현식에 맞는 경우
-					$('table#tblOrder :input').prop('disabled', false);
-						
-			     // $(e.target).next().hide();
-				 // 또는
-					$(e.target).parent().find('span.error').hide();
-				}
-						
-			});	// end of $('input#hp3').blur((e) => {})-------------------	
-			
-			$('input#email').blur((e) => { 
-				
-			    const regExp_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i; 
-				// 이메일 정규표현식 객체 생성
-				
-				const bool = regExp_email.test($(e.target).val());
-				
-				if(!bool) {
-					// 이메일이 정규표현식에 위배된 경우
-						
-					$('table#tblOrder :input').prop('disabled', true);
-					$(e.target).prop('disabled', false);
-					$(e.target).val('').focus();
-						
-				//	$(e.target).next().show();
-				//  또는
-				    $(e.target).parent().find('span.error').show();
-				}
-				else {
-					// 이메일이 정규표현식에 맞는 경우
-					$('table#tblOrder :input').prop('disabled', false);
-						
-			     // $(e.target).next().hide();
-				 // 또는
-					$(e.target).parent().find('span.error').hide();
-				}
-						
-			});	// end of $('input#email').blur((e) => {})-------------------	
-			
-			// "이메일중복확인" 을 클릭했을 때 이벤트 처리하기 시작 // 
-			 $('span#emailCheck').click(function(){
-				b_emailcheck_click = true;
-				// 비동기 방식으로 id와 마찬가지 이메일 체크하기	
-					
-				if($('input#email').val().trim() === '') {
-					alert("이메일을 입력해주세요.")
-					return;
-				} // 만약 이메일을 입력하지 않았다면, 경고 후 함수종료시키기.
-				$.ajax({
-					url:"checkEmailDuplicate.do",
-					data:{"email":$('input#email').val().trim()},
-					// data 속성은 http://localhost:9090/SemiProject/user/userEdit.do 로 
-					// 전송해야할 데이터를 말한다.
-					type:"post",
-					async:true, 
-					dataType:"json",  
-					
-					success:function(json){
-						console.log(json);
-						// {"isExists":false} 또는 {"isExists":true}
-						
-						if(json.isExists) {
-							// 입력한 email 이 이미 사용중이라면 
-							$('span#emailCheckResult')
-							.html($('input#email').val() + "은 이미 사용중 이므로 다른 이메일을 입력하세요")
-							.css({"color":"red"});
-						}
-						else {
-							// 입력한 email 이 존재하지 않는 경우라면 
-							$('span#emailCheckResult')
-							.html($('input#email').val() + "은 사용가능 합니다.")
-							.css({"color":"blue"});
-						}
-						
-					},
-					
-					error: function(request, status, error){
-		                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-		            }				  
-				});
-					
-			 });
-			 // "이메일중복확인" 을 클릭했을 때 이벤트 처리하기 끝 //	 
-			 
-			
-			 // 이메일값이 변경되면 가입하기 버튼 클릭시 "이메일중복확인" 을 클릭했는지 클릭안했는지 알아보기 위한 용도 초기화 시키기 
-		 	 $('input#email').bind('change', function(){
-				b_emailcheck_click = false;
-				$('span.emailCheckResult').html("");
-		 	 });// 만약 이메일 입력을 변경했다면, 중복확인 html은 지워주기.
+		// 우편번호를 읽기전용(readonly)로 만들기 
+		$('input#postcode').attr('readonly', true);
 		
+		// 주소를 읽기전용(readonly)로 만들기 
+		$('input#address').attr('readonly', true);
+		
+		// 참고항목을 읽기전용(readonly)로 만들기 
+		$('input#addressExtra').attr('readonly', true);
+				
+		// ==== "우편번호찾기"를 클릭했을때 이벤트 처리하기 ==== //
+		$('img#postcodeSearch').click(function(){
+			new daum.Postcode({
+			    oncomplete: function(data) {
+			        // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+			        // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+			        // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+			        let addr = ''; // 주소 변수
+			        let extraAddr = ''; // 참고항목 변수
+
+			        //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+			        if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+			            addr = data.roadAddress;
+			        } else { // 사용자가 지번 주소를 선택했을 경우(J)
+			            addr = data.jibunAddress;
+			        }
+
+			        // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+			        if(data.userSelectedType === 'R'){
+			            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+			            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+			            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+			                extraAddr += data.bname;
+			            }
+			            // 건물명이 있고, 공동주택일 경우 추가한다.
+			            if(data.buildingName !== '' && data.apartment === 'Y'){
+			                extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+			            }
+			            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+			            if(extraAddr !== ''){
+			                extraAddr = ' (' + extraAddr + ')';
+			            }
+			            // 조합된 참고항목을 해당 필드에 넣는다.
+			            document.getElementById("addressExtra").value = extraAddr;
+			        
+			        } else {
+			            document.getElementById("addressExtra").value = '';
+			        }
+
+			        // 우편번호와 주소 정보를 해당 필드에 넣는다.
+			        document.getElementById('postcode').value = data.zonecode;
+			        document.getElementById("address").value = addr;
+			        // 커서를 상세주소 필드로 이동한다.
+			        document.getElementById("addressDetail").focus();
+			    }
+			}).open();
+					
+		});// end of $('img#postcodeSearch').click(function(){})---------------
+			
+		$('input#hp2').blur((e) => { 
+			
+		    const regExp_hp2 = /^[1-9][0-9]{3}$/; 
+			// 연락처 국번( 숫자 4자리인데 첫번째 숫자는 1-9 이고 나머지는 0-9) 정규표현식 객체 생성
+			
+			const bool = regExp_hp2.test($(e.target).val());
+			
+			if(!bool) {
+				// 연락처 국번이 정규표현식에 위배된 경우
+					
+				$('table#tblOrder :input').prop('disabled', true);
+				$(e.target).prop('disabled', false);
+				$(e.target).val('').focus();
+					
+			//	$(e.target).next().show();
+			//  또는
+			    $(e.target).parent().find('span.error').show();
+			}
+			else {
+				// 연락처 국번이 정규표현식에 맞는 경우
+				$('table#tblOrder :input').prop('disabled', false);
+					
+		     // $(e.target).next().hide();
+			 // 또는
+				$(e.target).parent().find('span.error').hide();
+			}
+					
+		});	// end of $('input#hp2').blur((e) => {})-------------------	
+			
+			
+		$('input#hp3').blur((e) => { 
+					
+		 // const regExp_hp3 = /^[0-9]{4}$/;
+		 // 또는
+			const regExp_hp3 = /^\d{4}$/;
+			// 연락처 마지막 4자리( 숫자만 되어야 함) 정규표현식 객체 생성
+			
+			const bool = regExp_hp3.test($(e.target).val());
+			
+			if(!bool) {
+				// 연락처 마지막 4자리가 정규표현식에 위배된 경우
+					
+				$('table#tblOrder :input').prop('disabled', true);
+				$(e.target).prop('disabled', false);
+				$(e.target).val('').focus();
+					
+			//	$(e.target).next().show();
+			//  또는
+			    $(e.target).parent().find('span.error').show();
+			}
+			else {
+				// 연락처 마지막 4자리가 정규표현식에 맞는 경우
+				$('table#tblOrder :input').prop('disabled', false);
+					
+		     // $(e.target).next().hide();
+			 // 또는
+				$(e.target).parent().find('span.error').hide();
+			}
+					
+		});	// end of $('input#hp3').blur((e) => {})-------------------	
+			
+		$('input#email').blur((e) => { 
+			
+		    const regExp_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i; 
+			// 이메일 정규표현식 객체 생성
+			
+			const bool = regExp_email.test($(e.target).val());
+			
+			if(!bool) {
+				// 이메일이 정규표현식에 위배된 경우
+					
+				$('table#tblOrder :input').prop('disabled', true);
+				$(e.target).prop('disabled', false);
+				$(e.target).val('').focus();
+					
+			//	$(e.target).next().show();
+			//  또는
+			    $(e.target).parent().find('span.error').show();
+			}
+			else {
+				// 이메일이 정규표현식에 맞는 경우
+				$('table#tblOrder :input').prop('disabled', false);
+					
+		     // $(e.target).next().hide();
+			 // 또는
+				$(e.target).parent().find('span.error').hide();
+			}
+					
+		});	// end of $('input#email').blur((e) => {})-------------------	
+			
+			
+	 	// 결제하기 버튼을 눌렀을 때 약관에 동의 했는지
+	 	$('#btnOrderSubmit').click(function(e) {
+	        if (!$('#agree').is(':checked')) {
+	            e.preventDefault(); // form 전송 막기
+	            alert("이용약관에 동의해야 결제가 가능합니다.");
+	            $('#agree').focus();
+	            return false;
+	        }
+	        // 약관에 동의한 경우에는 그냥 submit됨
+	    });
+		
+		
+		// 현재주소지로 변경 버튼을 눌렀을 때
+	 	$('#btnUseCurrentAddress').click(function() {
+ 	    	document.getElementById("postcode").value = '${sessionScope.loginUser.postcode}';
+	 	    document.getElementById("address").value = '${sessionScope.loginUser.address}';
+	 	    document.getElementById("addressDetail").value = '${sessionScope.loginUser.addressDetail}';
+	 	    document.getElementById("addressExtra").value = '${sessionScope.loginUser.addressExtra}';
+	 	});
+			
+		// 포인트 입력하는 input에 pattern을 넣는 방법.(###,###)처럼
+	 	$('#usePoint').on('input', function() {
+	 	    // 입력된 값에서 숫자만 추출 (쉼표나 POINT 제거)
+	 	    let raw = $(this).val().replace(/[^\d]/g, "");
+
+	 	    // 정수로 변환
+	 	    let inputPoint = parseInt(raw || 0);
+
+	 	    // 최대 포인트보다 크면 보유 포인트로 되돌리기
+	 	    if (inputPoint > ${sessionScope.loginUser.point}) {
+	 	        inputPoint = ${sessionScope.loginUser.point};
+	 	    }
+
+	 	    // 다시 쉼표 붙여서 보여주기
+	 	    let formatted = inputPoint.toLocaleString();
+	 	    $(this).val(formatted);
+	 	});
+	
+
 	}); // end of $(function(){})--------------------------------
 	
 </script>
 
 	<div class="col-md-12" id="divOrder" style="background-color: #f5f5f5;padding-top:80px;">
-      	<form name="orderFrm" action="post">
+      	<form name="orderFrm" method="post" action="">
       	
       		<%-- 배송지 --%>
       		<div class="section">
@@ -408,7 +398,6 @@
 		                    <td>
 		                       	<input type="text" name="email" id="email" maxlength="60" class="requiredInfo" value="${sessionScope.loginUser.email}" /> 
 								<%-- 이메일 중복체크 --%>
-                   				<span id="emailCheck">이메일중복확인</span>
                 				<span id="emailCheckResult"></span>
 								<span class="error">이메일 형식에 맞지 않습니다</span>
 		                    </td>
@@ -423,15 +412,24 @@
 					<tr class="h5">
                    		<td>주문상품</td>
                 	</tr>
-					<tr style="border-bottom: 1px solid">
-						<td style="width: 100px;">
-							<img src="images/sample.jpg" style="width:100px;" />
-						</td>
-						<td>
-							<strong>테스트 상품 (예시)</strong><br/>
-							상품 설명이 여기에 들어갑니다.
-						</td>
-					</tr>
+                	<c:forEach var="item" items="${requestScope.orderItemList}">
+                		<tr style="border-bottom: 1px solid">
+							<td style="width: 100px;">
+								<span>
+									<img src="<%= ctxPath%>${item.itemPhotoPath}" alt="상품 이미지" style="width: 60px; height: auto;" />
+									
+								</span>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								<span>
+									${item.itemName}&nbsp;${item.volume}ml
+								</span>
+							    &nbsp;&nbsp;&nbsp;
+							    <span> 
+									<fmt:formatNumber value="${item.price}" pattern="###,###"/>원
+								</span>
+							</td>
+						</tr>
+                	</c:forEach>
 				</table>
 			</div>
 			
@@ -449,6 +447,22 @@
 						<td>배송비</td>
 						<td style="text-align: right;">0원</td>
 					</tr>
+					<tr>
+						<td>포인트</td>
+						<td style="text-align: right;">
+							<span>보유 포인트:&nbsp;
+								<strong style="color: navy;">
+									<fmt:formatNumber value="${sessionScope.loginUser.point}" pattern="###,###"/> POINT
+								</strong>
+							</span>
+							&nbsp;&nbsp;&nbsp;
+							<span>사용:
+								<input type="text" name="usePoint" id="usePoint" 
+									   style="width: 100px; text-align: right; margin-left: 10px;" 
+									   value="${sessionScope.loginUser.point}" />&nbsp;POINT
+							</span>
+						</td>
+					</tr>
 					<tr style="border-bottom: 1px solid">
 						<td><strong>최종 결제 금액</strong></td>
 						<td style="text-align: right;"><strong>57,375원</strong></td>
@@ -463,7 +477,9 @@
                    		<td>결제수단</td>
                 	</tr>
                 	<tr style="border-bottom: 1px solid">
-                		<td><button>카드결제</button></td>
+                		<td colspan="2">
+					        <label><input type="radio" name="paymentMethod" value="card" checked /> 카드결제</label>
+					    </td>
                 	</tr>
 				</table>
 			</div>
