@@ -10,12 +10,13 @@
 
 	.page-title {
         width: 80%;
-        margin: 30px auto 10px auto;
-        font-size: 24px;
+    margin: 50px auto 10px auto;
+       font-size: 24px;
         font-weight: bold;
         border-bottom: 2px solid #eee;
         padding-bottom: 10px;
         text-align: left;
+        padding-top:60px;
     }
 
 	 table#ItemInput {
@@ -130,8 +131,8 @@
   }); // end of $(function(){})
 </script>
 
-<div class="page-title">일반상품 등록</div>
-<div align="center" style="margin-bottom: 20px;">
+<div class="page-title" style="margin-top:20px; margin-bottom:10px;">일반상품 등록</div>
+<div align="center" style="margin-top:20px; margin-bottom: 20px;">
 
 	
 	<form name="itemInputFrm" enctype="multipart/form-data"> 
