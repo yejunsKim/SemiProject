@@ -68,7 +68,7 @@ CREATE TABLE Item (
 
 commit;
 
-<<<<<<< HEAD
+
 desc users;
 select * from users;
 
@@ -177,3 +177,29 @@ desc order_history;
 select id, name, email, grade from users;
 
 >>>>>>> refs/heads/main
+
+///
+
+desc ORDER_ITEMS;
+desc ORDER_HISTORY;
+
+
+
+SELECT orderitemno
+FROM ORDER_ITEMS I JOIN ORDER_HISTORY H
+ON I.ORDERNO = H.ORDERNO 
+WHERE H.id = ? AND I.itemNo = to_number(?);
+
+select * from REVIEWS;
+
+SELECT sequence_name FROM user_sequences;
+
+
+insert into reviews(reviewid, fk_id, fk_itemno, content, createdat)
+values(review_seq.nextval, ?, ?, ?, default);
+
+SELECT reviewId, fk_id, name, content, to_char(createAt, 'yyyy-mm-dd hh24:mi:ss') AS createAt
+FROM reviews R JOIN users U
+ON R.fk_id = U.id
+WHERE R.fk_itemno
+order by reviewId desc;

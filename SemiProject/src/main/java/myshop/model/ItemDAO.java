@@ -7,6 +7,7 @@ import java.util.Map;
 import myshop.domain.CartVO;
 import myshop.domain.CategoryVO;
 import myshop.domain.ItemVO;
+import myshop.domain.ReviewVO;
 
 public interface ItemDAO {
 
@@ -62,6 +63,15 @@ public interface ItemDAO {
 	int get_order_seq()throws SQLException;
 
 	int insertOrderUpdate(Map<String, String> paraMap) throws SQLException;
+
+	// 로그인한 사용자가 특정 제품을 구매했는지 여부를 알아오는 것. 구매했다라면 true, 구매하지 않았다면 false 를 리턴함.  
+	boolean isOrder(Map<String, String> paraMap) throws SQLException;
+
+	// 특정 사용자가 특정 제품에 대해 상품후기를 입력하기(insert)
+	int addReview(ReviewVO reviewVO) throws SQLException;
+
+	// 특정 제품의 사용후기를 조회하기(select) 
+	List<ReviewVO> reviewList(String fk_itemNo) throws SQLException;
 
 		
 }
