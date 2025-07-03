@@ -343,6 +343,30 @@
 	            $('#agree').focus();
 	            return false;
 	        }
+	 		
+	 		// 여기서 수정해아함 참고
+	 	//	console.log("<%= ctxPath%>");
+	 		const ctxPath = "<%= ctxPath%>";
+	 		
+	 	//	console.log($('td#finalPrice').text());
+	 		const coinmoney = $('td#finalPrice').text();
+	 		
+	 	//	console.log($('input[name="id"]').val());
+	 		const userid = $('input[name="id"]').val();
+	 		
+	 		e.preventDefault(); // form 전송 막기
+	 		
+	 		if (window.opener && typeof window.opener.goCoinPurchaseEnd === 'function') {
+	 			window.opener.goCoinPurchaseEnd(ctxPath, coinmoney, userid);
+	 		} 
+	 		else {
+	 			alert("부모창과 연결되어 있지 않거나 함수가 없습니다.");
+	 		}
+	 		
+	 	//	window.opener.location.href = `javascript:goCoinPurchaseEnd("${ctxPath}", "${coinmoney}", "${userid}")`;
+			
+			self.close();// 자신의 팝업창을 닫는 것이다.
+	 		
 	        // 약관에 동의한 경우에는 그냥 submit됨
 	    });
 		
@@ -418,7 +442,7 @@ window.addEventListener('DOMContentLoaded', function() {
 </script>
 
 	<div class="col-md-12" id="divOrder" style="background-color: #f5f5f5;padding-top:80px;">
-      	<form name="orderFrm" method="post" action="">
+      	<form name="orderFrm" method="post">
       	
       		<%-- 배송지 --%>
       		<div class="section">
@@ -582,7 +606,7 @@ window.addEventListener('DOMContentLoaded', function() {
                		</tr>
                		<tr>
 					    <td colspan="2" style="text-align: center; padding-top: 20px;">
-					        <button type="submit" id="btnOrderSubmit" style="padding: 10px 30px; font-size: 16px; font-weight: bold;">
+					        <button type="button" id="btnOrderSubmit" style="padding: 10px 30px; font-size: 16px; font-weight: bold;">
 					            결제하기
 					        </button>
 					    </td>
