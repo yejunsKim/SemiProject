@@ -14,6 +14,12 @@ $(function(){
 	   
 	 // alert($(e.target).val());
 		
+
+	// "취소" 버튼 클릭 시 이전 페이지로 이동
+ 	$('#btnCancel').click( () => {
+ 	    history.back();
+ 	});
+	 
 		const name = $(e.target).val().trim();
 		if(name == "") {
 			// 입력하지 않거나 공백만 입력했을 경우
@@ -141,7 +147,7 @@ $(function(){
 				
 		//	$(e.target).next().show();
 		//  또는
-		    $(e.target).parent().find('span.error').show();
+		    $(e.target).parent().parent().find('span.error').show();
 		}
 		else {
 			// 이메일이 정규표현식에 맞는 경우
@@ -149,7 +155,7 @@ $(function(){
 				
 	     // $(e.target).next().hide();
 		 // 또는
-			$(e.target).parent().find('span.error').hide();
+			$(e.target).parent().parent().find('span.error').hide();
 		}
 				
 	});	// end of $('input#email').blur((e) => {})-------------------	
@@ -302,7 +308,7 @@ $(function(){
 		                extraAddr = ' (' + extraAddr + ')';
 		            }
 		            // 조합된 참고항목을 해당 필드에 넣는다.
-		            document.getElementById("addressExtra").value = addressExtra;
+		            document.getElementById("addressExtra").value = extraAddr;
 		        
 		        } else {
 		            document.getElementById("addressExtra").value = '';
@@ -423,6 +429,8 @@ $(function(){
 		$('span.emailCheckResult').html("");
  	 });// 만약 이메일 입력을 변경했다면, 중복확인 html은 지워주기.
 	 	
+	 
+		
 });// end of $(function(){})--------------------------------
 
 
@@ -489,7 +497,6 @@ function register() {
 		return; // register() 함수를 종료한다.
 	}
 	// **** 우편번호 및 주소에 값을 입력했는지 검사하기 시작 **** /*/
-	
 	
 	
 	const form = document.registerForm;
