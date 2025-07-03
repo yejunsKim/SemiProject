@@ -348,7 +348,7 @@
 	            $('#agree').focus();
 	            return false;
 	        }
-	 		
+	        
 	 		//결제하기 관련 여기서 부터  수정함.
  		//	console.log("<%= ctxPath%>");
  			const ctxPath = "<%= ctxPath%>";
@@ -439,19 +439,17 @@ window.addEventListener('DOMContentLoaded', function() {
     updatePrices();
 });
 	
-	
-	// 결제완료시 해당 함수 호출됨!
+	//결제완료시 해당 함수 호출됨!
 	function paymentSuccess(userid, usepoint, coinmoney) {
 		
 		console.log(userid, usepoint, coinmoney);
 		
 	}// end of function paymentSuccess()-----------------------------
 	
-	
 </script>
 
 	<div class="col-md-12" id="divOrder" style="background-color: #f5f5f5;padding-top:80px;">
-      	<form name="orderFrm" method="post" action="">
+      	<form name="orderFrm" method="post">
       	
       		<%-- 배송지 --%>
       		<div class="section">
@@ -479,9 +477,9 @@ window.addEventListener('DOMContentLoaded', function() {
 	                	<tr>
                     		<td>우편번호&nbsp;<span class="star">*</span></td>
                     		<td>
-                       			<input type="text" name="postcode" id="postcode" size="6" maxlength="5" value="${sessionScope.loginUser.postcode}" />&nbsp;&nbsp;
+                       			<input type="text" name="postcode" id="postcode" size="10" maxlength="5" value="${sessionScope.loginUser.postcode}" />&nbsp;&nbsp;
                        			<%-- 우편번호 찾기 --%>
-                       			<img src="<%= ctxPath%>/images/find_postcode.gif" width="5%" id="postcodeSearch" />
+                       			<img src="<%= ctxPath%>/images/find_postcode.gif" width="27px" id="postcodeSearch" />
                        			&nbsp;&nbsp;&nbsp;
                        			<span class="error">우편번호 형식에 맞지 않습니다.</span>
                        			<button type="button" id="btnUseCurrentAddress" style="padding: 5px 10px; border: 3pt">
