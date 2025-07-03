@@ -10,12 +10,31 @@ public class ItemVO {
     private int itemAmount;				// 재고
     private int volume;					// 용량
     private String company;				// 제조사명
-    private String infoImg;				// 제품상세이미지
+   
+
+	private String infoImg;				// 제품상세이미지
     private int fk_catagory_no;			// 카테고리번호 참조
     
     private CategoryVO categvo; 		// 카테고리VO
     
+    private CartVO cartvo;				// 장바구니VO
+    
+    
     private int ItemPoint;				// 사용자의 등급에 따른 제품별 적립 포인트(개당)
+    
+    public CartVO getCartvo() {
+		return cartvo;
+	}
+
+	public void setCartvo(CartVO cartvo) {
+		this.cartvo = cartvo;
+	}
+
+	public void setItemPoint(int itemPoint) {
+		ItemPoint = itemPoint;
+	}
+    
+    
     
     public ItemVO() {}
 

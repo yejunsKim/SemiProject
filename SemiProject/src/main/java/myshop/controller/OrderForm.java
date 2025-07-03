@@ -28,16 +28,14 @@ public class OrderForm extends BaseController {
          UserVO loginUser = (UserVO) session.getAttribute("loginUser");
          
          String[] selectedCartNoArray = request.getParameterValues("selectedItems");
-        
+         
          System.out.println("제품 번호 리스트는 : " + Arrays.toString(selectedCartNoArray));
          System.out.println("제품 번호 1개만 : " + selectedCartNoArray[0]);
 
          if(selectedCartNoArray.length < 1) {
         	 System.err.println("선택자가 없음.");
-        	 
         	 // 추후이전 페이지로 보내기
          } 
-         
          
          List<ItemVO> orderItemList = idao.getOrderItem(loginUser.getId(), selectedCartNoArray);
          
