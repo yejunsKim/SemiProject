@@ -19,7 +19,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<jsp:include page="../header.jsp"></jsp:include>
+<%-- <jsp:include page="../header.jsp"></jsp:include> --%>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/bootstrap-4.6.2-dist/css/bootstrap.min.css" > 
 
@@ -136,17 +136,12 @@
 					all_check = true;
 					return false;	// break;
 				}
-				
 			});
 			
 			if(!all_check) {
 				$('input:checkbox[id="allCheckOrNone"]').prop("checked", true);
 			}
-			
 		});// end of $('input.checkbox[name="selectedItems"]').click(function()})------------------------
-		
-		
-		
 		
 	});// end of $(function(){})-------------------------
 	
@@ -279,45 +274,41 @@
 				alert("취소되었습니다.");
 			}
 		}
-		
-		// ==== 장바구니에서 제품 주문하기 ==== //
-	     function order_selected() {
-	      
-	      const $checked = $('input[name="selectedItems"]:checked');
-	   
-	      if ($checked.length === 0) {
-	         alert("주문할 상품을 선택해주세요.");
-	         return;
-	      }
-	   
-	      const $form = $('form[name="CartList"]');
-	   
-	      // 기존에 추가된 hidden input 제거
-	      $form.find("input[type='hidden'][name^='send_']").remove();
-	   
-	      $checked.each(function() {
-	         const itemNo = $(this).val(); 
-	         const $row = $(this).closest('tr');
-	   
-	         const itemName = $row.find('div#cart_itemName').text();  // ✅ 수정됨
-	         const quantity = $row.find('input[name="quantity"]').val();
-	         const priceText = $row.find('td').eq(3).text().replace(/원|,/g, "").trim();
-	         const orderPrice = parseInt(priceText);
-	   
-	         $form.append(`<input type="hidden" name="send_cartno" value="${itemNo}">`);
-	         $form.append(`<input type="hidden" name="send_itemName_${itemNo}" value="${itemName}">`);
-	         $form.append(`<input type="hidden" name="send_quantity_${itemNo}" value="${quantity}">`);
-	         $form.append(`<input type="hidden" name="send_price_${itemNo}" value="${orderPrice}">`);
-	      });
-	   
-	      $form.submit();
-	      
-	   }
+	}// end of function allDel()-----------------------------
 	
-		
-		
-}// end of function allDel()-----------------------------
-	
+	// ==== 장바구니에서 제품 주문하기 ==== //
+     function order_selected() {
+      
+	     const checked = $('input[name="selectedItems"]:checked');
+	  
+	     if (checked.length === 0) {
+	        alert("주문할 상품을 선택해주세요.");
+	        return; 
+	     }
+	  
+	     const form = $('form[name="CartList"]');
+	  
+	     // 기존에 추가된 hidden input 제거
+	     form.find("input[type='hidden'][name^='send_']").remove();
+	  
+	     checked.each(function() {
+	        const itemNo = $(this).val(); 
+	        const $row = $(this).closest('tr');
+	  
+	        const itemName = $row.find('div#cart_itemName').text();
+	        const quantity = $row.find('input[name="quantity"]').val();
+	        const priceText = $row.find('td').eq(3).text().replace(/원|,/g, "").trim();
+	        const orderPrice = parseInt(priceText);
+	  
+	        form.append(`<input type="hidden" name="send_cartno" value="${itemNo}">`);
+	        form.append(`<input type="hidden" name="send_itemName_${itemNo}" value="${itemName}">`);
+	        form.append(`<input type="hidden" name="send_quantity_${itemNo}" value="${quantity}">`);
+	        form.append(`<input type="hidden" name="send_price_${itemNo}" value="${orderPrice}">`);
+	     });
+   	  form.action = "orderForm.do"
+      form.submit();
+   } // end of function order_selected()-----------------------------
+	 
 	
 </script>
 
@@ -329,8 +320,13 @@
 	<hr style="border: solid 1px black;">
 	
 	<div class="text-center my-3" style="font-size: 10pt;">장바구니에 담긴 상품은 30일 동안 보관됩니다.</div>
+<<<<<<< HEAD
 	
 	<form name="CartList" method="POST" action="<%=ctxPath%>/item/orderForm.do">	
+=======
+	
+	<form name="CartList" method="POST" action = "orderForm.do" >
+>>>>>>> refs/heads/main
 		<table>
 			<thead>
 				<tr>
@@ -403,7 +399,7 @@
 		</table> --%>
 		
 		<div class="btn-row">
-			<button type="submit" name="order_selected" class="btn" >선택상품주문</button>
+			<button type="button" onclick="order_selected()" class="btn" >선택상품주문</button>
 			<button type="button" onclick="location.href='<%= ctxPath%>/item/mallHome.do'" class="btn">쇼핑계속하기</button>
 		</div>
 	</form>

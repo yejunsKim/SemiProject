@@ -21,6 +21,7 @@ public class ReviewReactionVO {
 	}
 	public void setFk_reviewId(int fk_reviewId) {
 		this.fk_reviewId = fk_reviewId;
+
 	}
 	public UserVO getUserVO() {
 		return userVO;

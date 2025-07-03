@@ -77,5 +77,7 @@ public interface ItemDAO {
 
 	boolean isOrder(Map<String, String> paraMap) throws SQLException;
 
+	int getTotalPage(String id) throws SQLException;
+
 		
 }

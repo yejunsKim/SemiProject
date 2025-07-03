@@ -631,6 +631,60 @@ public class ItemDAO_imple implements ItemDAO {
 		
 		return n;
 	}
+	
+	
+	// 30일 지난 장바구니 항목 먼저 삭제
+	@Override
+	public void deleteOldCart(String fk_users_id) throws SQLException {
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " delete from cart "
+					   + " where fk_users_id = ? "
+					   + " and cartdate < sysdate - 30 ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, fk_users_id);
+			
+			pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+	}// end of public void deleteOldCart(String fk_users_id) throws SQLException-------------------
+	
+	
+	// 로그인한 유저의 주문 내역의 총 페이지수 알아오기
+	@Override
+	public int getTotalPage(String id) throws SQLException {
+		
+		int totalPage = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " SELECT ceil(count(*) / 10) "	// 10 이 sizePerPage 이다.
+					   + " FROM order_history "
+					   + " WHERE id = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, id);
+			
+			rs = pstmt.executeQuery();
+			
+			rs.next();
+			
+			totalPage = rs.getInt(1);
+			
+		} finally {
+			close();
+		}
+		
+		return totalPage;
+		
+	}// end of public int getTotalPage(String id) throws SQLException----------------------------
 
 	// 로그인 유저의 장바구니 조회.	
 
@@ -654,7 +708,7 @@ public class ItemDAO_imple implements ItemDAO {
 	            }
 	        }
 
-	        String sql = "SELECT cartno, fk_users_id, itemno, cartamount, itemname, ITEMPHOTOPATH, price, volume"
+	        String sql = "SELECT cartno, fk_users_id, itemno, cartamount, itemname, ITEMPHOTOPATH, price, volume, cartamount"
 	                   + " FROM cart c "
 	                   + " JOIN item i ON c.fk_item_no = i.itemno "
 	                   + " WHERE c.fk_users_id = ? "
@@ -674,15 +728,17 @@ public class ItemDAO_imple implements ItemDAO {
 	            cvo.setFk_users_id(rs.getString("fk_users_id"));
 	            cvo.setCartamount(rs.getInt("cartamount"));*/
 
-	            ItemVO ivo = new ItemVO();
-	            ivo.setItemName(rs.getString("itemname"));
-	            ivo.setItemPhotoPath(rs.getString("itemphotopath"));
-	            ivo.setPrice(rs.getInt("price"));
-	            ivo.setVolume(rs.getInt("volume"));
-	            
-	            //cvo.setIvo(ivo);
+	            ItemVO itemvo = new ItemVO();
+	            itemvo.setItemName(rs.getString("itemname"));
+	            itemvo.setItemPhotoPath(rs.getString("itemphotopath"));
+	            itemvo.setPrice(rs.getInt("price"));
+	            itemvo.setVolume(rs.getInt("volume"));
 
-	            getOrderItemList.add(ivo);
+	            CartVO cartvo = new CartVO();
+	            cartvo.setCartamount(rs.getInt("cartamount"));
+	            itemvo.setCartvo(cartvo);
+ 
+	            getOrderItemList.add(itemvo);
 	        }
 
 	    } finally {
@@ -862,26 +918,7 @@ public class ItemDAO_imple implements ItemDAO {
 			return seq;
 		}
 
-		//30일  지난 장바구니 항목 먼저 삭제
-		@Override
-		   public void deleteOldCart(String fk_users_id) throws SQLException {
-		      
-		      try {
-		         conn = ds.getConnection();
-		         
-		         String sql = " delete from cart"
-		                  + " where fk_users_id = ? "
-		                  + " and cartdate < sysdate - 30";
-		         
-		         pstmt = conn.prepareStatement(sql);
-		         pstmt.setString(1, fk_users_id);
-		         
-		         pstmt.executeUpdate();
-		         
-		      } finally {
-		         close();
-		      }
-		   }// end of public void deleteOldCart(String fk_users_id) throws SQLException-------------------
+		
 
 		// 로그인한 사용자가 특정 제품을 구매했는지 여부를 알아오는 것. 구매했다라면 true, 구매하지 않았다면 false 를 리턴함.  
 		   @Override

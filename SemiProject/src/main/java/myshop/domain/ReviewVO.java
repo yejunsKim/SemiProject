@@ -30,6 +30,7 @@ public class ReviewVO {
 		}
 		public void setFk_itemNo(int fk_itemNo) {
 			this.fk_itemNo = fk_itemNo;
+
 		}
 		public String getContent() {
 			return content;

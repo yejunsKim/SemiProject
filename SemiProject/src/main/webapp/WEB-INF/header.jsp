@@ -320,7 +320,7 @@ function SearchItems() {
 			 	 	
 			 	 	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.id != 'admin'}">
 						<%-- header아이디에 따라 관리자 창 보이는곳 수정시작 --%>
-						<li><img src="/SemiProject/images/header/cart.png" ></li>						
+						<li><a href="<%= ctxPath%>/item/cartList.do"><img src="/SemiProject/images/header/cart.png" ></a></li>						
 						<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">내 메뉴보기</li>
 						<li class="userFunc" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">카테고리</li>
 				 	 	<%-- header아이디에 따라 관리자 창 보이는곳 수정 끝 --%>
