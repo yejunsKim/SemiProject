@@ -1,4 +1,3 @@
-
 <%@page import="java.awt.event.ItemEvent"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -44,6 +43,12 @@
 		font-size: 13pt;
 	}
 	
+	#postcodeSearch {
+ 	  vertical-align: middle;
+	  cursor: pointer;
+	  height: 30px; /* input 높이에 맞게 고정 (필요 시 조절) */
+	}
+	
 	span#emailCheck {
 		border: solid 1px gray;
 		border-radius: 5px;
@@ -60,8 +65,6 @@
 </style>
 
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-
-<script src="<%= ctxPath%>/js/login/login.js"></script>
 
 <script type="text/javascript">
 
@@ -346,21 +349,23 @@
 	            return false;
 	        }
 	 		
-	 		// 결제하기 관련 여기서 부터  수정함.
-	 	//	console.log("<%= ctxPath%>");
-	 		const ctxPath = "<%= ctxPath%>";
+	 		//결제하기 관련 여기서 부터  수정함.
+ 		//	console.log("<%= ctxPath%>");
+ 			const ctxPath = "<%= ctxPath%>";
+ 			
+ 		//	console.log($('#finalPrice > strong').attr('data-price'));
+ 			const coinmoney = $('#finalPrice > strong').attr('data-price');
+ 			
+ 		//	console.log($('input[name="id"]').val());
+ 			const userid = $('input[name="id"]').val();
+ 			
+ 		//	console.log($('input#usePoint').val());
+ 			const usepoint = $('input#usePoint').val();
 	 		
-	 	//	console.log($('#finalPrice strong').attr('data-price'));
-	 		const coinmoney = $('#finalPrice strong').attr('data-price');
-	 	//	console.log($('input[name="id"]').val());
-	 		const userid = $('input[name="id"]').val();
-	 		
-	 	//	console.log($('input#usePoint').val());
-	 		const usepoint = $('input#usePoint').val();
-	 		
+ 		
 	 		// ==== 포트원(구 아임포트) 결제
 	 		gopayment(ctxPath, coinmoney, userid, usepoint);
-
+	 		
 	    });
 		
 		
@@ -417,8 +422,8 @@ window.addEventListener('DOMContentLoaded', function() {
         const final = Math.max(total - adjustedUsed, 0);
 
         // 가격 표시
-        totalPriceEl.textContent = total.toLocaleString() + '원';
-        finalPriceEl.innerHTML = '<strong data-price="' + final + '">' + final.toLocaleString() + '원</strong>';		// 수정사항
+        totalPrice.textContent = total.toLocaleString() + '원';
+        finalPrice.innerHTML = '<strong data-price="' + final + '">' + final.toLocaleString() + '원</strong>';
     }
 
     // 포인트 입력 시마다 금액 업데이트
@@ -432,31 +437,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // 초기 실행
     updatePrices();
-<<<<<<< HEAD
 });
-	
-	//==== 포트원(구 아임포트) 결제를 해주는 함수 ==== //
-	function gopayment(ctxPath, coinmoney, userid, usepoint) {
-		
-	//	alert(`확인용 부모창의 함수 호출함.\n결제금액:${coinmoney}원, 사용자id : ${userid}, ${ctxPath}`);
-	
-		// 포트원(구 아임포트) 결제 팝업창 띄우기
-		const url = `${ctxPath}/item/itemPayment.do?userid=${userid}&coinmoney=${coinmoney}&usepoint=${usepoint}`;
-		
-		// 너비 1000, 높이 600 인 팝업창을 화면 가운데 위치시키기
-		const width = 1000;
-		const height = 600;
-		
-		const left = Math.ceil((window.screen.width - width) / 2);	// 정수로 만듬
-								// 1400 - 1000 = 400		400/2 ==> 200
-		
-		const top = Math.ceil((window.screen.height - height) / 2);	// 정수로 만듬
-								// 1400 - 600 = 800		800/2 ==> 400
-		
-		window.open(url, "payment", `left=${left}, top=${top}, width=${width}, height=${height}`);
-		
-	}// end of function goCoinPurchaseTypeChoice(userid, ctx_Path) {}--------------------
-	
 	
 	
 	// 결제완료시 해당 함수 호출됨!
@@ -467,16 +448,10 @@ window.addEventListener('DOMContentLoaded', function() {
 	}// end of function paymentSuccess()-----------------------------
 	
 	
-	
-=======
-});
-	
->>>>>>> refs/heads/main
-	
 </script>
 
 	<div class="col-md-12" id="divOrder" style="background-color: #f5f5f5;padding-top:80px;">
-      	<form name="orderFrm" method="post">
+      	<form name="orderFrm" method="post" action="">
       	
       		<%-- 배송지 --%>
       		<div class="section">
@@ -506,9 +481,10 @@ window.addEventListener('DOMContentLoaded', function() {
                     		<td>
                        			<input type="text" name="postcode" id="postcode" size="6" maxlength="5" value="${sessionScope.loginUser.postcode}" />&nbsp;&nbsp;
                        			<%-- 우편번호 찾기 --%>
-                       			<img src="<%= ctxPath%>/images/find_postcode.gif" width="6%" id="postcodeSearch" />
+                       			<img src="<%= ctxPath%>/images/find_postcode.gif" width="5%" id="postcodeSearch" />
+                       			&nbsp;&nbsp;&nbsp;
                        			<span class="error">우편번호 형식에 맞지 않습니다.</span>
-                       			<button type="button" id="btnUseCurrentAddress" style="padding: 5px 10px;">
+                       			<button type="button" id="btnUseCurrentAddress" style="padding: 5px 10px; border: 3pt">
 				            		현재 주소지로 변경
 				        		</button>
                	   	 		</td>
