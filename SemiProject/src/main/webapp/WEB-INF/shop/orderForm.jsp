@@ -43,6 +43,12 @@
 		font-size: 13pt;
 	}
 	
+	#postcodeSearch {
+ 	  vertical-align: middle;
+	  cursor: pointer;
+	  height: 30px; /* input 높이에 맞게 고정 (필요 시 조절) */
+	}
+	
 	span#emailCheck {
 		border: solid 1px gray;
 		border-radius: 5px;
@@ -448,11 +454,12 @@ window.addEventListener('DOMContentLoaded', function() {
 	                	<tr>
                     		<td>우편번호&nbsp;<span class="star">*</span></td>
                     		<td>
-                       			<input type="text" name="postcode" id="postcode" size="6" maxlength="5" value="${sessionScope.loginUser.postcode}" />&nbsp;&nbsp;
+                       			<input type="text" name="postcode" id="postcode" size="10" maxlength="5" value="${sessionScope.loginUser.postcode}" />&nbsp;&nbsp;
                        			<%-- 우편번호 찾기 --%>
-                       			<img src="<%= ctxPath%>/images/find_postcode.gif" width="6%" id="postcodeSearch" />
+                       			<img src="<%= ctxPath%>/images/find_postcode.gif" width="27px" id="postcodeSearch" />
+                       			&nbsp;&nbsp;&nbsp;
                        			<span class="error">우편번호 형식에 맞지 않습니다.</span>
-                       			<button type="button" id="btnUseCurrentAddress" style="padding: 5px 10px;">
+                       			<button type="button" id="btnUseCurrentAddress" style="padding: 5px 10px; border: 3pt">
 				            		현재 주소지로 변경
 				        		</button>
                	   	 		</td>
