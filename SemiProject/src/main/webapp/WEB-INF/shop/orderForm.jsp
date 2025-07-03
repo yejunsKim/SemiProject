@@ -61,6 +61,8 @@
 
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
+<script src="<%= ctxPath%>/js/login/login.js"></script>
+
 <script type="text/javascript">
 
 	let b_emailcheck_click = true; 
@@ -344,30 +346,21 @@
 	            return false;
 	        }
 	 		
-	 		// 여기서 수정해아함 참고
+	 		// 결제하기 관련 여기서 부터  수정함.
 	 	//	console.log("<%= ctxPath%>");
 	 		const ctxPath = "<%= ctxPath%>";
 	 		
-	 	//	console.log($('td#finalPrice').text());
-	 		const coinmoney = $('td#finalPrice').text();
-	 		
+	 	//	console.log($('#finalPrice strong').attr('data-price'));
+	 		const coinmoney = $('#finalPrice strong').attr('data-price');
 	 	//	console.log($('input[name="id"]').val());
 	 		const userid = $('input[name="id"]').val();
 	 		
-	 		e.preventDefault(); // form 전송 막기
+	 	//	console.log($('input#usePoint').val());
+	 		const usepoint = $('input#usePoint').val();
 	 		
-	 		if (window.opener && typeof window.opener.goCoinPurchaseEnd === 'function') {
-	 			window.opener.goCoinPurchaseEnd(ctxPath, coinmoney, userid);
-	 		} 
-	 		else {
-	 			alert("부모창과 연결되어 있지 않거나 함수가 없습니다.");
-	 		}
-	 		
-	 	//	window.opener.location.href = `javascript:goCoinPurchaseEnd("${ctxPath}", "${coinmoney}", "${userid}")`;
-			
-			self.close();// 자신의 팝업창을 닫는 것이다.
-	 		
-	        // 약관에 동의한 경우에는 그냥 submit됨
+	 		// ==== 포트원(구 아임포트) 결제
+	 		gopayment(ctxPath, coinmoney, userid, usepoint);
+
 	    });
 		
 		
@@ -424,7 +417,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         // 가격 표시
         totalPriceEl.textContent = total.toLocaleString() + '원';
-        finalPriceEl.innerHTML = '<strong>' + final.toLocaleString() + '원</strong>';
+        finalPriceEl.innerHTML = '<strong data-price="' + final + '">' + final.toLocaleString() + '원</strong>';		// 수정사항
     }
 
     // 포인트 입력 시마다 금액 업데이트
@@ -439,6 +432,41 @@ window.addEventListener('DOMContentLoaded', function() {
     // 초기 실행
     updatePrices();
 });
+	
+	//==== 포트원(구 아임포트) 결제를 해주는 함수 ==== //
+	function gopayment(ctxPath, coinmoney, userid, usepoint) {
+		
+	//	alert(`확인용 부모창의 함수 호출함.\n결제금액:${coinmoney}원, 사용자id : ${userid}, ${ctxPath}`);
+	
+		// 포트원(구 아임포트) 결제 팝업창 띄우기
+		const url = `${ctxPath}/item/itemPayment.do?userid=${userid}&coinmoney=${coinmoney}&usepoint=${usepoint}`;
+		
+		// 너비 1000, 높이 600 인 팝업창을 화면 가운데 위치시키기
+		const width = 1000;
+		const height = 600;
+		
+		const left = Math.ceil((window.screen.width - width) / 2);	// 정수로 만듬
+								// 1400 - 1000 = 400		400/2 ==> 200
+		
+		const top = Math.ceil((window.screen.height - height) / 2);	// 정수로 만듬
+								// 1400 - 600 = 800		800/2 ==> 400
+		
+		window.open(url, "payment", `left=${left}, top=${top}, width=${width}, height=${height}`);
+		
+	}// end of function goCoinPurchaseTypeChoice(userid, ctx_Path) {}--------------------
+	
+	
+	
+	// 결제완료시 해당 함수 호출됨!
+	function paymentSuccess(userid, usepoint, coinmoney) {
+		
+		console.log(userid, usepoint, coinmoney);
+		
+	}// end of function paymentSuccess()-----------------------------
+	
+	
+	
+	
 </script>
 
 	<div class="col-md-12" id="divOrder" style="background-color: #f5f5f5;padding-top:80px;">

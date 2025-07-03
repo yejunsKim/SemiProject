@@ -14,8 +14,9 @@ public class ItemPayment extends BaseController {
 		// 원포트(구 아임포트) 결제창을 띄우기 위한 전제조건은 먼저 로그인을 해야 하는 것이다.
 		if(super.checkLogin(request)) {
 			// 로그인을 했으면
-			
-			String id = request.getParameter("id");
+			// goCoinPurchaseEnd(ctxPath, coinmoney, userid, usepoint)
+			String id = request.getParameter("userid");
+			String usepoint = request.getParameter("usepoint");
 			
 			HttpSession session = request.getSession();
 			UserVO loginUser = (UserVO) session.getAttribute("loginUser");
@@ -24,10 +25,10 @@ public class ItemPayment extends BaseController {
 				// 로그인한 사용자가 결제하는 경우
 				
 				// request 데이터 가져와야함
-			/*	
+				
 				String s_coinmoney = request.getParameter("coinmoney");
 				
-				String productName = "코인충전";	// "새우깡"
+				String productName = "PerfumeArena 상품";	// "새우깡"
 			//	int productPrice = Integer.parseInt(s_coinmoney);
 				
 				int coinmoney = Integer.parseInt(s_coinmoney);
@@ -38,12 +39,14 @@ public class ItemPayment extends BaseController {
 				request.setAttribute("productPrice", 100);
 				
 				request.setAttribute("coinmoney", coinmoney);
-				request.setAttribute("email", loginuser.getEmail());
-				request.setAttribute("name", loginuser.getName());
-				request.setAttribute("mobile", loginuser.getMobile());
+				request.setAttribute("email", loginUser.getEmail());
+				request.setAttribute("name", loginUser.getName());
+				request.setAttribute("mobile", loginUser.getMobile());
 				
-				request.setAttribute("userid", loginuser.getUserid());
-			*/	
+				
+				request.setAttribute("userid", loginUser.getId());
+				request.setAttribute("usepoint", usepoint);
+				
 				
 				super.setRedirect(false);
 				super.setViewPage("/WEB-INF/shop/paymentGateway.jsp");
