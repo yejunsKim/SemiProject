@@ -43,6 +43,12 @@
 		font-size: 13pt;
 	}
 	
+	#postcodeSearch {
+ 	  vertical-align: middle;
+	  cursor: pointer;
+	  height: 30px; /* input 높이에 맞게 고정 (필요 시 조절) */
+	}
+	
 	span#emailCheck {
 		border: solid 1px gray;
 		border-radius: 5px;
@@ -372,13 +378,14 @@
 	 	    $(this).val(formatted);
 	 	});
 		
-		// totalPrice와 finalPrice의 합.
+	
+	// totalPrice와 finalPrice
 
 	}); // end of $(function(){})--------------------------------
 window.addEventListener('DOMContentLoaded', function() {
     const priceSpans = document.querySelectorAll('.item-price');
-    const totalPriceEl = document.querySelector('#totalPrice');
-    const finalPriceEl = document.querySelector('#finalPrice');
+    const totalPrice = document.querySelector('#totalPrice');
+    const finalPrice = document.querySelector('#finalPrice');
     const usePointInput = document.querySelector('#usePoint');
     const maxPoint = ${sessionScope.loginUser.point};
 
@@ -398,8 +405,8 @@ window.addEventListener('DOMContentLoaded', function() {
         const final = Math.max(total - adjustedUsed, 0);
 
         // 가격 표시
-        totalPriceEl.textContent = total.toLocaleString() + '원';
-        finalPriceEl.innerHTML = '<strong>' + final.toLocaleString() + '원</strong>';
+        totalPrice.textContent = total.toLocaleString() + '원';
+        finalPrice.innerHTML = '<strong>' + final.toLocaleString() + '원</strong>';
     }
 
     // 포인트 입력 시마다 금액 업데이트
@@ -414,6 +421,8 @@ window.addEventListener('DOMContentLoaded', function() {
     // 초기 실행
     updatePrices();
 });
+	
+	
 </script>
 
 	<div class="col-md-12" id="divOrder" style="background-color: #f5f5f5;padding-top:80px;">
@@ -447,9 +456,10 @@ window.addEventListener('DOMContentLoaded', function() {
                     		<td>
                        			<input type="text" name="postcode" id="postcode" size="6" maxlength="5" value="${sessionScope.loginUser.postcode}" />&nbsp;&nbsp;
                        			<%-- 우편번호 찾기 --%>
-                       			<img src="<%= ctxPath%>/images/find_postcode.gif" width="6%" id="postcodeSearch" />
+                       			<img src="<%= ctxPath%>/images/find_postcode.gif" width="5%" id="postcodeSearch" />
+                       			&nbsp;&nbsp;&nbsp;
                        			<span class="error">우편번호 형식에 맞지 않습니다.</span>
-                       			<button type="button" id="btnUseCurrentAddress" style="padding: 5px 10px;">
+                       			<button type="button" id="btnUseCurrentAddress" style="padding: 5px 10px; border: 3pt">
 				            		현재 주소지로 변경
 				        		</button>
                	   	 		</td>
@@ -502,12 +512,16 @@ window.addEventListener('DOMContentLoaded', function() {
 									<img src="<%= ctxPath%>${item.itemPhotoPath}" alt="상품 이미지" style="width: 60px; height: auto;" />
 								</span>
 								&nbsp;&nbsp;&nbsp;&nbsp;
-								<span class="item-price" data-price="${item.price}">
+								<span class="item-price" data-price="${item.price * item.cartvo.cartamount}">
 									${item.itemName}&nbsp;${item.volume}ml
 								</span>
 							    &nbsp;&nbsp;&nbsp;
+							    <span class="quantity" data-price="${item.cartvo.cartamount}">
+									X ${item.cartvo.cartamount}개
+								</span>
+							    &nbsp;&nbsp;&nbsp;
 							    <span> 
-									<fmt:formatNumber value="${item.price}" pattern="###,###"/>원
+									<fmt:formatNumber value="${item.price * item.cartvo.cartamount}" pattern="###,###"/>원
 								</span>
 							</td>
 						</tr>

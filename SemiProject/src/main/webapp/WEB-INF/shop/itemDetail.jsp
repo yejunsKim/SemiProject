@@ -27,7 +27,7 @@
     $.ajax({
         url:"<%= ctxPath%>/item/reviewList.do",
         type:"get",
-        data:{"fk_itemNo":"${requestScope.itemVO.itemNo}"},
+        data:{"fk_itemNo":"${item.itemNo}"},
         dataType:"json",
          success:function(json){ 
          
@@ -41,19 +41,19 @@
                  let writeUserid = item.fk_id;
                  let loginUserid = "${sessionScope.loginUser.id}";
                  
-                 v_html += "<div id='review"+index+"'><span class='markColor'>▶</span>&nbsp;"+item.contents+"</div>"
+                 v_html += "<div id='review"+index+"'><span class='markColor'>▶</span>&nbsp;"+item.content+"</div>"
                              + "<div class='customDisplay'>"+item.name+"</div>"      
                              + "<div class='customDisplay'>"+item.writeDate+"</div>";
                              
-                 if(loginuserid == "") { 
+                 if(loginUserid == "") { 
                      // 로그인을 안한 경우 
                      v_html += "<div class='customDisplay spacediv'>&nbsp;</div>";
                  }
-                 else if(loginuserid != "" && writeuserid != loginuserid ) { 
+                 else if(loginUserid != "" && writeUserid != loginUserid ) { 
                      // 로그인을 했으나 후기글이 로그인한 사용자 쓴 글이 아니라 다른 사용자 쓴 후기글 이라면  
                      v_html += "<div class='customDisplay spacediv'>&nbsp;</div>";
                  } 
-                 else if(loginuserid != "" && writeuserid == loginuserid ) {
+                 else if(loginUserid != "" && writeUserid == loginUserid ) {
                      // 로그인을 했고 후기글이 로그인한 사용자 쓴 글 이라면
                      v_html += "<div class='customDisplay spacediv commentDel' onclick='delMyReview("+item.review_seq+")'>후기삭제</div>"; 
                      v_html += "<div class='customDisplay spacediv commentDel commentUpdate' onclick='updateMyReview("+index+","+item.review_seq+")'>후기수정</div>"; 
@@ -80,7 +80,6 @@
 
 	$(function() {
 		
-		console.log("<%= ctxPath%>/item/isOrder.up");
     	 goReviewListView();	// 제품후기글을 보여주는 함수 호출하기
 		
 		$('button#btnScrollTop').hide(); // 위로 가기 버튼 숨기기
@@ -92,6 +91,8 @@
 		// 제품 상세이미지 보기 버튼을 클릭 했을 때
     	$('#btnMoreItem').click(function() {
     		
+            $('#reviewSection').hide();
+
    			// 상세 이미지 영역에 긴 이미지 한 장 삽입
        		$('#detailImageSection').html(`
          		<img src="<%= ctxPath%>/${item.infoImg}" alt="상세 이미지" style="width: 80%; height: auto;">
@@ -99,7 +100,7 @@
        		
    			// 상세 이미지 영역을 부드럽게 보여주고, 버튼 숨기기
        		$('#detailImageSection').slideDown(300); 
-       		$(this).hide();
+       		//$(this).hide();
        		$('button#btnScrollTop').show();
       		
     	});
@@ -108,14 +109,19 @@
     		$('html, body').animate({ scrollTop: 0 }); // 맨 위로 이동
     		$('#detailImageSection').hide(); // 상세 이미지 영역 숨기기
     		$('#btnMoreItem').show(); // 제품 상세이미지 보기 버튼 보여주기
-    		$(this).hide(); // 맨 위로 이동 버튼 숨기기
+    	//	$(this).hide(); // 맨 위로 이동 버튼 숨기기
     	});
     	
     	// ------------------구매후기----------------------- 
     	
     	$('button#btnReviews').click(function(){
     		
-    		 $('#reviewSection').slideToggle();
+    		// $('#reviewSection').slideToggle();
+    		 $('#detailImageSection').hide();
+    	        $('#reviewSection').slideDown();
+    	        $('button#btnScrollTop').hide();
+    		
+    		
     	});
     	
     	
@@ -126,13 +132,14 @@
     	$.ajax({
  		   url:"<%= ctxPath%>/item/isOrder.do",
  		   type:"get",
- 		   data:{"fk_itemNo":"${requestScope.itemVO.itemNo}",
- 			     "fk_id":"${sessionScope.loginUser.id}"},
+ 		  data:{"fk_itemNo":"${item.itemNo}",
+ 		      "fk_id":"${sessionScope.loginUser.id}"},
  		   dataType:"json",
  		   
  		   async:false, // 동기처리
  		   
  		   success:function(json){
+ 			   
  			   console.log("~~ 확인용 : " + JSON.stringify(json));
  			   // ~~ 확인용 : {"isOrder":true}   해당제품을 구매한 경우 
  			   // ~~ 확인용 : {"isOrder":false}  해당제품을 구매하지 않은 경우
@@ -162,16 +169,16 @@
      	   else { // 해당 제품을 구매한 경우라면
      	     // alert("제품후기 쓰기 가능함");
      	   
-     	        const review_contents = $('textarea[name="contents"]').val().trim();
+     	        const review_content = $('textarea[name="content"]').val().trim();
      	   
-     	        if(review_contents == "") {
+     	        if(review_content == "") {
      	        	alert("제품후기 내용을 입력하세요!!");
-     	        	$('textarea[name="contents"]').val(""); // 공백제거
+     	        	$('textarea[name="content"]').val(""); // 공백제거
      	        	return; // 종료
      	        }
      	   
      	        const queryString = $('form[name="commentFrm"]').serialize();
-     	   
+     	       //console.log(queryString);
      	        
      	        $.ajax({
      	        	url:"<%= ctxPath%>/item/reviewRegister.do",
@@ -198,7 +205,7 @@
    		  				   alert("제품후기 글쓰기가 실패했습니다.");
    		  			    }
      	        		
-     	        		$('textarea[name="contents"]').val("").focus();
+     	        		$('textarea[name="content"]').val("").focus();
      	        	},
      	        	error: function(request, status, error){
      				   alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -223,6 +230,7 @@ console.log("itemNo : ${requestScope.itemVO.itemNo}");
 console.log("id : ${sessionScope.loginUser.id}");
 </script>
 
+	
 	<div class="col-md-12" style="background-color: #f5f5f5;padding-top:80px;">
 		<div class="d-flex">
 			<div class="col-8 my-5" style="border-right: 1px solid #ccc;">
@@ -278,9 +286,9 @@ console.log("id : ${sessionScope.loginUser.id}");
 					<%-- 리뷰내용나오는 곳 --%>
 				</div>
 				<form name="commentFrm">
-					<textarea  name="contents" style="font-size: 12pt; width: 100%; height: 150px;"></textarea>
+					<textarea  name="content" style="font-size: 12pt; width: 100%; height: 150px;"></textarea>
 	    		    <input type="hidden" name="fk_id" value="${sessionScope.loginUser.id}" />
-	   	            <input type="hidden" name="fk_itemNo" value="${requestScope.itemVO.itemNo}" />
+	   	            <input type="hidden" name="fk_itemNo" value="${item.itemNo}" />
 				</form>
 				<div class="col-lg-2" style="display: flex;">
 			    	<button type="button" class="btn btn-outline-secondary w-100 h-100" id="btnCommentOK" style="margin: auto;">

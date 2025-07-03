@@ -55,7 +55,7 @@ public class ReviewRegister extends BaseController {
 			request.setAttribute("json", json);
 			
 			super.setRedirect(false);
-			super.setViewPage("WEB-INF/jsonview.jsp");
+			super.setViewPage("/WEB-INF/jsonview.jsp");
 			
 			
 		}

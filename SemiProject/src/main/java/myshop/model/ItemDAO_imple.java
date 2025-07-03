@@ -705,7 +705,7 @@ public class ItemDAO_imple implements ItemDAO {
 		         conn.setAutoCommit(false);
 		         
 		         String userid = paraMap.get("id");
-		         String orderCode = paraMap.get("orderCode");
+		         String odrcode = paraMap.get("odrcode");
 		         String[] cartnoArr = paraMap.get("cartnoArr").split(",");
 		         String[] oqtyArr = paraMap.get("oqtyArr").split(",");
 		         int sumPrice = Integer.parseInt(paraMap.get("sumPrice"));
@@ -895,7 +895,7 @@ public class ItemDAO_imple implements ItemDAO {
 		         String sql = " SELECT orderitemno "
 		                  + " FROM ORDER_ITEMS I JOIN ORDER_HISTORY H "
 		                  + " ON I.ORDERNO = H.ORDERNO "
-		                  + " WHERE H.id = ? AND I.itemno = to_number(?) ";
+		                  + " WHERE H.id = ? AND I.itemno = ? ";
 		         
 		         pstmt = conn.prepareStatement(sql);
 		         pstmt.setString(1, paraMap.get("fk_id"));
@@ -904,6 +904,8 @@ public class ItemDAO_imple implements ItemDAO {
 		         rs = pstmt.executeQuery();
 		         
 		         bool = rs.next();
+		         
+		         System.out.println(">>> DAO isOrder() 확인용 : " + paraMap);
 		               
 		      } finally {
 		         close();
