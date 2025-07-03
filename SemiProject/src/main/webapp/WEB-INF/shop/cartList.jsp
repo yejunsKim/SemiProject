@@ -320,13 +320,9 @@
 	<hr style="border: solid 1px black;">
 	
 	<div class="text-center my-3" style="font-size: 10pt;">장바구니에 담긴 상품은 30일 동안 보관됩니다.</div>
-<<<<<<< HEAD
 	
 	<form name="CartList" method="POST" action="<%=ctxPath%>/item/orderForm.do">	
-=======
 	
-	<form name="CartList" method="POST" action = "orderForm.do" >
->>>>>>> refs/heads/main
 		<table>
 			<thead>
 				<tr>

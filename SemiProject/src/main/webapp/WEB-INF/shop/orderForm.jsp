@@ -423,11 +423,8 @@ window.addEventListener('DOMContentLoaded', function() {
 
         // 가격 표시
         totalPrice.textContent = total.toLocaleString() + '원';
-<<<<<<< HEAD
-        finalPrice.innerHTML = '<strong>' + final.toLocaleString() + '원</strong>';
-=======
+
         finalPrice.innerHTML = '<strong data-price="' + final + '">' + final.toLocaleString() + '원</strong>';
->>>>>>> refs/heads/main
     }
 
     // 포인트 입력 시마다 금액 업데이트
@@ -442,9 +439,7 @@ window.addEventListener('DOMContentLoaded', function() {
     // 초기 실행
     updatePrices();
 });
-<<<<<<< HEAD
 	
-=======
 	
 	//결제완료시 해당 함수 호출됨!
 	function paymentSuccess(userid, usepoint, coinmoney) {
@@ -452,7 +447,6 @@ window.addEventListener('DOMContentLoaded', function() {
 		console.log(userid, usepoint, coinmoney);
 		
 	}// end of function paymentSuccess()-----------------------------
->>>>>>> refs/heads/main
 	
 </script>
 
@@ -487,11 +481,8 @@ window.addEventListener('DOMContentLoaded', function() {
                     		<td>
                        			<input type="text" name="postcode" id="postcode" size="10" maxlength="5" value="${sessionScope.loginUser.postcode}" />&nbsp;&nbsp;
                        			<%-- 우편번호 찾기 --%>
-<<<<<<< HEAD
-                       			<img src="<%= ctxPath%>/images/find_postcode.gif" width="5%" id="postcodeSearch" />
-=======
+
                        			<img src="<%= ctxPath%>/images/find_postcode.gif" width="27px" id="postcodeSearch" />
->>>>>>> refs/heads/main
                        			&nbsp;&nbsp;&nbsp;
                        			<span class="error">우편번호 형식에 맞지 않습니다.</span>
                        			<button type="button" id="btnUseCurrentAddress" style="padding: 5px 10px; border: 3pt">

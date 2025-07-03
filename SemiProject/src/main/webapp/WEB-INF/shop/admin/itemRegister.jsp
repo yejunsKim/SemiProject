@@ -7,54 +7,150 @@
 
 
 <style type="text/css">
-
-	.page-title {
-        width: 80%;
-    margin: 50px auto 10px auto;
-       font-size: 24px;
-        font-weight: bold;
-        border-bottom: 2px solid #eee;
-        padding-bottom: 10px;
-        text-align: left;
-        padding-top:60px;
+    body {
+        background-color: #f5f9ff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-	 table#ItemInput {
-        border-collapse: collapse;
+    .page-title {
+		width: 80%;
+        max-width: 1200px;
+   		 margin: 50px auto 10px auto;
+        font-size: 28px;
+        font-weight: bold;
+        color: #2a4e8a;
+        border-bottom: 3px solid #4a90e2;
+        padding-bottom: 15px;
+        text-align: left;
+        padding-top:60px;
+        
+    }
+
+    table#ItemInput {
+        border-collapse: separate;
+        border-spacing: 0;
         width: 80%;
-        margin: 0 auto;
-        font-size: 14px;
+        max-width: 1200px;
+        margin: 0% auto;
+        font-size: 16px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(74, 144, 226, 0.1);
+        overflow: hidden;
     }
 
     table#ItemInput td {
-        border: 1px solid #ccc;
-        padding: 10px;
+        border: 1px solid #d4e3fc;
+        padding: 15px;
+        transition: background-color 0.3s;
+    }
+
+    table#ItemInput tr:hover td {
+        background-color: #f0f7ff;
     }
 
     .itemInputName {
-        background-color: #e6fff2;
+        background-color: #e6f0ff;
         font-weight: bold;
         width: 25%;
         text-align: right;
-        padding-right: 15px;
+        padding-right: 20px;
+        color: #2a4e8a;
     }
 
     table#ItemInput td input[type="text"],
     table#ItemInput td input[type="file"],
     table#ItemInput td select,
     table#ItemInput td textarea {
-        width: 80%;
+        width: 100%;
+        max-width: 400px;
         box-sizing: border-box;
+        padding: 8px 12px;
+        border: 1px solid #c4d8f9;
+        border-radius: 4px;
+        background-color: #f9fcff;
+        transition: all 0.3s;
+    }
+
+    table#ItemInput td input:focus,
+    table#ItemInput td select:focus,
+    table#ItemInput td textarea:focus {
+        outline: none;
+        border-color: #4a90e2;
+        box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
     }
 
     .error {
-        color: red;
+        color: #e74c3c;
         font-weight: bold;
-        font-size: 9pt;
-        margin-left: 5px;
+        font-size: 12px;
+        margin-left: 10px;
     }
-   
-</style> 
+
+    #btnRegister {
+        background-color: #4a90e2;
+        border-color: #4a90e2;
+    }
+
+    #btnRegister:hover {
+        background-color: #3a7bc8;
+        border-color: #3a7bc8;
+    }
+
+    #previewImg {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #d4e3fc;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+        .page-title {
+            font-size: 22px;
+            text-align: center;
+        }
+        
+        table#ItemInput {
+            width: 95%;
+            font-size: 14px;
+        }
+        
+        .itemInputName {
+            width: 30%;
+            padding-right: 10px;
+        }
+        
+        table#ItemInput td {
+            padding: 10px 8px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .page-title {
+            font-size: 20px;
+        }
+        
+        table#ItemInput {
+            display: block;
+        }
+        
+        table#ItemInput tbody,
+        table#ItemInput tr,
+        table#ItemInput td {
+            display: block;
+            width: 100% !important;
+            text-align: left !important;
+        }
+        
+        .itemInputName {
+            background-color: transparent;
+            font-weight: bold;
+            color: #2a4e8a;
+            padding-bottom: 5px;
+        }
+    }
+</style>
 <script type="text/javascript">
 
   let total_fileSize = 0; 
@@ -169,7 +265,7 @@
 			<tr>
 				<td width="25%" class="itemInputName">용량</td>
 				<td width="75%" align="left" style="border-top: hidden; border-bottom: hidden;">
-		           	<input name="volume" style="width: 30px; height: 20px;"> ML
+		           	<input name="volume" style="width: 50px; height: 20px;"> ML
 					<span class="error">필수입력</span>
 				</td>
 			</tr>
