@@ -12,3 +12,6 @@ commit;
 
 select id, name, email, grade from users;
 
+select * from tab;
+
+select * from category;

@@ -58,5 +58,11 @@ public interface ItemDAO {
 	 //로그인 유저의 장바구니 조회.	
 	public List<ItemVO> getOrderItem(String id, String[] selectedCartNoArray)throws SQLException;
 
+	int getSearchResultCount(String searchID) throws SQLException;
+
+	List<ItemVO> searchItemsByName(String searchID, int start, int len) throws SQLException;
+
+	
+
 		
 }

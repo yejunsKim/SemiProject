@@ -690,4 +690,61 @@ public class ItemDAO_imple implements ItemDAO {
 	    return getOrderItemList;
 	}
 
+
+	@Override
+	public int getSearchResultCount(String searchID) throws SQLException {
+	    int count = 0;
+
+	    try {
+	        conn = ds.getConnection();
+	        String sql = "SELECT COUNT(*) AS cnt FROM item WHERE itemname LIKE ?";
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, "%" + searchID + "%");
+	        rs = pstmt.executeQuery();
+
+	        if (rs.next()) {
+	            count = rs.getInt("cnt");
+	        }
+	    } finally {
+	        close();
+	    }
+
+	    return count;
+	}
+
+	@Override
+	public List<ItemVO> searchItemsByName(String searchID, int start, int len) throws SQLException {
+	    List<ItemVO> list = new ArrayList<>();
+
+	    try {
+	        conn = ds.getConnection();
+	        String sql = "SELECT * FROM ( " +
+	                     " SELECT ROWNUM AS rnum, a.* FROM ( " +
+	                     " SELECT itemno, itemname, itemphotopath, price, volume " +
+	                     " FROM item WHERE itemname LIKE ? ORDER BY itemno DESC " +
+	                     ") a ) " +
+	                     "WHERE rnum BETWEEN ? AND ?";
+
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, "%" + searchID + "%");
+	        pstmt.setInt(2, start);
+	        pstmt.setInt(3, start + len - 1);
+
+	        rs = pstmt.executeQuery();
+	        while (rs.next()) {
+	            ItemVO vo = new ItemVO();
+	            vo.setItemNo(rs.getInt("itemno"));
+	            vo.setItemName(rs.getString("itemname"));
+	            vo.setItemPhotoPath(rs.getString("itemphotopath"));
+	            vo.setPrice(rs.getInt("price"));
+	            vo.setVolume(rs.getInt("volume"));
+	            list.add(vo);
+	        }
+	    } finally {
+	        close();
+	    }
+
+	    return list;
+	}
+	
 }

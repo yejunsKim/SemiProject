@@ -46,8 +46,8 @@ function editInfo(id, ctxPath) {
 	   const url = `<%=ctxPath%>/user/userEdit.do?id=${sessionScope.loginUser.id}`;
 	   
 	   // 너비 800, 높이 680 인 팝업창을 화면 가운데 위치시키기
-	   const width = 800;
-	   const height = 680;
+	   const width = 800px;
+	   const height = 680px;
 	   
 	   const left = Math.ceil((window.screen.width - width)/2);  // 정수로 만듬 
 	   const top = Math.ceil((window.screen.height - height)/2); // 정수로 만듬
@@ -112,15 +112,16 @@ table {
 .loginList .loginA input {width:150px;}
 .form-outline {position:relative;}
 .form-control {max-width:150px;width:100%;padding:0 35px;}
-.fa-search {position:absolute;top:12px;left:10px;} 
 .loginBox {z-index:20;}
 .trTab {padding:10px 0;display:flex;justify-content:space-between;align-items:center;}
 
-.userFunc {border: 1px solid #bbb;padding: 10px 15px;border-radius: 15px;background: #8444e9;color: #fff;cursor: pointer}
+.userFunc {border: 1px solid #bbb;padding: 10px 15px;border-radius: 15px;background: #ff995d;color: #fff;cursor: pointer}
 .userTab {position: fixed;right:0;height:860px;background:#fff;top:65px;width:150px;border-left:1px solid #ddd;z-index:20;}
 .userTab p a {padding:40px 13px;border-bottom:1px solid #ddd;cursor:pointer;display:block;text-align:center;}
 .userTab p:hover, .userTab p:hover a {background-color:#000;color:#fff}
-
+input#searchID {border-radius:30px;padding:5px 20px;border:1px solid #ddd;}
+.fa-search {position:absolute;top:11px;right:20px;left:initial;} 
+.btnSubmit {background-color:transparent;border:0;position:absolute;right:5px;top:7px;width:50px;height:21px;}
 </style>
 <script type="text/javascript">
 $(function() {
@@ -183,14 +184,15 @@ function SearchItems() {
     const searchID = $('input[name="searchID"]').val().trim();
 
     if (searchID === "") {
-        alert("검색어를 입력해주세요.");
-        return;
+        alert("검색어를 입력하세요.");
+        return false;
     }
 
-    const srcFrm = document.forms["searchFrm"];
-    srcFrm.action = "/SemiProject/item/searchItem.do";
-    srcFrm.method = "get";
-    srcFrm.submit();
+    const frm = document.searchFrm;
+    frm.action = "/SemiProject/item/searchResult.do";
+    frm.method = "get";
+    frm.submit();
+    return false; // 폼 기본 제출 막기
 }
 </script>
 
@@ -300,10 +302,10 @@ function SearchItems() {
 		 		<div style="width:550px;display:flex;justify-content:space-between;align-items:center;">
 			 		<li>
 				 	  <div class="input-group">
-						<form name="searchFrm" id="searchFrm" style="display:flex;">
-						  <input type="text" name="searchID" id="searchID" placeholder="검색어를 입력하세요">
+						<form name="searchFrm" id="searchFrm" onsubmit="return SearchItems();" style="display:flex;">
+						  <input type="text" name="searchID" id="searchID" placeholder="검색어를 입력하세요" />
 						  <i class="fas fa-search"></i>
-						  <button type="button" onclick="SearchItems()" style="width:50px;">검색</button>
+						   <button type="submit" class="btnSubmit"></button>
 						</form>
 					  </div>
 					</li>
@@ -319,7 +321,7 @@ function SearchItems() {
 			 	 	
 			 	 	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.id != 'admin'}">
 						<%-- header아이디에 따라 관리자 창 보이는곳 수정시작 --%>
-						<li><img src="/SemiProject/images/header/cart.png" ></li>						
+						<li><a href="<%= ctxPath%>/item/cartList.do"><img src="/SemiProject/images/header/cart.png" ></a></li>						
 						<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">내 메뉴보기</li>
 						<li class="userFunc" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">카테고리</li>
 				 	 	<%-- header아이디에 따라 관리자 창 보이는곳 수정 끝 --%>

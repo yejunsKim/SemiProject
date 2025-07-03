@@ -43,6 +43,7 @@ function loginLocalStorage() {
 
 function LogOut(ctx_Path) { // 로그아웃 페이지로 이동~
 	location.href = `${ctx_Path}/login/logout.do`;
+	$('.userTab').hide();
 }
 
 // 나의정보 수정하기 팝업창 띄우는 메소드
