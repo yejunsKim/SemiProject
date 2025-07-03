@@ -23,6 +23,8 @@ $(function(){
 		}
 		adminOpen = !adminOpen;
 	});
+	
+	$('.userTab').hide();
 });
 </script>
 
