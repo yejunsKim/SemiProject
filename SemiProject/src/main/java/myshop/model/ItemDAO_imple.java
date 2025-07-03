@@ -706,7 +706,7 @@ public class ItemDAO_imple implements ItemDAO {
 	            }
 	        }
 
-	        String sql = "SELECT cartno, fk_users_id, itemno, cartamount, itemname, ITEMPHOTOPATH, price, volume"
+	        String sql = "SELECT cartno, fk_users_id, itemno, cartamount, itemname, ITEMPHOTOPATH, price, volume, cartamount"
 	                   + " FROM cart c "
 	                   + " JOIN item i ON c.fk_item_no = i.itemno "
 	                   + " WHERE c.fk_users_id = ? "
@@ -726,15 +726,17 @@ public class ItemDAO_imple implements ItemDAO {
 	            cvo.setFk_users_id(rs.getString("fk_users_id"));
 	            cvo.setCartamount(rs.getInt("cartamount"));*/
 
-	            ItemVO ivo = new ItemVO();
-	            ivo.setItemName(rs.getString("itemname"));
-	            ivo.setItemPhotoPath(rs.getString("itemphotopath"));
-	            ivo.setPrice(rs.getInt("price"));
-	            ivo.setVolume(rs.getInt("volume"));
-	            
-	            //cvo.setIvo(ivo);
+	            ItemVO itemvo = new ItemVO();
+	            itemvo.setItemName(rs.getString("itemname"));
+	            itemvo.setItemPhotoPath(rs.getString("itemphotopath"));
+	            itemvo.setPrice(rs.getInt("price"));
+	            itemvo.setVolume(rs.getInt("volume"));
 
-	            getOrderItemList.add(ivo);
+	            CartVO cartvo = new CartVO();
+	            cartvo.setCartamount(rs.getInt("cartamount"));
+	            itemvo.setCartvo(cartvo);
+
+	            getOrderItemList.add(itemvo);
 	        }
 
 	    } finally {

@@ -390,13 +390,14 @@
 	 	    $(this).val(formatted);
 	 	});
 		
-		// totalPrice와 finalPrice의 합.
+	
+	// totalPrice와 finalPrice
 
 	}); // end of $(function(){})--------------------------------
 window.addEventListener('DOMContentLoaded', function() {
     const priceSpans = document.querySelectorAll('.item-price');
-    const totalPriceEl = document.querySelector('#totalPrice');
-    const finalPriceEl = document.querySelector('#finalPrice');
+    const totalPrice = document.querySelector('#totalPrice');
+    const finalPrice = document.querySelector('#finalPrice');
     const usePointInput = document.querySelector('#usePoint');
     const maxPoint = ${sessionScope.loginUser.point};
 
@@ -431,6 +432,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // 초기 실행
     updatePrices();
+<<<<<<< HEAD
 });
 	
 	//==== 포트원(구 아임포트) 결제를 해주는 함수 ==== //
@@ -466,6 +468,10 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	
 	
+=======
+});
+	
+>>>>>>> refs/heads/main
 	
 </script>
 
@@ -555,12 +561,16 @@ window.addEventListener('DOMContentLoaded', function() {
 									<img src="<%= ctxPath%>${item.itemPhotoPath}" alt="상품 이미지" style="width: 60px; height: auto;" />
 								</span>
 								&nbsp;&nbsp;&nbsp;&nbsp;
-								<span class="item-price" data-price="${item.price}">
+								<span class="item-price" data-price="${item.price * item.cartvo.cartamount}">
 									${item.itemName}&nbsp;${item.volume}ml
 								</span>
 							    &nbsp;&nbsp;&nbsp;
+							    <span class="quantity" data-price="${item.cartvo.cartamount}">
+									X ${item.cartvo.cartamount}개
+								</span>
+							    &nbsp;&nbsp;&nbsp;
 							    <span> 
-									<fmt:formatNumber value="${item.price}" pattern="###,###"/>원
+									<fmt:formatNumber value="${item.price * item.cartvo.cartamount}" pattern="###,###"/>원
 								</span>
 							</td>
 						</tr>
