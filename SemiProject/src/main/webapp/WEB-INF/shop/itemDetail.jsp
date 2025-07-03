@@ -93,9 +93,9 @@
     	$('#btnMoreItem').click(function() {
     		
    			// 상세 이미지 영역에 긴 이미지 한 장 삽입
-       		$('#detailImageSection').html(
-		       '<img src="<%= ctxPath %>${item.infoImg}" alt="상세 이미지" style="width: 80%; height: auto;">'
-			);
+       		$('#detailImageSection').html(`
+         		<img src="<%= ctxPath%>/${item.infoImg}" alt="상세 이미지" style="width: 80%; height: auto;">
+       		`);
        		
    			// 상세 이미지 영역을 부드럽게 보여주고, 버튼 숨기기
        		$('#detailImageSection').slideDown(300); 
