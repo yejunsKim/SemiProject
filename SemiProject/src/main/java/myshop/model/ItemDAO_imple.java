@@ -16,6 +16,8 @@ import javax.sql.DataSource;
 import myshop.domain.CartVO;
 import myshop.domain.CategoryVO;
 import myshop.domain.ItemVO;
+import myshop.domain.ReviewVO;
+import user.domain.UserVO;
 
 
 public class ItemDAO_imple implements ItemDAO {
@@ -881,6 +883,111 @@ public class ItemDAO_imple implements ItemDAO {
 		      }
 		   }// end of public void deleteOldCart(String fk_users_id) throws SQLException-------------------
 
+		// 로그인한 사용자가 특정 제품을 구매했는지 여부를 알아오는 것. 구매했다라면 true, 구매하지 않았다면 false 를 리턴함.  
+		   @Override
+		   public boolean isOrder(Map<String, String> paraMap) throws SQLException {
+
+		      boolean bool = false;
+		      
+		      try {
+		         conn = ds.getConnection();
+		         
+		         String sql = " SELECT orderitemno "
+		                  + " FROM ORDER_ITEMS I JOIN ORDER_HISTORY H "
+		                  + " ON I.ORDERNO = H.ORDERNO "
+		                  + " WHERE H.id = ? AND I.itemno = to_number(?) ";
+		         
+		         pstmt = conn.prepareStatement(sql);
+		         pstmt.setString(1, paraMap.get("fk_id"));
+		         pstmt.setString(2, paraMap.get("fk_itemNo"));
+		         
+		         rs = pstmt.executeQuery();
+		         
+		         bool = rs.next();
+		               
+		      } finally {
+		         close();
+		      }
+		      
+		      return bool;
+		      
+		   }
+
+
+		   // 특정 사용자가 특정 제품에 대해 상품후기를 입력하기(insert)
+		   @Override
+		   public int addReview(ReviewVO reviewVO) throws SQLException {
+
+		      int n = 0;
+		      
+		      try {
+		         conn = ds.getConnection();
+		         
+		         String sql = " insert into reviews(reviewid, fk_id, fk_itemno, content, createdat) "
+		                  + " values(review_seq.nextval, ?, ?, ?, default) ";
+		                  
+		         pstmt = conn.prepareStatement(sql);
+		         pstmt.setString(1, reviewVO.getFk_id());
+		         pstmt.setInt(2, reviewVO.getFk_itemNo());
+		         pstmt.setString(3, reviewVO.getContent());
+		         
+		         n = pstmt.executeUpdate();
+		         
+		      } finally {
+		         close();
+		      }
+		      
+		      return n;
+		      
+		   }
+
+		// 특정 제품의 사용후기를 조회하기(select)  
+		   @Override
+		   public List<ReviewVO> reviewList(String fk_itemNo) throws SQLException {
+		      
+		      List<ReviewVO> reviewList = new ArrayList<>();
+		      
+		      try {
+		         conn = ds.getConnection();
+		         
+		         String sql = " SELECT reviewId, fk_id, name, content, to_char(createdAt, 'yyyy-mm-dd hh24:mi:ss') AS createdAt "
+		                  + " FROM reviews R JOIN users U "
+		                  + " ON R.fk_id = U.id "
+		                  + " WHERE R.fk_itemno = ? "
+		                  + " order by reviewId desc ";
+		         
+		         pstmt = conn.prepareStatement(sql);
+		         pstmt.setString(1, fk_itemNo);
+		         
+		         rs = pstmt.executeQuery();
+		         
+		         while(rs.next()) {
+		            int reviewId = rs.getInt("reviewId");
+		            String fk_id = rs.getString("fk_id");
+		            String name = rs.getString("name");
+		            String content = rs.getString("content");
+		            String createAt = rs.getString("createdAt");
+		            
+		            ReviewVO reviewvo = new ReviewVO();
+		            reviewvo.setReviewId(reviewId);
+		            reviewvo.setFk_id(fk_id);
+		            
+		            UserVO uservo = new UserVO();
+		            uservo.setName(name);
+		            
+		            reviewvo.setUserVO(uservo);
+		            reviewvo.setContent(content);
+		            reviewvo.setCreatedAt(createAt);
+		            
+		            reviewList.add(reviewvo);            
+		         }
+		         
+		      } finally {
+		         close();
+		      }
+		      
+		      return reviewList;
+		   }
 	}
 
 

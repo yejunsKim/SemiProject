@@ -7,6 +7,7 @@ import java.util.Map;
 import myshop.domain.CartVO;
 import myshop.domain.CategoryVO;
 import myshop.domain.ItemVO;
+import myshop.domain.ReviewVO;
 
 public interface ItemDAO {
 
@@ -69,6 +70,12 @@ public interface ItemDAO {
 
 	 //로그인 유저의 장바구니 조회.	
 	public List<ItemVO> getOrderItem(String id, String[] selectedCartNoArray)throws SQLException;
+
+	List<ReviewVO> reviewList(String fk_itemNo) throws SQLException;
+
+	int addReview(ReviewVO reviewVO) throws SQLException;
+
+	boolean isOrder(Map<String, String> paraMap) throws SQLException;
 
 		
 }

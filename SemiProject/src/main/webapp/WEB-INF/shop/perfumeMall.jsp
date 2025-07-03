@@ -44,7 +44,6 @@
 	<%-- === 카테고리(?) 상품을 모두 가져와서 디스플레이(페이징 처리 방식은 미정) === --%>
 	<%-- 수정사항3 --%>
 	<div class="col-md-12" id="maininfo" align="center" style="padding-top:80px;">
-	<div class="col-md-9" id="maininfo" align="center">
 		<div id="maincontent">
 			<div style="background-color: #f5f5f5;">
 			
