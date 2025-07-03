@@ -1,3 +1,4 @@
+<%@page import="java.awt.event.ItemEvent"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -290,9 +291,52 @@
 		});	// end of $('input#email').blur((e) => {})-------------------	
 			
 			
-	 	// 결제하기 버튼을 눌렀을 때 약관에 동의 했는지
+	 	// 결제하기 버튼을 눌렀을 때 배송지가 입력되었는지, 약관에 동의 했는지
 	 	$('#btnOrderSubmit').click(function(e) {
-	        if (!$('#agree').is(':checked')) {
+		    if ( $('#name').val().trim() === "") {
+		       alert("받는 사람을 입력해주세요.");
+		       $('#name').focus();
+		       e.preventDefault();
+		       return false;
+		    }
+		
+		    if ( $('#postcode').val().trim() === "") {
+		       alert("우편번호를 입력해주세요.");
+		       $('#postcode').focus();
+		       e.preventDefault();
+		       return false;
+		    } 
+		
+		    if ($('#address').val().trim() === "") {
+		       alert("주소를 입력해주세요.");
+		       $('#address').focus();
+		       e.preventDefault();
+		       return false;
+		    }
+		
+		    if ( $('#addressDetail').val().trim() === "") {
+		       alert("상세주소를 입력해주세요.");
+		       $('#addressDetail').focus();
+		       e.preventDefault();
+		       return false;
+		    }
+		    
+		   /*  if ( $('#addressExtra').val().trim() === "") {
+			       alert("참고항목(동)를 입력해주세요.");
+			       $('#addressDetail').focus();
+			       e.preventDefault();
+			       return false;
+			    }
+		 */
+ 		   if ($('#email').val().trim() === "") {
+		       alert("이메일을 입력해주세요.");
+		       $('#email').focus();
+		       e.preventDefault();
+		       return false;
+ 		   }
+
+	 		// 약관에 동의 했는지
+	 		if (!$('#agree').is(':checked')) {
 	            e.preventDefault(); // form 전송 막기
 	            alert("이용약관에 동의해야 결제가 가능합니다.");
 	            $('#agree').focus();
@@ -327,10 +371,49 @@
 	 	    let formatted = inputPoint.toLocaleString();
 	 	    $(this).val(formatted);
 	 	});
-	
+		
+		// totalPrice와 finalPrice의 합.
 
 	}); // end of $(function(){})--------------------------------
-	
+window.addEventListener('DOMContentLoaded', function() {
+    const priceSpans = document.querySelectorAll('.item-price');
+    const totalPriceEl = document.querySelector('#totalPrice');
+    const finalPriceEl = document.querySelector('#finalPrice');
+    const usePointInput = document.querySelector('#usePoint');
+    const maxPoint = ${sessionScope.loginUser.point};
+
+    function calcTotalPrice() {
+        let total = 0;
+        priceSpans.forEach(span => {
+            const raw = span.getAttribute('data-price');
+            total += parseInt(raw);
+        });
+        return total;
+    }
+
+    function updatePrices() {
+        const total = calcTotalPrice();
+        const usedPoint = parseInt(usePointInput.value.replace(/[^\d]/g, '')) || 0;
+        const adjustedUsed = usedPoint > maxPoint ? maxPoint : usedPoint;
+        const final = Math.max(total - adjustedUsed, 0);
+
+        // 가격 표시
+        totalPriceEl.textContent = total.toLocaleString() + '원';
+        finalPriceEl.innerHTML = '<strong>' + final.toLocaleString() + '원</strong>';
+    }
+
+    // 포인트 입력 시마다 금액 업데이트
+    usePointInput.addEventListener('input', () => {
+        let raw = usePointInput.value.replace(/[^\d]/g, '');
+        let num = parseInt(raw || 0);
+        if (num > maxPoint) num = maxPoint;
+        usePointInput.value = num.toLocaleString();
+        updatePrices();
+    });
+
+    // 초기 실행
+    updatePrices();
+});
 </script>
 
 	<div class="col-md-12" id="divOrder" style="background-color: #f5f5f5;padding-top:80px;">
@@ -387,7 +470,7 @@
 		                    <td>연락처&nbsp;<span class="star">*</span></td>
 		                    <td>
 		                       	<input type="text" id="hp1" name='hp1' size="6" maxlength="3" value="010" readonly />&nbsp;-&nbsp; 
-		      		 			<input type="text" name="hp2" id="hp2" size="6" maxlength="4" value="${fn:substring(sessionScope.loginUser.mobile, 3, 7)}" />&nbsp;-&nbsp; 
+								<input type="text" name="hp2" id="hp2" size="6" maxlength="4" value="${fn:substring(sessionScope.loginUser.mobile, 3, 7)}" />&nbsp;-&nbsp; 
                        			<input type="text" name="hp3" id="hp3" size="6" maxlength="4" value="${fn:substring(sessionScope.loginUser.mobile, 7, 11)}" />    
                        			<span class="error">휴대폰 형식이 아닙니다.</span>
 		                    </td>
@@ -417,10 +500,9 @@
 							<td style="width: 100px;">
 								<span>
 									<img src="<%= ctxPath%>${item.itemPhotoPath}" alt="상품 이미지" style="width: 60px; height: auto;" />
-									
 								</span>
 								&nbsp;&nbsp;&nbsp;&nbsp;
-								<span>
+								<span class="item-price" data-price="${item.price}">
 									${item.itemName}&nbsp;${item.volume}ml
 								</span>
 							    &nbsp;&nbsp;&nbsp;
@@ -441,11 +523,11 @@
                 	</tr>
 					<tr>
 						<td>상품금액</td>
-						<td style="text-align: right;">57,375원</td>
+						<td id="totalPrice" style="text-align: right;"></td>
 					</tr>
 					<tr>
 						<td>배송비</td>
-						<td style="text-align: right;">0원</td>
+						<td style="text-align: right;">무료</td>
 					</tr>
 					<tr>
 						<td>포인트</td>
@@ -465,7 +547,7 @@
 					</tr>
 					<tr style="border-bottom: 1px solid">
 						<td><strong>최종 결제 금액</strong></td>
-						<td style="text-align: right;"><strong>57,375원</strong></td>
+						<td id="finalPrice" name="finalPrice" style="text-align: right;"><strong></strong></td>
 					</tr>
 				</table>
 			</div>

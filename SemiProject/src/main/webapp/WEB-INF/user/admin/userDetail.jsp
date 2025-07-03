@@ -5,11 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<<<<<<< HEAD
-<jsp:include page="../../headerTest.jsp" />   
-=======
 <jsp:include page="../../header.jsp" />   
->>>>>>> branch 'main' of https://github.com/yejunsKim/SemiProject.git
 
 <head>
     <meta charset="UTF-8">

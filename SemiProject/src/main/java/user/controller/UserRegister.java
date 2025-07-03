@@ -63,26 +63,27 @@ public class UserRegister extends BaseController {
 				int n = UserDAO.registerUser(user);
 
 				if(n == 1) {
-/*					String clientip = request.getRemoteAddr();
-					System.out.println("나의 IP 주소는 : "+clientip);
+					String ip = request.getRemoteAddr();
+					System.out.println("나의 IP 주소는 : "+ ip);
 					
 					Map<String, String> paraMap = new HashMap<>();
 					paraMap.put("id", id);
 					paraMap.put("password", password);
-					paraMap.put("clientip", clientip);
+					paraMap.put("ip", ip);
 					
-					UserVo loginUser = userDAO.login(paraMap);
+					UserVO loginUser = UserDAO.login(paraMap);
 					
 					HttpSession session = request.getSession();
 					session.setAttribute("loginUser", loginUser);
-					*/
-					message = "Signup~";
+					
+					message = " SignUp~ ";
+					loc = request.getContextPath()+"/main.do";
+					
 				}
-				
 				
 			} catch (SQLException e) {
 				e.printStackTrace();
-				message = "Failed for signup ";
+				message = "Failed for SignUp ";
 				loc = "javascript:history.back()";
 			}
 			request.setAttribute("message", message);
