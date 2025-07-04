@@ -39,6 +39,19 @@
 		text-decoration: underline; /* 마우스 올리면 밑줄 */
 	}
 	
+	.cart-btn {
+    	color: black;
+    	text-decoration: none;
+    	font-weight: normal;
+  	}
+
+  	.cart-btn:hover {
+    	color: black;
+    	text-decoration: underline;
+    	font-weight: bold;
+  	}
+	
+	
 </style>
 
 	<%-- === 카테고리(?) 상품을 모두 가져와서 디스플레이(페이징 처리 방식은 미정) === --%>

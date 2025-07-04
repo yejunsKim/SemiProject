@@ -52,7 +52,7 @@ function editInfo(id, ctxPath) {
 	   const left = Math.ceil((window.screen.width - width)/2);  // 정수로 만듬 
 	   const top = Math.ceil((window.screen.height - height)/2); // 정수로 만듬
 	   window.open(url, "editInfo", `left=${left}, top=${top}, 
-			   width=${width}, height=${height}`);
+			   width=${width}px, height=${height}px`);
 }
 
 </script>

@@ -203,3 +203,5 @@ FROM reviews R JOIN users U
 ON R.fk_id = U.id
 WHERE R.fk_itemno
 order by reviewId desc;
+
+select * from order_items;
