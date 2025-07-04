@@ -16,6 +16,9 @@
 </style>
 
 <style type="text/css">
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap');
+
+
 /* ================================
    전체 후기 영역
 ================================= */
@@ -188,15 +191,7 @@ let isOrderOK = false;
                  let writeUserid = item.fk_id;
                  let loginUserid = "${sessionScope.loginUser.id}";
                  
-                /*  v_html += "<div id='review"+index+"' class='review-card'>"
-			                 + "<div class='review-top'>"
-			                 + "<div class='review-content'><span class='markColor'>▶</span>&nbsp;" + item.content + "</div>"
-			                 + "<div class='review-meta'>" + item.name + " | " + item.createdAt + "</div>"
-			                 + "</div>"
-			                 + "<div class='like-container'>"
-			                 + "<i class='fas fa-thumbs-up' style='cursor:pointer;' onclick='golikeAdd(" + item.reviewId + ")'></i>"
-			                 + "<span id='likeCnt" + item.reviewId + "' class='badge badge-primary'></span>"
-			                 + "</div>"; */
+                
 			                 v_html += "<div class='review-card' id='review"+index+"'>"
 			                 +   "<div class='review-top'>"
 			                 +     "<div class='review-content'><span class='markColor'>▶</span>&nbsp;" + item.content + "</div>"

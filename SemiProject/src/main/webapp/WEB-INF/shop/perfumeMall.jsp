@@ -34,7 +34,6 @@
     }
 </style>
 
-<!-- ✅ 기존 네 스타일 전혀 건드리지 않음 -->
 <style>
     .card-link { text-decoration: none; color: black; }
     .card-link:hover { text-decoration: underline; color: black; }
