@@ -46,13 +46,13 @@ function editInfo(id, ctxPath) {
 	   const url = `<%=ctxPath%>/user/userEdit.do?id=${sessionScope.loginUser.id}`;
 	   
 	   // 너비 800, 높이 680 인 팝업창을 화면 가운데 위치시키기
-	   const width = 800px;
-	   const height = 680px;
+	   const width = 800;
+	   const height = 680;
 	   
 	   const left = Math.ceil((window.screen.width - width)/2);  // 정수로 만듬 
 	   const top = Math.ceil((window.screen.height - height)/2); // 정수로 만듬
-	   window.open(url, "editInfo", `left=${left}, top=${top}, 
-			   width=${width}, height=${height}`);
+	   window.open(url, "editInfo", `left=${left}px, top=${top}px, 
+			   width=${width}px, height=${height}px`);
 }
 
 </script>
@@ -86,6 +86,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
     line-height: 1;
+    position:relative;
 }
 ol, ul {
     list-style: none;
@@ -104,7 +105,7 @@ table {
 }
 
 .container-fluid {padding:0;}
-.headerNav {position:fixed;top:0;background-color:rgba(255,255,255,0.90);z-index:15;width:100%;padding:10px 25px;border-bottom:1px solid #ddd;}
+.headerNav {position:fixed;top:0;background-color:transparent;;z-index:15;width:100%;padding:10px 25px;}
 .headerUl {display:flex;justify-content:space-between;align-items:center;}
 .loginList {max-width:270px;width:100%;background-color:#fff;position:absolute;top:50%;left:50%;height:330px;padding:20px;box-shadow: 1px 3px 3px 2px #6f6363;border-radius:5px;transform:translate(-50%,-50%);z-index:15;}
 .loginList .loginBoxx .loginBTN {width:100%;border:0;border-radius:30px;background-color:#2c59e5;padding:15px 25px;margin-top:5px;color:#000;}
@@ -115,13 +116,17 @@ table {
 .loginBox {z-index:20;}
 .trTab {padding:10px 0;display:flex;justify-content:space-between;align-items:center;}
 
-/* .userFunc {border: 1px solid #bbb;padding: 10px 15px;border-radius: 15px;background: #ff995d;color: #fff;cursor: pointer} */
-.userTab {position: fixed;right:0;height:860px;background:#fff;top:63px;width:150px;border-left:1px solid #ddd;z-index:20;}
+.userTab-wrapper {position: relative;overflow: hidden;height: 880px;width: 250px;position: fixed;top: 63px;right: 0;z-index: 10;}
+.userTab {height: 100%;width: 250px;background: rgba(255, 255, 255, 0.6);position: absolute;right: -250px; top: 0;transition: right 0.9s ease;border-left: 1px solid #ddd;z-index: 21;}
+.userTab.userTab-open {right: 0;}
+
 .userTab p a {padding:40px 13px;border-bottom:1px solid #ddd;cursor:pointer;display:block;text-align:center;}
 .userTab p:hover, .userTab p:hover a {background-color:#000;color:#fff}
 input#searchID {border-radius:30px;padding:5px 20px;border:1px solid #ddd;}
 .fa-search {position:absolute;top:11px;right:20px;left:initial;} 
 .btnSubmit {background-color:transparent;border:0;position:absolute;right:5px;top:7px;width:50px;height:21px;}
+
+
 </style>
 <script type="text/javascript">
 $(function() {
@@ -150,33 +155,27 @@ $(function() {
 		}
 	};
 	
-	<%-- 유저가 로그인 후 카테고리 메뉴버튼 클릭시 메뉴 나타나도록 추가--%>
-	let userOpen = sessionStorage.getItem("userOpen") === "true";
-
-	if (userOpen) {
-		$('.userTab').show();
-	} else {
-		$('.userTab').hide();
-	}
-
-	$(document).on("click", ".userFunc", function() {
-		userOpen = !userOpen;
-
-		if (userOpen) {
-			$('.userTab').show();
-		} else {
-			$('.userTab').hide();
-		}
-
-		// 세션에 상태 저장입니당
-		
-		sessionStorage.setItem("userOpen", userOpen);
-	});
-	
 	
 	const pageurl = window.location.search
 	console.log(pageurl);
 	
+	$(function() {
+	    const loginId = "${sessionScope.loginUser.id}";
+
+	    if (loginId === 'admin') {
+	        const menuBtn = document.querySelector('.adminFunc');
+	        menuBtn?.addEventListener('click', () => {
+	            document.querySelector('.adminTab')?.classList.toggle('adminTab-open');
+	        });
+	    } else {
+	        const menuBtn = document.querySelector('.userFunc');
+	        menuBtn?.addEventListener('click', () => {
+	            document.querySelector('.userTab')?.classList.toggle('userTab-open');
+	        });
+	    }
+	});
+		
+
 });
 
 function SearchItems() {
@@ -193,10 +192,15 @@ function SearchItems() {
     frm.submit();
     return false; // 폼 기본 제출 막기
 }
+
+
+
+
 </script>
 
 </head>
 	<body>
+		<div class="userTab-wrapper">
 			<div class="userTab">
 				<p><a href="${pageContext.request.contextPath}/item/mallHome.do">전체</a></p>
 				<c:forEach var="cvo" items="${applicationScope.categoryList}" varStatus="status">
@@ -207,6 +211,7 @@ function SearchItems() {
 					</p>
 				</c:forEach>
 			</div>
+		</div>
 			<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
 				<div class="loginTheme">
 				  <c:if test="${empty sessionScope.loginUser}">
@@ -264,7 +269,7 @@ function SearchItems() {
 				  <table id="isLogin" style="width:100%;">
 				    <thead>
 				      <tr>
-				        <th id="loginUserId" colspan="3" style="text-align:center; font-size:18px;">
+				        <th colspan="3" style="text-align:center; font-size:18px;">
 				          ${sessionScope.loginUser.id}
 				        </th>
 				      </tr>
@@ -280,6 +285,17 @@ function SearchItems() {
 				        <td colspan="3" style="padding-top:10px;">
 				          <span style="font-weight: bold;">포인트&nbsp;:</span>
 				          &nbsp;<fmt:formatNumber value="${sessionScope.loginUser.point}" pattern="###,###"/> POINT  
+				        </td>
+				      </tr>
+				      <tr>
+				        <td colspan="3" style="padding-top:10px;">
+				          <span style="font-weight: bold;">등급&nbsp;:</span>
+				          ${sessionScope.loginUser.grade}
+				        </td>
+				      </tr>
+				      <tr>
+				        <td colspan="3" style="padding-top:10px;">
+				          <span style="font-weight: bold;"><a href="">주문목록 보기</a></span>
 				        </td>
 				      </tr>
 				      <tr>
@@ -321,7 +337,7 @@ function SearchItems() {
 			 	 	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.id != 'admin'}">
 						<%-- header아이디에 따라 관리자 창 보이는곳 수정시작 --%>
 						<li><a href="<%= ctxPath%>/item/cartList.do"><img src="/SemiProject/images/header/cart.png" ></a></li>						
-						<li class="logins" style="font-size:19pt;cursor:pointer;"><i class="fa-solid fa-user"></i></li>
+						<li class="logins" id="loginUser"style="font-size:19pt;cursor:pointer;"><i class="fas fa-user-circle mr-2"></i></li>
 						<li class="userFunc" style="font-size:19pt;cursor:pointer;"><i class="fa-solid fa-bars"></i></li>
 				 	 	<%-- header아이디에 따라 관리자 창 보이는곳 수정 끝 --%>
 			 	 	</c:if>
