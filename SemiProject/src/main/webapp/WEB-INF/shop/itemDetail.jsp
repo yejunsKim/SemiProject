@@ -15,9 +15,31 @@
 .itemLeft::after{content:"";display:inline-block;width:1px;height:100%;background-color:#ddd;position:absolute;right:5%;top:1%;}
 </style>
 
+<style type="text/css">
+
+	div#viewComments {width: 80%;
+	           		  margin: 1% 0 0 0; 
+	                  text-align: left;
+	                  max-height: 300px;
+	                  overflow: auto;
+	                  /* border: solid 1px red; */
+	}
+	
+	div.commentDel {font-size: 8pt;
+	                font-style: italic;
+	                cursor: pointer; }
+	
+	div.commentDel:hover {background-color: navy;
+	                      color: white;	}
+
+</style>
+
 
 <%-- JavaScript --%>
 <script type="text/javascript">
+
+let isOrderOK = false;
+
 
 //특정 제품의 제품후기글들을 보여주는 함수 
  function goReviewListView() {
@@ -77,10 +99,132 @@
     
 	  
  }// end of function goReviewListView()---------------------
+ 
+// 내가 쓴 제품후기 삭제하기 
+ function delMyReview(review_seq) {
+	  
+	  if(confirm("제품후기를 삭제하시겠습니까?")) {
+		  
+		  $.ajax({
+			   url:"<%= ctxPath%>/item/reviewDel.up",
+			   type:"post",
+			   data:{"review_seq":review_seq},
+			   dataType:"json",
+	 		   success:function(json){ 
+	 			
+	 			 
+	 			    if(json.n == 1) {
+	 			    	alert("제품후기를 삭제하였습니다.");
+	 			    	goReviewListView(); 
+	 			    }
+	 			    else {
+	 			    	alert("제품후기 삭제하기를 실패했습니다.");
+	 			    }
+	 			 
+	 		   },
+	 		   error: function(request, status, error){
+			       alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		       }
+		  });	   
+	  }
+	  
+ }// end of function delMyReview(review_seq)---------------
+ 
+ 
+//내가 쓴 제품후기 수정하기 
+ function updateMyReview(index, review_seq) {
+	  
+	  const origin_elmt = $('div#review'+index).html(); // 원래의 제품후기 엘리먼트 
+  
+     const review_contents = $('div#review'+index).text().substring(2); // 원래의 제품후기 내용 
+  
+     $("div.commentUpdate").hide(); // "후기수정" 글자 감추기
+     
+  // "후기수정" 을 위한 엘리먼트 만들기 
+	   let v_html = "<textarea id='edit_textarea' style='font-size: 12pt; width: 40%; height: 50px;'>"+review_contents+"</textarea>";
+	   v_html += "<div style='display: inline-block; position: relative; top: -20px; left: 10px;'><button type='button' class='btn btn-sm btn-outline-secondary' id='btnReviewUpdate_OK'>수정완료</button></div>"; 
+	   v_html += "<div style='display: inline-block; position: relative; top: -20px; left: 20px;'><button type='button' class='btn btn-sm btn-outline-secondary' id='btnReviewUpdate_NO'>수정취소</button></div>";
+     
+  // 원래의 제품후기 엘리먼트에 위에서 만든 "후기수정" 을 위한 엘리먼트로 교체하기    
+	  $("div#review"+index).html(v_html);
+  
+  // 수정취소 버튼 클릭시 
+     $(document).on("click", "button#btnReviewUpdate_NO", function(){
+   	  $("div#review"+index).html(origin_elmt); // 원래의 제품후기 엘리먼트로 복원하기
+   	  $("div.commentUpdate").show(); // "후기수정" 글자 보여주기
+     });
+	   
+  // 수정완료 버튼 클릭시 
+     $(document).on("click", "button#btnReviewUpdate_OK", function(){
+   	  
+   	  $.ajax({
+			   url:"<%= ctxPath%>/shop/reviewUpdate.up",
+			   type:"post",
+			   data:{"review_seq":review_seq
+				    ,"contents":$('textarea#edit_textarea').val()},
+			   dataType:"json",
+	 		   success:function(json){ 
+	 			
+	 			 
+	 			    if(json.n == 1) {
+	 			    	goReviewListView(); 
+	 			    }
+	 			    else {
+	 			    	alert("제품후기 수정을 실패하였습니다.");
+	 			    	goReviewListView(); 
+	 			    }
+	 			 
+	 		   },
+	 		   error: function(request, status, error){
+			       alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		       }
+		  });
+   	  
+     });
+	   
+ }// end of function updateMyReview(index, review_seq)-------
+ 
+ 
+ // **** 후기에 좋아요 반응 누르기 **** // 
+ function golikeAdd(fk_reviewId) {
+	  
+	  if(${empty sessionScope.loginUser}) {
+		   alert("좋아요 하시려면 먼저 로그인 하셔야 합니다.");
+		   return; // 종료
+	  }
+	  
+		   $.ajax({
+			   url:"<%= ctxPath%>/item/likeAdd.do",
+		       type:"post",
+			   data:{"fk_reviewId":fk_reviewId,
+				     "fk_id":"${sessionScope.loginUser.id}"},
+			   dataType:"json",
+			   success:function(json){ 
+				 // console.log(JSON.stringify(json));
+				 // {"msg":"해당제품에\n 좋아요를 클릭하셨습니다."}
+				 // 또는 
+				 // {"msg":"이미 좋아요를 클릭하셨기에\n 두번 이상 좋아요는 불가합니다."}
+				 
+			     // alert(json.msg);
+			        swal(json.msg);
+			   },
+			   error: function(request, status, error){
+			       alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		       }
+		  });
+	  }
+	  
+ }// end of function golikeAdd(pnum)------------------
+ 
+ 
+ 
 
 	$(function() {
 		
+		 goLikeDislikeCount();  // 좋아요 반응 수 보여주는 함수 호출하기
     	 goReviewListView();	// 제품후기글을 보여주는 함수 호출하기
+    	 
+    	 
 		
 		$('button#btnScrollTop').hide(); // 위로 가기 버튼 숨기기
 		$('#reviewSection').hide();  // 리뷰내용 숨기기
@@ -125,7 +269,6 @@
     	});
     	
     	
-    	let isOrderOK = false;
     	
     	// === 로그인한 사용자가 해당 제품을 구매한 상태인지 구매하지 않은 상태인지 알아오기 === // 
 

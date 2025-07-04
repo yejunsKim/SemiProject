@@ -71,13 +71,25 @@ public interface ItemDAO {
 	 //로그인 유저의 장바구니 조회.	
 	public List<ItemVO> getOrderItem(String id, String[] selectedCartNoArray)throws SQLException;
 
+	// 리뷰 조회하기
 	List<ReviewVO> reviewList(String fk_itemNo) throws SQLException;
 
+	//리뷰 등록하기
 	int addReview(ReviewVO reviewVO) throws SQLException;
 
+	//로그인한 사용자가 해당 제품을 구매했는지 알아오기
 	boolean isOrder(Map<String, String> paraMap) throws SQLException;
 
 	int getTotalPage(String id) throws SQLException;
+
+	//리뷰에 대한 좋아요남기기
+	int likeAdd(Map<String, String> paraMap) throws SQLException;
+
+	//리뷰 삭제하기
+	int reviewDel(String reviewId)throws SQLException;
+
+	//리뷰 수정하기
+	int reviewUpdate(Map<String, String> paraMap)throws SQLException;
 
 		
 }

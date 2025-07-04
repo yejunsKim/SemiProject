@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -920,7 +921,7 @@ public class ItemDAO_imple implements ItemDAO {
 
 		
 
-		// 로그인한 사용자가 특정 제품을 구매했는지 여부를 알아오는 것. 구매했다라면 true, 구매하지 않았다면 false 를 리턴함.  
+		// 로그인한 사용자가 해당 제품을 구매했는지 알아오기
 		   @Override
 		   public boolean isOrder(Map<String, String> paraMap) throws SQLException {
 
@@ -980,7 +981,7 @@ public class ItemDAO_imple implements ItemDAO {
 		      
 		   }
 
-		// 특정 제품의 사용후기를 조회하기(select)  
+		// 리뷰 조회하기(select)  
 		   @Override
 		   public List<ReviewVO> reviewList(String fk_itemNo) throws SQLException {
 		      
@@ -1027,6 +1028,95 @@ public class ItemDAO_imple implements ItemDAO {
 		      
 		      return reviewList;
 		   }
+
+
+		// 리뷰에 대한 좋아요 남기기
+		@Override
+		public int likeAdd(Map<String, String> paraMap) throws SQLException {
+			int n = 0;
+		      
+		      try {
+		         conn = ds.getConnection();
+		         
+		         conn.setAutoCommit(false);//수동커밋
+		         
+		         String sql = " insert into review_reactions(fk_id, fk_reviewId) "
+		         		+ " values(?, ?) ";
+		         
+		         
+		         pstmt = conn.prepareStatement(sql);
+		         pstmt.setString(1, paraMap.get("fk_id") );
+		         pstmt.setString(2, paraMap.get("fk_reviewId"));
+		         
+		         n= pstmt.executeUpdate();
+		         
+		         if(n == 1) {
+		        	 conn.commit();
+		         }
+		      } catch (SQLIntegrityConstraintViolationException e) {
+		    	  conn.rollback();
+		         
+		      } finally {
+		    	  conn.setAutoCommit(true);//자동커밋
+		         close();
+		      }
+		      
+		      return n;
+		}// 리뷰에 좋아요 누르기 
+		
+		// 리뷰 삭제하기 (delete)
+		@Override
+		public int reviewDel(String reviewId) throws SQLException {
+			
+			int n = 0;
+		      
+		      try {
+		         conn = ds.getConnection();
+		         
+		         String sql = " delete from reviews "
+		                  + " where reviewId = ? ";
+		                  
+		         pstmt = conn.prepareStatement(sql);
+		         pstmt.setString(1, reviewId);
+		         
+		         n = pstmt.executeUpdate();
+		         
+		      } finally {
+		         close();
+		      }
+		      
+		      return n;
+			
+		}//end of public int reviewDel(String review_seq) throws SQLException 
+
+		//리뷰 수정하기 (update)
+		@Override
+		public int reviewUpdate(Map<String, String> paraMap) throws SQLException {
+			
+			int n = 0;
+		      
+		      try {
+		         conn = ds.getConnection();
+		         
+		         String sql = " update tbl_purchase_reviews set contents = ? "
+		                  + "                               , writeDate = sysdate "
+		                  + " where review_seq = ? ";
+		                  
+		         pstmt = conn.prepareStatement(sql);
+		         pstmt.setString(1, paraMap.get("contents"));
+		         pstmt.setString(2, paraMap.get("review_seq"));
+		         
+		         n = pstmt.executeUpdate();
+		         
+		      } finally {
+		         close();
+		      }
+		      
+		      return n;
+			
+		}//end of public int reviewUpdate(String review_seq) throws SQLException
+
+		
 	}
 
 
