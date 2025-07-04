@@ -693,20 +693,6 @@ public class ItemDAO_imple implements ItemDAO {
 	}
 
 
-	@Override
-	public int get_order_seq() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public int insertOrderUpdate(Map<String, String> paraMap) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
 	// 로그인한 사용자가 특정 제품을 구매했는지 여부를 알아오는 것. 구매했다라면 true, 구매하지 않았다면 false 를 리턴함.  
 	@Override
 	public boolean isOrder(Map<String, String> paraMap) throws SQLException {

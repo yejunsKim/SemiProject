@@ -59,11 +59,6 @@ public interface ItemDAO {
 	 //로그인 유저의 장바구니 조회.	
 	public List<ItemVO> getOrderItem(String id, String[] selectedCartNoArray)throws SQLException;
 
-	
-	int get_order_seq()throws SQLException;
-
-	int insertOrderUpdate(Map<String, String> paraMap) throws SQLException;
-
 	// 로그인한 사용자가 특정 제품을 구매했는지 여부를 알아오는 것. 구매했다라면 true, 구매하지 않았다면 false 를 리턴함.  
 	boolean isOrder(Map<String, String> paraMap) throws SQLException;
 
