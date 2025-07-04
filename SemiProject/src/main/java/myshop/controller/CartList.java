@@ -48,6 +48,9 @@ public class CartList extends BaseController {
 			UserVO loginUser = (UserVO) session.getAttribute("loginUser");
 			String fk_users_id = loginUser.getId();
 			
+			// 30일 지난 장바구니 항목 먼저 삭제
+	        idao.deleteOldCart(fk_users_id);
+			
 			// 장바구니 목록 가져오기(select)
 			List<CartVO> cartList = idao.selectItemCart(fk_users_id);
 			

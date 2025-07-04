@@ -100,7 +100,7 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 										
 											<h5 class="card-title">
 												<a href="/SemiProject/item/itemDetail.do?itemno=${item.itemno}" class="itemDetail">
-													<span>${item.itemno}</span><br>
+													<span tyle="display: none;">${item.itemno}</span><br>
 													${item.itemname}<br>
 												</a>
 											</h5>
