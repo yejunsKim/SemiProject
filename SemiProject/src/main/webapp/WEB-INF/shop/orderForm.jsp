@@ -348,7 +348,24 @@
 	            $('#agree').focus();
 	            return false;
 	        }
-	        // 약관에 동의한 경우에는 그냥 submit됨
+	        
+	 		//결제하기 관련 여기서 부터  수정함.
+ 		//	console.log("<%= ctxPath%>");
+ 			const ctxPath = "<%= ctxPath%>";
+ 			
+ 		//	console.log($('#finalPrice > strong').attr('data-price'));
+ 			const coinmoney = $('#finalPrice > strong').attr('data-price');
+ 			
+ 		//	console.log($('input[name="id"]').val());
+ 			const userid = $('input[name="id"]').val();
+ 			
+ 		//	console.log($('input#usePoint').val());
+ 			const usepoint = $('input#usePoint').val();
+	 		
+ 		
+	 		// ==== 포트원(구 아임포트) 결제
+	 		gopayment(ctxPath, coinmoney, userid, usepoint);
+	 		
 	    });
 		
 	 	
@@ -443,7 +460,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         // 가격 표시
         totalPrice.textContent = total.toLocaleString() + '원';
-        finalPrice.innerHTML = '<strong>' + final.toLocaleString() + '원</strong>';
+        finalPrice.innerHTML = '<strong data-price="' + final + '">' + final.toLocaleString() + '원</strong>';
     }
 
     // 포인트 입력 시마다 금액 업데이트
@@ -459,11 +476,17 @@ window.addEventListener('DOMContentLoaded', function() {
     updatePrices();
 });
 	
+	//결제완료시 해당 함수 호출됨!
+	function paymentSuccess(userid, usepoint, coinmoney) {
+		
+		console.log(userid, usepoint, coinmoney);
+		
+	}// end of function paymentSuccess()-----------------------------
 	
 </script>
 
 	<div class="col-md-12" id="divOrder" style="background-color: #f5f5f5;padding-top:80px;">
-      	<form name="orderFrm" method="post" action="">
+      	<form name="orderFrm" method="post">
       	
       		<%-- 배송지 --%>
       		<div class="section">
@@ -632,7 +655,7 @@ window.addEventListener('DOMContentLoaded', function() {
                		</tr>
                		<tr>
 					    <td colspan="2" style="text-align: center; padding-top: 20px;">
-					        <button type="submit" id="btnOrderSubmit" style="padding: 10px 30px; font-size: 16px; font-weight: bold;">
+					        <button type="button" id="btnOrderSubmit" style="padding: 10px 30px; font-size: 16px; font-weight: bold;">
 					            결제하기
 					        </button>
 					    </td>

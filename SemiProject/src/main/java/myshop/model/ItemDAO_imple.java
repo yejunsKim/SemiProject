@@ -629,6 +629,60 @@ public class ItemDAO_imple implements ItemDAO {
 		
 		return n;
 	}
+	
+	
+	// 30일 지난 장바구니 항목 먼저 삭제
+	@Override
+	public void deleteOldCart(String fk_users_id) throws SQLException {
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " delete from cart "
+					   + " where fk_users_id = ? "
+					   + " and cartdate < sysdate - 30 ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, fk_users_id);
+			
+			pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+	}// end of public void deleteOldCart(String fk_users_id) throws SQLException-------------------
+	
+	
+	// 로그인한 유저의 주문 내역의 총 페이지수 알아오기
+	@Override
+	public int getTotalPage(String id) throws SQLException {
+		
+		int totalPage = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " SELECT ceil(count(*) / 10) "	// 10 이 sizePerPage 이다.
+					   + " FROM order_history "
+					   + " WHERE id = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, id);
+			
+			rs = pstmt.executeQuery();
+			
+			rs.next();
+			
+			totalPage = rs.getInt(1);
+			
+		} finally {
+			close();
+		}
+		
+		return totalPage;
+		
+	}// end of public int getTotalPage(String id) throws SQLException----------------------------
 
 	// 로그인 유저의 장바구니 조회.	
 
