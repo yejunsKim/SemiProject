@@ -1133,36 +1133,36 @@ public class ItemDAO_imple implements ItemDAO {
 		   }
 		
 		// 리뷰 좋아요 수 조회
-		@Override
-		public Map<String, Integer> getLikeCount(String reviewId) throws SQLException {
+		   @Override
+		   public Map<String, Integer> getLikeCount(String reviewId) throws SQLException {
+		       Map<String, Integer> map = new HashMap<>(); 
+		       System.out.println(">>> getLikeCount reviewId = " + reviewId);
 
-			Map<String, Integer> map = new HashMap<>(); 
-		      
-		      try {
-		         conn = ds.getConnection();
-		         
-		         String sql = " select count(*)  AS LIKECNT "+
-		                    "          from  review_reactions"+
-		                    "          where fk_reviewId = ?  ";
-		         
-		         pstmt = conn.prepareStatement(sql);
-		         pstmt.setString(1, reviewId);
-		         
-		         rs = pstmt.executeQuery();
-		         
-		         if(rs.next()) {
-		             map.put("likecnt", rs.getInt("likecnt"));
-		         } else {
-		             map.put("likecnt", 0);
-		         }
-		         
-		      } finally {
-		         close();
-		      }
-		      
-		      return map;
-		}
+		       try {
+		           conn = ds.getConnection();
+		           String sql = 
+		               " SELECT count(*) AS LIKECNT " +
+		               " FROM review_reactions " +
+		               " WHERE fk_reviewId = ? ";
 
+		           pstmt = conn.prepareStatement(sql);
+		           pstmt.setString(1, reviewId);
+
+		           rs = pstmt.executeQuery();
+		           if (rs.next()) {
+		               int cnt = rs.getInt("LIKECNT");
+		               System.out.println(">>> like count for reviewId "+reviewId+" = "+cnt);
+		               map.put("likecnt", cnt);
+		           } else {
+		               System.out.println(">>> no rows found for reviewId "+reviewId);
+		               map.put("likecnt", 0);
+		           }
+		       } finally {
+		           close();
+		       }
+
+		       return map;
+		   }
 		
 	}
 

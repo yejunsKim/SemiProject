@@ -188,7 +188,7 @@ let isOrderOK = false;
                  let writeUserid = item.fk_id;
                  let loginUserid = "${sessionScope.loginUser.id}";
                  
-                 v_html += "<div id='review"+index+"' class='review-card'>"
+                /*  v_html += "<div id='review"+index+"' class='review-card'>"
 			                 + "<div class='review-top'>"
 			                 + "<div class='review-content'><span class='markColor'>▶</span>&nbsp;" + item.content + "</div>"
 			                 + "<div class='review-meta'>" + item.name + " | " + item.createdAt + "</div>"
@@ -196,12 +196,22 @@ let isOrderOK = false;
 			                 + "<div class='like-container'>"
 			                 + "<i class='fas fa-thumbs-up' style='cursor:pointer;' onclick='golikeAdd(" + item.reviewId + ")'></i>"
 			                 + "<span id='likeCnt" + item.reviewId + "' class='badge badge-primary'></span>"
+			                 + "</div>"; */
+			                 v_html += "<div class='review-card' id='review"+index+"'>"
+			                 +   "<div class='review-top'>"
+			                 +     "<div class='review-content'><span class='markColor'>▶</span>&nbsp;" + item.content + "</div>"
+			                 +     "<div class='review-meta'>" + item.name + " | " + item.createdAt + "</div>"
+			                 +   "</div>"
+			                 +   "<div class='like-container'>"
+			                 +     "<i class='fas fa-thumbs-up' style='cursor:pointer;' onclick='golikeAdd(" + item.reviewId + ")'></i>"
+			                 +     "<span id='likeCnt" + item.reviewId + "' class='badge badge-primary'></span>"
+			                 +   "</div>"
 			                 + "</div>";
                      
-                     
-                     
-             	   goLikeCount(item.reviewId);
-                   goLikeCount(item.reviewId);
+			                 // ✅ 동시 요청 방지: 100ms 간격으로 AJAX 호출
+			                 setTimeout(() => {
+			                     goLikeCount(item.reviewId);
+			                 }, 100 * index);
          
                              
                  if(loginUserid == "") { 
@@ -367,7 +377,7 @@ let isOrderOK = false;
 		   success:function(json){ 
 			 
 			   $('span#likeCnt'+reviewId).html(json.likecnt);
-			   
+			   console.log(">>> goLikeCount item.reviewId = " + item.reviewId);
 		   },
 		   error: function(request, status, error){
 		       alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -583,15 +593,14 @@ let isOrderOK = false;
 				<div id="viewComments">
 					<%-- 리뷰내용나오는 곳 --%>
 					
-					<div class="row">
-		   <div class="col" style="display: flex">
-		   	   <h3 style="margin: auto">
-		   	      <i class="fas fa-thumbs-up fa-2x" style="cursor: pointer;" onclick="golikeAdd('${requestScope.itemVO.itemNo}')"></i> 
-		   	      <span id="likeCnt" class="badge badge-primary"></span>
-		   	    </h3>
-		   </div>
-		   
-		</div>
+					<%-- <div class="row">
+					   <div class="col" style="display: flex">
+					       <h3 style="margin: auto">
+					          <i class="fas fa-thumbs-up fa-2x" style="cursor: pointer;" onclick="golikeAdd('${requestScope.itemVO.itemNo}')"></i> 
+					          <span id="likeCnt" class="badge badge-primary"></span>
+					       </h3>
+					   </div>
+					</div> --%>
 				</div>
 				<form name="commentFrm">
 					<textarea  name="content" style="font-size: 12pt; width: 80%; height: 150px;"></textarea>
