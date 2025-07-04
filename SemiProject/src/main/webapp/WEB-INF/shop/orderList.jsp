@@ -76,7 +76,12 @@
 			const orderno = $(this).data("orderno");
 		//	alert(orderno);
 			
+			if(orderno == null) {
+				alert("주문을 완료하셔야 클릭 가능합니다.");
+			}
+			else {
 			location.href = '<%= ctxPath %>/item/orderDetail.do?orderno=' + orderno;	// 주문 상세 페이지로 이동
+			}
 		});
 		
 		
