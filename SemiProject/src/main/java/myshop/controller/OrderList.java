@@ -8,6 +8,7 @@ import common.controller.BaseController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import myshop.domain.Order_historyVO;
 import myshop.model.ItemDAO;
 import myshop.model.ItemDAO_imple;
 import user.domain.UserVO;
@@ -52,7 +53,7 @@ public class OrderList extends BaseController {
 		
 		// 로그인한 유저의 주문 내역의 총 페이지수 알아오기
 		int totalPage = idao.getTotalPage(id);
-	/*	
+		
 		List<Order_historyVO> ohList = idao.select_order_paging(paraMap);
 		
 		request.setAttribute("ohList", ohList);
@@ -71,10 +72,10 @@ public class OrderList extends BaseController {
 		
 		// **** [맨처음][이전] 만들기 **** //
 		// pageNo ==> 11
-		pageBar += "<li class='page-item'><a class='page-link' href='orderList.do?currentShowPageNo=1&cnum=" + cnum + "'>[맨처음]</a></li>";
+		pageBar += "<li class='page-item'><a class='page-link' href='orderList.do?currentShowPageNo=1'>[맨처음]</a></li>";
 		
 		if(pageNo != 1) {
-			pageBar += "<li class='page-item'><a class='page-link' href='mallByCategory.up?currentShowPageNo=" + (pageNo - 1) + "&cnum=" + cnum + "'>[이전]</a></li>";
+			pageBar += "<li class='page-item'><a class='page-link' href='orderList.do?currentShowPageNo=" + (pageNo - 1) + "'>[이전]</a></li>";
 		}
 		
 		while(!(loop > blockSize || pageNo > totalPage)) {
@@ -83,7 +84,7 @@ public class OrderList extends BaseController {
 				pageBar += "<li class='page-item active'><a class='page-link' href='#'>" + pageNo + "</a></li>";
 			}
 			else {
-				pageBar += "<li class='page-item'><a class='page-link' href='mallByCategory.up?currentShowPageNo=" + pageNo + "&cnum=" + cnum + "'>" + pageNo + "</a></li>";
+				pageBar += "<li class='page-item'><a class='page-link' href='orderList.do?currentShowPageNo=" + pageNo + "'>" + pageNo + "</a></li>";
 			}
 			
 			loop++;		// 1 2 3 4 5 6 7 8 9 10
@@ -96,15 +97,15 @@ public class OrderList extends BaseController {
 		// pageNo ==> 11
 		
 		if(pageNo <= totalPage) {
-			pageBar += "<li class='page-item'><a class='page-link' href='mallByCategory.up?currentShowPageNo=" + pageNo + "&cnum=" + cnum + "'>[다음]</a></li>";
+			pageBar += "<li class='page-item'><a class='page-link' href='orderList.do?currentShowPageNo=" + pageNo + "'>[다음]</a></li>";
 		}
-		pageBar += "<li class='page-item'><a class='page-link' href='mallByCategory.up?currentShowPageNo=" + totalPage + "&cnum=" + cnum + "'>[마지막]</a></li>";
+		pageBar += "<li class='page-item'><a class='page-link' href='orderList.do?currentShowPageNo=" + totalPage + "'>[마지막]</a></li>";
 		
 		request.setAttribute("pageBar", pageBar);
-			
-			
-	
-	*/	
+		// ========= 페이지바 만들기 끝 ========= //
+		
+		super.setRedirect(false);
+		super.setViewPage("/WEB-INF/shop/orderList.jsp");
 	}
 
 }

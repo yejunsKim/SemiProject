@@ -105,12 +105,24 @@
 		</thead>
 		
 		<tbody>
+			
+			<c:if test="${not empty requestScope.ohList}">
+				
+			</c:if>
+			
+			<c:if test="${empty requestScope.ohList}">
+				<tr>
+					<th colspan="4">주문한 내역이 없습니다.</th>
+				</tr>
+			</c:if>
+		<%--
 			<tr>
 				<th>2025-07-02</th>
 				<th>s20250702-1</th>
 				<th>내용물, 내용물, 내용물, 내용물, 내용물,내용물(넘처나면 ...표현)...</th>
-				<th><button class="btn1" >조회</button></th>
+				<th><button class="btn1" onclick="delivery()" >조회</button></th>
 			</tr>
+		--%>	
 		</tbody>
 				
 	</table>

@@ -7,6 +7,8 @@ import java.util.Map;
 import myshop.domain.CartVO;
 import myshop.domain.CategoryVO;
 import myshop.domain.ItemVO;
+import myshop.domain.Order_historyVO;
+import myshop.domain.Order_itemsVO;
 
 public interface ItemDAO {
 
@@ -61,8 +63,14 @@ public interface ItemDAO {
 	// 로그인한 유저의 주문 내역의 총 페이지수 알아오기
 	int getTotalPage(String id) throws SQLException;
 
-	 //로그인 유저의 장바구니 조회.	
-	public List<ItemVO> getOrderItem(String id, String[] selectedCartNoArray)throws SQLException;
+	//로그인 유저의 장바구니 조회.	
+	public List<ItemVO> getOrderItem(String id, String[] selectedCartNoArray) throws SQLException;
+	
+	// 로그인한 본인의 주문목록에서 특정 페이지번호에 해당하는 내용들을 조회해오기
+	List<Order_historyVO> select_order_paging(Map<String, String> paraMap) throws SQLException;
+	
+	// 로그인한 유저의 주문 상세 내역 조회(select)
+	List<Order_itemsVO> selectOrderDetail(Map<String, String> paraMap) throws SQLException;
 
 	
 }
