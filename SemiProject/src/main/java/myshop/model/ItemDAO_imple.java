@@ -16,6 +16,8 @@ import javax.sql.DataSource;
 import myshop.domain.CartVO;
 import myshop.domain.CategoryVO;
 import myshop.domain.ItemVO;
+import myshop.domain.Order_historyVO;
+import myshop.domain.Order_itemsVO;
 
 
 public class ItemDAO_imple implements ItemDAO {
@@ -651,41 +653,9 @@ public class ItemDAO_imple implements ItemDAO {
 			close();
 		}
 	}// end of public void deleteOldCart(String fk_users_id) throws SQLException-------------------
-	
-	
-	// 로그인한 유저의 주문 내역의 총 페이지수 알아오기
-	@Override
-	public int getTotalPage(String id) throws SQLException {
-		
-		int totalPage = 0;
-		
-		try {
-			conn = ds.getConnection();
-			
-			String sql = " SELECT ceil(count(*) / 10) "	// 10 이 sizePerPage 이다.
-					   + " FROM order_history "
-					   + " WHERE id = ? ";
-			
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, id);
-			
-			rs = pstmt.executeQuery();
-			
-			rs.next();
-			
-			totalPage = rs.getInt(1);
-			
-		} finally {
-			close();
-		}
-		
-		return totalPage;
-		
-	}// end of public int getTotalPage(String id) throws SQLException----------------------------
 
+	
 	// 로그인 유저의 장바구니 조회.	
-
 	@Override
 	public List<ItemVO> getOrderItem(String id, String[] selectedCartNoArray) throws SQLException {
 
@@ -746,5 +716,153 @@ public class ItemDAO_imple implements ItemDAO {
 
 	    return getOrderItemList;
 	}
+	
+	
+	// 로그인한 유저의 주문 내역의 총 페이지수 알아오기
+	@Override
+	public int getTotalPage(String id) throws SQLException {
+		
+		int totalPage = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " SELECT ceil(count(*) / 10) "	// 10 이 sizePerPage 이다.
+					   + " FROM order_history "
+					   + " WHERE id = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, id);
+			
+			rs = pstmt.executeQuery();
+			
+			rs.next();
+			
+			totalPage = rs.getInt(1);
+			
+		} finally {
+			close();
+		}
+		
+		return totalPage;
+		
+	}// end of public int getTotalPage(String id) throws SQLException----------------------------
+	
+	
+	// 로그인한 본인의 주문목록에서 특정 페이지번호에 해당하는 내용들을 조회해오기
+	@Override
+	public List<Order_historyVO> select_order_paging(Map<String, String> paraMap) throws SQLException {
+		
+		List<Order_historyVO> ohList = new ArrayList<>();
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " SELECT OH.orderno, OH.id, to_char(orderdate, 'yyyy-mm-dd') AS orderdate, "
+					   + " 		  OH.totalamount, OH.rewarded, "
+					   + " 		  NVL( "
+					   + "            CASE "
+					   + " 			  WHEN LENGTH(LISTAGG(I.itemname, ', ') WITHIN GROUP (ORDER BY I.itemname)) > 30 "
+					   + "            THEN SUBSTR(LISTAGG(I.itemname, ', ') WITHIN GROUP (ORDER BY I.itemname), 1, 30) || '...' "
+					   + "            ELSE LISTAGG(I.itemname, ', ') WITHIN GROUP (ORDER BY I.itemname) "
+					   + "            END, '없음' "
+					   + "        ) AS itemlist "
+					   + " FROM order_history OH "
+					   + " JOIN order_items OI ON OH.orderno = OI.ORDERNO "
+					   + " JOIN item I ON OI.itemno = I.itemNo "
+					   + " WHERE OH.id = ? "
+					   + " GROUP BY OH.orderno, OH.id, OH.totalamount, OH.rewarded, OH.orderdate "
+					   + " ORDER BY OH.orderno DESC "
+					   + " OFFSET ? ROW "
+					   + " FETCH NEXT ? ROW ONLY ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+			int sizePerPage = 10;	// 한 페이지당 화면상에 보여줄 제품의 개수는 10 으로 한다.
+			int offset = (currentShowPageNo - 1) * sizePerPage;	// 자바에서 미리 계산
+			
+			pstmt.setString(1, paraMap.get("id"));
+			pstmt.setInt(2, offset);
+			pstmt.setInt(3, sizePerPage);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				Order_historyVO ohvo = new Order_historyVO();
+				
+				ohvo.setOrderno(rs.getInt("orderno"));
+				ohvo.setId(rs.getString("id"));
+				ohvo.setOrderdate(rs.getString("orderdate"));
+				ohvo.setTotalamount(rs.getInt("totalamount"));
+				ohvo.setRewarded(rs.getInt("rewarded"));
+				
+				ohvo.setItemlist(rs.getString("itemlist"));	// 조인 통해서 주문내역 가져오기
+				
+				ohList.add(ohvo);
+				
+			}// end of while(rs.next())-----------------
+			
+		} finally {
+			close();
+		}
+		
+		return ohList;
+		
+	}// end of public List<Order_historyVO> select_order_paging(Map<String, String> paraMap) throws SQLException---------------------
+	
+	
+	// 로그인한 유저의 주문 상세 내역 조회(select)
+	@Override
+	public List<Order_itemsVO> selectOrderDetail(Map<String, String> paraMap) throws SQLException {
+		
+		List<Order_itemsVO> oiList = new ArrayList<>();
+		
+		try {
+			
+			conn = ds.getConnection();
+			
+			String sql = " SELECT itemPhotoPath, itemName, volume, quantity, orderprice, totalamount "
+					   + " FROM item I JOIN order_items OI ON I.itemNo = OI.itemno "
+					   + " JOIN order_history OH ON OI.orderno = OH.orderno "
+					   + " WHERE id = ? AND OH.orderno = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, paraMap.get("id"));
+			pstmt.setInt(2, Integer.parseInt(paraMap.get("orderno")));
+			
+			rs = pstmt.executeQuery();
+			
+			int cnt = 0;
+			while(rs.next()) {
+				cnt++;
+				Order_itemsVO oivo = new Order_itemsVO();
+				oivo.setQuantity(rs.getInt("quantity"));
+				oivo.setOrderprice(rs.getInt("orderprice"));
+				
+				ItemVO ivo = new ItemVO();
+				ivo.setItemPhotoPath(rs.getString("itemPhotoPath"));
+				ivo.setItemName(rs.getString("itemName"));
+				ivo.setVolume(rs.getInt("volume"));
+				oivo.setIvo(ivo);
+				
+				Order_historyVO ohvo = new Order_historyVO();
+				if(cnt == 1) {
+					ohvo.setTotalamount(rs.getInt("totalamount"));
+					oivo.setOhvo(ohvo);
+				}
+				
+				oiList.add(oivo);
+			}// end of while------------------
+			
+		} finally {
+			close();
+		}
+		
+		return oiList;
+		
+	}// end of public List<Order_itemsVO> selectOrderDetail(Map<String, String> paraMap) throws SQLException--------------
 
 }
