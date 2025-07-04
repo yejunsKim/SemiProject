@@ -37,8 +37,9 @@ public class LikeAdd extends BaseController {
 	      if(n==1) {
 	         msg = "해당리뷰에\n 좋아요를 클릭하셨습니다.";
 	      }
-	      else {
-	         msg = "이미 좋아요를 클릭하셨습니다.\n 두번 이상 좋아요는 불가합니다.";
+	      else if(n==0) {
+	         //msg = "이미 좋아요를 클릭하셨습니다.\n 두번 이상 좋아요는 불가합니다.";
+	    	  msg="좋아요를 취소했습니다.";
 	      }
 	      
 	      JSONObject jsonObj = new JSONObject();

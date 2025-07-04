@@ -91,5 +91,8 @@ public interface ItemDAO {
 	//리뷰 수정하기
 	int reviewUpdate(Map<String, String> paraMap)throws SQLException;
 
+	// 리뷰 좋아요 수 조회
+	Map<String, Integer> getLikeCount(String reviewId)throws SQLException;
+
 		
 }

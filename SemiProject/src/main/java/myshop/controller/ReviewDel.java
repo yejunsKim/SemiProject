@@ -29,6 +29,8 @@ public class ReviewDel extends BaseController {
 			
 			String reviewId = request.getParameter("reviewId");
 						
+			
+			System.out.println(">>> ReviewDel reviewId: " + reviewId);
 			int n = 0;
 			try {
 				 n = itemDAO.reviewDel(reviewId);
@@ -46,6 +48,8 @@ public class ReviewDel extends BaseController {
 			
 			super.setRedirect(false);
 			super.setViewPage("/WEB-INF/jsonview.jsp");
+			
+			
 			
 		}
 		else {

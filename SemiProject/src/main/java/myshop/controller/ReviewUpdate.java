@@ -28,15 +28,15 @@ private ItemDAO itemDAO = null;
 		if("POST".equalsIgnoreCase(method)) {
 			// **** POST 방식으로 넘어온 것이라면 **** //
 			
-			String review_seq = request.getParameter("review_seq");
-			String contents = request.getParameter("contents");
+			String reviewId = request.getParameter("reviewId");
+			String content = request.getParameter("content");
 			
 			// 입력한 내용에서 엔터는 <br> 로 변환시키기
-			contents.replaceAll("\r\n", "<br>");
+			content.replaceAll("\r\n", "<br>");
 						
 			Map<String, String> paraMap = new HashMap<>();
-	         paraMap.put("review_seq", review_seq);
-	         paraMap.put("contents", contents);
+	         paraMap.put("reviewId", reviewId);
+	         paraMap.put("content", content);
 	         
 			int n = 0;
 			try {

@@ -16,22 +16,146 @@
 </style>
 
 <style type="text/css">
+/* ================================
+   전체 후기 영역
+================================= */
+div#viewComments {
+    width: 80%;
+    margin: 30px auto;
+    text-align: left;
+    max-height: 500px;
+    overflow-y: auto;
+}
 
-	div#viewComments {width: 80%;
-	           		  margin: 1% 0 0 0; 
-	                  text-align: left;
-	                  max-height: 300px;
-	                  overflow: auto;
-	                  /* border: solid 1px red; */
-	}
-	
-	div.commentDel {font-size: 8pt;
-	                font-style: italic;
-	                cursor: pointer; }
-	
-	div.commentDel:hover {background-color: navy;
-	                      color: white;	}
+/* ================================
+   개별 후기 카드
+================================= */
+.review-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 16px;
+    margin-bottom: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
 
+.review-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.review-top {
+    margin-bottom: 10px;
+}
+
+.review-meta {
+    font-size: 12px;
+    color: #777;
+    margin-top: 5px;
+}
+
+/* ================================
+   좋아요 버튼과 카운트
+================================= */
+.like-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.like-container i {
+    color: #888;
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.like-container i:hover {
+    color: #ff4d4d;
+}
+
+.like-container span {
+    font-weight: bold;
+    color: #555;
+    background-color: #d0e8ff; /* 연한 파랑 */
+    
+}
+
+/* ================================
+   후기 삭제 & 수정 버튼
+================================= */
+div.commentDel, div.commentUpdate {
+    display: inline-block;
+    font-size: 10pt;
+    color: #777;
+    cursor: pointer;
+    margin-top: 8px;
+    margin-right: 12px;
+    transition: color 0.2s, background 0.2s;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+div.commentDel:hover, div.commentUpdate:hover {
+    background: #2c3e50;
+    color: #fff;
+}
+
+/* ================================
+   textarea 후기작성 영역
+================================= */
+form[name="commentFrm"] textarea {
+    width: 80%;
+    margin: 20px auto;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+form[name="commentFrm"] textarea:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52,152,219,0.5);
+    outline: none;
+}
+
+/* ================================
+   후기등록 버튼
+================================= */
+#btnCommentOK {
+    margin: 20px auto;
+    display: block;
+    background: #3498db;
+    color: white;
+    border: none;
+    transition: background 0.2s, transform 0.2s;
+    width: 10%
+    
+}
+
+#btnCommentOK:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+/* ================================
+   위로가기 버튼
+================================= */
+#btnScrollTop {
+    border: 2px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    transition: background 0.3s, transform 0.2s;
+}
+
+#btnScrollTop:hover {
+    background: #3498db;
+    color: white;
+    transform: translateY(-2px);
+}
 </style>
 
 
@@ -39,6 +163,7 @@
 <script type="text/javascript">
 
 let isOrderOK = false;
+
 
 
 //특정 제품의 제품후기글들을 보여주는 함수 
@@ -63,9 +188,21 @@ let isOrderOK = false;
                  let writeUserid = item.fk_id;
                  let loginUserid = "${sessionScope.loginUser.id}";
                  
-                 v_html += "<div id='review"+index+"'><span class='markColor'>▶</span>&nbsp;"+item.content+"</div>"
-                             + "<div class='customDisplay'>"+item.name+"</div>"      
-                             + "<div class='customDisplay'>"+item.writeDate+"</div>";
+                 v_html += "<div id='review"+index+"' class='review-card'>"
+			                 + "<div class='review-top'>"
+			                 + "<div class='review-content'><span class='markColor'>▶</span>&nbsp;" + item.content + "</div>"
+			                 + "<div class='review-meta'>" + item.name + " | " + item.createdAt + "</div>"
+			                 + "</div>"
+			                 + "<div class='like-container'>"
+			                 + "<i class='fas fa-thumbs-up' style='cursor:pointer;' onclick='golikeAdd(" + item.reviewId + ")'></i>"
+			                 + "<span id='likeCnt" + item.reviewId + "' class='badge badge-primary'></span>"
+			                 + "</div>";
+                     
+                     
+                     
+             	   goLikeCount(item.reviewId);
+                   goLikeCount(item.reviewId);
+         
                              
                  if(loginUserid == "") { 
                      // 로그인을 안한 경우 
@@ -77,8 +214,8 @@ let isOrderOK = false;
                  } 
                  else if(loginUserid != "" && writeUserid == loginUserid ) {
                      // 로그인을 했고 후기글이 로그인한 사용자 쓴 글 이라면
-                     v_html += "<div class='customDisplay spacediv commentDel' onclick='delMyReview("+item.review_seq+")'>후기삭제</div>"; 
-                     v_html += "<div class='customDisplay spacediv commentDel commentUpdate' onclick='updateMyReview("+index+","+item.review_seq+")'>후기수정</div>"; 
+                     v_html += "<div class='customDisplay spacediv commentDel' onclick='delMyReview("+item.reviewId+")'>후기삭제</div>"; 
+                     v_html += "<div class='customDisplay spacediv commentDel commentUpdate' onclick='updateMyReview("+index+","+item.reviewId+")'>후기수정</div>"; 
                   }
                  
               }); // end of $.each(json, function(index, item){})---------------
@@ -101,14 +238,14 @@ let isOrderOK = false;
  }// end of function goReviewListView()---------------------
  
 // 내가 쓴 제품후기 삭제하기 
- function delMyReview(review_seq) {
+ function delMyReview(reviewId) {
 	  
 	  if(confirm("제품후기를 삭제하시겠습니까?")) {
 		  
 		  $.ajax({
-			   url:"<%= ctxPath%>/item/reviewDel.up",
+			   url:"<%= ctxPath%>/item/reviewDel.do",
 			   type:"post",
-			   data:{"review_seq":review_seq},
+			   data:{"reviewId":reviewId},
 			   dataType:"json",
 	 		   success:function(json){ 
 	 			
@@ -132,11 +269,11 @@ let isOrderOK = false;
  
  
 //내가 쓴 제품후기 수정하기 
- function updateMyReview(index, review_seq) {
+ function updateMyReview(index, reviewId) {
 	  
 	  const origin_elmt = $('div#review'+index).html(); // 원래의 제품후기 엘리먼트 
   
-     const review_contents = $('div#review'+index).text().substring(2); // 원래의 제품후기 내용 
+	    const review_contents = $('div#review'+index).find('div.review-content').text().trim().substring(2);
   
      $("div.commentUpdate").hide(); // "후기수정" 글자 감추기
      
@@ -158,10 +295,10 @@ let isOrderOK = false;
      $(document).on("click", "button#btnReviewUpdate_OK", function(){
    	  
    	  $.ajax({
-			   url:"<%= ctxPath%>/shop/reviewUpdate.up",
+			   url:"<%= ctxPath%>/item/reviewUpdate.do",
 			   type:"post",
-			   data:{"review_seq":review_seq
-				    ,"contents":$('textarea#edit_textarea').val()},
+			   data:{"reviewId":reviewId
+				    ,"content":$('textarea#edit_textarea').val()},
 			   dataType:"json",
 	 		   success:function(json){ 
 	 			
@@ -182,11 +319,11 @@ let isOrderOK = false;
    	  
      });
 	   
- }// end of function updateMyReview(index, review_seq)-------
+ }// end of function updateMyReview(index, reviewId)-------
  
  
  // **** 후기에 좋아요 반응 누르기 **** // 
- function golikeAdd(fk_reviewId) {
+ function golikeAdd(reviewId) {
 	  
 	  if(${empty sessionScope.loginUser}) {
 		   alert("좋아요 하시려면 먼저 로그인 하셔야 합니다.");
@@ -196,32 +333,54 @@ let isOrderOK = false;
 		   $.ajax({
 			   url:"<%= ctxPath%>/item/likeAdd.do",
 		       type:"post",
-			   data:{"fk_reviewId":fk_reviewId,
+			   data:{"fk_reviewId":reviewId,
 				     "fk_id":"${sessionScope.loginUser.id}"},
 			   dataType:"json",
 			   success:function(json){ 
-				 // console.log(JSON.stringify(json));
-				 // {"msg":"해당제품에\n 좋아요를 클릭하셨습니다."}
-				 // 또는 
-				 // {"msg":"이미 좋아요를 클릭하셨기에\n 두번 이상 좋아요는 불가합니다."}
-				 
-			     // alert(json.msg);
-			        swal(json.msg);
+			
+			        //swal(json.msg);
+			        
+			        let current = parseInt($('#likeCnt'+reviewId).text()) || 0;
+		            if(json.msg.includes("취소")) {
+		                $('#likeCnt'+reviewId).text(current - 1);
+		            } else {
+		                $('#likeCnt'+reviewId).text(current + 1);
+		            }			  
+		            
 			   },
 			   error: function(request, status, error){
 			       alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 		       }
 		  });
-	  }
 	  
- }// end of function golikeAdd(pnum)------------------
+	  
+ }// end of function golikeAdd------------------
  
- 
+// 리뷰에 대한 좋아요 수 보여주기
+ function goLikeCount(reviewId) {
+	  
+	  $.ajax({
+		   url:"<%= ctxPath%>/item/likeCount.do",
+	   //  type:"get",
+		   data:{"reviewId":reviewId},
+		   dataType:"json",
+		   success:function(json){ 
+			 
+			   $('span#likeCnt'+reviewId).html(json.likecnt);
+			   
+		   },
+		   error: function(request, status, error){
+		       alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	       }
+	  });
+	  
+ }// end of function goLikeCount()-------------------
+
  
 
 	$(function() {
 		
-		 goLikeDislikeCount();  // 좋아요 반응 수 보여주는 함수 호출하기
+		 //goLikeCount(reviewId);  // 좋아요 반응 수 보여주는 함수 호출하기
     	 goReviewListView();	// 제품후기글을 보여주는 함수 호출하기
     	 
     	 
@@ -368,10 +527,6 @@ let isOrderOK = false;
 	
 </script>
 
-<script>
-console.log("itemNo : ${requestScope.itemVO.itemNo}");
-console.log("id : ${sessionScope.loginUser.id}");
-</script>
 
 	
 	<div class="col-md-12" style="background-color: #f5f5f5;padding-top:80px;">
@@ -427,15 +582,25 @@ console.log("id : ${sessionScope.loginUser.id}");
 			<div id="reviewSection" style="display:none;">	<%-- 리뷰작성 --%>
 				<div id="viewComments">
 					<%-- 리뷰내용나오는 곳 --%>
+					
+					<div class="row">
+		   <div class="col" style="display: flex">
+		   	   <h3 style="margin: auto">
+		   	      <i class="fas fa-thumbs-up fa-2x" style="cursor: pointer;" onclick="golikeAdd('${requestScope.itemVO.itemNo}')"></i> 
+		   	      <span id="likeCnt" class="badge badge-primary"></span>
+		   	    </h3>
+		   </div>
+		   
+		</div>
 				</div>
 				<form name="commentFrm">
-					<textarea  name="content" style="font-size: 12pt; width: 100%; height: 150px;"></textarea>
+					<textarea  name="content" style="font-size: 12pt; width: 80%; height: 150px;"></textarea>
 	    		    <input type="hidden" name="fk_id" value="${sessionScope.loginUser.id}" />
 	   	            <input type="hidden" name="fk_itemNo" value="${item.itemNo}" />
 				</form>
-				<div class="col-lg-2" style="display: flex;">
-			    	<button type="button" class="btn btn-outline-secondary w-100 h-100" id="btnCommentOK" style="margin: auto;">
-			    		<span class="h5">후기등록</span>
+				<div style="text-align: center;">
+			    	<button type="button" class="btn btn-outline-secondary" id="btnCommentOK" style="margin: auto;">
+			    		<span class="h5">리뷰등록</span>
 		    		</button>
 	    		</div>
 			</div>

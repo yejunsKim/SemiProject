@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -1030,39 +1030,6 @@ public class ItemDAO_imple implements ItemDAO {
 		   }
 
 
-		// 리뷰에 대한 좋아요 남기기
-		@Override
-		public int likeAdd(Map<String, String> paraMap) throws SQLException {
-			int n = 0;
-		      
-		      try {
-		         conn = ds.getConnection();
-		         
-		         conn.setAutoCommit(false);//수동커밋
-		         
-		         String sql = " insert into review_reactions(fk_id, fk_reviewId) "
-		         		+ " values(?, ?) ";
-		         
-		         
-		         pstmt = conn.prepareStatement(sql);
-		         pstmt.setString(1, paraMap.get("fk_id") );
-		         pstmt.setString(2, paraMap.get("fk_reviewId"));
-		         
-		         n= pstmt.executeUpdate();
-		         
-		         if(n == 1) {
-		        	 conn.commit();
-		         }
-		      } catch (SQLIntegrityConstraintViolationException e) {
-		    	  conn.rollback();
-		         
-		      } finally {
-		    	  conn.setAutoCommit(true);//자동커밋
-		         close();
-		      }
-		      
-		      return n;
-		}// 리뷰에 좋아요 누르기 
 		
 		// 리뷰 삭제하기 (delete)
 		@Override
@@ -1098,13 +1065,13 @@ public class ItemDAO_imple implements ItemDAO {
 		      try {
 		         conn = ds.getConnection();
 		         
-		         String sql = " update tbl_purchase_reviews set contents = ? "
-		                  + "                               , writeDate = sysdate "
-		                  + " where review_seq = ? ";
+		         String sql = " update reviews set content = ? "
+		                  + "                               , createdAt = sysdate "
+		                  + " where reviewId = ? ";
 		                  
 		         pstmt = conn.prepareStatement(sql);
-		         pstmt.setString(1, paraMap.get("contents"));
-		         pstmt.setString(2, paraMap.get("review_seq"));
+		         pstmt.setString(1, paraMap.get("content"));
+		         pstmt.setString(2, paraMap.get("reviewId"));
 		         
 		         n = pstmt.executeUpdate();
 		         
@@ -1115,6 +1082,86 @@ public class ItemDAO_imple implements ItemDAO {
 		      return n;
 			
 		}//end of public int reviewUpdate(String review_seq) throws SQLException
+
+		   
+		   @Override
+		   public int likeAdd(Map<String, String> paraMap) throws SQLException {
+		       int result = 0;
+		       
+		       String sql =" select count(*)  AS LIKECNT "+
+	                    "          from  review_reactions"+
+	                    "          where fk_reviewId = ?  and fk_id = ? ";
+		       
+		       try {
+		           conn = ds.getConnection();
+		           pstmt = conn.prepareStatement(sql);
+		           pstmt.setString(1, paraMap.get("fk_reviewId"));
+		           pstmt.setString(2, paraMap.get("fk_id"));
+		           
+		           rs = pstmt.executeQuery();
+		           if(rs.next() && rs.getInt("LIKECNT") > 0) {
+		        	   
+		               // 이미 좋아요 눌렀음 -> 삭제
+		               sql = "DELETE FROM review_reactions"
+		               		+ " WHERE fk_reviewId = ? and fk_id = ? ";
+		               
+		               pstmt = conn.prepareStatement(sql);
+		               pstmt.setString(1, paraMap.get("fk_reviewId"));
+			           pstmt.setString(2, paraMap.get("fk_id"));
+
+		               
+		               pstmt.executeUpdate();
+		               result = 0; // 좋아요 취소
+		           } else {
+		               // 좋아요 추가
+		        	    sql = " insert into review_reactions(fk_id, fk_reviewId) "
+				         		+ " values(?, ?) ";
+				         
+				         
+				         pstmt = conn.prepareStatement(sql);
+				         pstmt.setString(1, paraMap.get("fk_id") );
+				         pstmt.setString(2, paraMap.get("fk_reviewId"));
+				         
+		              
+		               pstmt.executeUpdate();
+		               result = 1; // 좋아요 추가
+		           }
+		       } finally {
+		           close();
+		       }
+		       return result;
+		   }
+		
+		// 리뷰 좋아요 수 조회
+		@Override
+		public Map<String, Integer> getLikeCount(String reviewId) throws SQLException {
+
+			Map<String, Integer> map = new HashMap<>(); 
+		      
+		      try {
+		         conn = ds.getConnection();
+		         
+		         String sql = " select count(*)  AS LIKECNT "+
+		                    "          from  review_reactions"+
+		                    "          where fk_reviewId = ?  ";
+		         
+		         pstmt = conn.prepareStatement(sql);
+		         pstmt.setString(1, reviewId);
+		         
+		         rs = pstmt.executeQuery();
+		         
+		         if(rs.next()) {
+		             map.put("likecnt", rs.getInt("likecnt"));
+		         } else {
+		             map.put("likecnt", 0);
+		         }
+		         
+		      } finally {
+		         close();
+		      }
+		      
+		      return map;
+		}
 
 		
 	}
