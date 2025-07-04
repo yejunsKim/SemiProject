@@ -46,13 +46,13 @@ function editInfo(id, ctxPath) {
 	   const url = `<%=ctxPath%>/user/userEdit.do?id=${sessionScope.loginUser.id}`;
 	   
 	   // 너비 800, 높이 680 인 팝업창을 화면 가운데 위치시키기
-	   const width = 800;
-	   const height = 680;
+	   const width = 800px;
+	   const height = 680px;
 	   
 	   const left = Math.ceil((window.screen.width - width)/2);  // 정수로 만듬 
 	   const top = Math.ceil((window.screen.height - height)/2); // 정수로 만듬
 	   window.open(url, "editInfo", `left=${left}, top=${top}, 
-			   width=${width}px, height=${height}px`);
+			   width=${width}, height=${height}`);
 }
 
 </script>
@@ -284,6 +284,12 @@ function SearchItems() {
 				      <tr>
 				        <td colspan="3" style="padding-top:10px;">
 				          <button type="button" class="btn btn-danger btn-sm" onclick="javascript:LogOut('<%=ctxPath%>')">Logout</button>
+				        </td>
+				      </tr>
+				      <tr>
+				      	<td colspan="3" style="padding-top:10px;">
+				          <span style="font-weight: bold;">등급&nbsp;:</span>
+				          &nbsp;${sessionScope.loginUser.grade} 
 				        </td>
 				      </tr>
 				    </tbody>
