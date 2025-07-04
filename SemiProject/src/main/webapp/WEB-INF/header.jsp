@@ -263,7 +263,7 @@ function SearchItems() {
 				  <table id="isLogin" style="width:100%;">
 				    <thead>
 				      <tr>
-				        <th colspan="3" style="text-align:center; font-size:18px;">
+				        <th id="loginUserId" colspan="3" style="text-align:center; font-size:18px;">
 				          ${sessionScope.loginUser.id}
 				        </th>
 				      </tr>

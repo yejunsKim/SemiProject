@@ -727,6 +727,7 @@ public class ItemDAO_imple implements ItemDAO {
 	            cvo.setCartamount(rs.getInt("cartamount"));*/
 
 	            ItemVO itemvo = new ItemVO();
+	            itemvo.setItemNo(rs.getInt("itemno"));
 	            itemvo.setItemName(rs.getString("itemname"));
 	            itemvo.setItemPhotoPath(rs.getString("itemphotopath"));
 	            itemvo.setPrice(rs.getInt("price"));

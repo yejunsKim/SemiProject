@@ -296,77 +296,6 @@
 					
 		});	// end of $('input#email').blur((e) => {})-------------------	
 			
-			
-	 	// 결제하기 버튼을 눌렀을 때 배송지가 입력되었는지, 약관에 동의 했는지
-	 	$('#btnOrderSubmit').click(function(e) {
-		    if ( $('#name').val().trim() === "") {
-		       alert("받는 사람을 입력해주세요.");
-		       $('#name').focus();
-		       e.preventDefault();
-		       return false;
-		    }
-		
-		    if ( $('#postcode').val().trim() === "") {
-		       alert("우편번호를 입력해주세요.");
-		       $('#postcode').focus();
-		       e.preventDefault();
-		       return false;
-		    } 
-		
-		    if ($('#address').val().trim() === "") {
-		       alert("주소를 입력해주세요.");
-		       $('#address').focus();
-		       e.preventDefault();
-		       return false;
-		    }
-		
-		    if ( $('#addressDetail').val().trim() === "") {
-		       alert("상세주소를 입력해주세요.");
-		       $('#addressDetail').focus();
-		       e.preventDefault();
-		       return false;
-		    }
-		    
-		   /*  if ( $('#addressExtra').val().trim() === "") {
-			       alert("참고항목(동)를 입력해주세요.");
-			       $('#addressDetail').focus();
-			       e.preventDefault();
-			       return false;
-			    }
-		 */
- 		   if ($('#email').val().trim() === "") {
-		       alert("이메일을 입력해주세요.");
-		       $('#email').focus();
-		       e.preventDefault();
-		       return false;
- 		   }
-
-	 		// 약관에 동의 했는지
-	 		if (!$('#agree').is(':checked')) {
-	            e.preventDefault(); // form 전송 막기
-	            alert("이용약관에 동의해야 결제가 가능합니다.");
-	            $('#agree').focus();
-	            return false;
-	        }
-	        
-	 		//결제하기 관련 여기서 부터  수정함.
- 		//	console.log("<%= ctxPath%>");
- 			const ctxPath = "<%= ctxPath%>";
- 			
- 		//	console.log($('#finalPrice > strong').attr('data-price'));
- 			const coinmoney = $('#finalPrice > strong').attr('data-price');
- 			
- 		//	console.log($('input[name="id"]').val());
- 			const userid = $('input[name="id"]').val();
- 			
- 		//	console.log($('input#usePoint').val());
- 			const usepoint = $('input#usePoint').val();
-	 		
- 		
-	 		// ==== 포트원(구 아임포트) 결제
-	 		gopayment(ctxPath, coinmoney, userid, usepoint);
-	 		
-	    });
 		
 	 	
 		// 현재주소지로 변경 버튼을 눌렀을 때
@@ -433,9 +362,125 @@
 	 	});
 		
 	
-	// totalPrice와 finalPrice
+		
+ 	// 결제하기 버튼을 눌렀을 때 배송지가 입력되었는지, 약관에 동의 했는지
+	 	$('#btnOrderSubmit').click(function(e) {
+		    if ( $('#name').val().trim() === "") {
+		       alert("받는 사람을 입력해주세요.");
+		       $('#name').focus();
+		       e.preventDefault();
+		       return false;
+		    }
+		
+		    if ( $('#postcode').val().trim() === "") {
+		       alert("우편번호를 입력해주세요.");
+		       $('#postcode').focus();
+		       e.preventDefault();
+		       return false;
+		    } 
+		
+		    if ($('#address').val().trim() === "") {
+		       alert("주소를 입력해주세요.");
+		       $('#address').focus();
+		       e.preventDefault();
+		       return false;
+		    }
+		
+		    if ( $('#addressDetail').val().trim() === "") {
+		       alert("상세주소를 입력해주세요.");
+		       $('#addressDetail').focus();
+		       e.preventDefault();
+		       return false;
+		    }
+		    
+		   /*  if ( $('#addressExtra').val().trim() === "") {
+			       alert("참고항목(동)를 입력해주세요.");
+			       $('#addressDetail').focus();
+			       e.preventDefault();
+			       return false;
+			    }
+		 */
+ 		   if ($('#email').val().trim() === "") {
+		       alert("이메일을 입력해주세요.");
+		       $('#email').focus();
+		       e.preventDefault();
+		       return false;
+ 		   }
 
-	}); // end of $(function(){})--------------------------------
+	 		// 약관에 동의 했는지
+	 		if (!$('#agree').is(':checked')) {
+	            e.preventDefault(); // form 전송 막기
+	            alert("이용약관에 동의해야 결제가 가능합니다.");
+	            $('#agree').focus();
+	            return false;
+	        }
+	 		
+////////////////////////////////////////////////////////////////////////// 
+	 		
+					 //	포트윈 결제하기 관련 여기서 부터
+		 
+////////////////////////////////////////////////////////////////////////// 
+	 
+ 			const ctxPath = "<%= ctxPath%>";
+ 		//	console.log($('#finalPrice > strong').attr('data-price'));
+ 			const totalAmount = $('#finalPrice > strong').attr('data-price');
+ 		//	console.log($('th#loginUserId').html().trim());
+ 			const id = $('th#loginUserId').html().trim();
+ 		// 	console.log($('input#usePoint').val());
+ 			const usepoint = $('input#usePoint').val();
+ 		
+	 		// ==== 포트원(구 아임포트) 결제
+	 		requestPayment(ctxPath, totalAmount, id, usepoint);
+	    });
+		
+//////  *** 유저 아이디를 찾기 위해 header에 loginUserId 라는 id값을 주었음. ***  ////// 
+// <th id="loginUserId" colspan="3" .... > ${sessionScope.loginUser.id} </th>
+
+		console.log("<%= ctxPath%>");
+		console.log($('th#loginUserId').html().trim()); // 확인
+
+}); 
+// end of $(function(){})--------------------------------
+
+// ==== 포트원(구 아임포트) 결제를 해주는 함수 ==== //
+function requestPayment(ctxPath, coinmoney, userid, usepoint) {
+	
+	const url = `${ctxPath}/item/itemPayment.do?userid=${userid}&coinmoney=${coinmoney}&usepoint=${usepoint}`;
+//	console.log(url);
+	// 너비 1000, 높이 600 인 팝업창을 화면 가운데 위치시키기
+	const width = 1000;
+	const height = 600;
+	
+	const left = Math.ceil((window.screen.width - width) / 2);	// 정수로 만듬
+							// 1400 - 1000 = 400		400/2 ==> 200
+	
+	const top = Math.ceil((window.screen.height - height) / 2);	// 정수로 만듬
+							// 1400 - 600 = 800		800/2 ==> 400
+	
+	window.open(url, "payment", `left=${left}, top=${top}, width=${width}, height=${height}`);
+	
+}// end of function goCoinPurchaseTypeChoice(userid, ctx_Path) {}--------------------
+
+//----------------------------------------------------------------------//		
+					 //	포트윈 결제하기 관련 종료
+//----------------------------------------------------------------------//	
+	
+//결제완료시 해당 함수 호출됨!
+function paymentSuccess(id, usepoint, totalAmount) {
+	
+	console.log(id, usepoint, totalAmount);
+	
+	// 여기서 orderAdd 예정
+	
+	
+}// end of function paymentSuccess()-----------------------------
+
+
+
+//----------------------------------------------------------------------//
+				//	포트윈 결제 후, orderAdd 함수까지 종료!
+//----------------------------------------------------------------------//	
+	
 	window.addEventListener('DOMContentLoaded', function() {
 	    const priceSpans = document.querySelectorAll('.item-price');
 	    const totalPrice = document.querySelector('#totalPrice');
@@ -476,12 +521,7 @@
 	    updatePrices();
 	});
 	
-	//결제완료시 해당 함수 호출됨!
-	function paymentSuccess(userid, usepoint, coinmoney) {
-		
-		console.log(userid, usepoint, coinmoney);
-		
-	}// end of function paymentSuccess()-----------------------------
+	
 	
 </script>
 
@@ -583,6 +623,7 @@
 							    <span> 
 									<fmt:formatNumber value="${item.price * item.cartvo.cartamount}" pattern="###,###"/>원
 								</span>
+								<span class="itemNo" style="display: none;">${item.itemNo}</span>
 							</td>
 						</tr>
                 	</c:forEach>
