@@ -363,7 +363,7 @@ public class ItemDAO_imple implements ItemDAO {
 			
 			if(rs.next()) {	// 장바구니에 이미 같은 제품이 존재하는 경우
 				
-				sql = " UPDATE cart set cartamount = to_number(?) "
+				sql = " UPDATE cart set cartamount = cartamount + to_number(?) "
 					+ " WHERE cartno = ? ";
 				
 				pstmt = conn.prepareStatement(sql);
