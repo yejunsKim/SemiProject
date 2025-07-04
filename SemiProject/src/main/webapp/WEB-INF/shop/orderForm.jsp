@@ -436,45 +436,45 @@
 	// totalPrice와 finalPrice
 
 	}); // end of $(function(){})--------------------------------
-window.addEventListener('DOMContentLoaded', function() {
-    const priceSpans = document.querySelectorAll('.item-price');
-    const totalPrice = document.querySelector('#totalPrice');
-    const finalPrice = document.querySelector('#finalPrice');
-    const usePointInput = document.querySelector('#usePoint');
-    const maxPoint = ${sessionScope.loginUser.point};
-
-    function calcTotalPrice() {
-        let total = 0;
-        priceSpans.forEach(span => {
-            const raw = span.getAttribute('data-price');
-            total += parseInt(raw);
-        });
-        return total;
-    }
-
-    function updatePrices() {
-        const total = calcTotalPrice();
-        const usedPoint = parseInt(usePointInput.value.replace(/[^\d]/g, '')) || 0;
-        const adjustedUsed = usedPoint > maxPoint ? maxPoint : usedPoint;
-        const final = Math.max(total - adjustedUsed, 0);
-
-        // 가격 표시
-        totalPrice.textContent = total.toLocaleString() + '원';
-        finalPrice.innerHTML = '<strong data-price="' + final + '">' + final.toLocaleString() + '원</strong>';
-    }
-
-    // 포인트 입력 시마다 금액 업데이트
-    usePointInput.addEventListener('input', () => {
-        let raw = usePointInput.value.replace(/[^\d]/g, '');
-        let num = parseInt(raw || 0);
-        if (num > maxPoint) num = maxPoint;
-        usePointInput.value = num.toLocaleString();
-        updatePrices();
-    });
-
-    // 초기 실행
-    updatePrices();
-});
+	window.addEventListener('DOMContentLoaded', function() {
+	    const priceSpans = document.querySelectorAll('.item-price');
+	    const totalPrice = document.querySelector('#totalPrice');
+	    const finalPrice = document.querySelector('#finalPrice');
+	    const usePointInput = document.querySelector('#usePoint');
+	    const maxPoint = ${sessionScope.loginUser.point};
+	
+	    function calcTotalPrice() {
+	        let total = 0;
+	        priceSpans.forEach(span => {
+	            const raw = span.getAttribute('data-price');
+	            total += parseInt(raw);
+	        });
+	        return total;
+	    }
+	
+	    function updatePrices() {
+	        const total = calcTotalPrice();
+	        const usedPoint = parseInt(usePointInput.value.replace(/[^\d]/g, '')) || 0;
+	        const adjustedUsed = usedPoint > maxPoint ? maxPoint : usedPoint;
+	        const final = Math.max(total - adjustedUsed, 0);
+	
+	        // 가격 표시
+	        totalPrice.textContent = total.toLocaleString() + '원';
+	        finalPrice.innerHTML = '<strong data-price="' + final + '">' + final.toLocaleString() + '원</strong>';
+	    }
+	
+	    // 포인트 입력 시마다 금액 업데이트
+	    usePointInput.addEventListener('input', () => {
+	        let raw = usePointInput.value.replace(/[^\d]/g, '');
+	        let num = parseInt(raw || 0);
+	        if (num > maxPoint) num = maxPoint;
+	        usePointInput.value = num.toLocaleString();
+	        updatePrices();
+	    });
+	
+	    // 초기 실행
+	    updatePrices();
+	});
 	
 	//결제완료시 해당 함수 호출됨!
 	function paymentSuccess(userid, usepoint, coinmoney) {
