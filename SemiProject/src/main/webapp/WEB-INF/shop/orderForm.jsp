@@ -351,13 +351,50 @@
 	        // 약관에 동의한 경우에는 그냥 submit됨
 	    });
 		
-		
+	 	
 		// 현재주소지로 변경 버튼을 눌렀을 때
 	 	$('#btnUseCurrentAddress').click(function() {
- 	    	document.getElementById("postcode").value = '${sessionScope.loginUser.postcode}';
-	 	    document.getElementById("address").value = '${sessionScope.loginUser.address}';
-	 	    document.getElementById("addressDetail").value = '${sessionScope.loginUser.addressDetail}';
-	 	    document.getElementById("addressExtra").value = '${sessionScope.loginUser.addressExtra}';
+	 		
+	 		const postcode = $('input#postcode').val().trim();
+	 		const address = $('input#address').val().trim();
+	 		const addressDetail = $('input#addressDetail').val().trim();
+	 		const addressExtra = $('input#addressExtra').val().trim();
+	 		
+	 		
+	 		if(postcode === '' || address === '') {
+ 				alert("주소를 입력해주세요.")
+ 				return;
+ 			} // 만약 주소를 입력(찾기)하지 않았다면, 경고 후 함수종료시키기.
+ 			if(addressDetail === '' ) {
+ 				alert("상세주소를 입력해주세요.")
+ 				return;
+ 			}
+ 			
+ 			$.ajax({
+ 				url:"user/userUpdateAddress.do",
+ 				data:{"postcode":postcode,
+ 					  "address":address,
+ 					  "addressDetail":addressDetail,
+ 					  "addressExtra":addressExtra},
+ 				// data 속성은 http://localhost:9090/SemiProject/user/userRegister.do 로 
+ 				// 전송해야할 데이터를 말한다.
+ 				type:"post",
+ 				async:true, 
+ 				dataType:"json",  
+ 				
+ 				success:function(json){
+ 					console.log(json);
+ 					// {"isChanged":false} 또는 {"isChanged":true}
+ 					
+ 					if(json.isChanged) {
+ 						// isChanged가 true로 응답되면 주소 업데이트완료.
+ 						alert("변경이 완료되었습니다.");
+ 					};
+ 				},
+ 				error: function(request, status, error){
+ 	                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+ 	            }				  
+ 			});
 	 	});
 			
 		// 포인트 입력하는 input에 pattern을 넣는 방법.(###,###)처럼

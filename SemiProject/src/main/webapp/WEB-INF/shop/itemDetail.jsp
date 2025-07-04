@@ -57,12 +57,13 @@
 		
 			<div class="col-4 my-5">
 				<div class="d-flex justify-content-between mt-5">
-					<span style="font-size: 15pt; font-weight: bold;">${item.itemNo}</span>
-					<span style="font-size: 13pt;"><fmt:formatNumber value="${item.price}" pattern="#,###" /> 원</span>
+					<span class="my-4" style="font-size: 17pt; font-weight: bold;">${item.itemName}</span>
+					<%-- <span style="font-size: 15pt; font-weight: bold;">${item.itemNo}</span> --%>
 				</div>
-				
-				<div class="my-3" style="font-size: 15pt;">${item.itemName}</div>
-				
+				<div>
+					<span class="my-4" style="font-size: 13pt; text-align: right;"><fmt:formatNumber value="${item.price}" pattern="#,###" /> 원</span>
+				</div>
+				<br>
 				<div class="py-2 pl-3" style="background-color: white;padding-top:16px !important;padding-bottom:16px !important;">
 					용량&nbsp;: <span style="padding-left:84px;">${item.volume}ml</span> 
 				</div>
