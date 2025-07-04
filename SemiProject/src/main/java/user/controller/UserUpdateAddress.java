@@ -64,17 +64,6 @@ public class UserUpdateAddress extends BaseController {
 			
 			super.setRedirect(false);
 			super.setViewPage("/WEB-INF/jsonview.jsp");		
-			/*}
-			else {
-				 String message = "비정상적인 경로입니다.";
-		         String loc = "javascript:history.back()";
-		         
-		         request.setAttribute("message", message);
-		         request.setAttribute("loc", loc);
-		         
-		         super.setRedirect(false);
-		         super.setViewPage("/WEB-INF/msg.jsp");
-			}*/
 			
 			
 		}
