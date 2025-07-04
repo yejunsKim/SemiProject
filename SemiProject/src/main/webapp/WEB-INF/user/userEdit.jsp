@@ -37,7 +37,7 @@
 <style type="text/css">
 @charset "UTF-8";
 
-div.container {width:100%;max-width:initial;}
+div.container {width:100%;max-width:initial;height:100vh;}
 form[name="editForm"]{max-width:1200px;margin:0;}
 div#editForm {
 	text-align: center;

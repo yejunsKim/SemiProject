@@ -221,12 +221,12 @@ public class UserDAO_imple implements UserDAO {
 			conn = ds.getConnection();
 			
 			String sql = " SELECT id, name, point, registerday, passwordChangeGap, email, mobile, postcode, "
-					+ "       address, addressDetail, addressExtra, lastlogingap, isDormant "
+					+ "       address, addressDetail, addressExtra, lastlogingap, isDormant, grade "
 					+ " FROM ( "
 					+ "    SELECT id, name, point, registerday, "
 					+ "           TRUNC(MONTHS_BETWEEN(SYSDATE, passwordChanged)) AS passwordChangeGap, "
 					+ "           isDormant, email, mobile, postcode, "
-					+ "           address, addressDetail, addressExtra "
+					+ "           address, addressDetail, addressExtra, grade "
 					+ "    FROM Users "
 					+ "    WHERE id = ? AND password like ? "
 					+ ") U "
@@ -263,6 +263,7 @@ public class UserDAO_imple implements UserDAO {
 				user.setAddress(rs.getString("address"));
 				user.setAddressDetail(rs.getString("addressDetail"));
 				user.setAddressExtra(rs.getString("addressExtra"));
+				user.setGrade(rs.getString("grade"));
 				// ==== 휴면이 아닌 회원만 login_history(로그인기록) 테이블에 insert 하기 시작 ==== // 
 				if( rs.getInt("lastlogingap") < 12 ) {
 					sql = " insert into login_history(loginHistoryNo, id, ip) "

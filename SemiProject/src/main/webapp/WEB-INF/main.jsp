@@ -22,16 +22,59 @@
 <!--  Bootstrap JS (마지막) -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+<script>
+$(document).ready(function() {
+	  // 로고 페이드 인 > 2초간 유지 > 페이드 아웃
+	  $('#footerLogo').fadeTo(2000, 1, function() {
+	    setTimeout(function() {
+	      $('#splashScreen').fadeOut(800, function() {
+	        $('#mainContent').fadeIn(300); // 메인 내용 보여줌
+	      });
+	    }, 1000); // fadeIn 후 1초 대기
+	  });
+	});
+</script>
+
  <%-- 250627 헤더테스트로인한 수정 --%>
- <jsp:include page="header.jsp" />
+ <jsp:include page="headerTest.jsp" />
  <!-- Commercials.jsp의 header.jsp 바로 아래 -->
 <style>
     #leftSide {
         display: none !important;
     }
+    
+   #splashScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000; /* 또는 원하는 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+#splashScreen img#footerLogo {
+  width: 300px; /* 원하는 초기 로고 크기 */
+  height: auto;
+  opacity: 0;
+}
+    
 </style>
 
+<%--
+  <div id="splashScreen">
+    <img src="/SemiProject/images/footer/footerLogo.png" id="footerLogo" />
+  </div>
 
+  <!-- 원래 페이지 내용 시작 -->
+  <div id="mainContent" style="display: none;">
+    <!-- 여기에 원래 있던 메인 내용들 -->
+  </div>
+   --%>
+  
 <div class="col-md-12" style="padding:0;">
 	<div class="container-fluid">		
 		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
