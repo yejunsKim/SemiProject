@@ -49,7 +49,7 @@ $(document).ready(function() {
 	   */
 
 		if ( rsp.success ) { // PC 데스크탑용
-			 self.close();
+		
 			window.opener.paymentSuccessOrderService('${requestScope.id}', '${requestScope.usePoint}', '${requestScope.totalAmount}')
 			
 			self.close(); // 팝업 닫기

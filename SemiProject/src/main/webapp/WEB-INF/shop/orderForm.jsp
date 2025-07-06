@@ -437,18 +437,29 @@ $(function(){
 
 	console.log(`<%= ctxPath%>`);
 	console.log($('th#loginUserId').html().trim()); // 확인
+	
+	const userGrade = "${sessionScope.loginUser.grade}";
+	console.log("확인:", userGrade);
 
 }); 
 //end of $(function(){})--------------------------------
 
-
 window.addEventListener('DOMContentLoaded', function() {
+    // 각 상품 가격을 담고 있는 span들
     const priceSpans = document.querySelectorAll('.item-price');
+
+    // 결제 금액 표시용 DOM
     const totalPrice = document.querySelector('#totalPrice');
     const finalPrice = document.querySelector('#finalPrice');
+    const getPoint = document.querySelector('#getPoint strong');
+    // 포인트 입력 input
     const usePointInput = document.querySelector('#usePoint');
+    // 최대 사용 가능한 포인트 (세션에서 주입됨)
     const maxPoint = ${sessionScope.loginUser.point};
+    // 회원 등급 가져오기 (세션에서 주입됨)
+    const userGrade = "${sessionScope.loginUser.grade}";
 
+    // 총 상품 금액 계산 함수
     function calcTotalPrice() {
         let total = 0;
         priceSpans.forEach(span => {
@@ -458,18 +469,34 @@ window.addEventListener('DOMContentLoaded', function() {
         return total;
     }
 
+    // 가격과 적립 포인트를 계산해서 표시하는 함수
     function updatePrices() {
-        const total = calcTotalPrice();
+        const total = calcTotalPrice(); // 총 상품 금액
+        // 사용자가 입력한 포인트 (숫자만 추출)
         const usedPoint = parseInt(usePointInput.value.replace(/[^\d]/g, '')) || 0;
+        // 사용 포인트가 보유 포인트보다 많으면 보유 포인트로 제한
         const adjustedUsed = usedPoint > maxPoint ? maxPoint : usedPoint;
+        // 최종 결제 금액 = 총금액 - 사용포인트 (최소 0 이상)
         const final = Math.max(total - adjustedUsed, 0);
-
-        // 가격 표시
+        // 최종 결제 금액 표시
         totalPrice.textContent = total.toLocaleString() + '원';
         finalPrice.innerHTML = '<strong data-price="' + final + '">' + final.toLocaleString() + '원</strong>';
+        // === 등급별 적립 포인트 계산 ===
+        let pointRate = 0;
+        switch (userGrade) {
+            case 'bronze': pointRate = 0.03; // 브론즈는 3%
+                break;
+            case 'silver': pointRate = 0.05; // 실버는 5%
+                break;
+            case 'gold': pointRate = 0.07; 	 // 골드는 7%
+                break;
+        }
+        // 적립 예정 포인트 계산 및 표시
+        const expectedPoint = Math.floor(final * pointRate);
+        getPoint.textContent = expectedPoint.toLocaleString();
     }
 
-    // 포인트 입력 시마다 금액 업데이트
+    // 포인트 입력할 때마다 가격 업데이트
     usePointInput.addEventListener('input', () => {
         let raw = usePointInput.value.replace(/[^\d]/g, '');
         let num = parseInt(raw || 0);
@@ -478,9 +505,10 @@ window.addEventListener('DOMContentLoaded', function() {
         updatePrices();
     });
 
-    // 초기 실행
+    // 페이지 로딩 시 초기 실행
     updatePrices();
 });
+
 
 
 </script>
@@ -621,14 +649,14 @@ window.addEventListener('DOMContentLoaded', function() {
 					</td>
 				</tr>
 				<tr>
-					<td><strong>적립 예정 포인트</strong></td>
-					<td id="getPoint" name="getPoint" style="text-align: right;"><strong></strong></td>
-				</tr>
-				<tr style="border-bottom: 1px solid">
 					<td><strong>최종 결제 금액</strong></td>
 					<td id="finalPrice" name="finalPrice" style="text-align: right;"><strong></strong></td>
 				</tr>
-
+				<tr style="border-bottom: 1px solid">
+					<td><strong>적립 예정 포인트</strong></td>
+					<td id="getPoint" name="getPoint" style="text-align: right;">
+					<strong style="color: green;"></strong>&nbsp;POINT</td>
+				</tr>
 			</table>
 		</div>
 		
