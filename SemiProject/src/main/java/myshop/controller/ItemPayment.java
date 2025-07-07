@@ -38,7 +38,7 @@ public class ItemPayment extends BaseController {
 				request.setAttribute("name", loginUser.getName());
 				request.setAttribute("mobile", loginUser.getMobile());
 				
-				
+	     
 				request.setAttribute("id", loginUser.getId());
 				request.setAttribute("usePoint", usePoint);
 				

@@ -48,6 +48,7 @@ private ItemDAO itemDAO = new ItemDAO_imple();
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
+		System.out.println("주문 시작");
 		String method = request.getMethod();
 		/*
 		if("POST".equalsIgnoreCase(method)) {
