@@ -79,31 +79,39 @@
                 
                 <!-- 이름 -->
                 <div>
-                    <label for="name" class="block font-medium text-gray-700 mb-1">성명 <span class="text-red-600">*</span></label>
-                    <input type="text" id="name" name="name" maxlength="30" class="requiredInfo w-full px-4 py-2 border rounded-lg" value="${sessionScope.loginUser.name}">
+                    <div class="flex items-center gap-4">
+                        <label for="name" class="w-32 font-medium text-gray-700">성명 <span class="text-red-600">*</span></label>
+                        <input type="text" id="name" name="name" maxlength="30" class="requiredInfo flex-1 px-4 py-2 border rounded-lg" value="${sessionScope.loginUser.name}">
+                    </div>
                     <span class="error">필수 입력 사항입니다</span>
                 </div>
 
                 <!-- 비밀번호 -->
                 <div>
-                    <label for="password" class="block font-medium text-gray-700 mb-1">비밀번호 <span class="text-red-600">*</span></label>
-                    <input type="password" id="password" name="password" maxlength="30" class="requiredInfo w-full px-4 py-2 border rounded-lg">
+                    <div class="flex items-center gap-4">
+                        <label for="password" class="w-32 font-medium text-gray-700">비밀번호 <span class="text-red-600">*</span></label>
+                        <input type="password" id="password" name="password" maxlength="30" class="requiredInfo flex-1 px-4 py-2 border rounded-lg">
+                    </div>
                     <span class="error">영문자,숫자,특수기호가 혼합된 8~15 비밀번호를 입력해주세요</span>
                 </div>
 
                 <!-- 비밀번호 확인 -->
                 <div>
-                    <label for="passwordCheck" class="block font-medium text-gray-700 mb-1">비밀번호 확인 <span class="text-red-600">*</span></label>
-                    <input type="password" id="passwordCheck" maxlength="30" class="requiredInfo w-full px-4 py-2 border rounded-lg">
+                    <div class="flex items-center gap-4">
+                        <label for="passwordCheck" class="w-32 font-medium text-gray-700">비밀번호 확인 <span class="text-red-600">*</span></label>
+                        <input type="password" id="passwordCheck" maxlength="30" class="requiredInfo flex-1 px-4 py-2 border rounded-lg">
+                    </div>
                     <span class="error">비밀번호가 일치하지 않습니다</span>
                 </div>
 
                 <!-- 이메일 -->
                 <div>
-                    <label for="email" class="block font-medium text-gray-700 mb-1">이메일 <span class="text-red-600">*</span></label>
-                    <div class="flex gap-2">
-                        <input type="text" id="email" name="email" maxlength="60" class="requiredInfo flex-grow px-4 py-2 border rounded-lg" value="${sessionScope.loginUser.email}">
-                        <span id="emailCheck" class="btn-check text-white px-4 py-2 rounded-lg cursor-pointer">이메일중복확인</span>
+                    <div class="flex items-center gap-4">
+                        <label for="email" class="w-32 font-medium text-gray-700">이메일 <span class="text-red-600">*</span></label>
+                        <div class="flex flex-1 gap-2">
+                            <input type="text" id="email" name="email" maxlength="60" class="requiredInfo flex-1 px-4 py-2 border rounded-lg" value="${sessionScope.loginUser.email}">
+                            <span id="emailCheck" class="btn-check text-white px-4 py-2 rounded-lg cursor-pointer whitespace-nowrap">이메일중복확인</span>
+                        </div>
                     </div>
                     <span id="emailCheckResult" class="block mt-1 text-sm"></span>
                     <span class="error">이메일 형식에 맞지 않습니다</span>
@@ -111,33 +119,42 @@
 
                 <!-- 연락처 -->
                 <div>
-                    <label for="hp1" class="block font-medium text-gray-700 mb-1">연락처 <span class="text-red-600">*</span></label>
-                    <div class="flex items-center gap-2">
-                        <input type="text" id="hp1" name="hp1" size="6" maxlength="3" value="010" readonly class="w-20 px-3 py-2 border rounded-lg text-center">
-                        <span>-</span>
-                        <input type="text" id="hp2" name="hp2" size="6" maxlength="4" value="${fn:substring(sessionScope.loginUser.mobile, 3, 7)}" class="w-24 px-3 py-2 border rounded-lg text-center">
-                        <span>-</span>
-                        <input type="text" id="hp3" name="hp3" size="6" maxlength="4" value="${fn:substring(sessionScope.loginUser.mobile, 7, 11)}" class="w-24 px-3 py-2 border rounded-lg text-center">
+                    <div class="flex items-center gap-4">
+                        <label for="hp1" class="w-32 font-medium text-gray-700">연락처 <span class="text-red-600">*</span></label>
+                        <div class="flex gap-2 items-center">
+                            <input type="text" id="hp1" name="hp1" size="6" maxlength="3" value="010" readonly class="w-20 px-3 py-2 border rounded-lg text-center">
+                            <span>-</span>
+                            <input type="text" id="hp2" name="hp2" size="6" maxlength="4" value="${fn:substring(sessionScope.loginUser.mobile, 3, 7)}" class="w-24 px-3 py-2 border rounded-lg text-center">
+                            <span>-</span>
+                            <input type="text" id="hp3" name="hp3" size="6" maxlength="4" value="${fn:substring(sessionScope.loginUser.mobile, 7, 11)}" class="w-24 px-3 py-2 border rounded-lg text-center">
+                        </div>
                     </div>
                     <span class="error">휴대폰 형식이 아닙니다.</span>
                 </div>
 
                 <!-- 우편번호 -->
                 <div>
-                    <label for="postcode" class="block font-medium text-gray-700 mb-1">우편번호</label>
-                    <div class="flex gap-2 items-center">
-                        <input type="text" id="postcode" name="postcode" size="6" maxlength="5" value="${sessionScope.loginUser.postcode}" class="flex-grow px-4 py-2 border rounded-lg">
-                        <img src="<%= ctxPath%>/images/find_postcode.gif" width="6%" id="postcodeSearch" class="cursor-pointer">
+                    <div class="flex items-center gap-4">
+                        <label for="postcode" class="w-32 font-medium text-gray-700">우편번호</label>
+                        <div class="flex flex-1 gap-2 items-center">
+                            <input type="text" id="postcode" name="postcode" size="6" maxlength="5" placeholder="우편번호" value="${sessionScope.loginUser.postcode}" class="flex-grow px-4 py-2 border rounded-lg">
+                            <img src="<%= ctxPath%>/images/find_postcode.gif" width="6%" id="postcodeSearch" class="cursor-pointer">
+                        </div>
                     </div>
                     <span class="error">우편번호 형식에 맞지 않습니다.</span>
                 </div>
 
                 <!-- 주소 -->
                 <div>
-                    <label class="block font-medium text-gray-700 mb-1">주소</label>
-                    <input type="text" name="address" id="address" class="w-full px-4 py-2 border rounded-lg mb-2" placeholder="주소" value="${sessionScope.loginUser.address}">
-                    <input type="text" name="detailAddress" id="addressDetail" class="w-full px-4 py-2 border rounded-lg mb-2" placeholder="상세주소" value="${sessionScope.loginUser.addressDetail}">
-                    <input type="text" name="extraAddress" id="addressExtra" class="w-full px-4 py-2 border rounded-lg" placeholder="참고항목" value="${sessionScope.loginUser.addressExtra}">
+                    <div class="flex items-start gap-4">
+                    	
+                        <label class="w-32 font-medium text-gray-700 pt-2">주소</label>
+                        <div class="flex-1 space-y-2">
+                            <input type="text" name="address" id="address" class="w-full px-4 py-2 border rounded-lg" placeholder="주소" value="${sessionScope.loginUser.address}">
+                            <input type="text" name="detailAddress" id="addressDetail" class="w-full px-4 py-2 border rounded-lg" placeholder="상세주소" value="${sessionScope.loginUser.addressDetail}">
+                            <input type="text" name="extraAddress" id="addressExtra" class="w-full px-4 py-2 border rounded-lg" placeholder="참고항목" value="${sessionScope.loginUser.addressExtra}">
+                        </div>
+                    </div>
                     <span class="error">주소를 입력하세요.</span>
                 </div>
             </div>
