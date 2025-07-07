@@ -471,7 +471,7 @@ let isOrderOK = false;
      	   }
      	   
      	   if(!isOrderOK) { // 해당 제품을 구매하지 않은 경우라면
-     		   alert("${requestScope.itemVO.itemName} 제품을 구매하셔야 후기작성이 가능합니다.");
+     		   alert("${requestScope.itemVO.itemName} 제품을 구매하셔야만 후기작성이 가능합니다.");
      	   }
      	   else { // 해당 제품을 구매한 경우라면
      	     // alert("제품후기 쓰기 가능함");
@@ -504,8 +504,8 @@ let isOrderOK = false;
    		  			    }
    		  			    else if(json.n == -1)  {
    						// 동일한 제품에 대하여 동일한 회원이 제품후기를 2번 쓰려고 경우 unique 제약에 위배됨 
-   						 alert("이미 후기를 작성하셨습니다.\n작성하시려면 기존의 제품후기를 삭제하시고 다시 쓰세요.");
-   						 //  swal("이미 후기를 작성하셨습니다.\n작성하시려면 기존의 제품후기를\n삭제하시고 다시 쓰세요.");
+   						// alert("이미 후기를 작성하셨습니다.\n작성하시려면 기존의 제품후기를\n삭제하시고 다시 쓰세요.");
+   						   swal("이미 후기를 작성하셨습니다.\n작성하시려면 기존의 제품후기를\n삭제하시고 다시 쓰세요.");
    					    }
    		  			    else  {
    		  				   // 제품후기 등록(insert)이 실패한 경우 
@@ -533,6 +533,7 @@ let isOrderOK = false;
 </script>
 
 
+	
 	<div class="col-md-12" style="background-color: #f5f5f5;padding-top:80px;">
 		<div class="d-flex">
 			<div class="col-8 my-5" style="border-right: 1px solid #ccc;">
@@ -541,13 +542,12 @@ let isOrderOK = false;
 		
 			<div class="col-4 my-5">
 				<div class="d-flex justify-content-between mt-5">
-					<span class="my-4" style="font-size: 17pt; font-weight: bold;">${item.itemName}</span>
-					<%-- <span style="font-size: 15pt; font-weight: bold;">${item.itemNo}</span> --%>
+					<span style="font-size: 15pt; font-weight: bold;">${item.itemNo}</span>
+					<span style="font-size: 13pt;"><fmt:formatNumber value="${item.price}" pattern="#,###" /> 원</span>
 				</div>
-				<div>
-					<span class="my-4" style="font-size: 13pt; text-align: right;"><fmt:formatNumber value="${item.price}" pattern="#,###" /> 원</span>
-				</div>
-				<br>
+				
+				<div class="my-3" style="font-size: 15pt;">${item.itemName}</div>
+				
 				<div class="py-2 pl-3" style="background-color: white;padding-top:16px !important;padding-bottom:16px !important;">
 					용량&nbsp;: <span style="padding-left:84px;">${item.volume}ml</span> 
 				</div>
@@ -575,14 +575,41 @@ let isOrderOK = false;
 			</div>
 		</div>
 		
-		<%-- 상세 이미지 보기 버튼 --%>
-		<div class="col text-center">
-			<button type="button" class="btn btn-secondary btn-lg" id="btnMoreItem" value="">자세히보기</button>
+		<%-- 상세 이미지 보기 버튼 & 리뷰작성 버튼--%>
+		<div class="col text-center d-flex justify-content-center gap-3 my-3">
+			<button type="button" class="btn btn-secondary btn-lg" id="btnMoreItem">자세히보기</button>
+			<button type="button" class="btn btn-secondary btn-lg" id="btnReviews">리뷰작성</button>
+		</div>			
+		
+		<%-- 상세 이미지 영역 --%>
+			<div id="detailImageSection"></div>
 			
-			<%-- 상세 이미지 영역 --%>
-			<div id="detailImageSection">
-				
+			<div id="reviewSection" style="display:none;">	<%-- 리뷰작성 --%>
+				<div id="viewComments">
+					<%-- 리뷰내용나오는 곳 --%>
+					
+					<%-- <div class="row">
+					   <div class="col" style="display: flex">
+					       <h3 style="margin: auto">
+					          <i class="fas fa-thumbs-up fa-2x" style="cursor: pointer;" onclick="golikeAdd('${requestScope.itemVO.itemNo}')"></i> 
+					          <span id="likeCnt" class="badge badge-primary"></span>
+					       </h3>
+					   </div>
+					</div> --%>
+				</div>
+				<form name="commentFrm">
+					<textarea  name="content" style="font-size: 12pt; width: 80%; height: 150px;"></textarea>
+	    		    <input type="hidden" name="fk_id" value="${sessionScope.loginUser.id}" />
+	   	            <input type="hidden" name="fk_itemNo" value="${item.itemNo}" />
+				</form>
+				<div style="text-align: center;">
+			    	<button type="button" class="btn btn-outline-secondary" id="btnCommentOK" style="margin: auto;">
+			    		<span class="h5">리뷰등록</span>
+		    		</button>
+	    		</div>
 			</div>
+
+			<div>	
 			
 			<%-- 위로 가기 --%>
 			<div style="display: flex;">
@@ -597,9 +624,8 @@ let isOrderOK = false;
 			</div>
 		</div>
 		
+		
 	</div>
 	
 
 <jsp:include page="../footer.jsp" />
-
-

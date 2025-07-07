@@ -93,13 +93,13 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 					
 					v_html += `<div class='col-md-6 col-lg-3'>
 									<div class="card mb-3">
-										<a href="/SemiProject/item/itemDetail.do?itemno=${item.itemno}" class="itemDetail">
+										<a href="/SemiProject/item/itemDetail.do?itemNo=${item.itemno}" class="itemDetail">
 											<img src="/SemiProject${item.itemphotopath}" class="card-img-top" style="height: 350px; object-fit: cover;">
 										</a>
 										<div class="card-body">
 										
 											<h5 class="card-title">
-												<a href="/SemiProject/item/itemDetail.do?itemno=${item.itemno}" class="itemDetail">
+												<a href="/SemiProject/item/itemDetail.do?itemNo=${item.itemno}" class="itemDetail">
 													<span tyle="display: none;">${item.itemno}</span><br>
 													${item.itemname}<br>
 												</a>
