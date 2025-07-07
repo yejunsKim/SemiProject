@@ -15,8 +15,9 @@ public class ItemPayment extends BaseController {
 		if(super.checkLogin(request)) {
 			// 로그인을 했으면
 			// goCoinPurchaseEnd(ctxPath, coinmoney, userid, usepoint)
-			String id = request.getParameter("userid");
-			String usepoint = request.getParameter("usepoint");
+			// requestPayment(ctxPath, totalAmount, id, usePoint)
+			String id = request.getParameter("id");
+			String usePoint = request.getParameter("usePoint");
 			
 			HttpSession session = request.getSession();
 			UserVO loginUser = (UserVO) session.getAttribute("loginUser");
@@ -26,12 +27,12 @@ public class ItemPayment extends BaseController {
 				
 				// request 데이터 가져와야함
 				
-				String s_coinmoney = request.getParameter("coinmoney");
+				String s_totalAmount = request.getParameter("totalAmount");
 				
 				String productName = "PerfumeArena 상품";	// "새우깡"
 			//	int productPrice = Integer.parseInt(s_coinmoney);
 				
-				int coinmoney = Integer.parseInt(s_coinmoney);
+				int coinmoney = Integer.parseInt(s_totalAmount);
 				
 				request.setAttribute("productName", productName);
 			//	request.setAttribute("productPrice", productPrice);
@@ -45,7 +46,7 @@ public class ItemPayment extends BaseController {
 				
 				
 				request.setAttribute("userid", loginUser.getId());
-				request.setAttribute("usepoint", usepoint);
+				request.setAttribute("usePoint", usePoint);
 				
 				
 				super.setRedirect(false);

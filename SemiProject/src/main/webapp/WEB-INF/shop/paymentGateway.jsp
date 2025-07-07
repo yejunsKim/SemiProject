@@ -50,7 +50,7 @@ $(document).ready(function() {
 
 		if ( rsp.success ) { // PC 데스크탑용
         	
-			window.opener.paymentSuccess('${requestScope.userid}', '${requestScope.usepoint}', '${requestScope.coinmoney}')
+			window.opener.paymentSuccess('${requestScope.userid}', '${requestScope.usePoint}', '${requestScope.coinmoney}')
 			
 			self.close(); // 팝업 닫기
 			

@@ -426,52 +426,50 @@
  			const totalAmount = $('#finalPrice > strong').attr('data-price');
  		//	console.log($('th#loginUserId').html().trim());
  			const id = $('th#loginUserId').html().trim();
- 		// 	console.log($('input#usePoint').val());
- 			const usepoint = $('input#usePoint').val();
+ 		 	console.log($('input#usePoint').val());
+ 			const usePoint = $('input#usePoint').val();
  		
 	 		// ==== 포트원(구 아임포트) 결제
-	 		requestPayment(ctxPath, totalAmount, id, usepoint);
+	 		requestPayment(ctxPath, totalAmount, id, usePoint);
 	    });
 		
 //////  *** 유저 아이디를 찾기 위해 header에 loginUserId 라는 id값을 주었음. ***  ////// 
 // <th id="loginUserId" colspan="3" .... > ${sessionScope.loginUser.id} </th>
 
-		console.log("<%= ctxPath%>");
-		console.log($('th#loginUserId').html().trim()); // 확인
+	//	console.log("<%= ctxPath%>");
+	//	console.log($('th#loginUserId').html().trim()); // 확인
 
 }); 
 // end of $(function(){})--------------------------------
 
-// ==== 포트원(구 아임포트) 결제를 해주는 함수 ==== //
-function requestPayment(ctxPath, coinmoney, userid, usepoint) {
-	
-	const url = `${ctxPath}/item/itemPayment.do?userid=${userid}&coinmoney=${coinmoney}&usepoint=${usepoint}`;
-//	console.log(url);
-	// 너비 1000, 높이 600 인 팝업창을 화면 가운데 위치시키기
-	const width = 1000;
-	const height = 600;
-	
-	const left = Math.ceil((window.screen.width - width) / 2);	// 정수로 만듬
-							// 1400 - 1000 = 400		400/2 ==> 200
-	
-	const top = Math.ceil((window.screen.height - height) / 2);	// 정수로 만듬
-							// 1400 - 600 = 800		800/2 ==> 400
-	
-	window.open(url, "payment", `left=${left}, top=${top}, width=${width}, height=${height}`);
-	
-}// end of function goCoinPurchaseTypeChoice(userid, ctx_Path) {}--------------------
+
 
 //----------------------------------------------------------------------//		
 					 //	포트윈 결제하기 관련 종료
 //----------------------------------------------------------------------//	
 	
 //결제완료시 해당 함수 호출됨!
-function paymentSuccess(id, usepoint, totalAmount) {
+function paymentSuccess(id, usePoint, totalAmount) {
 	
-	console.log(id, usepoint, totalAmount);
+//	console.log(id);
+//	console.log(usePoint);
+//	console.log(totalAmount);
 	
 	// 여기서 orderAdd 예정
-	
+	/*
+	$.ajax({
+		url:"<%= ctxPath%>/item/orderAdd.do",
+		type:"post",
+		data:[{}],
+		dataType:"json"
+		success:function(json){
+			
+		},
+		error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		}
+	});
+	*/
 	
 }// end of function paymentSuccess()-----------------------------
 
