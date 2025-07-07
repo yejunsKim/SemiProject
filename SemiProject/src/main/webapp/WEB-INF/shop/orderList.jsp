@@ -51,7 +51,7 @@
 		vertical-align: middle;
 	}
 	tbody tr:hover {
-		background-color: white;
+		background-color: #f5f5f5;
 		cursor: pointer;
 	}
 	.order-summary {
@@ -71,19 +71,9 @@
 	$(function(){
 		
 		// tr 클릭
-		$('tbody').on('click', 'tr', function(){
-			
-			const orderno = $(this).data("orderno");
-		//	alert(orderno);
-			
-			if(orderno == null) {
-				alert("주문을 완료하셔야 클릭 가능합니다.");
-			}
-			else {
-			location.href = '<%= ctxPath %>/item/orderDetail.do?orderno=' + orderno;	// 주문 상세 페이지로 이동
-			}
+		$('tbody tr').click(function(){
+			alert("tr 클릭됨");
 		});
-		
 		
 		// 버튼 클릭 시 tr 클릭 막기
 		$('.btn1').click(function(event) {
@@ -98,9 +88,9 @@
 </script>
 
 </head>
-<body style="background-color: #f5f5f5;">
+<body>
 	
-	<h2 style="text-align:center;"><span style="color: blue;">${sessionScope.loginUser.name}</span> 님 주문 내역</h2>
+	<h2 style="text-align:center;">최근 주문 내역</h2>
 	
 	<hr style="border: solid 1px black; width: 90%;">
 	
@@ -117,14 +107,7 @@
 		<tbody>
 			
 			<c:if test="${not empty requestScope.ohList}">
-				<c:forEach var="ohvo" items="${requestScope.ohList}" varStatus="status">
-					<tr data-orderno="${ohvo.orderno}">
-						<td>${ohvo.orderdate}</td>
-						<td>${ohvo.orderno}</td>
-						<td>${ohvo.itemlist}</td>
-						<td><button class="btn1" onclick="delivery(${status.index})" >조회</button></td>
-					</tr>
-				</c:forEach>
+				
 			</c:if>
 			
 			<c:if test="${empty requestScope.ohList}">
@@ -132,15 +115,24 @@
 					<th colspan="4">주문한 내역이 없습니다.</th>
 				</tr>
 			</c:if>
+		<%--
+			<tr>
+				<th>2025-07-02</th>
+				<th>s20250702-1</th>
+				<th>내용물, 내용물, 내용물, 내용물, 내용물,내용물(넘처나면 ...표현)...</th>
+				<th><button class="btn1" onclick="delivery()" >조회</button></th>
+			</tr>
+		--%>	
 		</tbody>
 				
 	</table>
-	<c:if test="${not empty requestScope.ohList}">
-		<nav class="my-5">
-			<div style='display:flex; width:80%; margin: 0 auto;'>
-				<ul class="pagination" style='margin:auto;'>${requestScope.pageBar}</ul>
-			</div>
+	
+	<div id="pageBar">
+		<nav>
+			<%--<ul class="pagination">${requestScope.pageBar}</ul> --%>
 		</nav>
-	</c:if>
+	</div>
+	
+		
 </body>
 </html>
