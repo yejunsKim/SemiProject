@@ -28,16 +28,15 @@ function requestPayment(ctxPath, id, email, usePoint, totalAmount) {
 //결제완료시 해당 함수 호출됨!
 function paymentSuccessOrderService(id, usePoint, totalAmount) {
 	
-	console.log(id, usePoint, totalAmount);
+	console.log("결제완료시 해당 함수 호출됨! >> ", id, usePoint, totalAmount);
 	
 	 //// === 체크박스의 체크된 value값(checked 속성이용) === ////
 	   //// === 체크가 된 것만 읽어와서 배열에 넣어준다. === ////
 	   
 	   const allCnt = $("input:checkbox[name='pnum']").length;
 	   
-	   const pnumArr = new Array();        // 또는 const pnumArr = [];
-	   const oqtyArr = new Array();        // 또는 const oqtyArr = [];
-	   const pqtyArr = new Array();        // 또는 const pqtyArr = [];
+	   const itemNoArr = new Array();        // 또는 const pnumArr = [];
+	   const quantity = new Array();       // 또는 const oqtyArr = [];
 	   const cartnoArr = new Array();      // 또는 const cartnoArr = [];
 	   const totalPriceArr = new Array();  // 또는 const totalPriceArr = [];
 	   const totalPointArr = new Array();  // 또는 const totalPointArr = []; 
@@ -45,10 +44,9 @@ function paymentSuccessOrderService(id, usePoint, totalAmount) {
 	   for(let i=0; i<allCnt; i++){
 		   if( $("input:checkbox[name='pnum']").eq(i).prop("checked") ) {
 			  
-			   console.log("제품번호 : ", $("input:checkbox[name='pnum']").eq(i).val() );
-			   console.log("주문량 : ", $('input.oqty').eq(i).val() );
-			   console.log("잔고량 : ", $('input.pqty').eq(i).val() );
-			   console.log("삭제해야할 장바구니 번호 : ", $('input.cartno').eq(i).val() );
+			   console.log("제품번호 : ", $("input.itemNo").eq(i).val() );
+			   console.log("주문량 : ", $('input.quantity').eq(i).val() );
+			   console.log("삭제해야할 장바구니 번호 : ", $('input.cartNo').eq(i).val() );
 			   console.log("주문한 제품의 개수에 따른 가격합계 : ", $('input.totalPrice').eq(i).val() );
 			   console.log("주문한 제품의 개수에 따른 포인트합계 : ", $('input.totalPoint').eq(i).val() );
 			   console.log("======================================");
@@ -165,7 +163,7 @@ function paymentSuccessOrderService(id, usePoint, totalAmount) {
 
 
 //----------------------------------------------------------------------//
-				//	포트윈 결제 후, orderAdd 함수까지 종료!
+				//	포트윈 결제 후, paymentSuccessOrderService 함수까지 종료!
 //----------------------------------------------------------------------//	
 	
 	

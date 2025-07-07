@@ -717,7 +717,7 @@ public class ItemDAO_imple implements ItemDAO {
 	        for (int i = 0; i < selectedCartNoArray.length; i++) {
 	            pstmt.setString(i + 2, selectedCartNoArray[i]);
 	        }
-
+	        
 	        rs = pstmt.executeQuery();
 
 	        while(rs.next()) {
@@ -735,6 +735,8 @@ public class ItemDAO_imple implements ItemDAO {
 
 	            CartVO cartvo = new CartVO();
 	            cartvo.setCartamount(rs.getInt("cartamount"));
+	            cartvo.setCartno(rs.getInt("cartno"));
+	            // cartno 를 끌고와야, 추후 계산 완료시 해당 카트를 삭제할 수 있음.
 	            itemvo.setCartvo(cartvo);
  
 	            getOrderItemList.add(itemvo);

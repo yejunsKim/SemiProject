@@ -612,6 +612,8 @@ window.addEventListener('DOMContentLoaded', function() {
 								<fmt:formatNumber value="${item.price * item.cartvo.cartamount}" pattern="###,###"/>원
 							</span>
 							<span class="itemNo" style="display: none;">${item.itemNo}</span>
+							<span class="cartNo" style="display: none;">${item.cartvo.cartno}</span>
+							<%-- item 번호와, cart 번호를 넘겨주기 위해 숨겨놓기. --%>
 						</td>
 					</tr>
                	</c:forEach>
