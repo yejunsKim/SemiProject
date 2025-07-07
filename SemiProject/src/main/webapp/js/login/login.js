@@ -64,22 +64,4 @@ function editInfo(id, ctxPath) {
 }
 
 
-// ==== 포트원(구 아임포트) 결제를 해주는 함수 ==== //
-function requestPayment(ctxPath, totalAmount, id, usePoint) {
-	
-	const url = `${ctxPath}/item/itemPayment.do?id=${id}&totalAmount=${totalAmount}&usePoint=${usePoint}`;
-	console.log(url);
-	// 너비 1000, 높이 600 인 팝업창을 화면 가운데 위치시키기
-	const width = 1000;
-	const height = 600;
-	
-	const left = Math.ceil((window.screen.width - width) / 2);	// 정수로 만듬
-							// 1400 - 1000 = 400		400/2 ==> 200
-	
-	const top = Math.ceil((window.screen.height - height) / 2);	// 정수로 만듬
-							// 1400 - 600 = 800		800/2 ==> 400
-	
-	window.open(url, "payment", `left=${left}, top=${top}, width=${width}, height=${height}`);
-	
-}// end of function goCoinPurchaseTypeChoice(userid, ctx_Path) {}--------------------
 

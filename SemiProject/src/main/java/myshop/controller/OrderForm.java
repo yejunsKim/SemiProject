@@ -40,11 +40,12 @@ public class OrderForm extends BaseController {
          List<ItemVO> orderItemList = idao.getOrderItem(loginUser.getId(), selectedCartNoArray);
          
          System.out.println(orderItemList.toString());
+         System.out.println(loginUser.getGrade());
          
          request.setAttribute("orderItemList", orderItemList);
-        
-		super.setRedirect(false);
-		super.setViewPage("/WEB-INF/shop/orderForm.jsp");
+         
+         super.setRedirect(false);
+	 	 super.setViewPage("/WEB-INF/shop/orderForm.jsp");
 
 	}
 	

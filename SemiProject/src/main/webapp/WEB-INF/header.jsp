@@ -51,8 +51,8 @@ function editInfo(id, ctxPath) {
 	   
 	   const left = Math.ceil((window.screen.width - width)/2);  // 정수로 만듬 
 	   const top = Math.ceil((window.screen.height - height)/2); // 정수로 만듬
-	   window.open(url, "editInfo", `left=${left}, top=${top}, 
-			   width=${width}, height=${height}`);
+	   window.open(url, "editInfo", `left=${left}px, top=${top}px, 
+			   width=${width}px, height=${height}px`);
 }
 
 </script>
@@ -86,6 +86,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
     line-height: 1;
+    position:relative;
 }
 ol, ul {
     list-style: none;
@@ -104,27 +105,34 @@ table {
 }
 
 .container-fluid {padding:0;}
-.headerNav {position:fixed;top:0;background-color:#ddd;z-index:15;width:100%;padding:10px 25px;box-shadow:2px 2px 2px #000;}
+.headerNav {position:fixed;top:0;background-color:transparent;z-index:15;width:100%;padding:10px 25px;
+-webkit-transition: background-color .3s ease-in;
+transition: background-color .3s ease-in;}
 .headerUl {display:flex;justify-content:space-between;align-items:center;}
 .loginList {max-width:270px;width:100%;background-color:#fff;position:absolute;top:50%;left:50%;height:330px;padding:20px;box-shadow: 1px 3px 3px 2px #6f6363;border-radius:5px;transform:translate(-50%,-50%);z-index:15;}
-.loginList .loginBoxx .loginBTN {width:100%;border:0;border-radius:20px;background-color:#2c59e5;padding:15px 0;margin-top:5px;color:#fff;}
+.loginList .loginBoxx .loginBTN {width:100%;border:0;border-radius:30px;background-color:#2c59e5;padding:15px 25px;margin-top:5px;color:#000;}
 .loginList .loginA {width:100%;display:flex;justify-content:space-between;align-items:center;margin:15px 0;}
 .loginList .loginA input {width:150px;}
 .form-outline {position:relative;}
 .form-control {max-width:150px;width:100%;padding:0 35px;}
-.fa-search {position:absolute;top:12px;left:10px;} 
 .loginBox {z-index:20;}
 .trTab {padding:10px 0;display:flex;justify-content:space-between;align-items:center;}
 
-.userFunc {border: 1px solid #bbb;padding: 10px 15px;border-radius: 15px;background: #8444e9;color: #fff;cursor: pointer}
-.userTab {position: fixed;right:0;height:860px;background:#fff;top:65px;width:150px;border-left:1px solid #ddd;z-index:20;}
+.userTab-wrapper {position: relative;overflow: hidden;height: 880px;width: 250px;position: fixed;top: 63px;right: 0;z-index: 0;}
+.userTab-wrapper.wrapperOpen {z-index:21;} 
+.userTab {height: 100%;width: 250px;background: rgba(255, 255, 255, 0.6);position: absolute;right: -250px; top: 0;transition: right 0.9s ease;border-left: 1px solid #ddd;border-top:1px solid #ddd;z-index: 11;}
+.userTab.userTab-open {right: 0;}
+
 .userTab p a {padding:40px 13px;border-bottom:1px solid #ddd;cursor:pointer;display:block;text-align:center;}
 .userTab p:hover, .userTab p:hover a {background-color:#000;color:#fff}
+input#searchID {border-radius:30px;padding:5px 20px;border:1px solid #ddd;}
+.fa-search {position:absolute;top:11px;right:20px;left:initial;} 
+.btnSubmit {background-color:transparent;border:0;position:absolute;right:5px;top:7px;width:50px;height:21px;}
+
 
 </style>
 <script type="text/javascript">
 $(function() {
-	
 	
 	$('div.loginBox').hide();
     let isMenuOpen = false;
@@ -150,52 +158,103 @@ $(function() {
 		}
 	};
 	
-	<%-- 유저가 로그인 후 카테고리 메뉴버튼 클릭시 메뉴 나타나도록 추가--%>
-	let userOpen = sessionStorage.getItem("userOpen") === "true";
-
-	if (userOpen) {
-		$('.userTab').show();
-	} else {
-		$('.userTab').hide();
-	}
-
-	$(document).on("click", ".userFunc", function() {
-		userOpen = !userOpen;
-
-		if (userOpen) {
-			$('.userTab').show();
-		} else {
-			$('.userTab').hide();
-		}
-
-		// 세션에 상태 저장입니당
-		
-		sessionStorage.setItem("userOpen", userOpen);
-	});
-	
 	
 	const pageurl = window.location.search
 	console.log(pageurl);
 	
+	$(function() {
+	    const loginId = "${sessionScope.loginUser.id}";
+
+	    if (loginId === 'admin') {
+	        const adminTabWrapper = document.querySelector('.adminTab-wrapper');
+	        const adminTab = document.querySelector('.adminTab');
+	        const menuBtn = document.querySelector('.adminFunc');
+	        let isAdminTabOpen = false;
+
+	        menuBtn.addEventListener('click', () => {
+	          adminTabWrapper.classList.toggle('wrapperOpen');
+	          adminTab.classList.toggle('adminTab-open');
+
+	          isAdminTabOpen = !isAdminTabOpen;
+
+	          if (isAdminTabOpen) {
+	            // 메뉴 열릴 때 위로 나오게
+	            adminTabWrapper.style.zIndex = '21';
+	            adminTabWrapper.style.right = '0';
+	          } else {
+	            // 닫힐 때 transition 끝난 후 z-index 낮추기
+	            adminTab.addEventListener('transitionend', function handler() {
+	            adminTabWrapper.style.zIndex = '0';
+	            adminTab.removeEventListener('transitionend', handler);
+	            adminTabWrapper.style.right = '-250px';
+	            });
+	          }
+	        });
+	      } else {
+	    	const userTabWrapper = document.querySelector('.userTab-wrapper');
+	    	const userTab = document.querySelector('.userTab');
+	    	let isUserTabOpen = false;
+
+	    	document.querySelector('.userFunc').addEventListener('click', () => {
+	    	    
+	    	    userTabWrapper.classList.toggle('wrapperOpen');
+	    	    userTab.classList.toggle('userTab-open');
+	    	   	
+	    	    isUserTabOpen = !isUserTabOpen;
+
+	    	    if (isUserTabOpen) {
+	    	        
+	    	        userTabWrapper.style.zIndex = '21';
+	    	    } else {
+	    	        
+	    	        userTab.addEventListener('transitionend', function handler() {
+	    	            userTabWrapper.style.zIndex = '0';
+	    	            userTab.removeEventListener('transitionend', handler); // 이벤트 중복 방지
+	    	        });
+	    	    }
+	    	});
+	    }
+	});
+	
+	$(window).scroll(function(){
+		
+		// 스크롤탑의 위치값
+		console.log("$(window).scrollTop() => ", $(window).scrollTop());
+		const viewTop = $(window).scrollTop();
+		
+		if(viewTop > 30) {
+			$('.headerNav').css('backgroundColor','rgba(255,255,255,0.9)');
+		}
+		else{
+			$('.headerNav').css('backgroundColor','transparent');
+		}
+	});
+		
 });
 
 function SearchItems() {
     const searchID = $('input[name="searchID"]').val().trim();
 
     if (searchID === "") {
-        alert("검색어를 입력해주세요.");
-        return;
+        alert("검색어를 입력하세요.");
+        return false;
     }
 
-    const srcFrm = document.forms["searchFrm"];
-    srcFrm.action = "/SemiProject/item/searchItem.do";
-    srcFrm.method = "get";
-    srcFrm.submit();
+    const frm = document.searchFrm;
+    frm.action = "/SemiProject/item/searchResult.do";
+    frm.method = "get";
+    frm.submit();
+    return false; // 폼 기본 제출 막기
 }
+
+
+
+
 </script>
 
 </head>
 	<body>
+		<div class="userTab-wrapper">
 			<div class="userTab">
 				<p><a href="${pageContext.request.contextPath}/item/mallHome.do">전체</a></p>
 				<c:forEach var="cvo" items="${applicationScope.categoryList}" varStatus="status">
@@ -206,6 +265,7 @@ function SearchItems() {
 					</p>
 				</c:forEach>
 			</div>
+		</div>
 			<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
 				<div class="loginTheme">
 				  <c:if test="${empty sessionScope.loginUser}">
@@ -283,6 +343,17 @@ function SearchItems() {
 				      </tr>
 				      <tr>
 				        <td colspan="3" style="padding-top:10px;">
+				          <span style="font-weight: bold;">등급&nbsp;:</span>
+				          ${sessionScope.loginUser.grade}
+				        </td>
+				      </tr>
+				      <tr>
+				        <td colspan="3" style="padding-top:10px;">
+				          <span style="font-weight: bold;"><a href="">주문목록 보기</a></span>
+				        </td>
+				      </tr>
+				      <tr>
+				        <td colspan="3" style="padding-top:10px;">
 				          <button type="button" class="btn btn-danger btn-sm" onclick="javascript:LogOut('<%=ctxPath%>')">Logout</button>
 				        </td>
 				      </tr>
@@ -300,15 +371,15 @@ function SearchItems() {
 		 		<div style="width:550px;display:flex;justify-content:space-between;align-items:center;">
 			 		<li>
 				 	  <div class="input-group">
-						<form name="searchFrm" id="searchFrm" style="display:flex;">
-						  <input type="text" name="searchID" id="searchID" placeholder="검색어를 입력하세요">
+						<form name="searchFrm" id="searchFrm" onsubmit="return SearchItems();" style="display:flex;">
+						  <input type="text" name="searchID" id="searchID" placeholder="검색어를 입력하세요" />
 						  <i class="fas fa-search"></i>
-						  <button type="button" onclick="SearchItems()" style="width:50px;">검색</button>
+						   <button type="submit" class="btnSubmit"></button>
 						</form>
 					  </div>
 					</li>
 					<c:if test="${empty sessionScope.loginUser}">
-					<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">로그인</li>
+					<li class="logins" style="border:1px solid #bbb;padding:10px 25px;border-radius:30px;background:#fff;color:#000;cursor:pointer;">로그인</li>
 					</c:if>
 					
 					<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.id == 'admin'}">
@@ -320,8 +391,9 @@ function SearchItems() {
 			 	 	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.id != 'admin'}">
 						<%-- header아이디에 따라 관리자 창 보이는곳 수정시작 --%>
 						<li><a href="<%= ctxPath%>/item/cartList.do"><img src="/SemiProject/images/header/cart.png" ></a></li>						
-						<li class="logins" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">내 메뉴보기</li>
-						<li class="userFunc" style="border:1px solid #bbb;padding:10px 15px;border-radius:15px;background:#6b6bf7;color:#fff;cursor:pointer;">카테고리</li>
+
+						<li class="logins" id="loginUser"style="font-size:19pt;cursor:pointer;"><i class="fas fa-user-circle mr-2"></i></li>
+						<li class="userFunc" style="font-size:19pt;cursor:pointer;"><i class="fa-solid fa-bars"></i></li>
 				 	 	<%-- header아이디에 따라 관리자 창 보이는곳 수정 끝 --%>
 			 	 	</c:if>
 			 	</div>
