@@ -562,8 +562,9 @@ function paymentSuccessOrderService(id, usePoint, totalAmount) {
    $.ajax({
       url:"orderService.do",
       type:"post",
-      data:{"totalAmount":$('#finalPrice > strong').attr("data-price"), 
-    	  // text시에는 totalAmount 값이 100원이라 위와 같이 설정.
+      data:{"id":id,
+    	    "totalAmount":$('#finalPrice > strong').attr("data-price"), 
+    	    //test시에는 totalAmount 값이 100원이라 위와 같이 설정.
     	  	"usePoint":usePoint,
             "getPoint":getPoint,
             "str_itemNo":str_itemNo,

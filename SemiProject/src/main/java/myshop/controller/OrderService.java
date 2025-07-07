@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpSession;
 import login.controller.GoogleMail;
 import myshop.model.ItemDAO;
 import myshop.model.ItemDAO_imple;
+import user.domain.UserVO;
 
 public class OrderService extends BaseController {
 
@@ -23,7 +24,7 @@ private ItemDAO itemDAO = new ItemDAO_imple();
 	
 	
 	// === 전표(주문코드)를 생성해주는 메소드 생성하기 === //
-	private String getOdrcode() {
+	private String getOrderNo() {
 		
 		// 전표(주문코드) 형식 : s+날짜+sequence ==> s20250702-1
 		
@@ -73,41 +74,32 @@ private ItemDAO itemDAO = new ItemDAO_imple();
 			Map<String, Object> paraMap = new HashMap<>();
 			
 			// ==== 주문테이블(tbl_order)에 insert 할 데이터 ==== 
-			String odrcode = getOdrcode();
-			paraMap.put("odrcode", odrcode); // 주문코드(명세서번호) s+날짜+sequence
-			// getOdrcode() 메소드는 위에서 정의한 전표(주문코드)를 생성해주는 것이다. 
+			String orderNo = getOrderNo();
+			paraMap.put("orderNo", orderNo); // 주문코드(명세서번호) s+날짜+sequence
+			// getOrderNo() 메소드는 위에서 정의한 전표(주문코드)를 생성해주는 것이다. 
 			
 			HttpSession session = request.getSession();
-			ItemVO orderedItem = (ItemVO) session.getAttribute("loginUser"); 
+			UserVO orderedItem = (UserVO) session.getAttribute("loginUser"); 
+			
 			
 			paraMap.put("id",request.getParameter("id")); // 회원아이디
-			paraMap.put("totalAmount", totalPrice); // 주문총액
-			paraMap.put("usePoint", usePoint); // 주문총포인트
+			paraMap.put("totalAmount", request.getParameter("totalAmount")); // 주문총액
+			paraMap.put("usePoint", request.getParameter("usePoint")); // 주문총포인트
+			paraMap.put("getPoint", request.getParameter("getPoint")); // 주문총포인트
+
 			
 			
 			// ==== 주문상세테이블(tbl_orderdetail)에 insert 할 데이터 ====
-			String[] pnum_arr = str_pnum_join.split("\\,"); // 여러개 제품을 주문한 경우
-			                                                // 장바구니에서 제품 1개만 주문한 경우 
-			                                                // 특정제품을 바로주문하기를 한 경우
+			String[] cartNoArr = request.getParameter("str_cartNo").split("\\,");
+			String[] itemNoArr = request.getParameter("str_itemNo").split("\\,");
+			String[] quantityArr = request.getParameter("str_quantity").split("\\,");
 			
-			String[] oqty_arr = str_oqty_join.split("\\,");
+			for (String str : cartNoArr) {System.out.println(str+"\n");}
 			
-			String[] totalPrice_arr = str_totalPrice_join.split("\\,");
-			
-			paraMap.put("pnum_arr", pnum_arr);
-			paraMap.put("oqty_arr", oqty_arr);
-			paraMap.put("totalPrice_arr", totalPrice_arr);
-			
-			
-			// === 장바구니테이블(tbl_cart)에 delete 할 데이터 === 
-			if(str_cartno_join != null) {
-				// 특정제품을 바로주문하기를 한 경우라면 str_cartno_join 의 값은 null 이 된다. 
-				
-				String[] cartno_arr = str_cartno_join.split("\\,");
-				paraMap.put("cartno_arr", cartno_arr);
-			}
-			
-			
+			paraMap.put("itemNoArr", itemNoArr);
+			paraMap.put("quantityArr", quantityArr);
+			paraMap.put("cartNoArr", cartNoArr);
+			/*
 			// *** Transaction 처리를 해주는 메소드 호출하기 *** //
 			int isSuccess = pdao.orderAdd(paraMap); 
 			
@@ -161,7 +153,7 @@ private ItemDAO itemDAO = new ItemDAO_imple();
 		    request.setAttribute("json", json);
 		    
 			super.setRedirect(false);
-			super.setViewPage("/WEB-INF/jsonview.jsp");
+			super.setViewPage("/WEB-INF/jsonview.jsp");*/
 		}
 		
 		else {
