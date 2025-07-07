@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import login.controller.GoogleMail;
+import myshop.domain.ItemVO;
 import myshop.model.ItemDAO;
 import myshop.model.ItemDAO_imple;
 import user.domain.UserVO;
@@ -73,20 +74,23 @@ private ItemDAO itemDAO = new ItemDAO_imple();
 			
 			Map<String, Object> paraMap = new HashMap<>();
 			
+
+			HttpSession session = request.getSession();
+			UserVO loginUser = (UserVO) session.getAttribute("loginUser"); 
+			
 			// ==== 주문테이블(tbl_order)에 insert 할 데이터 ==== 
 			String orderNo = getOrderNo();
+			String usePoint = request.getParameter("usePoint");
+			String getPoint = request.getParameter("getPoint");
+
 			paraMap.put("orderNo", orderNo); // 주문코드(명세서번호) s+날짜+sequence
 			// getOrderNo() 메소드는 위에서 정의한 전표(주문코드)를 생성해주는 것이다. 
-			
-			HttpSession session = request.getSession();
-			UserVO orderedItem = (UserVO) session.getAttribute("loginUser"); 
-			
-			
-			paraMap.put("id",request.getParameter("id")); // 회원아이디
+			paraMap.put("id", loginUser.getId()); // 회원아이디
 			paraMap.put("totalAmount", request.getParameter("totalAmount")); // 주문총액
-			paraMap.put("usePoint", request.getParameter("usePoint")); // 주문총포인트
-			paraMap.put("getPoint", request.getParameter("getPoint")); // 주문총포인트
-
+			paraMap.put("usePoint", usePoint); // 주문총포인트
+			paraMap.put("getPoint", getPoint.replaceAll(",", "")); // 주문총포인트
+			
+			// String 삽입 끝
 			
 			
 			// ==== 주문상세테이블(tbl_orderdetail)에 insert 할 데이터 ====
@@ -94,53 +98,61 @@ private ItemDAO itemDAO = new ItemDAO_imple();
 			String[] itemNoArr = request.getParameter("str_itemNo").split("\\,");
 			String[] quantityArr = request.getParameter("str_quantity").split("\\,");
 			
-			for (String str : cartNoArr) {System.out.println(str+"\n");}
-			
+			for (String str : cartNoArr) {
+				System.out.println(str);
+			}
+			for (String str : itemNoArr) {
+				System.out.println(str);
+			}
+			for (String str : quantityArr) {
+				System.out.println(str);
+			}
 			paraMap.put("itemNoArr", itemNoArr);
 			paraMap.put("quantityArr", quantityArr);
 			paraMap.put("cartNoArr", cartNoArr);
-			/*
-			// *** Transaction 처리를 해주는 메소드 호출하기 *** //
-			int isSuccess = pdao.orderAdd(paraMap); 
+			// Object 삽입 끝
 			
+			// *** Transaction 처리를 해주는 메소드 호출하기 *** //
+			int isSuccess = itemDAO.insertOrderUpdate(paraMap); 
+			System.out.println(isSuccess+" 번호 나온 거 확인");
 			// **** 주문이 완료되었을시 세션에 저장되어져 있는 loginuser 정보를 갱신하고
 			//      이어서 주문이 완료되었다라는 email 보내주기  **** //
 			if(isSuccess == 1) {
 			
 				// === 세션에 저장되어져 있는 loginuser 정보를 갱신하기 === 
-				loginUser.setCoin(loginUser.getCoin() - Integer.parseInt(sum_totalPrice));				
-				loginUser.setPoint(loginUser.getPoint() + Integer.parseInt(sum_totalPoint));
+				loginUser.setPoint(loginUser.getPoint() 
+							+ Integer.parseInt(getPoint) - Integer.parseInt(usePoint));
 				
 		        ////////// === 주문이 완료되었다는 email 보내기 시작 === ///////////
 				GoogleMail mail = new GoogleMail();
 				
 			//	str_pnum_join ==> 5,3,57
 				
-				String pnumes = "'"+String.join("','", str_pnum_join.split("\\,"))+"'";
+				//String str_itemNo = "'"+String.join("','",itemNoArr+"'");
 			                    // {5,3,7} ==> 5','3','7 ==> '5','3','57'
 				
-			//	System.out.println("~~~ 확인용 주문한 제품번호 pnumes : " + pnumes);
-				// ~~~ 확인용 주문한 제품번호 pnumes : '5','3','57'
+			//	System.out.println("~~~ 확인용 주문한 제품번호 itemNo 들 : " + itemNo 들);
+				// ~~~ 확인용 주문한 제품번호 itemNo 들 : '5','3','57'
 				
 				
 			 // 주문한 제품에 대해 email 보내기시 email 내용에 넣을 주문한 제품번호들에 대한 제품정보를 얻어오는 것.
-				List<ProductVO> orderitemList = pdao.getOrderItemList(pnumes);
-				
+				List<ItemVO> orderitemList = itemDAO.getOrderItemList(loginUser.getId(), itemNoArr);
+				System.out.println("getOrderItemList 사용 완료");
                 StringBuilder sb = new StringBuilder();
 				
-				sb.append("주문코드번호 : <span style='color: blue; font-weight: bold;'>"+odrcode+"</span><br><br>"); 
+				sb.append("주문코드번호 : <span style='color: blue; font-weight: bold;'>"+orderNo+"</span><br><br>"); 
 				sb.append("<주문상품><br>");
 				
 				for(int i=0; i<orderitemList.size(); i++) {
-					sb.append(orderitemList.get(i).getPname()+"&nbsp;"+oqty_arr[i]+"개&nbsp;&nbsp;");  
-					sb.append("<img src='http://127.0.0.1:9090/MyMVC/images/"+orderitemList.get(i).getPimage1()+"' />");
+					sb.append(orderitemList.get(i).getItemName()+"&nbsp;"+quantityArr[i]+"개&nbsp;&nbsp;");  
+					sb.append("<img src='http://127.0.0.1:9090/SemiProject/images/"+orderitemList.get(i).getItemPhotoPath()+"' />");
 					sb.append("<br>");
 				}// end of for------------------------------------------
 				
-                sb.append("<br>이용해 주셔서 감사합니다.");
+                sb.append("<br> 이용해 주셔서 감사합니다.");
 				
 				String emailContents = sb.toString();
-				
+				System.out.println(sb);
 				mail.sendmail_OrderFinish(loginUser.getEmail(), loginUser.getName(), emailContents);
 		        ////////// === 주문이 완료되었다는 email 보내기 끝 === ///////////
 			
@@ -153,7 +165,7 @@ private ItemDAO itemDAO = new ItemDAO_imple();
 		    request.setAttribute("json", json);
 		    
 			super.setRedirect(false);
-			super.setViewPage("/WEB-INF/jsonview.jsp");*/
+			super.setViewPage("/WEB-INF/jsonview.jsp");
 		}
 		
 		else {
