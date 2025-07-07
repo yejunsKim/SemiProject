@@ -35,6 +35,28 @@
 </style>
 
 <style>
+	.card-link {	/* 장바구니 담기 */
+		text-decoration: none;	/* 기본은 밑줄 없음  */
+		color: black;
+	}
+	
+	.card-link:hover {	/* 장바구니 담기 */
+		text-decoration: underline; /* 마우스 올리면 밑줄 */
+		color: black;
+	}
+	
+	a.itemDetail {	/* 이미지랑, 제품명 */
+		text-decoration: none;	/* 기본은 밑줄 없음  */
+		color: black;
+	}
+	
+	.card-title:hover {	/* 제품명 */
+		text-decoration: underline; /* 마우스 올리면 밑줄 */
+	}
+	
+</style> 
+
+<style>
     .card-link { text-decoration: none; color: black; }
     .card-link:hover { text-decoration: underline; color: black; }
     a.itemDetail { text-decoration: none; color: black; }

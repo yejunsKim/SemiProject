@@ -629,3 +629,4 @@ let isOrderOK = false;
 	
 
 <jsp:include page="../footer.jsp" />
+

@@ -589,4 +589,35 @@ public class UserDAO_imple implements UserDAO {
 		return user;
 	}// end of public MemberVO selectMember(String userid) throws SQLException -----
 
+	// 회원정보수정
+		@Override
+		public boolean updateAddress(Map<String, String> paraMap) throws SQLException {
+			boolean isChanged = false;
+			
+			try {
+				 conn = ds.getConnection();
+				 
+				 String sql = " update Users set  postcode = ? " 
+						    + "                  , address = ? "
+						    + "                  , addressDetail = ? "
+						    + "                  , addressExtra = ? "
+						    + " where id = ? ";
+				 
+				 pstmt = conn.prepareStatement(sql);
+					
+				 pstmt.setString(1, paraMap.get("postcode"));
+				 pstmt.setString(2, paraMap.get("address"));
+				 pstmt.setString(3, paraMap.get("addressDetail"));
+				 pstmt.setString(4, paraMap.get("addressExtra"));
+				 pstmt.setString(5, paraMap.get("id"));
+				 
+				 int n = pstmt.executeUpdate();
+				 if(n==1) isChanged = true;
+				 
+			} finally {
+				close();
+			}
+			
+			return isChanged;		
+		}
 }

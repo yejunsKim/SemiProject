@@ -17,6 +17,8 @@ import javax.sql.DataSource;
 import myshop.domain.CartVO;
 import myshop.domain.CategoryVO;
 import myshop.domain.ItemVO;
+import myshop.domain.Order_historyVO;
+import myshop.domain.Order_itemsVO;
 import myshop.domain.ReviewVO;
 import user.domain.UserVO;
 
@@ -654,41 +656,9 @@ public class ItemDAO_imple implements ItemDAO {
 			close();
 		}
 	}// end of public void deleteOldCart(String fk_users_id) throws SQLException-------------------
-	
-	
-	// 로그인한 유저의 주문 내역의 총 페이지수 알아오기
-	@Override
-	public int getTotalPage(String id) throws SQLException {
-		
-		int totalPage = 0;
-		
-		try {
-			conn = ds.getConnection();
-			
-			String sql = " SELECT ceil(count(*) / 10) "	// 10 이 sizePerPage 이다.
-					   + " FROM order_history "
-					   + " WHERE id = ? ";
-			
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, id);
-			
-			rs = pstmt.executeQuery();
-			
-			rs.next();
-			
-			totalPage = rs.getInt(1);
-			
-		} finally {
-			close();
-		}
-		
-		return totalPage;
-		
-	}// end of public int getTotalPage(String id) throws SQLException----------------------------
 
+	
 	// 로그인 유저의 장바구니 조회.	
-
 	@Override
 	public List<ItemVO> getOrderItem(String id, String[] selectedCartNoArray) throws SQLException {
 
@@ -730,6 +700,7 @@ public class ItemDAO_imple implements ItemDAO {
 	            cvo.setCartamount(rs.getInt("cartamount"));*/
 
 	            ItemVO itemvo = new ItemVO();
+	            itemvo.setItemNo(rs.getInt("itemno"));
 	            itemvo.setItemName(rs.getString("itemname"));
 	            itemvo.setItemPhotoPath(rs.getString("itemphotopath"));
 	            itemvo.setPrice(rs.getInt("price"));
@@ -749,148 +720,299 @@ public class ItemDAO_imple implements ItemDAO {
 	    return getOrderItemList;
 	}
 	
-	 // 트랜잭션으로 주문 insert & 재고감소 & 장바구니삭제 & 포인트적립
-		@Override
-		public int insertOrderUpdate(Map<String, String> paraMap) throws SQLException {
+	// 트랜잭션으로 주문 insert & 재고감소 & 장바구니삭제 & 포인트적립
+			@Override
+			public int insertOrderUpdate(Map<String, String> paraMap) throws SQLException {
+				
+				int isSuccess = 0;
+			    int n1=0, n2=0, n3=0, n4=0, n5=0;	      
+			    
+			    
+			      try {
+			         conn = ds.getConnection();
+			         conn.setAutoCommit(false);
+			         
+			         String userid = paraMap.get("id");
+			         String odrcode = paraMap.get("odrcode");
+			         String[] cartnoArr = paraMap.get("cartnoArr").split(",");
+			         String[] oqtyArr = paraMap.get("oqtyArr").split(",");
+			         int sumPrice = Integer.parseInt(paraMap.get("sumPrice"));
+			         int sumPoint = Integer.parseInt(paraMap.get("sumPoint"));
+			         
+			         // 주문 insert
+			         String sql = " insert into order_history(orderNo,id,orderDate,totalAmount,rewarded) "
+			         		+ " values(order_seq.nextval, ? , sysdate, ? , ? ) ";
+			         
+			         pstmt= conn.prepareStatement(sql);
+			         pstmt.setString(1, userid);
+			         pstmt.setInt(2, sumPrice);
+			         pstmt.setInt(3, sumPoint); 	        
+			         
+			         n1= pstmt.executeUpdate();
+			         pstmt.close();
+			          
+			      	if(n1==1) {
+			          
+			      	  int cnt =0;
+			      		
+			          for(int i=0; i<cartnoArr.length; i++) {
+			        	  
+			        	   sql = " select fk_item_no from cart where cartno = ? ";
+			        	   
+			        	   pstmt= conn.prepareStatement(sql);
+			        	   pstmt.setString(1, cartnoArr[i]);
+			        	   rs = pstmt.executeQuery();
+			        	   
+			        	   String itemNo= null;
+			        	   if(rs.next()) {
+			        		   itemNo = rs.getString("fk_item_no");
+			        	   }
+			        	  rs.close();
+			        	  pstmt.close();
+			        	  
+			        	  if(itemNo != null) {
+			        		  sql = " insert into order_items (orderItemNO, orderNo, itemNo, quantity,"
+			        		  		+ "	orderPrice,	deliveryNo) "
+			        		  		+ " values (order_item_seq.nextval, order_seq.currval, ?, ?, "
+			        		  		+ " ?, delivery_seq.nextval) ";
+			        		  
+			        		  pstmt = conn.prepareStatement(sql);
+			                    pstmt.setString(1, itemNo);
+			                    pstmt.setInt(2, Integer.parseInt(oqtyArr[i]));
+			                    pstmt.setInt(3, 0); 
+			                    pstmt.executeUpdate();
+			                    pstmt.close();
+			        		  
+			                 // 재고 감소
+			                    sql = "UPDATE item SET itemAmount = itemAmount - ? WHERE itemNo = ?";
+			                    pstmt = conn.prepareStatement(sql);
+			                    pstmt.setInt(1, Integer.parseInt(oqtyArr[i]));
+			                    pstmt.setString(2, itemNo);
+			                    pstmt.executeUpdate();
+			                    pstmt.close();
+			                    
+			                    cnt++;
+			        	  }
+			        	  }
+			        	  if(cnt == cartnoArr.length) {
+			                  n2 = 1; n3 = 1;
+			              }
+			      	}
+			        	  
+			        	  // 장바구니 삭제
+			      	if(n3 == 1) {
+			      	    StringBuilder placeholders = new StringBuilder();
+			      	    for (int i = 0; i < cartnoArr.length; i++) {
+			      	        placeholders.append("?");
+			      	        if (i < cartnoArr.length - 1) {
+			      	            placeholders.append(",");
+			      	        }
+			      	    }
+
+			      	    sql = "DELETE FROM cart WHERE cartno IN (" + placeholders.toString() + ")";
+			      	    pstmt = conn.prepareStatement(sql);
+			      	    for (int i = 0; i < cartnoArr.length; i++) {
+			      	        pstmt.setString(i + 1, cartnoArr[i]);
+			      	    }
+
+			      	    n4 = pstmt.executeUpdate();
+			      	    pstmt.close();
+
+			      	    if (n4 >= cartnoArr.length) {
+			      	        n4 = 1;
+			      	    }
+			      	}
+			        	  
+			        	  //사용자 포인트 적립
+			        	  if(n4==1) {
+			        		  sql = " update users set point = point + ? "
+			        		  		+ " where id = ? ";
+			        		  
+			        		  pstmt= conn.prepareStatement(sql);
+			        		  pstmt.setInt(1, sumPoint);
+			        		  pstmt.setString(2, userid);
+			        		  n5 = pstmt.executeUpdate();
+			        		  pstmt.close();
+			        	  }
+			        	  
+			        	  if(n1*n2*n3*n4*n5 == 1) {
+								
+								conn.commit();
+								
+								conn.setAutoCommit(true); // 자동커밋으로 전환 
+								
+							//	System.out.println("~~~ 확인용 n1*n2*n3*n4*n5 : " + n1*n2*n3*n4*n5);
+							//	~~~ 확인용 n1*n2*n3*n4*n5 : 1 
+								
+								isSuccess = 1;
+							}
+			        	  
+			        	  
+				} catch(SQLException e) {
+						
+						conn.rollback();
+						
+						conn.setAutoCommit(true); // 자동커밋으로 전환 
+						
+						isSuccess = 0;
+						
+					} finally {
+						close();
+					}
+					
+					return isSuccess;
+				}
+
+
+	
+	// 로그인한 유저의 주문 내역의 총 페이지수 알아오기
+	@Override
+	public int getTotalPage(String id) throws SQLException {
+		
+		int totalPage = 0;
+		
+		try {
+			conn = ds.getConnection();
 			
-			int isSuccess = 0;
-		    int n1=0, n2=0, n3=0, n4=0, n5=0;	      
-		    
-		    
-		      try {
-		         conn = ds.getConnection();
-		         conn.setAutoCommit(false);
-		         
-		         String userid = paraMap.get("id");
-		         String odrcode = paraMap.get("odrcode");
-		         String[] cartnoArr = paraMap.get("cartnoArr").split(",");
-		         String[] oqtyArr = paraMap.get("oqtyArr").split(",");
-		         int sumPrice = Integer.parseInt(paraMap.get("sumPrice"));
-		         int sumPoint = Integer.parseInt(paraMap.get("sumPoint"));
-		         
-		         // 주문 insert
-		         String sql = " insert into order_history(orderNo,id,orderDate,totalAmount,rewarded) "
-		         		+ " values(order_seq.nextval, ? , sysdate, ? , ? ) ";
-		         
-		         pstmt= conn.prepareStatement(sql);
-		         pstmt.setString(1, userid);
-		         pstmt.setInt(2, sumPrice);
-		         pstmt.setInt(3, sumPoint); 	        
-		         
-		         n1= pstmt.executeUpdate();
-		         pstmt.close();
-		          
-		      	if(n1==1) {
-		          
-		      	  int cnt =0;
-		      		
-		          for(int i=0; i<cartnoArr.length; i++) {
-		        	  
-		        	   sql = " select fk_item_no from cart where cartno = ? ";
-		        	   
-		        	   pstmt= conn.prepareStatement(sql);
-		        	   pstmt.setString(1, cartnoArr[i]);
-		        	   rs = pstmt.executeQuery();
-		        	   
-		        	   String itemNo= null;
-		        	   if(rs.next()) {
-		        		   itemNo = rs.getString("fk_item_no");
-		        	   }
-		        	  rs.close();
-		        	  pstmt.close();
-		        	  
-		        	  if(itemNo != null) {
-		        		  sql = " insert into order_items (orderItemNO, orderNo, itemNo, quantity,"
-		        		  		+ "	orderPrice,	deliveryNo) "
-		        		  		+ " values (order_item_seq.nextval, order_seq.currval, ?, ?, "
-		        		  		+ " ?, delivery_seq.nextval) ";
-		        		  
-		        		  pstmt = conn.prepareStatement(sql);
-		                    pstmt.setString(1, itemNo);
-		                    pstmt.setInt(2, Integer.parseInt(oqtyArr[i]));
-		                    pstmt.setInt(3, 0); 
-		                    pstmt.executeUpdate();
-		                    pstmt.close();
-		        		  
-		                 // 재고 감소
-		                    sql = "UPDATE item SET itemAmount = itemAmount - ? WHERE itemNo = ?";
-		                    pstmt = conn.prepareStatement(sql);
-		                    pstmt.setInt(1, Integer.parseInt(oqtyArr[i]));
-		                    pstmt.setString(2, itemNo);
-		                    pstmt.executeUpdate();
-		                    pstmt.close();
-		                    
-		                    cnt++;
-		        	  }
-		        	  }
-		        	  if(cnt == cartnoArr.length) {
-		                  n2 = 1; n3 = 1;
-		              }
-		      	}
-		        	  
-		        	  // 장바구니 삭제
-		      	if(n3 == 1) {
-		      	    StringBuilder placeholders = new StringBuilder();
-		      	    for (int i = 0; i < cartnoArr.length; i++) {
-		      	        placeholders.append("?");
-		      	        if (i < cartnoArr.length - 1) {
-		      	            placeholders.append(",");
-		      	        }
-		      	    }
-
-		      	    sql = "DELETE FROM cart WHERE cartno IN (" + placeholders.toString() + ")";
-		      	    pstmt = conn.prepareStatement(sql);
-		      	    for (int i = 0; i < cartnoArr.length; i++) {
-		      	        pstmt.setString(i + 1, cartnoArr[i]);
-		      	    }
-
-		      	    n4 = pstmt.executeUpdate();
-		      	    pstmt.close();
-
-		      	    if (n4 >= cartnoArr.length) {
-		      	        n4 = 1;
-		      	    }
-		      	}
-		        	  
-		        	  //사용자 포인트 적립
-		        	  if(n4==1) {
-		        		  sql = " update users set point = point + ? "
-		        		  		+ " where id = ? ";
-		        		  
-		        		  pstmt= conn.prepareStatement(sql);
-		        		  pstmt.setInt(1, sumPoint);
-		        		  pstmt.setString(2, userid);
-		        		  n5 = pstmt.executeUpdate();
-		        		  pstmt.close();
-		        	  }
-		        	  
-		        	  if(n1*n2*n3*n4*n5 == 1) {
-							
-							conn.commit();
-							
-							conn.setAutoCommit(true); // 자동커밋으로 전환 
-							
-						//	System.out.println("~~~ 확인용 n1*n2*n3*n4*n5 : " + n1*n2*n3*n4*n5);
-						//	~~~ 확인용 n1*n2*n3*n4*n5 : 1 
-							
-							isSuccess = 1;
-						}
-		        	  
-		        	  
-			} catch(SQLException e) {
-					
-					conn.rollback();
-					
-					conn.setAutoCommit(true); // 자동커밋으로 전환 
-					
-					isSuccess = 0;
-					
-				} finally {
-					close();
+			String sql = " SELECT ceil(count(*) / 10) "	// 10 이 sizePerPage 이다.
+					   + " FROM order_history "
+					   + " WHERE id = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, id);
+			
+			rs = pstmt.executeQuery();
+			
+			rs.next();
+			
+			totalPage = rs.getInt(1);
+			
+		} finally {
+			close();
+		}
+		
+		return totalPage;
+		
+	}// end of public int getTotalPage(String id) throws SQLException----------------------------
+	
+	
+	// 로그인한 본인의 주문목록에서 특정 페이지번호에 해당하는 내용들을 조회해오기
+	@Override
+	public List<Order_historyVO> select_order_paging(Map<String, String> paraMap) throws SQLException {
+		
+		List<Order_historyVO> ohList = new ArrayList<>();
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " SELECT OH.orderno, OH.id, to_char(orderdate, 'yyyy-mm-dd') AS orderdate, "
+					   + " 		  OH.totalamount, OH.rewarded, "
+					   + " 		  NVL( "
+					   + "            CASE "
+					   + " 			  WHEN LENGTH(LISTAGG(I.itemname, ', ') WITHIN GROUP (ORDER BY I.itemname)) > 30 "
+					   + "            THEN SUBSTR(LISTAGG(I.itemname, ', ') WITHIN GROUP (ORDER BY I.itemname), 1, 30) || '...' "
+					   + "            ELSE LISTAGG(I.itemname, ', ') WITHIN GROUP (ORDER BY I.itemname) "
+					   + "            END, '없음' "
+					   + "        ) AS itemlist "
+					   + " FROM order_history OH "
+					   + " JOIN order_items OI ON OH.orderno = OI.ORDERNO "
+					   + " JOIN item I ON OI.itemno = I.itemNo "
+					   + " WHERE OH.id = ? "
+					   + " GROUP BY OH.orderno, OH.id, OH.totalamount, OH.rewarded, OH.orderdate "
+					   + " ORDER BY OH.orderno DESC "
+					   + " OFFSET ? ROW "
+					   + " FETCH NEXT ? ROW ONLY ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+			int sizePerPage = 10;	// 한 페이지당 화면상에 보여줄 제품의 개수는 10 으로 한다.
+			int offset = (currentShowPageNo - 1) * sizePerPage;	// 자바에서 미리 계산
+			
+			pstmt.setString(1, paraMap.get("id"));
+			pstmt.setInt(2, offset);
+			pstmt.setInt(3, sizePerPage);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				Order_historyVO ohvo = new Order_historyVO();
+				
+				ohvo.setOrderno(rs.getInt("orderno"));
+				ohvo.setId(rs.getString("id"));
+				ohvo.setOrderdate(rs.getString("orderdate"));
+				ohvo.setTotalamount(rs.getInt("totalamount"));
+				ohvo.setRewarded(rs.getInt("rewarded"));
+				
+				ohvo.setItemlist(rs.getString("itemlist"));	// 조인 통해서 주문내역 가져오기
+				
+				ohList.add(ohvo);
+				
+			}// end of while(rs.next())-----------------
+			
+		} finally {
+			close();
+		}
+		
+		return ohList;
+		
+	}// end of public List<Order_historyVO> select_order_paging(Map<String, String> paraMap) throws SQLException---------------------
+	
+	
+	// 로그인한 유저의 주문 상세 내역 조회(select)
+	@Override
+	public List<Order_itemsVO> selectOrderDetail(Map<String, String> paraMap) throws SQLException {
+		
+		List<Order_itemsVO> oiList = new ArrayList<>();
+		
+		try {
+			
+			conn = ds.getConnection();
+			
+			String sql = " SELECT itemPhotoPath, itemName, volume, quantity, orderprice, totalamount "
+					   + " FROM item I JOIN order_items OI ON I.itemNo = OI.itemno "
+					   + " JOIN order_history OH ON OI.orderno = OH.orderno "
+					   + " WHERE id = ? AND OH.orderno = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, paraMap.get("id"));
+			pstmt.setInt(2, Integer.parseInt(paraMap.get("orderno")));
+			
+			rs = pstmt.executeQuery();
+			
+			int cnt = 0;
+			while(rs.next()) {
+				cnt++;
+				Order_itemsVO oivo = new Order_itemsVO();
+				oivo.setQuantity(rs.getInt("quantity"));
+				oivo.setOrderprice(rs.getInt("orderprice"));
+				
+				ItemVO ivo = new ItemVO();
+				ivo.setItemPhotoPath(rs.getString("itemPhotoPath"));
+				ivo.setItemName(rs.getString("itemName"));
+				ivo.setVolume(rs.getInt("volume"));
+				oivo.setIvo(ivo);
+				
+				Order_historyVO ohvo = new Order_historyVO();
+				if(cnt == 1) {
+					ohvo.setTotalamount(rs.getInt("totalamount"));
+					oivo.setOhvo(ohvo);
 				}
 				
-				return isSuccess;
-			}
+				oiList.add(oivo);
+			}// end of while------------------
+			
+		} finally {
+			close();
+		}
+		
+		return oiList;
+		
+	}// end of public List<Order_itemsVO> selectOrderDetail(Map<String, String> paraMap) throws SQLException--------------
+
+		      	 
 
 
 		//주문번호 채번하기
