@@ -368,7 +368,7 @@ public class ItemDAO_imple implements ItemDAO {
 			
 			if(rs.next()) {	// 장바구니에 이미 같은 제품이 존재하는 경우
 				
-				sql = " UPDATE cart set cartamount = to_number(?) "
+				sql = " UPDATE cart set cartamount = cartamount + to_number(?) "
 					+ " WHERE cartno = ? ";
 				
 				pstmt = conn.prepareStatement(sql);
@@ -410,7 +410,7 @@ public class ItemDAO_imple implements ItemDAO {
 		try {
 			conn = ds.getConnection();
 			
-			String sql = " SELECT C.cartno, I.itemPhotoPath, I.itemName, I.price, I.itemAmount, C.cartamount, "
+			String sql = " SELECT C.cartno, I.itemPhotoPath, I.itemName, I.price, I.itemAmount, C.cartamount,  I.itemNo, "
 					   + " TO_CHAR(C.cartdate, 'yyyy-mm-dd') AS cartdate, U.grade "
 					   + " FROM cart C "
 					   + " JOIN users U ON C.fk_users_id = U.id "
@@ -423,6 +423,7 @@ public class ItemDAO_imple implements ItemDAO {
 			pstmt.setString(1, fk_users_id);
 			
 			rs = pstmt.executeQuery();
+			
 			
 			int cnt = 0;
 			while(rs.next()) {
@@ -437,9 +438,13 @@ public class ItemDAO_imple implements ItemDAO {
 				ivo.setItemName(rs.getString("itemName"));
 				ivo.setPrice(rs.getInt("price"));
 				ivo.setItemAmount(rs.getInt("itemAmount"));
+				ivo.setItemNo(rs.getInt("itemNo"));
+				
 				
 				// 등급에 따른 포인트 계산
 				ivo.setUserItemPoint(rs.getString("grade"));
+				
+				
 				
 				
 				CartVO cvo = new CartVO();
@@ -690,7 +695,7 @@ public class ItemDAO_imple implements ItemDAO {
 	        for (int i = 0; i < selectedCartNoArray.length; i++) {
 	            pstmt.setString(i + 2, selectedCartNoArray[i]);
 	        }
-
+	        
 	        rs = pstmt.executeQuery();
 
 	        while(rs.next()) {
@@ -708,6 +713,8 @@ public class ItemDAO_imple implements ItemDAO {
 
 	            CartVO cartvo = new CartVO();
 	            cartvo.setCartamount(rs.getInt("cartamount"));
+	            cartvo.setCartno(rs.getInt("cartno"));
+	            // cartno 를 끌고와야, 추후 계산 완료시 해당 카트를 삭제할 수 있음.
 	            itemvo.setCartvo(cartvo);
  
 	            getOrderItemList.add(itemvo);

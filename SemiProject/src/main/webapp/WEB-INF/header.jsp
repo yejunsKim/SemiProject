@@ -105,7 +105,9 @@ table {
 }
 
 .container-fluid {padding:0;}
-.headerNav {position:fixed;top:0;background-color:transparent;;z-index:15;width:100%;padding:10px 25px;}
+.headerNav {position:fixed;top:0;background-color:transparent;z-index:15;width:100%;padding:10px 25px;
+-webkit-transition: background-color .3s ease-in;
+transition: background-color .3s ease-in;}
 .headerUl {display:flex;justify-content:space-between;align-items:center;}
 .loginList {max-width:270px;width:100%;background-color:#fff;position:absolute;top:50%;left:50%;height:330px;padding:20px;box-shadow: 1px 3px 3px 2px #6f6363;border-radius:5px;transform:translate(-50%,-50%);z-index:15;}
 .loginList .loginBoxx .loginBTN {width:100%;border:0;border-radius:30px;background-color:#2c59e5;padding:15px 25px;margin-top:5px;color:#000;}
@@ -116,8 +118,9 @@ table {
 .loginBox {z-index:20;}
 .trTab {padding:10px 0;display:flex;justify-content:space-between;align-items:center;}
 
-.userTab-wrapper {position: relative;overflow: hidden;height: 880px;width: 250px;position: fixed;top: 63px;right: 0;z-index: 10;}
-.userTab {height: 100%;width: 250px;background: rgba(255, 255, 255, 0.6);position: absolute;right: -250px; top: 0;transition: right 0.9s ease;border-left: 1px solid #ddd;z-index: 21;}
+.userTab-wrapper {position: relative;overflow: hidden;height: 880px;width: 250px;position: fixed;top: 63px;right: 0;z-index: 0;}
+.userTab-wrapper.wrapperOpen {z-index:21;} 
+.userTab {height: 100%;width: 250px;background: rgba(255, 255, 255, 0.6);position: absolute;right: -250px; top: 0;transition: right 0.9s ease;border-left: 1px solid #ddd;border-top:1px solid #ddd;z-index: 11;}
 .userTab.userTab-open {right: 0;}
 
 .userTab p a {padding:40px 13px;border-bottom:1px solid #ddd;cursor:pointer;display:block;text-align:center;}
@@ -163,19 +166,70 @@ $(function() {
 	    const loginId = "${sessionScope.loginUser.id}";
 
 	    if (loginId === 'admin') {
+	        const adminTabWrapper = document.querySelector('.adminTab-wrapper');
+	        const adminTab = document.querySelector('.adminTab');
 	        const menuBtn = document.querySelector('.adminFunc');
-	        menuBtn?.addEventListener('click', () => {
-	            document.querySelector('.adminTab')?.classList.toggle('adminTab-open');
+	        let isAdminTabOpen = false;
+
+	        menuBtn.addEventListener('click', () => {
+	          adminTabWrapper.classList.toggle('wrapperOpen');
+	          adminTab.classList.toggle('adminTab-open');
+
+	          isAdminTabOpen = !isAdminTabOpen;
+
+	          if (isAdminTabOpen) {
+	            // 메뉴 열릴 때 위로 나오게
+	            adminTabWrapper.style.zIndex = '21';
+	            adminTabWrapper.style.right = '0';
+	          } else {
+	            // 닫힐 때 transition 끝난 후 z-index 낮추기
+	            adminTab.addEventListener('transitionend', function handler() {
+	            adminTabWrapper.style.zIndex = '0';
+	            adminTab.removeEventListener('transitionend', handler);
+	            adminTabWrapper.style.right = '-250px';
+	            });
+	          }
 	        });
-	    } else {
-	        const menuBtn = document.querySelector('.userFunc');
-	        menuBtn?.addEventListener('click', () => {
-	            document.querySelector('.userTab')?.classList.toggle('userTab-open');
-	        });
+	      } else {
+	    	const userTabWrapper = document.querySelector('.userTab-wrapper');
+	    	const userTab = document.querySelector('.userTab');
+	    	let isUserTabOpen = false;
+
+	    	document.querySelector('.userFunc').addEventListener('click', () => {
+	    	    
+	    	    userTabWrapper.classList.toggle('wrapperOpen');
+	    	    userTab.classList.toggle('userTab-open');
+	    	    
+	    	    isUserTabOpen = !isUserTabOpen;
+
+	    	    if (isUserTabOpen) {
+	    	        
+	    	        userTabWrapper.style.zIndex = '21';
+	    	    } else {
+	    	        
+	    	        userTab.addEventListener('transitionend', function handler() {
+	    	            userTabWrapper.style.zIndex = '0';
+	    	            userTab.removeEventListener('transitionend', handler); // 이벤트 중복 방지
+	    	        });
+	    	    }
+	    	});
 	    }
 	});
+	
+	$(window).scroll(function(){
 		
-
+		// 스크롤탑의 위치값
+		console.log("$(window).scrollTop() => ", $(window).scrollTop());
+		const viewTop = $(window).scrollTop();
+		
+		if(viewTop > 30) {
+			$('.headerNav').css('backgroundColor','rgba(255,255,255,0.9)');
+		}
+		else{
+			$('.headerNav').css('backgroundColor','transparent');
+		}
+	});
+		
 });
 
 function SearchItems() {

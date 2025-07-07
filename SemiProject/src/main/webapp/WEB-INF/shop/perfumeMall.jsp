@@ -14,7 +14,7 @@
 
 <!-- Google Fonts for Noto Sans KR -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
-
+<!-- 
 <style>
      body {
 		    font-family: 'Noto Sans KR', sans-serif;
@@ -33,7 +33,7 @@
         100% {background-position: 0% 50%;}
     }
 </style>
-
+ -->
 <style>
 	.card-link {	/* 장바구니 담기 */
 		text-decoration: none;	/* 기본은 밑줄 없음  */
