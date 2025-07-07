@@ -160,7 +160,7 @@ $(function() {
 	
 	
 	const pageurl = window.location.search
-	console.log(pageurl);
+	// console.log(pageurl);
 	
 	$(function() {
 	    const loginId = "${sessionScope.loginUser.id}";
@@ -219,7 +219,8 @@ $(function() {
 	$(window).scroll(function(){
 		
 		// 스크롤탑의 위치값
-	//	console.log("$(window).scrollTop() => ", $(window).scrollTop());
+
+		//console.log("$(window).scrollTop() => ", $(window).scrollTop());
 		const viewTop = $(window).scrollTop();
 		
 		if(viewTop > 30) {
