@@ -75,5 +75,9 @@ public interface ItemDAO {
 	//주문번호 채번하기
 	public int getOrderSequence() throws SQLException;
 
+	public int insertOrderUpdate(Map<String, Object> paraMap) throws SQLException;
+
+	List<ItemVO> getOrderItemList(String id, String[] itemNoArr) throws SQLException;
+
 	
 }
