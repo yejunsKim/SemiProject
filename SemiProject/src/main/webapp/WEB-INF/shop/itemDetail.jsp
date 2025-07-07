@@ -471,7 +471,7 @@ let isOrderOK = false;
      	   }
      	   
      	   if(!isOrderOK) { // 해당 제품을 구매하지 않은 경우라면
-     		   alert("${requestScope.itemVO.itemName} 제품을 구매하셔야만 후기작성이 가능합니다.");
+     		   alert("${requestScope.itemVO.itemName} 제품을 구매하셔야 후기작성이 가능합니다.");
      	   }
      	   else { // 해당 제품을 구매한 경우라면
      	     // alert("제품후기 쓰기 가능함");
