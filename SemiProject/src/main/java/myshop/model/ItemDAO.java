@@ -91,7 +91,6 @@ public interface ItemDAO {
 	//로그인한 사용자가 해당 제품을 구매했는지 알아오기
 	boolean isOrder(Map<String, String> paraMap) throws SQLException;
 
-
 	//리뷰에 대한 좋아요남기기
 	int likeAdd(Map<String, String> paraMap) throws SQLException;
 
