@@ -456,8 +456,8 @@ function paymentSuccess(id, usePoint, totalAmount) {
 //	console.log(totalAmount);
 	
 	// 여기서 orderAdd 예정
-	/*
-	$.ajax({
+	
+	<%-- $.ajax({
 		url:"<%= ctxPath%>/item/orderAdd.do",
 		type:"post",
 		data:[{}],
@@ -468,8 +468,8 @@ function paymentSuccess(id, usePoint, totalAmount) {
 		error: function(request, status, error){
 			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 		}
-	});
-	*/
+	}); --%>
+	
 	
 }// end of function paymentSuccess()-----------------------------
 
