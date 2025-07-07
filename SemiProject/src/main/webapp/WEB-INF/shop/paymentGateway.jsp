@@ -58,6 +58,8 @@ $(document).ready(function() {
 		else {
 			location.href="/SemiProject";
 			alert("결제에 실패하였습니다.");
+			
+			self.close();
 		}
 
    }); // end of IMP.request_pay()----------------------------

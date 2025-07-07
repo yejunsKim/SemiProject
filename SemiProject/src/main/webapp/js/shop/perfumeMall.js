@@ -1,4 +1,3 @@
-
 let lenHIT = 8;
 
 $(function(){
@@ -93,13 +92,13 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 					
 					v_html += `<div class='col-md-6 col-lg-3'>
 									<div class="card mb-3">
-										<a href="/SemiProject/item/itemDetail.do?itemno=${item.itemno}" class="itemDetail">
+										<a href="/SemiProject/item/itemDetail.do?itemNo=${item.itemno}" class="itemDetail">
 											<img src="/SemiProject${item.itemphotopath}" class="card-img-top" style="height: 350px; object-fit: cover;">
 										</a>
 										<div class="card-body">
 										
 											<h5 class="card-title">
-												<a href="/SemiProject/item/itemDetail.do?itemno=${item.itemno}" class="itemDetail">
+												<a href="/SemiProject/item/itemDetail.do?itemNo=${item.itemno}" class="itemDetail">
 													<span tyle="display: none;">${item.itemno}</span><br>
 													${item.itemname}<br>
 												</a>
@@ -114,7 +113,7 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 										</ul>
 									</div>
 								</div>`;
-				});// end of $.each(json, function(index, item){})-------------------------
+				});// end of $.each(json, function(index, item){})————————————
 				
 				// HIT 상품 결과를 출력하기
 				$('div#displayHIT').append(v_html);
@@ -126,7 +125,7 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 				if($("span#countHIT").text() == $("span#totalCount").text()) {
 					$('span#end').html("더이상 조회할 제품이 없습니다.");
 				}
-			}// end of else if(json.length > 0)---------------------
+			}// end of else if(json.length > 0)——————————
 			
 		},
 		error: function(request, _, error){
@@ -134,11 +133,11 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 		}
 	});
 	
-}// end of function displayHIT(start)-------------------
+}// end of function displayHIT(start)—————————
 
 
 function goTop(){
 	$(window).scrollTop(0);
-}// end of function goTop()-----------------------------
+}// end of function goTop()——————————————
 
 
