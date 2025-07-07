@@ -294,7 +294,7 @@
 	     checked.each(function() {
 	        const itemNo = $(this).val(); 
 	        const $row = $(this).closest('tr');
-	  
+	   		// 해당 체크박스가 속한 행 전체 jQuery 객체($)로 잡았음. 헷갈리지않게.
 	        const itemName = $row.find('div#cart_itemName').text();
 	        const quantity = $row.find('input[name="quantity"]').val();
 	        const priceText = $row.find('td').eq(3).text().replace(/원|,/g, "").trim();

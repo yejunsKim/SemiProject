@@ -220,13 +220,13 @@ public class UserDAO_imple implements UserDAO {
 		try {
 			conn = ds.getConnection();
 			
-			String sql = " SELECT id, name, point, registerday, passwordChangeGap, email, mobile, postcode, "
+			String sql = " SELECT id, name, point, registerday, passwordChangeGap, email, mobile, postcode, grade, "
 					+ "       address, addressDetail, addressExtra, lastlogingap, isDormant "
 					+ " FROM ( "
 					+ "    SELECT id, name, point, registerday, "
 					+ "           TRUNC(MONTHS_BETWEEN(SYSDATE, passwordChanged)) AS passwordChangeGap, "
 					+ "           isDormant, email, mobile, postcode, "
-					+ "           address, addressDetail, addressExtra "
+					+ "           address, addressDetail, addressExtra, grade "
 					+ "    FROM Users "
 					+ "    WHERE id = ? AND password like ? "
 					+ ") U "
@@ -247,12 +247,13 @@ public class UserDAO_imple implements UserDAO {
 			if(rs.next()) {
 				System.out.println("로그인 되었음!!");
 				user = new UserVO();
-				
+
 				user.setId(rs.getString("id"));
 				user.setName(rs.getString("name"));
 				user.setPoint(rs.getInt("point"));
+				user.setGrade(rs.getString("grade"));
 				user.setRegisterday(rs.getString("registerday"));
-				 
+				
 				if(rs.getInt("passwordChangeGap") > 3) {
 					// 비밀번호를 변경한지 3개월이 넘었을 경우,
 					user.setRequirePasswordChange(true);
@@ -263,6 +264,7 @@ public class UserDAO_imple implements UserDAO {
 				user.setAddress(rs.getString("address"));
 				user.setAddressDetail(rs.getString("addressDetail"));
 				user.setAddressExtra(rs.getString("addressExtra"));
+				
 				// ==== 휴면이 아닌 회원만 login_history(로그인기록) 테이블에 insert 하기 시작 ==== // 
 				if( rs.getInt("lastlogingap") < 12 ) {
 					sql = " insert into login_history(loginHistoryNo, id, ip) "

@@ -42,7 +42,8 @@ public class Login extends BaseController {
 				session.setAttribute("loginUser", loginUser);
 				
 				System.out.println(loginUser.getPoint());
-				
+				System.out.println(loginUser.getGrade());
+
 				super.setRedirect(true);
 				super.setViewPage(request.getContextPath()+"/main.do");
 				
