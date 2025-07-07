@@ -11,30 +11,24 @@
 <script>
 	const categoryName = "${requestScope.categoryName}";
 </script>
+<script src="https://cdn.tailwindcss.com"></script>
 
 <!-- Google Fonts for Noto Sans KR -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
-<!-- 
-<style>
-     body {
-		    font-family: 'Noto Sans KR', sans-serif;
-		    background-color: #f5f3ff; /* 라이트 퍼플 */
-		    background-image: url('https://img.freepik.com/free-vector/hand-painted-watercolor-floral-pattern_23-2148931052.jpg');
-		    background-size: cover;
-		    background-position: center;
-		    background-attachment: fixed;
-		    background-blend-mode: overlay;
-		}
 
-
-    @keyframes gradientBG {
-        0% {background-position: 0% 50%;}
-        50% {background-position: 100% 50%;}
-        100% {background-position: 0% 50%;}
-    }
-</style>
- -->
 <style>
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #f3e7e9 50%, #e3eeff 100%);
+    min-height: 100vh;
+}
+.gradient-text {
+    background: linear-gradient(to right, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
 
 
 	.card-link {	/* 장바구니 담기 */
@@ -88,18 +82,52 @@
         display: block; text-align: center; margin-bottom: 8px; word-break: keep-all;
     }
 
-    #maincontent {
-        background: none;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-        padding: 30px;
-    }
+   #maincontent {
+    background: #f0f4fa; /* 기존 background: none; 대신 배경색 추가 */
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+}
+
+#displayHIT .card {
+    /* 기존 스타일 유지 */
+    display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+    padding: 20px; border-radius: 12px;
+    background: #f9fafb; /* 기존 background: white; 대신 연한 회색 배경색 추가 */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s; height: 100%;
+}
+
+.go-top-btn {
+  background: rgba(255,255,255,0.85);
+  color: #232946;
+  border: none;
+  border-radius: 28px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 0.9rem 2.5rem;
+  box-shadow: 0 4px 24px rgba(140,180,255,0.15);
+  backdrop-filter: blur(6px);
+  transition: background 0.3s, box-shadow 0.2s, color 0.2s, transform 0.16s;
+}
+
+.go-top-btn:hover {
+  background: rgba(140,180,255,0.92);
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(140,180,255,0.25);
+  transform: translateY(-3px) scale(1.05);
+}
+
+
+
+
+    
 </style>
 <body>
 <div class="col-md-12" id="maininfo" align="center" style="padding-top:80px;">
 	<div id="maincontent">
 		<div>
-			<p class="h3 my-3 text-center">- ${requestScope.categoryName} -</p>
+			<p class="h3 my-3 text-center font-bold text-3xl gradient-text mb-8">- ${requestScope.categoryName} -</p>
 			<div class="row" id="displayHIT" style="text-align: left;"></div>
 
 			<div>
@@ -112,7 +140,12 @@
 
 			<div style="display: flex;">
 				<div style="margin: 0 auto;">
-					<button class="btn btn-info" onclick="goTop()">맨위로가기(scrollTop 1로 설정함)</button>
+					<button 
+  class="go-top-btn font-semibold py-3 px-8 rounded-xl shadow-md transition duration-300 ease-in-out"
+  onclick="goTop()">
+    맨위로가기
+</button>
+
 				</div>
 			</div>
 		</div>

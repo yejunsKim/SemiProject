@@ -130,18 +130,25 @@ form[name="commentFrm"] textarea:focus {
 #btnCommentOK {
     margin: 20px auto;
     display: block;
-    background: #3498db;
-    color: white;
+    background: #3563e9;
+    color: #fff;
     border: none;
-    transition: background 0.2s, transform 0.2s;
-    width: 10%
-    
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.06rem;
+    padding: 0.7rem 2.1rem;
+    box-shadow: 0 2px 8px rgba(53,99,233,0.10);
+    transition: background 0.2s, box-shadow 0.18s, transform 0.13s;
+    width: auto;
 }
 
 #btnCommentOK:hover {
-    background: #2980b9;
-    transform: translateY(-2px);
+    background: #2547b8;
+    box-shadow: 0 4px 16px rgba(53,99,233,0.15);
+    transform: translateY(-2px) scale(1.03);
+    cursor: pointer;
 }
+
 
 /* ================================
    위로가기 버튼
@@ -159,6 +166,31 @@ form[name="commentFrm"] textarea:focus {
     color: white;
     transform: translateY(-2px);
 }
+
+/* 위로 가기 버튼 전용 CSS */
+#btnScrollTop {
+    background: linear-gradient(135deg, #a7bfff 0%, #f3e7e9 100%);
+    color: #2d3748;
+    border: none;
+    border-radius: 50%;
+    width: 54px;
+    height: 54px;
+    box-shadow: 0 4px 16px rgba(127, 156, 245, 0.13);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, color 0.2s, transform 0.2s, box-shadow 0.2s;
+    font-size: 1.6rem;
+    padding: 0;
+}
+
+#btnScrollTop:hover {
+    background: linear-gradient(135deg, #667eea 0%, #a7bfff 100%);
+    color: #fff;
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 8px 24px rgba(127, 156, 245, 0.22);
+}
+
 </style>
 
 
