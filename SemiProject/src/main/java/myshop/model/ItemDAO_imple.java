@@ -867,4 +867,33 @@ public class ItemDAO_imple implements ItemDAO {
 		
 	}// end of public List<Order_itemsVO> selectOrderDetail(Map<String, String> paraMap) throws SQLException--------------
 
+	//주문번호 채번하기
+	@Override
+	public int getOrderSequence() throws SQLException {
+		int seq = 0;
+		
+		try {
+			 conn = ds.getConnection();
+				 
+			 String sql = " select order_seq.nextval AS seq "
+			 		    + " from dual";
+				 
+			 pstmt = conn.prepareStatement(sql);
+				 
+			 rs = pstmt.executeQuery();
+				 
+			 rs.next();
+				 
+			 seq = rs.getInt("seq");
+				 
+			} finally {
+			  close();
+		}
+			
+		return seq;
+	}
+
+			
+	
+	
 }

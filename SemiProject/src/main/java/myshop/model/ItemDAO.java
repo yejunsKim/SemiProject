@@ -72,5 +72,8 @@ public interface ItemDAO {
 	// 로그인한 유저의 주문 상세 내역 조회(select)
 	List<Order_itemsVO> selectOrderDetail(Map<String, String> paraMap) throws SQLException;
 
+	//주문번호 채번하기
+	public int getOrderSequence() throws SQLException;
+
 	
 }

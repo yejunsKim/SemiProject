@@ -33,14 +33,15 @@ private ItemDAO itemDAO = new ItemDAO_imple();
 		String today = smdatefm.format(now);
 		
 		int seq = 0;
-		/*
+		
 		try {
 			seq = itemDAO.getOrderSequence();
 			// 다음 주문번호를 채번해올것!
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		*/
+		
+		System.out.println("s"+today+"-"+seq);
 		return "s"+today+"-"+seq;
 	}
 	
@@ -50,7 +51,7 @@ private ItemDAO itemDAO = new ItemDAO_imple();
 		
 		System.out.println("주문 시작");
 		String method = request.getMethod();
-		/*
+		
 		if("POST".equalsIgnoreCase(method)) {
 			// POST 방식이라면 
 			// ===== Transaction 처리하기 ===== // 
@@ -174,7 +175,7 @@ private ItemDAO itemDAO = new ItemDAO_imple();
 		    super.setRedirect(false);	
 		    super.setViewPage("/WEB-INF/msg.jsp");
 		}
-		*/
+		
 	}
 
 }
