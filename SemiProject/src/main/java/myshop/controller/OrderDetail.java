@@ -47,16 +47,16 @@ public class OrderDetail extends BaseController {
 			HttpSession session = request.getSession();
 			UserVO loginUser = (UserVO) session.getAttribute("loginUser");
 			String id = loginUser.getId();
-			
+
 			String orderno = request.getParameter("orderno");
 			
 			Map<String, String> paraMap = new HashMap<>();
 			paraMap.put("orderno", orderno);
 			paraMap.put("id", id);
 			
+			
 			// 상품이미지, 상품이름, 상품용량(item 테이블) // 주문수량, 주문금액(주문상세내역 테이블) // 최종결제금액(주문내역 테이블)
 			List<Order_itemsVO> oiList = idao.selectOrderDetail(paraMap);
-			
 			request.setAttribute("oiList", oiList);
 			
 			super.setRedirect(false);

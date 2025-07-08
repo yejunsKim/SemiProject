@@ -269,7 +269,7 @@ function SearchItems() {
     }
 
     const frm = document.searchFrm;
-    frm.action = "/SemiProject/item/searchResult.do";
+    frm.action = "/SemiProject/item/searchItem.do";
     frm.method = "get";
     frm.submit();
     return false; // 폼 기본 제출 막기
@@ -375,7 +375,7 @@ function SearchItems() {
 				      </tr>
 				      <tr>
 				        <td colspan="3" style="padding-top:10px;">
-				          <span style="font-weight: bold;"><a href="">주문목록 보기</a></span>
+				          <span style="font-weight: bold;"><a href="<%=ctxPath %>/item/orderList.do">주문목록 보기</a></span>
 				        </td>
 				      </tr>
 				      <tr>
