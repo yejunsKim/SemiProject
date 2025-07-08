@@ -15,8 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .gradient-bg {
-            background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
-        }
+   			 background: linear-gradient(135deg, #6b73ff 20%, #444eff 100%);        }
         .card-shadow {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
@@ -43,12 +42,12 @@
         <header class="gradient-bg text-white p-4">
             <div class="container mx-auto flex justify-between items-center">
                 <h1 class="text-2xl font-bold">Admin Dashboard</h1>
-                <div class="flex items-center space-x-4">
+                <!-- <div class="flex items-center space-x-4">
                     <span class="hidden md:inline"><i class="fas fa-user-circle mr-2"></i>Admin</span>
                     <button class="bg-white text-blue-600 px-4 py-1 rounded-full hover:bg-gray-200 transition">
                         <i class="fas fa-sign-out-alt mr-1"></i> Logout
                     </button>
-                </div>
+                </div> -->
             </div>
         </header>
 
@@ -181,8 +180,8 @@
                                     <textarea rows="4" id="smsContent" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter your message here..."></textarea>
                                 </div>
                                 <div class="flex items-center justify-center md:justify-start">
-                                    <button id="btnSend" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition flex items-center">
-                                        <i class="fas fa-paper-plane mr-2"></i> Send SMS
+                                    <button id="btnSend" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition flex items-center">
+                                        <i class="fas fa-paper-plane mr-2"></i> 메세지 발송
                                     </button>
                                 </div>
                             </div>
