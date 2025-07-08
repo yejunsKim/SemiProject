@@ -116,7 +116,7 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 													<input type="hidden" name="quantity" value="1">
 													<button type="submit" class="btn btn-link btn-sm cart-btn" style="color: black; margin-left: 10px;">장바구니 담기</button>
 												</form>
-											<li>
+											</li>
 										</ul>
 									</div>
 								</div>`;

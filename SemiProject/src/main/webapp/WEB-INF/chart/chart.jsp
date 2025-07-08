@@ -24,7 +24,7 @@
 
   .highcharts-data-table th,
   .stats-table th {
-    background-color: #a78bfa; /* 보라색 (Tailwind: violet-400) */
+    background-color: #8080ff; /* 보라색 (Tailwind: violet-400) */
     color: white;
     font-weight: 600;
     padding: 0.75rem;
@@ -59,7 +59,7 @@
 <script src="<%= ctxPath%>/Highcharts-10.3.1/code/modules/series-label.js"></script>
 
 <!-- 통계 페이지 레이아웃 -->
-<main class="bg-gray-50 min-h-screen px-4 py-10">
+<main class="bg-gray-50 min-h-screen px-4 py-10" >
   <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-md p-6">
 
     <!-- ✅ 여기! 제목 + select 가로 배치 들어갈 자리 -->
