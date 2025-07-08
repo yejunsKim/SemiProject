@@ -60,7 +60,7 @@ function displaySearch(start) {
             $('#displayHIT').append(html);
             $('#countHIT').text(Number($('#countHIT').text()) + json.length);
             if ($('#countHIT').text() == $('#totalCount').val()) {
-                $('#end').text("더 이상 조회할 제품이 없습니다.");
+                //$('#end').text("더 이상 조회할 제품이 없습니다.");
             }
         },
         error: function(err) {

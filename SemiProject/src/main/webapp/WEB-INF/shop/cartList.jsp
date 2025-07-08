@@ -116,6 +116,25 @@
 		align-items: center;
 		margin: 20px 0;
 	}
+	/* 공통 스타일 적용 */
+button.amountUpdate,
+button#cartDelete,
+button[name="allDelete"] {
+    border: none;
+    border-radius: 8px;
+    color: black;
+    padding: 8px 14px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.amountUpdate:hover,
+button#cartDelete:hover,
+button[name="allDelete"]:hover {
+    background-color: #888;
+}
+	
 
 </style>
 
@@ -177,7 +196,7 @@
 					
 				},
 				error: function(request, status, error){
-					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					//alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 				}
 			});
 		}
@@ -233,7 +252,7 @@
 					}
 				},
 				error: function(request, status, error){
-					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					//alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 				}
 			});
 		}
@@ -323,7 +342,7 @@
 	
 	<form name="CartList" method="POST" action = "orderForm.do" >
 		<table>
-			<thead>
+			<thead> 
 				<tr>
 					<th style="width: 5%;"><input type="checkbox" id="allCheckOrNone" onclick="allCheckBox()" /></th>
 					<th style="width: 15%;">이미지</th>
