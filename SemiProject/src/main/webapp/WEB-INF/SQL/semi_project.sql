@@ -282,3 +282,6 @@ select * from tab;
 
 select * from category;
 >>>>>>> refs/heads/main
+
+/
+select * from ORDER_HISTORY;
