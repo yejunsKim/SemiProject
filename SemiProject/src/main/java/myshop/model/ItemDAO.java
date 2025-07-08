@@ -84,7 +84,11 @@ public interface ItemDAO {
 	public int insertOrderUpdate(Map<String, Object> paraMap) throws SQLException;
 	
 	// 순수 item 리스트만 추출, cart관련 없음.
-	public List<ItemVO> getOrderItemList(String[] itemNoArr) throws SQLException;
-	
-	
+	public List<ItemVO> getOrderItemList(String[] itemNoArr) throws SQLException;	
+
+	// 카테고리별주문 통계정보 알아오기
+	List<Map<String, String>> myPurchase_byCategory(String id) throws SQLException;
+
+	// 카테고리별 월별주문 통계정보 알아오기
+	List<Map<String, String>> myPurchase_byMonth_byCategory(String id) throws SQLException;
 }

@@ -146,4 +146,3 @@ function goTop(){
 	$('button.btn-dark').hide();
 }// end of function goTop()——————————————
 
-

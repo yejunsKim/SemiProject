@@ -327,7 +327,7 @@ function SearchItems() {
     }
 
     const frm = document.searchFrm;
-    frm.action = "/SemiProject/item/searchItem.do";
+    frm.action = "/SemiProject/item/searchResult.do";
     frm.method = "get";
     frm.submit();
     return false; // 폼 기본 제출 막기
