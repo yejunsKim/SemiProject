@@ -59,7 +59,7 @@ body {
     .card-title:hover { text-decoration: underline; }
 
     #displayHIT .card {
-        display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+        display: flex; flex-direction: column;  justify-content: space-between;
         padding: 20px; border-radius: 12px; background: white;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         transition: transform 0.2s, box-shadow 0.2s; height: 100%;
