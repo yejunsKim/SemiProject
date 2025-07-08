@@ -111,7 +111,7 @@ public interface ItemDAO {
 	// 리뷰 좋아요 수 조회
 	Map<String, Integer> getLikeCount(String reviewId)throws SQLException;
 
-		
+
 	//주문번호 채번하기
 	public int getOrderSequence() throws SQLException;
 	
@@ -123,4 +123,10 @@ public interface ItemDAO {
 
 	
 	
+
+	// 카테고리별주문 통계정보 알아오기
+	List<Map<String, String>> myPurchase_byCategory(String id) throws SQLException;
+
+	// 카테고리별 월별주문 통계정보 알아오기
+	List<Map<String, String>> myPurchase_byMonth_byCategory(String id) throws SQLException;
 }

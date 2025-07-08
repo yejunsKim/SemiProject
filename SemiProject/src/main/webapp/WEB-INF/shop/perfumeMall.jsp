@@ -16,8 +16,41 @@
 <!-- Google Fonts for Noto Sans KR -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
 
+<style>
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #f3e7e9 50%, #e3eeff 100%);
+    min-height: 100vh;
+}
+.gradient-text {
+    background: linear-gradient(to right, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
 
 
+	.card-link {	/* 장바구니 담기 */
+		text-decoration: none;	/* 기본은 밑줄 없음  */
+		color: black;
+	}
+	
+	.card-link:hover {	/* 장바구니 담기 */
+		text-decoration: underline; /* 마우스 올리면 밑줄 */
+		color: black;
+	}
+	
+	a.itemDetail {	/* 이미지랑, 제품명 */
+		text-decoration: none;	/* 기본은 밑줄 없음  */
+		color: black;
+	}
+	
+	.card-title:hover {	/* 제품명 */
+		text-decoration: underline; /* 마우스 올리면 밑줄 */
+	}
+	
+</style> 
 
 <style>
     .card-link { text-decoration: none; color: black; }
@@ -90,6 +123,7 @@
 
     
 </style>
+<body>
 <div class="col-md-12" id="maininfo" align="center" style="padding-top:80px;">
 	<div id="maincontent">
 		<div>
@@ -104,18 +138,15 @@
 				</p>
 			</div>
 
-			
-				
-				<div style="display: flex;">
-					<div style="margin: 0 auto;">
-						<button style="display: none;" class="btn btn-dark" onclick="goTop()">
-							<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
-			        		<path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-			      		</svg>
-						</button>
-					</div>
+			<div style="display: flex;">
+				<div style="margin: 0 auto;">
+					<button 
+  class="go-top-btn font-semibold py-3 px-8 rounded-xl shadow-md transition duration-300 ease-in-out"
+  onclick="goTop()">
+    맨위로가기
+</button>
+
 				</div>
-				
 			</div>
 		</div>
 	</div>

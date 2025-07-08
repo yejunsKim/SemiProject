@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 <% 
   String ctxPath = request.getContextPath(); 
 %>
@@ -99,3 +100,4 @@ $(function(){
 	
 
 <jsp:include page="../footer.jsp" />
+

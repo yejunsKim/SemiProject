@@ -120,6 +120,7 @@
 </style>
 
 <script type="text/javascript">
+<<<<<<< HEAD
    
    $(function(){
       
@@ -277,6 +278,165 @@
    }// end of function allDel()-----------------------------
    
    // ==== 장바구니에서 제품 주문하기 ==== //
+=======
+	
+	$(function(){
+		
+		$('input:checkbox[name="selectedItems"]').click(function(){	// 제품 체크박스 상태에 따라 전체 체크박스 연동
+			
+			let all_check = false;
+			
+			$('input:checkbox[name="selectedItems"]').each(function(index, elmt){
+				
+				const cartno_checked = $(elmt).prop("checked");
+				
+				if(!cartno_checked) {
+					$('input:checkbox[id="allCheckOrNone"]').prop("checked", false);
+					all_check = true;
+					return false;	// break;
+				}
+			});
+			
+			if(!all_check) {
+				$('input:checkbox[id="allCheckOrNone"]').prop("checked", true);
+			}
+		});// end of $('input.checkbox[name="selectedItems"]').click(function()})------------------------
+		
+	});// end of $(function(){})-------------------------
+	
+	
+	// Function Declaration
+	
+	// 장바구니 제품 왼쪽 상단 전부 체크 or 해제하기
+	function allCheckBox() {
+		
+		const bool = $('input:checkbox[id="allCheckOrNone"]').is(":checked");
+		
+		$('input:checkbox[name="selectedItems"]').prop("checked", bool);
+	}// end of function allCheckBox()-------------------------
+	
+	
+	// 장바구니에서 특정 제품 삭제하기
+	function cartDel(cartno) {
+		
+		const itemName = $(event.target).parent().parent().find("div#cart_itemName").text();
+		
+		if( confirm(`\${itemName} 을[를] 삭제하시겠습니까?`) ) {
+			
+			$.ajax({	// 삭제 클래스 만들기
+				url:"<%= ctxPath%>/item/cartDel.do",
+				type:"post",
+				data:{"cartno":cartno},
+				dataType:"json",
+				success:function(json){
+					
+					if(json.n == 1) {	// 성공시 삭제된 채로 다시 장바구니 목록으로
+						location.href = "<%= ctxPath%>/item/cartList.do";
+					}
+					
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+			});
+		}
+		
+		else {
+			alert(`장바구니에서 \${itemName} 제품 삭제를 취소하셨습니다.`);
+		}
+		
+	}// end of function cartDel(cartno)------------------------------
+	
+	
+	// 장바구니 제품 수량 변경하기
+	function amountUpdate(obj) {
+		
+		const index = $('button.amountUpdate').index(obj);	// 인덱스
+		
+		const cartno = $('input:checkbox[name="selectedItems"]').eq(index).val();	// 제품번호
+		
+		const cartamount = $('input[name="quantity" ]').eq(index).val();			// 제품 주문 수량
+		
+		const regExp = /^[0-9]+$/g;  // 숫자만 체크하는 정규표현식
+		const bool = regExp.test(cartamount);
+		
+		if(!bool) {
+			alert("수량을 제대로 입력하세요.");
+			location.href="javascript:history.go(0)";
+			return; // amountUpdate 함수 종료
+		}
+		
+		const itemAmount = $('input[name="maxAmount"]').eq(index).val();			// 제품 재고
+		
+		if(Number(cartamount) > Number(itemAmount)) {
+			alert("제품 재고가 부족하여 진행할 수 없습니다.");
+			location.href="javascript:history.go(0)";
+			return; // amountUpdate 함수 종료
+		}
+		
+		if(cartamount == "0") {
+			// 해당 장바구니 번호 비우기
+			cartDel(cartno);	// 해당 장바구니 번호 비우기
+		}
+		else {
+			$.ajax({
+				url:"<%= ctxPath%>/item/cartEdit.do",
+				type:"post",
+				data:{"cartno":cartno,
+					  "cartamount":cartamount},
+				dataType:"json",
+				success:function(json){
+					if(json.n == 1){
+						alert("주문수량이 변경되었습니다.");
+						location.href = "<%= ctxPath%>/item/cartList.do";	// 장바구니 보기 페이지로 간다.
+					}
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+			});
+		}
+		
+	}// end of function amountUpdate(obj)---------------------------
+	
+	
+	// 장바구니 모두 비우기
+	function allDel() {
+		
+		const id = "${sessionScope.loginUser.id}";
+		
+		const is_cartList = ${not empty requestScope.cartList};
+		
+		if(!is_cartList) {
+			alert("장바구니가 이미 비어있습니다.");
+		}
+		else{
+			if( confirm(`장바구니를 모두 비우시겠습니까?`) ) {
+				
+				$.ajax({
+					url:"<%= ctxPath%>/item/cartAllDel.do",
+					type:"post",
+					data:{"id":id},
+					dataType:"json",
+					success:function(json){
+						if(json.n >= 1){
+							alert("장바구니를 모두 비웠습니다.");
+							location.href = "<%= ctxPath%>/item/cartList.do";	// 장바구니 보기 페이지로 간다.
+						}
+					},
+					error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}
+				});
+			}
+			else{
+				alert("취소되었습니다.");
+			}
+		}
+	}// end of function allDel()-----------------------------
+	
+	// ==== 장바구니에서 제품 주문하기 ==== //
+>>>>>>> branch 'main' of https://github.com/yejunsKim/SemiProject.git
      function order_selected() {
       
         const checked = $('input[name="selectedItems"]:checked');
