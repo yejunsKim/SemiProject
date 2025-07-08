@@ -9,45 +9,23 @@
     //    /SemiProject
 %>
 
-<!DOCTYPE html>
-<html>
-<head>
-
-<title>주문 내역</title>
-
-<!-- Required meta tags -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-<!-- Bootstrap CSS -->
-<link rel="stylesheet" type="text/css" href="<%= ctxPath%>/bootstrap-4.6.2-dist/css/bootstrap.min.css" > 
-
-<!-- Font Awesome 6 Icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
-
-<!-- Optional JavaScript -->
-<script type="text/javascript" src="<%= ctxPath%>/js/jquery-3.7.1.min.js"></script>
-<script type="text/javascript" src="<%= ctxPath%>/bootstrap-4.6.2-dist/js/bootstrap.bundle.min.js" ></script> 
-
-<%-- jQueryUI CSS 및 JS --%>
-<link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.css" />
-<script type="text/javascript" src="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
+<jsp:include page="../header.jsp" />
 
 <style>
-	table {
+	table#orderList {
 		width: 90%;
 		height: 100px;
 		margin: 30px auto;
 		border-collapse: collapse;
 		font-size: 15px;
 	}
-	thead {
+	thead#orderList {
 		background-color: #e7f3f9; /* 연한 하늘색 */
 	}
-	tbody {
+	tbody#orderList {
 		background-color: white;
 	}
-	th, td {
+	th#orderList, td#orderList {
 		border: 1px solid #ddd;
 		padding: 10px;
 		text-align: center;
@@ -78,29 +56,6 @@
 	
 	$(function(){
 		
-		<%-- // tr 클릭
-		$('tbody').on('click', 'tr', function(){
-			
-			const orderno = $(this).data("orderno");
-		//	alert(orderno);
-			
-			if(orderno == null) {
-				alert("주문을 완료하셔야 클릭 가능합니다.");
-			}
-			else {
-			location.href = '<%= ctxPath %>/item/orderDetail.do?orderno=' + orderno;	// 주문 상세 페이지로 이동
-			}
-		});
-		
-		
-		// 버튼 클릭 시 tr 클릭 막기
-		$('.btn1').click(function(event) {
-			event.stopPropagation();  // 상위 tr 클릭 막기
-			
-			alert("버튼 클릭됨");
-			
-	    }); --%>
-		
 	});// end of $(function(){})------------------------------
 	
 	
@@ -115,44 +70,44 @@
 	
 </script>
 
-</head>
-<body style="background-color: #f5f5f5;">
+<div class="col-md-12" style="background-color: #f5f5f5;padding-top:80px;">
+<div class="container" style="min-height: 600px; background-color: #f5f5f5; padding-bottom: 50px;">
 	
-	<h2 style="text-align:center;"><span style="color: blue;">${sessionScope.loginUser.name}</span> 님 주문 내역</h2>
+	<h2 style="text-align:center; font-size: 24pt;"><span style="color: blue;">${sessionScope.loginUser.name}</span> 님 주문 내역</h2>
 	
 	<hr style="border: solid 1px black; width: 90%;">
 	
-	<table>
-		<thead>
+	<table id="orderList">
+		<thead id="orderList">
 			<tr>
-				<th style="width: 10%">주문일자</th>
-				<th style="width: 15%">주문번호</th>
-				<th>주문내역</th>
-				<th style="width: 15%">적립포인트</th>
-				<%-- <th style="width: 10%">주문상태</th> --%>
-				<th style="width: 10%"></th>
+				<th id="orderList" style="width: 10%">주문일자</th>
+				<th id="orderList" style="width: 15%">주문번호</th>
+				<th id="orderList">주문내역</th>
+				<th id="orderList" style="width: 15%">적립포인트</th>
+				<%-- <th id="orderList" style="width: 10%">주문상태</th> --%>
+				<th id="orderList" style="width: 10%"></th>
 			</tr>
 		</thead>
 		
-		<tbody>
+		<tbody id="orderList">
 			
 			<c:if test="${not empty requestScope.ohList}">
 				<c:forEach var="ohvo" items="${requestScope.ohList}" varStatus="status">
 					<tr data-orderno="${ohvo.orderno}">
-						<td>${ohvo.orderdate}</td>
-						<td>${ohvo.orderno}</td>
-						<td>${ohvo.itemlist}</td>
-						<td><fmt:formatNumber pattern="#,###">${ohvo.rewarded}</fmt:formatNumber> Point</td>
-						<%-- <td>임시 주문상태</td> --%>
-						<td><button class="btn1" onclick="orderDetail('${ohvo.orderno}')" >상세보기</button></td>
+						<td id="orderList">${ohvo.orderdate}</td>
+						<td id="orderList">${ohvo.orderno}</td>
+						<td id="orderList">${ohvo.itemlist}</td>
+						<td id="orderList"><fmt:formatNumber pattern="#,###">${ohvo.rewarded}</fmt:formatNumber> Point</td>
+						<%-- <td id="orderList">임시 주문상태</td> --%>
+						<td id="orderList"><button class="btn1" onclick="orderDetail('${ohvo.orderno}')" >상세보기</button></td>
 					</tr>
 				</c:forEach>
 			</c:if>
 			
 			<c:if test="${empty requestScope.ohList}">
-				<tr>
+				<tr id="orderList">
 					<th colspan="6">주문한 내역이 없습니다.</th>
-				</tr>
+				</tr id="orderList">
 			</c:if>
 		</tbody>
 				
@@ -164,5 +119,6 @@
 			</div>
 		</nav>
 	</c:if>
-</body>
-</html>
+</div>
+
+<jsp:include page="../footer.jsp" />

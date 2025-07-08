@@ -74,13 +74,20 @@
 				
 					<%-- 수량 입력 --%>
 					<div class="bg-white p-3 d-flex align-items-center mb-2" style="gap: 10px;">
-					  	<label for="quantity" class="mb-0" style="min-width: 80px;">수량&nbsp;:</label>
-					  	<select id="quantity" name="quantity" class="border-0 p-0" 
-					          style="box-shadow: none; width: 100px; text-align: center;">
-					    	<c:forEach var="itemAmount" begin="1" end="${item.itemAmount}">
-					      		<option value="${itemAmount}">${itemAmount}</option>
-					    	</c:forEach>
-					  	</select>
+						<label for="quantity" class="mb-0" style="min-width: 80px;">수량&nbsp;:</label>
+						<c:choose>
+							<c:when test="${item.itemAmount == 0}">
+								<span style="color: red;">현재 재고가 없습니다.</span>
+							</c:when>
+							<c:otherwise>
+								<select id="quantity" name="quantity" class="border-0 p-0" 
+								style="box-shadow: none; width: 100px; text-align: center;">
+									<c:forEach var="itemAmount" begin="1" end="${item.itemAmount}">
+										<option value="${itemAmount}">${itemAmount}</option>
+									</c:forEach>
+								</select>
+							</c:otherwise>
+						</c:choose>
 					</div>
 
 					<%-- 장바구니 담기 버튼 --%>
