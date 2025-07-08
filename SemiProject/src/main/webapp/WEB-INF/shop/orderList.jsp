@@ -55,7 +55,6 @@
 
 	/* 주문 테이블 hover 스타일 추가 */
 	tbody tr:hover {
-		background-color: #f5f5f5;
 		background-color: #f8fafc;
 		transform: translateY(-2px);
 		box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
@@ -98,9 +97,19 @@
 	$(function(){
 		
 		// tr 클릭
-		$('tbody tr').click(function(){
-			alert("tr 클릭됨");
+		$('tbody').on('click', 'tr', function(){
+			
+			const orderno = $(this).data("orderno");
+		//	alert(orderno);
+			
+			if(orderno == null) {
+				alert("주문을 완료하셔야 클릭 가능합니다.");
+			}
+			else {
+			location.href = '<%= ctxPath %>/item/orderDetail.do?orderno=' + orderno;	// 주문 상세 페이지로 이동
+			}
 		});
+		
 		
 		// 버튼 클릭 시 tr 클릭 막기
 		$('.btn1').click(function(event) {
@@ -115,9 +124,9 @@
 </script>
 
 </head>
-<body>
+<body style="background-color: #f5f5f5;">
 	
-	<h2 style="text-align:center;">최근 주문 내역</h2>
+	<h2 style="text-align:center;"><span style="color: blue;">${sessionScope.loginUser.name}</span> 님 주문 내역</h2>
 	
 	<hr style="border: solid 1px black; width: 90%;">
 	
@@ -134,7 +143,6 @@
 		<tbody>
 			
 			<c:if test="${not empty requestScope.ohList}">
-				
 				<c:forEach var="ohvo" items="${requestScope.ohList}" varStatus="status">
 					<tr data-orderno="${ohvo.orderno}">
 						<td>${ohvo.orderdate}</td>
@@ -149,7 +157,6 @@
 			</c:if>
 			
 			<c:if test="${empty requestScope.ohList}">
-
 	<tr>
 		<td colspan="4">
 			<div class="empty-state">
@@ -163,13 +170,12 @@
 		</tbody>
 				
 	</table>
-	
-	<div id="pageBar">
-		<nav>
-			<%--<ul class="pagination">${requestScope.pageBar}</ul> --%>
+	<c:if test="${not empty requestScope.ohList}">
+		<nav class="my-5">
+			<div style='display:flex; width:80%; margin: 0 auto;'>
+				<ul class="pagination" style='margin:auto;'>${requestScope.pageBar}</ul>
+			</div>
 		</nav>
-	</div>
-	
-		
+	</c:if>
 </body>
 </html>
