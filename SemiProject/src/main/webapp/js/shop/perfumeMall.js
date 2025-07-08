@@ -30,7 +30,7 @@ $(function(){
 		
 	//	if( $(window).scrollTop() == $(document).height() - $(window).height() ) {
 		// 만약에 위의 값대로 잘 안되면 아래의 것을 하도록 한다. 
-		if( $(window).scrollTop() == $(document).height() - $(window).height() ) { 
+		if( $(window).scrollTop() + 1 >= $(document).height() - $(window).height() ) { 
 			
 			if($('span#totalCount').text() != $('span#countHIT').text()) {
 				start += lenHIT;
@@ -145,4 +145,3 @@ function goTop(){
 	$(window).scrollTop(0);
 	$('button.btn-dark').hide();
 }// end of function goTop()——————————————
-
