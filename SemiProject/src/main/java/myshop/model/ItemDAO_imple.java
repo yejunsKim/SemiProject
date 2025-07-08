@@ -983,12 +983,13 @@ public class ItemDAO_imple implements ItemDAO {
 	
 	         // 주문 insert
 	         String sql = " insert into order_history(orderNo, id, orderDate, totalAmount, rewarded) "
-	         		+ " values(order_seq.nextval, ? , sysdate, ? , ? ) ";
+	         		+ " values(?, ? , sysdate, ? , ? ) ";
 	         
 	         pstmt= conn.prepareStatement(sql);
-	         pstmt.setString(1, id);
-	         pstmt.setInt(2, totalAmount);
-	         pstmt.setInt(3, getPoint); 	        
+	         pstmt.setString(1, orderNo);
+	         pstmt.setString(2, id);
+	         pstmt.setInt(3, totalAmount);
+	         pstmt.setInt(4, getPoint); 	        
 	         
 	         n1= pstmt.executeUpdate();
 	         pstmt.close();

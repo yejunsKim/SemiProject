@@ -79,7 +79,8 @@ private ItemDAO itemDAO = new ItemDAO_imple();
 			UserVO loginUser = (UserVO) session.getAttribute("loginUser"); 
 			
 			// ==== 주문테이블(tbl_order)에 insert 할 데이터 ==== 
-			String orderNo = getOrderNo();
+			String s_orderNo = getOrderNo();
+			String orderNo = request.getParameter("orderNo");
 			String usePoint = request.getParameter("usePoint");
 			String getPoint = request.getParameter("getPoint");
 
