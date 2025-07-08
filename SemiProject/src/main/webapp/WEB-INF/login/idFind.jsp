@@ -6,6 +6,8 @@
 <style>
 .headerNav {position:relative;}
 .btn.btn-success {width: 100%;margin: 25px 0 0;}
+body {background-color: #f5f3ff;background-image: url(https://img.freepik.com/free-vector/hand-painted-watercolor-floral-pattern_23-2148931052.jpg);background-size: cover;background-position: center;background-attachment: fixed;background-blend-mode: overlay;}
+#idBox{background-color:#fff;}
 </style>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -84,7 +86,7 @@ $(function(){
 			</ul>
 	
 			<div class="my-3 text-center">
-				<button type="button" class="btn btn-success">찾기</button>
+				<button type="button" class="btn btn-success" style="border:0px solid #fff !important; background-color:#c084fc !important;">찾기</button>
 			</div>
 	
 		</form>
