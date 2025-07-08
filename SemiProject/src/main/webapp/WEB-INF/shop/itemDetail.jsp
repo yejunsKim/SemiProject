@@ -17,6 +17,17 @@
 <style type="text/css">
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap');
 
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #f3e7e9 50%, #e3eeff 100%);
+    min-height: 100vh;
+}
+/* 모바일에서 조금 더 밝게 */
+@media (max-width: 600px) {
+    body {
+        background: linear-gradient(135deg, #f7fafc 60%, #e3e8ee 100%);
+    }
+}
 
 /* ================================
    전체 후기 영역
@@ -25,25 +36,23 @@ div#viewComments {
     width: 80%;
     margin: 30px auto;
     text-align: left;
-    max-height: 500px;
-    overflow-y: auto;
 }
 
 /* ================================
    개별 후기 카드
 ================================= */
 .review-card {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    padding: 16px;
-    margin-bottom: 16px;
-    transition: transform 0.2s, box-shadow 0.2s;
+    background: #f9fafb;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .review-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.12);
 }
 
 .review-top {
@@ -51,7 +60,7 @@ div#viewComments {
 }
 
 .review-meta {
-    font-size: 12px;
+    font-size: 13px;
     color: #777;
     margin-top: 5px;
 }
@@ -62,26 +71,29 @@ div#viewComments {
 .like-container {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-top: 8px;
+    gap: 10px;
+    margin-top: 10px;
 }
 
 .like-container i {
     color: #888;
-    font-size: 20px;
+    font-size: 22px;
     cursor: pointer;
-    transition: color 0.3s;
+    transition: color 0.3s, transform 0.2s;
 }
 
 .like-container i:hover {
-    color: #ff4d4d;
+    color: #667eea;
+    transform: scale(1.2);
 }
 
 .like-container span {
     font-weight: bold;
     color: #555;
-    background-color: #d0e8ff; /* 연한 파랑 */
-    
+    background: #e0e7ff;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.9rem;
 }
 
 /* ================================
@@ -89,19 +101,19 @@ div#viewComments {
 ================================= */
 div.commentDel, div.commentUpdate {
     display: inline-block;
-    font-size: 10pt;
-    color: #777;
+    font-size: 0.9rem;
+    color: #555;
     cursor: pointer;
-    margin-top: 8px;
-    margin-right: 12px;
-    transition: color 0.2s, background 0.2s;
-    padding: 2px 6px;
-    border-radius: 4px;
+    margin: 0 5px 0 0;  /* 위를 0으로 */
+    padding: 5px 12px;
+    border-radius: 6px;
+    transition: background 0.3s, color 0.3s;
 }
 
 div.commentDel:hover, div.commentUpdate:hover {
-    background: #2c3e50;
-    color: #fff;
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
 }
 
 /* ================================
@@ -109,17 +121,19 @@ div.commentDel:hover, div.commentUpdate:hover {
 ================================= */
 form[name="commentFrm"] textarea {
     width: 80%;
-    margin: 20px auto;
+    margin: 25px auto;
     display: block;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    transition: border 0.2s, box-shadow 0.2s;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 1rem;
+    transition: box-shadow 0.3s, border 0.3s;
 }
 
 form[name="commentFrm"] textarea:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 5px rgba(52,152,219,0.5);
+    border-color: #667eea;
+    box-shadow: 0 0 8px rgba(102,126,234,0.4);
     outline: none;
 }
 
@@ -127,68 +141,49 @@ form[name="commentFrm"] textarea:focus {
    후기등록 버튼
 ================================= */
 #btnCommentOK {
-    margin: 20px auto;
+    margin: 25px auto;
     display: block;
-    background: #3563e9;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
+    background: #667eea;
+    color: white;
     font-weight: 600;
-    font-size: 1.06rem;
-    padding: 0.7rem 2.1rem;
-    box-shadow: 0 2px 8px rgba(53,99,233,0.10);
-    transition: background 0.2s, box-shadow 0.18s, transform 0.13s;
-    width: auto;
+    font-size: 1.1rem;
+    padding: 0.8rem 2.2rem;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(102,126,234,0.2);
+    transition: background 0.3s, box-shadow 0.2s, transform 0.2s;
 }
 
 #btnCommentOK:hover {
-    background: #2547b8;
-    box-shadow: 0 4px 16px rgba(53,99,233,0.15);
-    transform: translateY(-2px) scale(1.03);
+    background: #4b59c7;
+    box-shadow: 0 8px 20px rgba(102,126,234,0.35);
+    transform: translateY(-3px);
     cursor: pointer;
 }
-
 
 /* ================================
    위로가기 버튼
 ================================= */
 #btnScrollTop {
-    border: 2px solid #3498db;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    transition: background 0.3s, transform 0.2s;
-}
-
-#btnScrollTop:hover {
-    background: #3498db;
-    color: white;
-    transform: translateY(-2px);
-}
-
-/* 위로 가기 버튼 전용 CSS */
-#btnScrollTop {
-    background: linear-gradient(135deg, #a7bfff 0%, #f3e7e9 100%);
-    color: #2d3748;
+    background: rgba(255,255,255,0.85);
+    color: #232946;
     border: none;
-    border-radius: 50%;
-    width: 54px;
-    height: 54px;
-    box-shadow: 0 4px 16px rgba(127, 156, 245, 0.13);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.3s, color 0.2s, transform 0.2s, box-shadow 0.2s;
-    font-size: 1.6rem;
-    padding: 0;
+    border-radius: 28px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 0.9rem 2.5rem;
+    box-shadow: 0 4px 24px rgba(140,180,255,0.15);
+    backdrop-filter: blur(6px);
+    transition: background 0.3s, box-shadow 0.2s, color 0.2s, transform 0.16s;
 }
 
 #btnScrollTop:hover {
-    background: linear-gradient(135deg, #667eea 0%, #a7bfff 100%);
+    background: rgba(140,180,255,0.92);
     color: #fff;
-    transform: translateY(-3px) scale(1.08);
-    box-shadow: 0 8px 24px rgba(127, 156, 245, 0.22);
+    box-shadow: 0 8px 32px rgba(140,180,255,0.25);
+    transform: translateY(-3px) scale(1.05);
 }
+
 
 </style>
 
@@ -197,42 +192,44 @@ form[name="commentFrm"] textarea:focus {
 <script type="text/javascript">
 
 let isOrderOK = false;
-
-
+let currentPage = 1;
 
 //특정 제품의 제품후기글들을 보여주는 함수 
- function goReviewListView() {
+ function goReviewListView(page = 1) {
   
-  // alert("후기글 보여주기");
+
+  	// alert("후기글 보여주기");
   
     $.ajax({
         url:"<%= ctxPath%>/item/reviewList.do",
         type:"get",
-        data:{"fk_itemNo":"${item.itemNo}"},
+        data:{"fk_itemNo":"${item.itemNo}",
+        		"page":page},
         dataType:"json",
          success:function(json){ 
-         
+        	 console.log(json);
             
             let v_html = "";
            
-           if(json.length > 0) {
-              
-              $.each(json, function(index, item){
-                 
+            if(json.reviews.length > 0) {
+            	
+              $.each(json.reviews, function(index, item){
+            	  console.log(item);
+            	  
                  let writeUserid = item.fk_id;
                  let loginUserid = "${sessionScope.loginUser.id}";
                  
-                
-			                 v_html += "<div class='review-card' id='review"+index+"'>"
-			                 +   "<div class='review-top'>"
-			                 +     "<div class='review-content'><span class='markColor'>▶</span>&nbsp;" + item.content + "</div>"
-			                 +     "<div class='review-meta'>" + item.name + " | " + item.createdAt + "</div>"
-			                 +   "</div>"
-			                 +   "<div class='like-container'>"
-			                 +     "<i class='fas fa-thumbs-up' style='cursor:pointer;' onclick='golikeAdd(" + item.reviewId + ")'></i>"
-			                 +     "<span id='likeCnt" + item.reviewId + "' class='badge badge-primary'></span>"
-			                 +   "</div>"
-			                 + "</div>";
+                 v_html += "<div class='review-card' id='review"+index+"'>"
+                 +   "<div class='review-top'>"
+                 +     "<div class='review-content'><span class='markColor'>▶</span>&nbsp;" + item.content + "</div>"
+                 +     "<div class='review-meta'>" + item.name + " | " + item.createdAt + "</div>"
+                 +   "</div>"
+                 +   "<div class='like-container'>"
+                 +    "<span style='font-size:13px; color:#888; margin-right:8px;'>이 리뷰가 도움이 돼요!</span>"
+                 +     "<i class='fas fa-thumbs-up' style='cursor:pointer;' onclick='golikeAdd(" + item.reviewId + ")'></i>"
+                 +     "<span id='likeCnt" + item.reviewId + "' class='badge badge-primary'></span>"
+                 +   "</div>";
+
                      
 			                 // ✅ 동시 요청 방지: 100ms 간격으로 AJAX 호출
 			                 setTimeout(() => {
@@ -244,15 +241,13 @@ let isOrderOK = false;
                      // 로그인을 안한 경우 
                      v_html += "<div class='customDisplay spacediv'>&nbsp;</div>";
                  }
-                 else if(loginUserid != "" && writeUserid != loginUserid ) { 
-                     // 로그인을 했으나 후기글이 로그인한 사용자 쓴 글이 아니라 다른 사용자 쓴 후기글 이라면  
-                     v_html += "<div class='customDisplay spacediv'>&nbsp;</div>";
-                 } 
-                 else if(loginUserid != "" && writeUserid == loginUserid ) {
-                     // 로그인을 했고 후기글이 로그인한 사용자 쓴 글 이라면
-                     v_html += "<div class='customDisplay spacediv commentDel' onclick='delMyReview("+item.reviewId+")'>후기삭제</div>"; 
-                     v_html += "<div class='customDisplay spacediv commentDel commentUpdate' onclick='updateMyReview("+index+","+item.reviewId+")'>후기수정</div>"; 
-                  }
+                 else if(loginUserid != "" && writeUserid == loginUserid ) { 
+                     v_html += "<div style='margin-top:12px; display:flex; gap:10px;'>" 
+			           	+ "<div class='commentDel' onclick='delMyReview("+item.reviewId+")'>후기삭제</div>"
+			           	+ "<div class='commentUpdate' onclick='updateMyReview("+index+","+item.reviewId+")'>후기수정</div>"
+			           	+ "</div>";
+               }
+                 v_html += "</div>";
                  
               }); // end of $.each(json, function(index, item){})---------------
               
@@ -263,6 +258,19 @@ let isOrderOK = false;
            }// end of else ----------------------------
            
            $('div#viewComments').html(v_html);
+           
+           // 페이지네이션 그리기
+           let page_html = "<div style='text-align:center; margin-top:20px;'>";
+           for (let i = 1; i <= json.totalPage; i++) {
+               if (i === json.currentPage) {
+                   page_html += "<span style='margin:0 5px; font-weight:bold; color:#667eea;'>" + i + "</span>";
+               } else {
+                   page_html += "<a href='#' onclick='goReviewListView(" + i + ")' style='margin:0 5px; text-decoration:none; color:#333;'>" + i + "</a>";
+               }
+           }
+           page_html += "</div>";
+           
+           $('#viewComments').append(page_html);
            
         },
         error: function(request, status, error){
@@ -403,7 +411,7 @@ let isOrderOK = false;
 		   success:function(json){ 
 			 
 			   $('span#likeCnt'+reviewId).html(json.likecnt);
-			   console.log(">>> goLikeCount item.reviewId = " + item.reviewId);
+			   console.log(">>> goLikeCount item.reviewId = " + reviewId);
 		   },
 		   error: function(request, status, error){
 		       alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -417,7 +425,7 @@ let isOrderOK = false;
 	$(function() {
 		
 		 //goLikeCount(reviewId);  // 좋아요 반응 수 보여주는 함수 호출하기
-    	 goReviewListView();	// 제품후기글을 보여주는 함수 호출하기
+    	 goReviewListView(currentPage);	// 제품후기글을 보여주는 함수 호출하기
     	 
     	 
 		
@@ -565,7 +573,7 @@ let isOrderOK = false;
 
 
 	
-	<div class="col-md-12" style="background-color: #f5f5f5;padding-top:80px;">
+	<div class="col-md-12" style="background-color: #FOF4FA;padding-top:80px;">
 		<div class="d-flex">
 			<div class="col-8 my-5" style="border-right: 1px solid #ccc;">
 				<img class="mt-4" src="<%= ctxPath%>${item.itemPhotoPath}" class="img-fluid" style="width: 80%;">

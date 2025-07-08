@@ -32,7 +32,7 @@ private ItemDAO itemDAO = null;
 			String content = request.getParameter("content");
 			
 			// 입력한 내용에서 엔터는 <br> 로 변환시키기
-			content.replaceAll("\r\n", "<br>");
+			content = content.replaceAll("\r\n", "<br>");
 						
 			Map<String, String> paraMap = new HashMap<>();
 	         paraMap.put("reviewId", reviewId);

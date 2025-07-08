@@ -83,8 +83,11 @@ public interface ItemDAO {
 	List<Order_itemsVO> selectOrderDetail(Map<String, String> paraMap) throws SQLException;
 
 	// 리뷰 조회하기
-	List<ReviewVO> reviewList(String fk_itemNo) throws SQLException;
+	List<ReviewVO> reviewList(String fk_itemNo, int startRow, int endRow) throws SQLException;
 
+	//리뷰 페이지 수 
+	int getReviewCount(String fk_itemNo)throws SQLException;
+	
 	//리뷰 등록하기
 	int addReview(ReviewVO reviewVO) throws SQLException;
 
@@ -102,6 +105,11 @@ public interface ItemDAO {
 
 	// 리뷰 좋아요 수 조회
 	Map<String, Integer> getLikeCount(String reviewId)throws SQLException;
+
+
+	
+
+	
 
 		
 }

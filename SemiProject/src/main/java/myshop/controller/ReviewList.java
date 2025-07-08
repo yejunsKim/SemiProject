@@ -21,7 +21,20 @@ public class ReviewList extends BaseController {
 		
 		String fk_itemNo = request.getParameter("fk_itemNo");
 		
-		List<ReviewVO> reviewList = itemDAO.reviewList(fk_itemNo);
+		// 페이지 번호 가져오기
+	    String pageStr = request.getParameter("page");
+	    int currentPage = (pageStr == null || pageStr.trim().isEmpty()) ? 1 : Integer.parseInt(pageStr);
+
+	    int sizePerPage = 5; // 한 페이지에 5개 보여주기
+	    int startRow = (currentPage - 1) * sizePerPage + 1;
+	    int endRow = currentPage * sizePerPage;
+		
+		List<ReviewVO> reviewList = itemDAO.reviewList(fk_itemNo, startRow, endRow);
+		
+		// 총 게시물 수
+	    int totalCount = itemDAO.getReviewCount(fk_itemNo);
+	    int totalPage = (int)Math.ceil((double)totalCount / sizePerPage);
+
 
 		JSONArray jsArr = new JSONArray(); // []
 		
@@ -40,11 +53,17 @@ public class ReviewList extends BaseController {
 				
 			}
 			
+			
+
+			
 		}
-		
-		String json = jsArr.toString();
-		
-		request.setAttribute("json", json);
+		JSONObject result = new JSONObject();
+		    result.put("reviews", jsArr);
+		    result.put("totalPage", totalPage);
+		    result.put("currentPage", currentPage);
+		    
+			request.setAttribute("json", result.toString());
+
 		
 		super.setRedirect(false);
 		super.setViewPage("/WEB-INF/jsonview.jsp");

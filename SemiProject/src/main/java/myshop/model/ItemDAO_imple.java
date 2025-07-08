@@ -1112,51 +1112,70 @@ public class ItemDAO_imple implements ItemDAO {
 
 		// 리뷰 조회하기(select)  
 		   @Override
-		   public List<ReviewVO> reviewList(String fk_itemNo) throws SQLException {
-		      
-		      List<ReviewVO> reviewList = new ArrayList<>();
-		      
-		      try {
-		         conn = ds.getConnection();
-		         
-		         String sql = " SELECT reviewId, fk_id, name, content, to_char(createdAt, 'yyyy-mm-dd hh24:mi:ss') AS createdAt "
-		                  + " FROM reviews R JOIN users U "
-		                  + " ON R.fk_id = U.id "
-		                  + " WHERE R.fk_itemno = ? "
-		                  + " order by reviewId desc ";
-		         
-		         pstmt = conn.prepareStatement(sql);
-		         pstmt.setString(1, fk_itemNo);
-		         
-		         rs = pstmt.executeQuery();
-		         
-		         while(rs.next()) {
-		            int reviewId = rs.getInt("reviewId");
-		            String fk_id = rs.getString("fk_id");
-		            String name = rs.getString("name");
-		            String content = rs.getString("content");
-		            String createAt = rs.getString("createdAt");
-		            
-		            ReviewVO reviewvo = new ReviewVO();
-		            reviewvo.setReviewId(reviewId);
-		            reviewvo.setFk_id(fk_id);
-		            
-		            UserVO uservo = new UserVO();
-		            uservo.setName(name);
-		            
-		            reviewvo.setUserVO(uservo);
-		            reviewvo.setContent(content);
-		            reviewvo.setCreatedAt(createAt);
-		            
-		            reviewList.add(reviewvo);            
-		         }
-		         
-		      } finally {
-		         close();
-		      }
-		      
-		      return reviewList;
+		   public List<ReviewVO> reviewList(String fk_itemNo, int startRow, int endRow) throws SQLException{
+		       List<ReviewVO> reviewList = new ArrayList<>();
+		       try {
+		           conn = ds.getConnection();
+
+		           String sql = 
+		               " SELECT reviewId, fk_id, name, content, createdAt " +
+		               " FROM ( " +
+		               "    SELECT R.reviewId, R.fk_id, U.name, R.content, " +
+		               "           TO_CHAR(R.createdAt, 'yyyy-mm-dd hh24:mi:ss') AS createdAt, " +
+		               "           ROW_NUMBER() OVER (ORDER BY R.reviewId DESC) AS rn " +
+		               "    FROM reviews R " +
+		               "    JOIN users U ON R.fk_id = U.id " +
+		               "    WHERE R.fk_itemNo = ? " +
+		               " ) " +
+		               " WHERE rn BETWEEN ? AND ? ";
+
+		           pstmt = conn.prepareStatement(sql);
+		           pstmt.setString(1, fk_itemNo);
+		           pstmt.setInt(2, startRow);
+		           pstmt.setInt(3, endRow);
+
+		           rs = pstmt.executeQuery();
+		           while(rs.next()) {
+		               ReviewVO reviewvo = new ReviewVO();
+		               reviewvo.setReviewId(rs.getInt("reviewId"));
+		               reviewvo.setFk_id(rs.getString("fk_id"));
+
+		               UserVO uservo = new UserVO();
+		               uservo.setName(rs.getString("name"));
+		               reviewvo.setUserVO(uservo);
+
+		               reviewvo.setContent(rs.getString("content"));
+		               reviewvo.setCreatedAt(rs.getString("createdAt"));
+
+		               reviewList.add(reviewvo);
+		           }
+		       } finally {
+		           close();
+		       }
+		       return reviewList;
 		   }
+
+		   //리뷰페이지수
+			@Override
+			public int getReviewCount(String fk_itemNo) throws SQLException {
+			    int count = 0;
+			    try {
+			        conn = ds.getConnection();
+			        String sql = "SELECT COUNT(*) FROM reviews WHERE fk_itemNo = ?";
+			        pstmt = conn.prepareStatement(sql);
+			        pstmt.setString(1, fk_itemNo);
+
+			        rs = pstmt.executeQuery();
+			        if (rs.next()) {
+			            count = rs.getInt(1);
+			        }
+
+			    } finally {
+			        close();
+			    }
+			    return count;
+			
+		}
 
 
 		
@@ -1292,6 +1311,12 @@ public class ItemDAO_imple implements ItemDAO {
 
 		       return map;
 		   }
+
+
+
+		
+
+
 		
 	}
 
