@@ -101,19 +101,20 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 											<h5 class="card-title">
 												<a href="/SemiProject/item/itemDetail.do?itemno=${item.itemno}" class="itemDetail">
 
-													<span style="display:none;">${item.itemno}</span><br>
-													<span tyle="display: none;">${item.itemno}</span><br>
-
 													${item.itemname}<br>
 												</a>
 											</h5>
 										</div>
 										<ul class="list-group list-group-flush">
-											<li class="list-group-item">${item.volume}ml</li>	
-											<li class="list-group-item d-flex justify-content-between">
-												<a href="#" class="card-link" style="color: black;">장바구니 담기</a>
-												<span>${item.price.toLocaleString('en')}원</span>
-											</li>
+											<li class="list-group-item">${item.volume}ml</li>   
+											<li class="list-group-item">${item.price.toLocaleString('en')}원</li>   
+											<li style="height: 40.8px; display: flex; align-items: center;">
+										     <form id="cartPush" method="post" action="/SemiProject/item/cartAdd.do">
+										       <input type="hidden" name="itemNo" value="${item.itemno}">
+										       <input type="hidden" name="quantity" value="1">
+										        <button type="submit" class="btn btn-link btn-sm cart-btn" style="color: black; margin-left: 10px;">장바구니 담기</button>
+										     </form>
+										    </li>
 										</ul>
 									</div>
 								</div>`;
