@@ -30,7 +30,7 @@ $(function(){
 		
 	//	if( $(window).scrollTop() == $(document).height() - $(window).height() ) {
 		// 만약에 위의 값대로 잘 안되면 아래의 것을 하도록 한다. 
-		if( $(window).scrollTop() + 1 >= $(document).height() - $(window).height() ) { 
+		if( $(window).scrollTop() == $(document).height() - $(window).height() ) { 
 			
 			if($('span#totalCount').text() != $('span#countHIT').text()) {
 				start += lenHIT;
@@ -67,6 +67,7 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 	$.ajax({
 		url:"perfumeDisplayJSON.do",
 	//	type:"get"
+		async:false,
 		data:{"categoryName":categoryName,
 			  "start":start,	// 1
 			  "len":lenHIT},	// 8
@@ -127,6 +128,7 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 				// 스크롤을 계속하여 countHIT 값과 totalCount 값이 일치하는 경우
 				if($("span#countHIT").text() == $("span#totalCount").text()) {
 					$('span#end').html("더이상 조회할 제품이 없습니다.");
+					$('button.btn-dark').show();
 				}
 			}// end of else if(json.length > 0)——————————
 			
@@ -141,6 +143,7 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 
 function goTop(){
 	$(window).scrollTop(0);
+	$('button.btn-dark').hide();
 }// end of function goTop()——————————————
 
 

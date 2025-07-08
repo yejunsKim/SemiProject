@@ -50,10 +50,10 @@
 		text-align: center;
 		vertical-align: middle;
 	}
-	tbody tr:hover {
+	/* tbody tr:hover {
 		background-color: white;
 		cursor: pointer;
-	}
+	} */
 	.order-summary {
 		text-align: left;
 		white-space: nowrap;
@@ -70,7 +70,7 @@
 	
 	$(function(){
 		
-		// tr 클릭
+		<%-- // tr 클릭
 		$('tbody').on('click', 'tr', function(){
 			
 			const orderno = $(this).data("orderno");
@@ -91,9 +91,14 @@
 			
 			alert("버튼 클릭됨");
 			
-	    });
+	    }); --%>
 		
 	});// end of $(function(){})------------------------------
+	
+	
+	function orderDetail(orderno){
+		alert(orderno);
+	}
 	
 </script>
 
@@ -107,10 +112,12 @@
 	<table>
 		<thead>
 			<tr>
-				<th style="width: 15%">주문일자</th>
+				<th style="width: 10%">주문일자</th>
 				<th style="width: 15%">주문번호</th>
 				<th>주문내역</th>
-				<th style="width: 10%">배송</th>
+				<th style="width: 15%">결제금액</th>
+				<th style="width: 10%">주문상태</th>
+				<th style="width: 10%"></th>
 			</tr>
 		</thead>
 		
@@ -122,14 +129,16 @@
 						<td>${ohvo.orderdate}</td>
 						<td>${ohvo.orderno}</td>
 						<td>${ohvo.itemlist}</td>
-						<td><button class="btn1" onclick="delivery(${status.index})" >조회</button></td>
+						<td>${ohvo.totalamount}</td>
+						<td>임시 주문상태</td>
+						<td><button class="btn1" onclick="orderDetail('${ohvo.orderno}')" >상세보기</button></td>
 					</tr>
 				</c:forEach>
 			</c:if>
 			
 			<c:if test="${empty requestScope.ohList}">
 				<tr>
-					<th colspan="4">주문한 내역이 없습니다.</th>
+					<th colspan="6">주문한 내역이 없습니다.</th>
 				</tr>
 			</c:if>
 		</tbody>

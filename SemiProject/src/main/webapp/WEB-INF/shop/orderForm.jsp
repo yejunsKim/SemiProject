@@ -65,7 +65,7 @@
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="<%=ctxPath%>/js/shop/orderForm.js"></script>
 <script type="text/javascript">
-let b_emailcheck_click = true; 
+let address_click = true; 
 //회원 수정의 이메일은 자동으로 받아오기 때문에, 건들지만 않으면 true가 맞다.
 
 
@@ -198,6 +198,8 @@ $(function(){
 		        document.getElementById("address").value = addr;
 		        // 커서를 상세주소 필드로 이동한다.
 		        document.getElementById("addressDetail").focus();
+		        // 그후 현재 주소지 변경을 누르도록 address_click = false;로 설정한다.
+		        address_click = false;
 		    }
 		}).open();
 				
@@ -292,9 +294,11 @@ $(function(){
 		}
 				
 	});	// end of $('input#email').blur((e) => {})-------------------	
-		
 	
- 	
+	$('input#addressDetail').bind('change', function(){
+		address_click = false;
+	});
+	
 	// 현재주소지로 변경 버튼을 눌렀을 때
  	$('#btnUseCurrentAddress').click(function() {
  		
@@ -309,10 +313,9 @@ $(function(){
 				return;
 			} // 만약 주소를 입력(찾기)하지 않았다면, 경고 후 함수종료시키기.
 			if(addressDetail === '' ) {
-				alert("상세주소를 입력해주세요.")
+				alert("상세주소를 입력해주세요.");
 				return;
 			}
-			
 			$.ajax({
 				url:"user/userUpdateAddress.do",
 				data:{"postcode":postcode,
@@ -332,6 +335,7 @@ $(function(){
 					if(json.isChanged) {
 						// isChanged가 true로 응답되면 주소 업데이트완료.
 						alert("변경이 완료되었습니다.");
+						address_click = true;
 					};
 				},
 				error: function(request, status, error){
@@ -387,9 +391,13 @@ $(function(){
 	       alert("상세주소를 입력해주세요.");
 	       $('#addressDetail').focus();
 	       e.preventDefault();
+	       address_click = false;
 	       return false;
 	    }
-	    
+	    if(address_click == false) {
+			alert('주소지 변경 후, "현재 주소지 변경" 버튼을 눌러주세요')
+			return false;
+		}
 	   /*  if ( $('#addressExtra').val().trim() === "") {
 		       alert("참고항목(동)를 입력해주세요.");
 		       $('#addressDetail').focus();
@@ -429,7 +437,9 @@ $(function(){
 			const usePoint = $('input#usePoint').val();
 			
  		// ==== 포트원(구 아임포트) 결제
- 		requestPayment(ctxPath, id, email, usePoint, totalAmount);
+ 		//requestPayment(ctxPath, id, email, usePoint, totalAmount);
+ 		paymentSuccessOrderService(id, usePoint, totalAmount);
+
     });
 	
 //////*** 유저 아이디를 찾기 위해 header에 loginUserId 라는 id값을 주었음. ***  ////// 
@@ -550,6 +560,7 @@ function paymentSuccessOrderService(id, usePoint, totalAmount) {
    const str_itemNo = itemNoArr.join();
    const str_quantity = quantityArr.join();
    const getPoint = $('#getPoint > strong').text();
+   const email = $('input#email').val();
    //console.log($('input#usePoint').val());
    
    console.log("확인용 str_cartNo : ", str_cartNo);       
@@ -568,7 +579,8 @@ function paymentSuccessOrderService(id, usePoint, totalAmount) {
             "getPoint":getPoint,
             "str_itemNo":str_itemNo,
             "str_quantity":str_quantity,
-            "str_cartNo":str_cartNo
+            "str_cartNo":str_cartNo,
+            "email":email
           },
       dataType:"json",
       success:function(json){ // json ==> {"isSuccess":1} 또는 {"isSuccess":0}
