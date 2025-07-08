@@ -44,16 +44,19 @@
 	thead {
 		background-color: #e7f3f9; /* 연한 하늘색 */
 	}
+	tbody {
+		background-color: white;
+	}
 	th, td {
 		border: 1px solid #ddd;
 		padding: 10px;
 		text-align: center;
 		vertical-align: middle;
 	}
-	tbody tr:hover {
+	/* tbody tr:hover {
 		background-color: white;
 		cursor: pointer;
-	}
+	} */
 	.order-summary {
 		text-align: left;
 		white-space: nowrap;
@@ -64,13 +67,18 @@
 		border: 1px solid #ccc;
 		cursor: pointer;
 	}
+	.btn1:hover {
+		background-color: #fff;
+		border-color: blue;
+		cursor: pointer;
+	}
 </style>
 
 <script type="text/javascript">
 	
 	$(function(){
 		
-		// tr 클릭
+		<%-- // tr 클릭
 		$('tbody').on('click', 'tr', function(){
 			
 			const orderno = $(this).data("orderno");
@@ -91,9 +99,19 @@
 			
 			alert("버튼 클릭됨");
 			
-	    });
+	    }); --%>
 		
 	});// end of $(function(){})------------------------------
+	
+	
+	function orderDetail(orderno){
+		if(orderno == null) {
+			alert("주문을 완료하셔야 클릭 가능합니다.");
+		}
+		else {
+		location.href = '<%= ctxPath %>/item/orderDetail.do?orderno=' + orderno;	// 주문 상세 페이지로 이동
+		}
+	}
 	
 </script>
 
@@ -107,10 +125,12 @@
 	<table>
 		<thead>
 			<tr>
-				<th style="width: 15%">주문일자</th>
+				<th style="width: 10%">주문일자</th>
 				<th style="width: 15%">주문번호</th>
 				<th>주문내역</th>
-				<th style="width: 10%">배송</th>
+				<th style="width: 15%">적립포인트</th>
+				<%-- <th style="width: 10%">주문상태</th> --%>
+				<th style="width: 10%"></th>
 			</tr>
 		</thead>
 		
@@ -122,14 +142,16 @@
 						<td>${ohvo.orderdate}</td>
 						<td>${ohvo.orderno}</td>
 						<td>${ohvo.itemlist}</td>
-						<td><button class="btn1" onclick="delivery(${status.index})" >조회</button></td>
+						<td><fmt:formatNumber pattern="#,###">${ohvo.rewarded}</fmt:formatNumber> Point</td>
+						<%-- <td>임시 주문상태</td> --%>
+						<td><button class="btn1" onclick="orderDetail('${ohvo.orderno}')" >상세보기</button></td>
 					</tr>
 				</c:forEach>
 			</c:if>
 			
 			<c:if test="${empty requestScope.ohList}">
 				<tr>
-					<th colspan="4">주문한 내역이 없습니다.</th>
+					<th colspan="6">주문한 내역이 없습니다.</th>
 				</tr>
 			</c:if>
 		</tbody>

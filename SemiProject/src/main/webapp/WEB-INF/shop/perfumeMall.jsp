@@ -56,14 +56,18 @@
 				<div>
 					<p class="text-center">
 						<span id="end" style="display:block; margin:20px; font-size: 14pt; font-weight: bold; color: red;"></span>
-						<span id="totalCount">${requestScope.totalCount}</span>
-						<span id="countHIT">0</span>
+						<span style="display:none;" id="totalCount">${requestScope.totalCount}</span>
+						<span style="display:none;" id="countHIT">0</span>
 					</p>
 				</div>
 				
 				<div style="display: flex;">
 					<div style="margin: 0 auto;">
-						<button class="btn btn-info" onclick="goTop()">맨위로가기(scrollTop 1로 설정함)</button>
+						<button style="display: none;" class="btn btn-dark" onclick="goTop()">
+							<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+			        		<path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+			      		</svg>
+						</button>
 					</div>
 				</div>
 				

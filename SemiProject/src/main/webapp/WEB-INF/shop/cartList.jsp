@@ -325,9 +325,9 @@
 		<table>
 			<thead>
 				<tr>
-					<th style="width: 10%;"><input type="checkbox" id="allCheckOrNone" onclick="allCheckBox()" />  제품번호</th>
+					<th style="width: 5%;"><input type="checkbox" id="allCheckOrNone" onclick="allCheckBox()" /></th>
 					<th style="width: 15%;">이미지</th>
-					<th style="width: 15%;">향수명</th>
+					<th style="width: 20%;">향수명</th>
 					<th style="width: 10%;">상품금액(개당)</th>
 					<th style="width: 10%;">최대 적립 포인트</th>
 					<th style="width: 15%;">수량</th>

@@ -1,4 +1,3 @@
-
 let lenHIT = 8;
 
 $(function(){
@@ -31,7 +30,7 @@ $(function(){
 		
 	//	if( $(window).scrollTop() == $(document).height() - $(window).height() ) {
 		// 만약에 위의 값대로 잘 안되면 아래의 것을 하도록 한다. 
-		if( $(window).scrollTop() + 1 >= $(document).height() - $(window).height() ) { 
+		if( $(window).scrollTop() == $(document).height() - $(window).height() ) { 
 			
 			if($('span#totalCount').text() != $('span#countHIT').text()) {
 				start += lenHIT;
@@ -68,6 +67,7 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 	$.ajax({
 		url:"perfumeDisplayJSON.do",
 	//	type:"get"
+		async:false,
 		data:{"categoryName":categoryName,
 			  "start":start,	// 1
 			  "len":lenHIT},	// 8
@@ -100,7 +100,6 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 										
 											<h5 class="card-title">
 												<a href="/SemiProject/item/itemDetail.do?itemno=${item.itemno}" class="itemDetail">
-
 													${item.itemname}<br>
 												</a>
 											</h5>
@@ -118,7 +117,7 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 										</ul>
 									</div>
 								</div>`;
-				});// end of $.each(json, function(index, item){})-------------------------
+				});// end of $.each(json, function(index, item){})————————————
 				
 				// HIT 상품 결과를 출력하기
 				$('div#displayHIT').append(v_html);
@@ -129,8 +128,9 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 				// 스크롤을 계속하여 countHIT 값과 totalCount 값이 일치하는 경우
 				if($("span#countHIT").text() == $("span#totalCount").text()) {
 					$('span#end').html("더이상 조회할 제품이 없습니다.");
+					$('button.btn-dark').show();
 				}
-			}// end of else if(json.length > 0)---------------------
+			}// end of else if(json.length > 0)——————————
 			
 		},
 		error: function(request, _, error){
@@ -138,11 +138,12 @@ function displayHIT(start){	// start가  1 이라면   1~ 8  까지 상품 8개�
 		}
 	});
 	
-}// end of function displayHIT(start)-------------------
+}// end of function displayHIT(start)—————————
 
 
 function goTop(){
 	$(window).scrollTop(0);
-}// end of function goTop()-----------------------------
+	$('button.btn-dark').hide();
+}// end of function goTop()——————————————
 
 

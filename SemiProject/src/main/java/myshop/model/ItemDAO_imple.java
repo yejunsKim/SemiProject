@@ -1,5 +1,8 @@
 package myshop.model;
 
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,9 +18,12 @@ import javax.sql.DataSource;
 
 import myshop.domain.CartVO;
 import myshop.domain.CategoryVO;
+import myshop.domain.Delivery_addressVO;
 import myshop.domain.ItemVO;
 import myshop.domain.Order_historyVO;
 import myshop.domain.Order_itemsVO;
+import util.security.AES256;
+import util.security.SecretMyKey;
 
 
 public class ItemDAO_imple implements ItemDAO {
@@ -26,6 +32,7 @@ public class ItemDAO_imple implements ItemDAO {
 	private Connection conn;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
+	private AES256 aes; // 양방향일 때 사용!
 	
 	// 생성자
 	public ItemDAO_imple() {
@@ -35,7 +42,11 @@ public class ItemDAO_imple implements ItemDAO {
 			Context envContext  = (Context)initContext.lookup("java:/comp/env");
 			ds = (DataSource)envContext.lookup("jdbc/semiproject");
 			
+			aes = new AES256(SecretMyKey.KEY);
 		} catch(NamingException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -407,7 +418,7 @@ public class ItemDAO_imple implements ItemDAO {
 		try {
 			conn = ds.getConnection();
 			
-			String sql = " SELECT C.cartno, I.itemPhotoPath, I.itemName, I.price, I.itemAmount, C.cartamount, "
+			String sql = " SELECT C.cartno, I.itemPhotoPath, I.itemName, I.price, I.itemAmount, C.cartamount, I.itemNo, "
 					   + " TO_CHAR(C.cartdate, 'yyyy-mm-dd') AS cartdate, U.grade "
 					   + " FROM cart C "
 					   + " JOIN users U ON C.fk_users_id = U.id "
@@ -434,6 +445,7 @@ public class ItemDAO_imple implements ItemDAO {
 				ivo.setItemName(rs.getString("itemName"));
 				ivo.setPrice(rs.getInt("price"));
 				ivo.setItemAmount(rs.getInt("itemAmount"));
+				ivo.setItemNo(rs.getInt("itemNo"));
 				
 				// 등급에 따른 포인트 계산
 				ivo.setUserItemPoint(rs.getString("grade"));
@@ -720,68 +732,56 @@ public class ItemDAO_imple implements ItemDAO {
 	}
 	
 	// 로그인 유저의 장바구니 조회.	
-		@Override
-		public List<ItemVO> getOrderItemList(String id, String[] selectedCartNoArray) throws SQLException {
+	@Override
+	public List<ItemVO> getOrderItemList(String[] itemNoArr) throws SQLException {
 
-		    List<ItemVO> getOrderItemList = new ArrayList<>();
+	    List<ItemVO> getOrderItemList = new ArrayList<>();
 
-		    if(selectedCartNoArray == null || selectedCartNoArray.length == 0) {
-		        return getOrderItemList;
-		    }
+	    try {
+	        conn = ds.getConnection();
 
-		    try {
-		        conn = ds.getConnection();
+	        StringBuilder placeholders = new StringBuilder();
+	        for (int i = 0; i < itemNoArr.length; i++) {
+	            placeholders.append("?");
+	            if (i < itemNoArr.length - 1) {
+	                placeholders.append(",");
+	            }
+	        }
 
-		        StringBuilder placeholders = new StringBuilder();
-		        for (int i = 0; i < selectedCartNoArray.length; i++) {
-		            placeholders.append("?");
-		            if (i < selectedCartNoArray.length - 1) {
-		                placeholders.append(",");
-		            }
-		        }
+	        String sql = " select itemno, itemname, ITEMPHOTOPATH, price, volume "
+	        		   + " from item "
+	                   + " where itemno in ( "+ placeholders.toString()+" ) ";
+	        
+	        pstmt = conn.prepareStatement(sql);
 
-		        String sql = "SELECT cartno, fk_users_id, itemno, cartamount, itemname, ITEMPHOTOPATH, price, volume, cartamount"
-		                   + " FROM cart c "
-		                   + " JOIN item i ON c.fk_item_no = i.itemno "
-		                   + " WHERE c.fk_users_id = ? "
-		                   + " AND cartno IN (" + placeholders.toString() + ")";
+	        for (int i = 0; i < itemNoArr.length; i++) {
+	            pstmt.setString(i + 1, itemNoArr[i]);
+	        }
+	        
+	        rs = pstmt.executeQuery();
 
-		        pstmt = conn.prepareStatement(sql);
-		        pstmt.setString(1, id);
-		        for (int i = 0; i < selectedCartNoArray.length; i++) {
-		            pstmt.setString(i + 2, selectedCartNoArray[i]);
-		        }
-		        
-		        rs = pstmt.executeQuery();
+	        while(rs.next()) {
+	           /* CartVO cvo = new CartVO();
+	            cvo.setCartno(rs.getInt("cartno"));
+	            cvo.setFk_users_id(rs.getString("fk_users_id"));
+	            cvo.setCartamount(rs.getInt("cartamount"));*/
 
-		        while(rs.next()) {
-		           /* CartVO cvo = new CartVO();
-		            cvo.setCartno(rs.getInt("cartno"));
-		            cvo.setFk_users_id(rs.getString("fk_users_id"));
-		            cvo.setCartamount(rs.getInt("cartamount"));*/
+	            ItemVO itemvo = new ItemVO();
+	            itemvo.setItemNo(rs.getInt("itemno"));
+	            itemvo.setItemName(rs.getString("itemname"));
+	            itemvo.setItemPhotoPath(rs.getString("itemphotopath"));
+	            itemvo.setPrice(rs.getInt("price"));
+	            itemvo.setVolume(rs.getInt("volume"));
 
-		            ItemVO itemvo = new ItemVO();
-		            itemvo.setItemNo(rs.getInt("itemno"));
-		            itemvo.setItemName(rs.getString("itemname"));
-		            itemvo.setItemPhotoPath(rs.getString("itemphotopath"));
-		            itemvo.setPrice(rs.getInt("price"));
-		            itemvo.setVolume(rs.getInt("volume"));
+	            getOrderItemList.add(itemvo);
+	        }
 
-		            CartVO cartvo = new CartVO();
-		            cartvo.setCartamount(rs.getInt("cartamount"));
-		            cartvo.setCartno(rs.getInt("cartno"));
-		            // cartno 를 끌고와야, 추후 계산 완료시 해당 카트를 삭제할 수 있음.
-		            itemvo.setCartvo(cartvo);
-	 
-		            getOrderItemList.add(itemvo);
-		        }
+	    } finally {
+	        close();
+	    }
 
-		    } finally {
-		        close();
-		    }
-
-		    return getOrderItemList;
-		}
+	    return getOrderItemList;
+	}
 	
 	// 로그인한 유저의 주문 내역의 총 페이지수 알아오기
 	@Override
@@ -889,14 +889,16 @@ public class ItemDAO_imple implements ItemDAO {
 			
 			conn = ds.getConnection();
 			
-			String sql = " SELECT itemPhotoPath, itemName, volume, quantity, orderprice, totalamount "
+			String sql = " SELECT itemPhotoPath, itemName, volume, quantity, orderprice, totalamount, rewarded"
+					   + "		, D.email, D.address, D.addressdetail, D.addressextra, D.deliveryno "
 					   + " FROM item I JOIN order_items OI ON I.itemNo = OI.itemno "
 					   + " JOIN order_history OH ON OI.orderno = OH.orderno "
-					   + " WHERE id = ? AND OH.orderno = ? ";
+					   + " JOIN delivery_address D ON OI.deliveryno = D.deliveryno "
+					   + " WHERE OH.id = ? AND OH.orderno = ? ";
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, paraMap.get("id"));
-			pstmt.setInt(2, Integer.parseInt(paraMap.get("orderno")));
+			pstmt.setString(2, paraMap.get("orderno"));
 			
 			rs = pstmt.executeQuery();
 			
@@ -907,6 +909,15 @@ public class ItemDAO_imple implements ItemDAO {
 				oivo.setQuantity(rs.getInt("quantity"));
 				oivo.setOrderprice(rs.getInt("orderprice"));
 				
+				Delivery_addressVO davo = new Delivery_addressVO();
+				if(cnt == 1) {
+					davo.setEmail(aes.decrypt(rs.getString("email"))); // 주문배송지의 이메일을 가져옴.
+					davo.setAddress(rs.getString("address"));
+					davo.setAddressdetail(rs.getString("addressdetail"));
+					davo.setAddressextra(rs.getString("addressextra"));
+					davo.setDeliveryno(rs.getInt("deliveryno"));
+					oivo.setDelivery_addressVO(davo); // 주문배송지를 order_item에 삽입
+				}
 				ItemVO ivo = new ItemVO();
 				ivo.setItemPhotoPath(rs.getString("itemPhotoPath"));
 				ivo.setItemName(rs.getString("itemName"));
@@ -916,12 +927,22 @@ public class ItemDAO_imple implements ItemDAO {
 				Order_historyVO ohvo = new Order_historyVO();
 				if(cnt == 1) {
 					ohvo.setTotalamount(rs.getInt("totalamount"));
+					ohvo.setRewarded(rs.getInt("rewarded"));
 					oivo.setOhvo(ohvo);
 				}
 				
 				oiList.add(oivo);
 			}// end of while------------------
 			
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (GeneralSecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} finally {
 			close();
 		}
@@ -998,7 +1019,7 @@ public class ItemDAO_imple implements ItemDAO {
 			 		    + " from dual";
 				 
 			 pstmt = conn.prepareStatement(sql);
-				 
+			 
 			 rs = pstmt.executeQuery();
 				 
 			 rs.next();
@@ -1011,6 +1032,30 @@ public class ItemDAO_imple implements ItemDAO {
 			
 		return seq;
 	}
+	//주문 배송지번호 채번하기
+	@Override
+	public int getDeliverySequence() throws SQLException {
+		int seq = 0;
+		
+		try {
+			 conn = ds.getConnection();
+				 
+			 String sql = " select delivery_seq.nextval AS seq "
+			 		    + " from dual";
+				 
+			 pstmt = conn.prepareStatement(sql);
+			 
+			 rs = pstmt.executeQuery();
+				 
+			 rs.next();
+				 
+			 seq = rs.getInt("seq");
+				 
+			} finally {
+			  close();
+		}
+		return seq;
+	}
 	
 	// 트랜잭션으로 주문 insert & 재고감소 & 장바구니삭제 & 포인트적립
 	@Override
@@ -1019,12 +1064,14 @@ public class ItemDAO_imple implements ItemDAO {
 		int isSuccess = 0;
 	    int n1=0, n2=0, n3=0, n4=0, n5=0;	      
     
-	      try {
+	    try {
 	         conn = ds.getConnection();
 	         conn.setAutoCommit(false);
 	         //String 얻어오기
 	         String id = (String)paraMap.get("id");
 	         String orderNo = (String) paraMap.get("orderNo"); // 주문코드는 문자열로 유지
+	         // 사실상 orderCode인 셈.
+	         int deliverNo = (Integer) paraMap.get("deliverNo");
 	         int totalAmount = Integer.parseInt((String) paraMap.get("totalAmount"));
 	         int usePoint = Integer.parseInt((String) paraMap.get("usePoint"));
 	         int getPoint = Integer.parseInt((String) paraMap.get("getPoint"));
@@ -1034,110 +1081,141 @@ public class ItemDAO_imple implements ItemDAO {
 	         String[] cartNoArr = ((String[]) paraMap.get("cartNoArr"));
 	         String[] itemNoArr = ((String[])paraMap.get("itemNoArr"));
 	         String[] quantityArr = ((String[])paraMap.get("quantityArr"));
-	
+	         int[] itemEachPriceArr = ((int[])paraMap.get("itemEachPriceArr"));
 	
 	         // 주문 insert
 	         String sql = " insert into order_history(orderNo, id, orderDate, totalAmount, rewarded) "
-	         		+ " values(order_seq.nextval, ? , sysdate, ? , ? ) ";
+	         		+ " values(?, ? , sysdate, ? , ? ) ";
 	         
 	         pstmt= conn.prepareStatement(sql);
-	         pstmt.setString(1, id);
-	         pstmt.setInt(2, totalAmount);
-	         pstmt.setInt(3, getPoint); 	        
+	      	
+	         pstmt.setString(1, orderNo); // 사실상 orderCode인 셈.
+	         pstmt.setString(2, id);
+	         pstmt.setInt(3, totalAmount);
+	         pstmt.setInt(4, getPoint); 	        
 	         
 	         n1= pstmt.executeUpdate();
 	         pstmt.close();
 	          
-	      	if(n1==1) {
-	          
+	      	if(n1==1) { 
+	      	// 주문상세내역(order_items)이 insert되었다면,
+	      	// 주문 배송지 (delivery_address)도 insert 해주기
+	      		sql = " insert into delivery_address (deliveryNo, id, postcode, address, addressDetail, addressExtra, email) "
+	        		  		+ " values (?, ?, ?, ?, ?, ?, ?) ";
+	      		pstmt = conn.prepareStatement(sql);
+
+	      		pstmt.setInt(1, deliverNo);
+	      		pstmt.setString(2, id);
+	      		pstmt.setString(3, (String)paraMap.get("postcode"));
+	      		pstmt.setString(4, (String)paraMap.get("address"));
+	      		pstmt.setString(5, (String)paraMap.get("addressDetail"));
+	      		pstmt.setString(6, (String)paraMap.get("addressExtra"));
+	      		pstmt.setString(7, aes.encrypt((String)paraMap.get("email")));
+
+	      		n2= pstmt.executeUpdate();
+	      		pstmt.close();
+	      	}
+	      	if(n2==1) {
 	      	  int cnt =0;
 	      		
 	          for(int i=0; i<itemNoArr.length; i++) {
 	        	  
-        		  sql = " insert into order_items (orderItemNO, orderNo, itemNo, quantity,"
-        		  		+ "	orderPrice,	deliveryNo) "
-        		  		+ " values (order_item_seq.nextval, order_seq.currval, ?, ?, "
-        		  		+ " ?, delivery_seq.nextval) ";
+        		  sql = " insert into order_items (orderItemNo, orderNo, itemNo, quantity, orderPrice"
+        		  		+ "							, deliveryNo) "
+        		  		+ " values (order_item_seq.nextval, ?, ?, ?, ?, ?) ";
         		  
         		  pstmt = conn.prepareStatement(sql);
-                    pstmt.setString(1, itemNoArr[i]);
-                    pstmt.setInt(2, Integer.parseInt(quantityArr[i]));
-                    pstmt.setInt(3, 0); 
-                    pstmt.executeUpdate();
-                    pstmt.close();
-        		  
+                  pstmt.setString(1, orderNo);
+                  pstmt.setString(2, itemNoArr[i]);
+                  pstmt.setInt(3, Integer.parseInt(quantityArr[i]));
+                  pstmt.setInt(4, itemEachPriceArr[i]);
+                  pstmt.setInt(5, deliverNo);
+                  pstmt.executeUpdate();
+                  pstmt.close();
+        		  System.out.println("itemEachPriceArr[i]>>"+itemEachPriceArr[i]);
                  // 재고 감소
-                    sql = "UPDATE item SET itemAmount = itemAmount - ? WHERE itemNo = ?";
-                    pstmt = conn.prepareStatement(sql);
-                    pstmt.setInt(1, Integer.parseInt(quantityArr[i]));
-                    pstmt.setString(2, itemNoArr[i]);
-                    pstmt.executeUpdate();
-                    pstmt.close();
-                    
-                    cnt++;
+                  sql = "UPDATE item SET itemAmount = itemAmount - ? WHERE itemNo = ?";
+                  pstmt = conn.prepareStatement(sql);
+                  pstmt.setInt(1, Integer.parseInt(quantityArr[i]));
+                  pstmt.setString(2, itemNoArr[i]);
+                  pstmt.executeUpdate();
+                  pstmt.close();
+                
+                  cnt++;
         	  }
         	  if(cnt == cartNoArr.length) {
-                  n2 = 1; n3 = 1;
+                  n3 = 1;
               }
-      	}
+	      	}
         	  
         	  // 장바구니 삭제
-      	if(n3 == 1) {
-      	    StringBuilder placeholders = new StringBuilder();
-      	    for (int i = 0; i < cartNoArr.length; i++) {
-      	        placeholders.append("?");
-      	        if (i < cartNoArr.length - 1) {
-      	            placeholders.append(",");
-      	        }
+	      	if(n3 == 1) {
+	      	    StringBuilder placeholders = new StringBuilder();
+	      	    for (int i = 0; i < cartNoArr.length; i++) {
+	      	        placeholders.append("?");
+	      	        if (i < cartNoArr.length - 1) {
+	      	            placeholders.append(",");
+	      	        }
       	    }
 
-      	    sql = "DELETE FROM cart WHERE cartno IN (" + placeholders.toString() + ")";
-      	    pstmt = conn.prepareStatement(sql);
-      	    for (int i = 0; i < cartNoArr.length; i++) {
-      	        pstmt.setString(i + 1, cartNoArr[i]);
-      	    }
-
-      	    n4 = pstmt.executeUpdate();
-      	    pstmt.close();
-
-      	    if (n4 >= cartNoArr.length) {
-      	        n4 = 1;
-      	    }
-      	}
-        	  
-        	  //사용자 포인트 적립
-        	  if(n4==1) {
-        		  sql = " update users set point = point + ? "
-        		  		+ " where id = ? ";
-        		  
-        		  pstmt= conn.prepareStatement(sql);
-        		  pstmt.setInt(1, getPoint - usePoint);
-        		  pstmt.setString(2, id);
-        		  n5 = pstmt.executeUpdate();
-        		  pstmt.close();
-        	  }
-        	  
-        	  if(n1*n2*n3*n4*n5 == 1) {
-					
-					conn.commit();
-					
-					conn.setAutoCommit(true); // 자동커밋으로 전환 
-					
-				//	System.out.println("~~~ 확인용 n1*n2*n3*n4*n5 : " + n1*n2*n3*n4*n5);
-				//	~~~ 확인용 n1*n2*n3*n4*n5 : 1 
-					
-					isSuccess = 1;
-				}
-        	  
-        	  
-	} catch(SQLException e) {
+	      	    sql = "DELETE FROM cart WHERE cartno IN (" + placeholders.toString() + ")";
+	      	    pstmt = conn.prepareStatement(sql);
+	      	    for (int i = 0; i < cartNoArr.length; i++) {
+	      	        pstmt.setString(i + 1, cartNoArr[i]);
+	      	    }
+	
+	      	    n4 = pstmt.executeUpdate();
+	      	    pstmt.close();
+	
+	      	    if (n4 >= cartNoArr.length) {
+	      	        n4 = 1;
+	      	    }
+	      	}
+		  
+			//사용자 포인트 적립
+			if(n4==1) {
+				sql = " update users set point = point + ? "
+				  	+ " where id = ? ";
+				  
+				pstmt= conn.prepareStatement(sql);
+				pstmt.setInt(1, getPoint - usePoint);
+				pstmt.setString(2, id);
+				n5 = pstmt.executeUpdate();
+				pstmt.close();
+			}
+		    System.out.println("n1="+n1+" n2="+n2+" n3="+n3+" n4="+n4+" n5="+n5);
+		    if(n1*n2*n3*n4*n5 == 1) {
+				
+			conn.commit();
 			
+			conn.setAutoCommit(true); // 자동커밋으로 전환 
+			
+			//	System.out.println("~~~ 확인용 n1*n2*n3*n4*n5 : " + n1*n2*n3*n4*n5);
+			//	~~~ 확인용 n1*n2*n3*n4*n5 : 1 
+			
+			isSuccess = 1;
+		}
+        	  
+        	  
+	    } catch(SQLException e) {
+			e.printStackTrace();
+		    System.out.println("n1="+n1+" n2="+n2+" n3="+n3+" n4="+n4+" n5="+n5);
+
 			conn.rollback();
 			
 			conn.setAutoCommit(true); // 자동커밋으로 전환 
 			
 			isSuccess = 0;
 			
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (GeneralSecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} finally {
 			close();
 		}
