@@ -72,10 +72,10 @@ public class OrderList extends BaseController {
 		
 		// **** [맨처음][이전] 만들기 **** //
 		// pageNo ==> 11
-		pageBar += "<li class='page-item'><a class='page-link' href='orderList.do?currentShowPageNo=1'>[맨처음]</a></li>";
+		pageBar += "<li class='page-item'><a class='page-link' href='orderList.do?currentShowPageNo=1'><i class='fa-solid fa-angles-left'></i></a></li>";
 		
 		if(pageNo != 1) {
-			pageBar += "<li class='page-item'><a class='page-link' href='orderList.do?currentShowPageNo=" + (pageNo - 1) + "'>[이전]</a></li>";
+			pageBar += "<li class='page-item'><a class='page-link' href='orderList.do?currentShowPageNo=" + (pageNo - 1) + "'><i class='fa-solid fa-angle-left'></i></a></li>";
 		}
 		
 		while(!(loop > blockSize || pageNo > totalPage)) {
@@ -97,9 +97,9 @@ public class OrderList extends BaseController {
 		// pageNo ==> 11
 		
 		if(pageNo <= totalPage) {
-			pageBar += "<li class='page-item'><a class='page-link' href='orderList.do?currentShowPageNo=" + pageNo + "'>[다음]</a></li>";
+			pageBar += "<li class='page-item'><a class='page-link' href='orderList.do?currentShowPageNo=" + pageNo + "'><i class='fa-solid fa-angle-right'></i></a></li>";
 		}
-		pageBar += "<li class='page-item'><a class='page-link' href='orderList.do?currentShowPageNo=" + totalPage + "'>[마지막]</a></li>";
+		pageBar += "<li class='page-item'><a class='page-link' href='orderList.do?currentShowPageNo=" + totalPage + "'><i class='fa-solid fa-angles-right'></i></a></li>";
 		
 		request.setAttribute("pageBar", pageBar);
 		// ========= 페이지바 만들기 끝 ========= //
