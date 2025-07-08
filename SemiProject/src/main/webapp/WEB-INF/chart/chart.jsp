@@ -7,7 +7,13 @@
 <jsp:include page="../header.jsp" />
 
 <style type="text/css">
-	 .highcharts-data-table table,
+  body {background-color:#f9fafb;}
+  .chartMain {max-width:1300px;margin:5% auto;}
+  .chartOpt {display:flex;justify-content:space-between;align-items:center;margin-bottom:3%;}
+  #searchType {position:relative;}
+  .chartPointer {position:absolute;right:0;top:20px;}
+  
+  .highcharts-data-table table,
   .stats-table {
     width: 100%;
     border-collapse: collapse;
@@ -46,10 +52,20 @@
   .stats-table tr:hover {
     background-color: #f1f5f9; /* hover 효과 */
   }
+  
+  .chartInfo{font-size:1.8rem;}
+  
+  @media screen and (max-width:1200px){
+     .chartMain {margin:8% auto;}
+  }
+  
+   @media screen and (max-width:650px){
+     .chartMain {margin:12% auto;}
+     .chartInfo {font-size:1.3rem;}
+  }
+  
 </style>
 
-<!-- Tailwind 사용 시 CDN 포함되어 있어야 함 (header.jsp 안에 있다면 생략 가능) -->
-<script src="https://cdn.tailwindcss.com"></script>
 
 <!-- Highcharts 관련 JS -->
 <script src="<%= ctxPath%>/Highcharts-10.3.1/code/highcharts.js"></script>
@@ -59,33 +75,29 @@
 <script src="<%= ctxPath%>/Highcharts-10.3.1/code/modules/series-label.js"></script>
 
 <!-- 통계 페이지 레이아웃 -->
-<main class="bg-gray-50 min-h-screen px-4 py-10" >
-  <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-md p-6">
+<main class="chartMain">
+  <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-md p-6" style="padding:1.5%;border-radius:15px;box-shadow:1px 1px 7px 1px #ddd;">
 
     <!-- ✅ 여기! 제목 + select 가로 배치 들어갈 자리 -->
-    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+    <div class="chartOpt">
       <h2 class="text-2xl font-bold text-gray-800 flex items-center">
-        <i class="fas fa-chart-pie text-indigo-600 mr-2"></i> 주문통계 차트
+        <i class="fas fa-chart-pie text-indigo-600 mr-2 chartInfo" style="color:#8080ff;font-size:19pt;"></i> 주문통계 차트
       </h2>
 
       <form name="searchFrm">
-        <div class="relative w-72">
+        <div class="relative w-72" style="position:relative;">
           <select name="searchType" id="searchType"
             class="block w-full px-4 py-3 pr-10 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none z-10">
-            <option value="">통계선택하세요</option>
-            <option value="myPurchase_byCategory">카테고리별주문 통계</option>
             <option value="myPurchase_byMonth_byCategory">카테고리별 월별주문 통계</option>
+            <option value="myPurchase_byCategory">카테고리별주문 통계</option>
           </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
-            ▼
-          </div>
         </div>
       </form>
     </div>
 
     <!-- 그래프 및 표 -->
-    <div id="chart_container" class="p-4 bg-gray-50 border border-gray-200 rounded-xl mb-6 min-h-[350px]"></div>
-    <div id="table_container" class="overflow-x-auto"></div>
+    <div id="chart_container" class="p-4 bg-gray-50 border border-gray-200 rounded-xl mb-6 min-h-[350px]" style="padding:1.5rem !1important;background:#f9fafb;border-radius:15px;"></div>
+    <div id="table_container" style="overflow-x:scroll;z-index:30;"></div>
 
   </div>
 </main>
@@ -96,7 +108,7 @@
             func_choice($(e.target).val());
         });
 
-        $("select#searchType").val("myPurchase_byCategory").trigger("change");
+        $("select#searchType").val("myPurchase_byMonth_byCategory").trigger("change");
     });
 
     function func_choice(searchTypeVal) {
@@ -232,9 +244,6 @@
                         Highcharts.chart('chart_container', {
                             title: {
                                 text: new Date().getFullYear() + '년 카테고리별 월별주문 통계'
-                            },
-                            subtitle: {
-                                text: 'Source: <a href="https://irecusa.org/programs/solar-jobs-census/" target="_blank">출처</a>'
                             },
                             yAxis: {
                                 title: {

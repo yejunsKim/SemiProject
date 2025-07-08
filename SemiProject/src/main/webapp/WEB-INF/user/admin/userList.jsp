@@ -184,15 +184,24 @@
                                 <td>${uservo.name}</td>
                                 <td>${uservo.email}</td>
                                 <td>
-                                    <c:choose>
-                                        <c:when test="${uservo.grade == 'admin'}">
-                                            <span class="badge badge-pill badge-danger">${uservo.grade}</span>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <span class="badge" style="background-color: #5f5fff; color: white;"><!-- badge-pill badge-success -->${uservo.grade}</span>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </td>
+								    <c:choose>
+								    	<c:when test="${uservo.grade == 'vip'}">
+								            <span class="badge badge-pill" style="background: linear-gradient(45deg, #ff00ff, #00ffff); color: white;">Vip</span>
+								        </c:when>
+								        <c:when test="${uservo.grade == 'bronze'}">
+								            <span class="badge badge-pill" style="background-color: #cd7f32; color: white;">Bronze</span>
+								        </c:when>
+								        <c:when test="${uservo.grade == 'gold'}">
+								            <span class="badge badge-pill" style="background-color: #ffd700; color: black;">Gold</span>
+								        </c:when>
+								        <c:when test="${uservo.grade == 'silver'}">
+								            <span class="badge badge-pill" style="background-color: #c0c0c0; color: white;">Silver</span>
+								        </c:when>
+								        <c:otherwise>
+								            <span class="badge badge-pill" style="background-color: #5f5fff; color: white;">${uservo.grade}</span>
+								        </c:otherwise>
+								    </c:choose>
+								</td>
                             </tr>
                         </c:forEach>
                     </c:if>

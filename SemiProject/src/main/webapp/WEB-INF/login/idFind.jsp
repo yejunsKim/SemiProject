@@ -1,101 +1,88 @@
-<% 
-  String ctxPath = request.getContextPath(); 
-%>
-<jsp:include page="../header.jsp" />
-<link rel="stylesheet" type="text/css" href="<%= ctxPath %>/css/find/idFind.css" />
-<style>
-.headerNav {position:relative;}
-.btn.btn-success {width: 100%;margin: 25px 0 0;}
-body {background-color: #f5f3ff;background-image: url(https://img.freepik.com/free-vector/hand-painted-watercolor-floral-pattern_23-2148931052.jpg);background-size: cover;background-position: center;background-attachment: fixed;background-blend-mode: overlay;}
-#idBox{background-color:#fff;}
-</style>
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<% String ctxPath = request.getContextPath(); %>
+<jsp:include page="../header.jsp" />
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<link rel="stylesheet" type="text/css" href="<%= ctxPath %>/css/find/idFind.css" />
 
 
-<script type="text/javascript" >
-$(function(){
+<script type="text/javascript">
+$(function() {
+    const method = "${requestScope.method}";
 
-	const method = "${requestScope.method}";
+    if(method == "GET") {
+        $('div#div_findResult').prop('hidden', true);
+    } else {
+        $('div#div_findResult').prop('hidden', false);
+        $('input:text[name="name"]').val("${requestScope.name}");
+        $('input:text[name="email"]').val("${requestScope.email}");
+    }
 
-	if(method == "GET") {
-		$('div#div_findResult').prop('hidden', true);
-		
-	} 
-	else {
-		$('div#div_findResult').prop('hidden', false);
-		$('input:text[name="name"]').val("${requestScope.name}");
-		$('input:text[name="email"]').val("${requestScope.email}");
-		<%-- idfind class파일에서 setAttribute에서 name과 email을 넘겨줘서 여기서 쓸 수 있었다.--%>
-	} 
+    $('button.btn-success').click(function(){
+        goFind();
+    });
 
-	$('button.btn-success').click(function(){
-		goFind();
-	});
-	
-	$('input:text[name="email"]').bind('keyup',function(e){
-		if(e.keyCode == 13){
-			goFind();
-		}
-	});
-	
-}); 
- function goFind() {
-	
-	const name = $('input:text[name="name"]').val().trim();
-	if (name == ""){
-		alert('성명을 입력하십시오.');
-		return; 
-	}
-	
-	const email = $('input:text[name="email"]').val();
-	
-	const regExp_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-	
-	if ( !regExp_email.test(email) ){
-		// 이메일이 정규표현식에 위배된 경우
-		alert('이메일을 올바르게 입력하십시오.');
-		return; // goFind() 함수종료
-	}
-	
-	// 다 올바른 경우
-	const frm = document.idFindFrm;
-	frm.action = "<%= ctxPath%>/login/idFind.do";
-	frm.method = "POST";
-	frm.submit();
+    $('input:text[name="email"]').bind('keyup',function(e){
+        if(e.keyCode == 13){
+            goFind();
+        }
+    });
+});
+
+function goFind() {
+    const name = $('input:text[name="name"]').val().trim();
+    if (name == "") {
+        alert('성명을 입력하십시오.');
+        return;
+    }
+
+    const email = $('input:text[name="email"]').val();
+    const regExp_email = /^[0-9a-zA-Z]([\-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([\-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+
+    if (!regExp_email.test(email)) {
+        alert('이메일을 올바르게 입력하십시오.');
+        return;
+    }
+
+    const frm = document.idFindFrm;
+    frm.action = "<%= ctxPath %>/login/idFind.do";
+    frm.method = "POST";
+    frm.submit();
 }
 
- function form_reset_empty(){
-	 	document.querySelector('form[name="idFindFrm"]').reset();
-	 	$('div#div_findResult').empty(); 
-	 	<%-- 해당 태그내에 값들을 싹 비우는것.--%>
- }
-
+function form_reset_empty(){
+    document.querySelector('form[name="idFindFrm"]').reset();
+    $('div#div_findResult').empty();
+}
 </script>
 
-	<div id="idBox" class="idBox">
-		<form name="idFindFrm">
-			<p style="text-align:center;">아이디 찾기</p>
-			<ul style="list-style-type: none;">
-				<li style="margin: 25px 0"><label
-					style="display: inline-block; width: 90px;">성명</label> <input
-					type="text" name="name" size="25" autocomplete="off" /></li>
-				<li style="margin: 25px 0"><label
-					style="display: inline-block; width: 90px;">이메일</label> <input
-					type="text" name="email" size="25" autocomplete="off" /></li>
-			</ul>
-	
-			<div class="my-3 text-center">
-				<button type="button" class="btn btn-success" style="border:0px solid #fff !important; background-color:#c084fc !important;">찾기</button>
-			</div>
-	
-		</form>
-	
-		<div id="div_findResult" class="my-3 text-center">
-			ID : <span style="color: #000; font-weight: 600; font-size: 16pt;">${requestScope.id}</span>
-		</div>
-	</div>
+<div class="pwFindWrap" id="pwFindWrap">
+  <form name="idFindFrm" id="pwFindFrm">
+    <p class="pwContain">아이디 찾기</p>
 
+    <div class="pwBox">
+      <p>성명</p>
+      <input type="text" name="name" id="name" />
+    </div>
+
+    <div class="pwBox">
+      <p>이메일</p>
+      <input type="text" name="email" id="email" />
+    </div>
+
+    <div class="submitBtn">
+      <button type="button" class="btn btn-success">찾기</button>
+    </div>
+
+    <div id="div_findResult">
+      <c:if test="${not empty requestScope.id}">
+        <p style="text-align: center;">아이디는 <strong style="color:#000; font-size: 16pt; ">${requestScope.id}</strong> 입니다.</p>
+      </c:if>
+      <c:if test="${requestScope.n == 0}">
+        <p>입력하신 정보와 일치하는 아이디가 없습니다.</p>
+      </c:if>
+    </div>
+  </form>
 </div>
-	
+
 <jsp:include page="../footer.jsp" />
