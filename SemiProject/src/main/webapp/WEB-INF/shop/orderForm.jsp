@@ -502,14 +502,97 @@ window.addEventListener('DOMContentLoaded', function() {
         let num = parseInt(raw || 0);
         if (num > maxPoint) num = maxPoint;
         usePointInput.value = num.toLocaleString();
+        
         updatePrices();
     });
 
     // 페이지 로딩 시 초기 실행
     updatePrices();
+    $('span.cartNo').each(function(index) {
+        console.log( '카트번호',$('span.cartNo').eq(index).text());
+        console.log('아이템번호',$('span.itemNo').eq(index).text());
+        console.log( $('span.quantity').eq(index).attr('data-price'));
+     });  
+    console.log('최종금액',$('#finalPrice > strong').text()); 
+    console.log('최종포인트',$('#getPoint > strong').text()); 
+ 	console.log($('input#usePoint').val());
+
 });
 
 
+//----------------------------------------------------------------------//		
+					 //	포트윈 결제하기 이후
+//----------------------------------------------------------------------//	
+
+//결제완료시 해당 함수 호출됨!
+function paymentSuccessOrderService(id, usePoint, totalAmount) {
+	
+	console.log("결제완료시 해당 함수 호출됨! >> ", id, usePoint, totalAmount);
+    //// === 체크박스의 체크된 value값(checked 속성이용) === ////
+    //// === 체크가 된 것만 읽어와서 배열에 넣어준다. === ////
+      
+   const cartNoArr = new Array();     
+   const itemNoArr = new Array();       
+   const quantityArr = new Array(); 
+    
+   // 배열에 각 인스턴스 정보를 삽입하고,
+   $('span.cartNo').each(function(index) {
+      //console.log($('span.cartNo').eq(index).text());
+      //console.log($('span.itemNo').eq(index).text());
+      //console.log($('span.quantity').eq(index).attr('data-price'));
+	  console.log("현재 인덱스: ", index);
+      cartNoArr.push($('span.cartNo').eq(index).text());
+      itemNoArr.push($('span.itemNo').eq(index).text());
+      quantityArr.push($('span.quantity').eq(index).attr('data-price'));
+   }); 
+   /// string으로 각 배열들을 합치기(join) 시작
+   const str_cartNo = cartNoArr.join();
+   const str_itemNo = itemNoArr.join();
+   const str_quantity = quantityArr.join();
+   const getPoint = $('#getPoint > strong').text();
+   //console.log($('input#usePoint').val());
+   
+   console.log("확인용 str_cartNo : ", str_cartNo);       
+   console.log("확인용 str_itmeNo : ", str_itemNo);       
+   console.log("확인용 str_quantity : ", str_quantity);        
+   console.log( '최종금액',$('#finalPrice > strong').attr("data-price")); 
+   console.log('최종포인트',$('#getPoint > strong').text()); 
+   
+    
+   $.ajax({
+      url:"orderService.do",
+      type:"post",
+      data:{"totalAmount":$('#finalPrice > strong').attr("data-price"), 
+    	    //test시에는 totalAmount 값이 100원이라 위와 같이 설정.
+    	  	"usePoint":usePoint,
+            "getPoint":getPoint,
+            "str_itemNo":str_itemNo,
+            "str_quantity":str_quantity,
+            "str_cartNo":str_cartNo
+          },
+      dataType:"json",
+      success:function(json){ // json ==> {"isSuccess":1} 또는 {"isSuccess":0}
+          if(json.isSuccess == 1){
+         <%-- location.href="<%= ctxPath%>/shop/orderList.do"; --%> 
+           	  location.href="<%= ctxPath%>/main.do";
+          }
+          else {
+        	  location.href="<%= ctxPath%>/error.do";
+          }
+      },
+      error: function(request, status, error){
+            alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+       }
+   });
+   //OrderService
+    
+}// end of function paymentSuccess()-----------------------------
+
+
+//----------------------------------------------------------------------//
+				//	포트윈 결제 후, paymentSuccessOrderService 함수까지 종료!
+//----------------------------------------------------------------------//	
+	
 
 </script>
 

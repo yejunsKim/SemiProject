@@ -2,7 +2,7 @@ package myshop.domain;
 
 public class Order_historyVO {
 	
-	private int orderno;      
+	private String orderno;      
 	private String id;
 	private String orderdate;
 	private int totalamount;
@@ -18,11 +18,11 @@ public class Order_historyVO {
 		this.itemlist = itemlist;
 	}
 
-	public int getOrderno() {
+	public String getOrderno() {
 		return orderno;
 	}
 
-	public void setOrderno(int orderno) {
+	public void setOrderno(String orderno) {
 		this.orderno = orderno;
 	}
 
