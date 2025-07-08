@@ -345,7 +345,7 @@
 					<c:if test="${not empty requestScope.cartList}">
 						<c:forEach var="cart" items="${requestScope.cartList}">
 							<tr>
-								<td><input type="checkbox" name="selectedItems" value="${cart.cartno}" /></td>
+								<td><input type="checkbox" name="selectedItems" value="${cart.cartno}" />  ${cart.ivo.itemNo}</td>
 								<td><img src="<%= ctxPath%>${cart.ivo.itemPhotoPath}" alt="상품 이미지" style="width: 120px; height: auto;" /></td>
 								<td><div id="cart_itemName">${cart.ivo.itemName}</div></td>
 								<td><fmt:formatNumber pattern="#,###">${cart.ivo.price}</fmt:formatNumber>원</td>
