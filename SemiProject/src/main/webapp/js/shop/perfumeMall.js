@@ -127,14 +127,14 @@ function displayHIT(start){   // start가  1 이라면   1~ 8  까지 상품 8�
             
             // 스크롤을 계속하여 countHIT 값과 totalCount 값이 일치하는 경우
             if($("span#countHIT").text() == $("span#totalCount").text()) {
-               $('span#end').html("더이상 조회할 제품이 없습니다.");
+               //$('span#end').html("더이상 조회할 제품이 없습니다.");
                $('button.btn-dark').show();
             }
          }// end of else if(json.length > 0)——————————
          
       },
       error: function(request, _, error){
-         alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+         //lert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
       }
    });
    
