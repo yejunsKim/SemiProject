@@ -3,12 +3,20 @@ package myshop.domain;
 public class Order_itemsVO {
 	
 	private int orderitemno;
-	private int orderno;
+	private String orderno;
 	private int itemno;
 	private int quantity;
 	private int orderprice;
 	private int deliveryno;
+	private Delivery_addressVO delivery_addressVO;
 	
+	
+	public Delivery_addressVO getDelivery_addressVO() {
+		return delivery_addressVO;
+	}
+	public void setDelivery_addressVO(Delivery_addressVO delivery_addressVO) {
+		this.delivery_addressVO = delivery_addressVO;
+	}
 	private ItemVO ivo;
 	private Order_historyVO ohvo;
 	
@@ -30,10 +38,10 @@ public class Order_itemsVO {
 	public void setOrderitemno(int orderitemno) {
 		this.orderitemno = orderitemno;
 	}
-	public int getOrderno() {
+	public String getOrderno() {
 		return orderno;
 	}
-	public void setOrderno(int orderno) {
+	public void setOrderno(String orderno) {
 		this.orderno = orderno;
 	}
 	public int getItemno() {
