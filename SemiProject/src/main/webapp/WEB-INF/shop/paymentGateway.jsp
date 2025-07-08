@@ -57,8 +57,8 @@ $(document).ready(function() {
 		} 
 		else {
 			location.href="/SemiProject";
-			alert("결제에 실패하였습니다.");
-			
+			alert("결제에 실패하였습니다.");	
+
 			self.close(); // 팝업 닫기
 		}
 

@@ -418,7 +418,7 @@ public class ItemDAO_imple implements ItemDAO {
 		try {
 			conn = ds.getConnection();
 			
-			String sql = " SELECT C.cartno, I.itemPhotoPath, I.itemName, I.price, I.itemAmount, C.cartamount, "
+			String sql = " SELECT C.cartno, I.itemPhotoPath, I.itemName, I.price, I.itemAmount, C.cartamount, I.itemNo, "
 					   + " TO_CHAR(C.cartdate, 'yyyy-mm-dd') AS cartdate, U.grade "
 					   + " FROM cart C "
 					   + " JOIN users U ON C.fk_users_id = U.id "
@@ -445,6 +445,7 @@ public class ItemDAO_imple implements ItemDAO {
 				ivo.setItemName(rs.getString("itemName"));
 				ivo.setPrice(rs.getInt("price"));
 				ivo.setItemAmount(rs.getInt("itemAmount"));
+				ivo.setItemNo(rs.getInt("itemNo"));
 				
 				// 등급에 따른 포인트 계산
 				ivo.setUserItemPoint(rs.getString("grade"));
@@ -888,7 +889,8 @@ public class ItemDAO_imple implements ItemDAO {
 			
 			conn = ds.getConnection();
 			
-			String sql = " SELECT itemPhotoPath, itemName, volume, quantity, orderprice, totalamount, D.email "
+			String sql = " SELECT itemPhotoPath, itemName, volume, quantity, orderprice, totalamount, rewarded"
+					   + "		, D.email, D.address, D.addressdetail, D.addressextra, D.deliveryno "
 					   + " FROM item I JOIN order_items OI ON I.itemNo = OI.itemno "
 					   + " JOIN order_history OH ON OI.orderno = OH.orderno "
 					   + " JOIN delivery_address D ON OI.deliveryno = D.deliveryno "
@@ -908,9 +910,14 @@ public class ItemDAO_imple implements ItemDAO {
 				oivo.setOrderprice(rs.getInt("orderprice"));
 				
 				Delivery_addressVO davo = new Delivery_addressVO();
-				davo.setEmail(aes.decrypt(rs.getString("email"))); // 주문배송지의 이메일을 가져옴.
-				oivo.setDelivery_addressVO(davo); // 주문배송지를 order_item에 삽
-
+				if(cnt == 1) {
+					davo.setEmail(aes.decrypt(rs.getString("email"))); // 주문배송지의 이메일을 가져옴.
+					davo.setAddress(rs.getString("address"));
+					davo.setAddressdetail(rs.getString("addressdetail"));
+					davo.setAddressextra(rs.getString("addressextra"));
+					davo.setDeliveryno(rs.getInt("deliveryno"));
+					oivo.setDelivery_addressVO(davo); // 주문배송지를 order_item에 삽입
+				}
 				ItemVO ivo = new ItemVO();
 				ivo.setItemPhotoPath(rs.getString("itemPhotoPath"));
 				ivo.setItemName(rs.getString("itemName"));
@@ -920,6 +927,7 @@ public class ItemDAO_imple implements ItemDAO {
 				Order_historyVO ohvo = new Order_historyVO();
 				if(cnt == 1) {
 					ohvo.setTotalamount(rs.getInt("totalamount"));
+					ohvo.setRewarded(rs.getInt("rewarded"));
 					oivo.setOhvo(ohvo);
 				}
 				
