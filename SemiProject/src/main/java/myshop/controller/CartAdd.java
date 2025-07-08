@@ -65,7 +65,7 @@ public class CartAdd extends BaseController {
 					}
 					
 				} catch(SQLException e) {
-					request.setAttribute("message", "장바구니 담기 실패!!");
+					request.setAttribute("message", "재고가 부족합니다. 관리자에게 문의바랍니다.");
 					request.setAttribute("loc", "javascript:history.back()");
 					
 					super.setRedirect(false);

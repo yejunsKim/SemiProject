@@ -129,6 +129,64 @@ input#searchID {border-radius:30px;padding:5px 20px;border:1px solid #ddd;}
 .fa-search {position:absolute;top:11px;right:20px;left:initial;} 
 .btnSubmit {background-color:transparent;border:0;position:absolute;right:5px;top:7px;width:50px;height:21px;}
 
+.pixel-crown {
+    display: inline-block;
+    width: 24px;
+    height: 20px;
+    position: relative;
+    margin-left: 8px;
+    image-rendering: pixelated;
+}
+
+.pixel-crown::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: 24px 20px;
+    background-repeat: no-repeat;
+}
+
+.bronze::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='20' viewBox='0 0 24 20'%3E%3Cpath fill='%23cd7f32' d='M12,0 L8,6 L0,4 L4,10 L0,16 L8,14 L12,20 L16,14 L24,16 L20,10 L24,4 L16,6 L12,0 Z'/%3E%3C/svg%3E");
+}
+
+.silver::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='20' viewBox='0 0 24 20'%3E%3Cpath fill='%23c0c0c0' d='M12,0 L8,6 L0,4 L4,10 L0,16 L8,14 L12,20 L16,14 L24,16 L20,10 L24,4 L16,6 L12,0 Z'/%3E%3C/svg%3E");
+}
+
+.gold::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='20' viewBox='0 0 24 20'%3E%3Cpath fill='%23ffd700' d='M12,0 L8,6 L0,4 L4,10 L0,16 L8,14 L12,20 L16,14 L24,16 L20,10 L24,4 L16,6 L12,0 Z'/%3E%3C/svg%3E");
+}
+
+.vip::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='20' viewBox='0 0 24 20'%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ff00ff' /%3E%3Cstop offset='100%25' stop-color='%2300ffff' /%3E%3C/linearGradient%3E%3Cpath fill='url(%23grad)' d='M12,0 L8,6 L0,4 L4,10 L0,16 L8,14 L12,20 L16,14 L24,16 L20,10 L24,4 L16,6 L12,0 Z'/%3E%3C/svg%3E");
+}
+.grade-name {
+    margin-top: 16px;
+    padding: 8px 16px;
+    border-radius: 9999px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    width: fit-content;
+}
+
+/* 각 등급별 배경색상 */
+.bronze-name {
+    background-color: #cd7f32;
+}
+.silver-name {
+    background-color: #c0c0c0;
+}
+.gold-name {
+    background-color: #ffd700;
+}
+.vip-name {
+    background: linear-gradient(45deg, #ff00ff, #00ffff);
+}
+
 </style>
 <script type="text/javascript">
 $(function () {
@@ -269,7 +327,7 @@ function SearchItems() {
     }
 
     const frm = document.searchFrm;
-    frm.action = "/SemiProject/item/searchItem.do";
+    frm.action = "/SemiProject/item/searchResult.do";
     frm.method = "get";
     frm.submit();
     return false; // 폼 기본 제출 막기
@@ -292,7 +350,7 @@ function SearchItems() {
 				</c:forEach>
 			</div>
 		</div>
-			<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
+			<div class="loginBox" style="height: 200px; text-align: left; padding: 11px; border-radius: 15px">
 				<div class="loginTheme">
 				  <c:if test="${empty sessionScope.loginUser}">
 					<form name="loginForm" action="<%=ctxPath%>/login/login.do"
@@ -349,16 +407,29 @@ function SearchItems() {
 				  <table id="isLogin" style="width:100%;">
 				    <thead>
 				      <tr>
-				        <th id="loginUserId" colspan="3" style="text-align:center; font-size:18px;">
-				          ${sessionScope.loginUser.id}
+				        <th id="loginUserId" colspan="3" style="text-align:center; font-size:18px;padding-top:10px;"> 
+				          <c:choose>
+							  <c:when test="${sessionScope.loginUser.grade eq 'bronze'}">
+							    <span class="grade-name bronze-name">${sessionScope.loginUser.id}</span>
+							  </c:when>
+							  <c:when test="${sessionScope.loginUser.grade eq 'silver'}">
+							    <span class="grade-name silver-name">${sessionScope.loginUser.id}</span>
+							  </c:when>
+							  <c:when test="${sessionScope.loginUser.grade eq 'gold'}">
+							    <span class="grade-name gold-name">${sessionScope.loginUser.id}</span>
+							  </c:when>
+							  <c:when test="${sessionScope.loginUser.grade eq 'vip'}">
+							    <span class="grade-name vip-name">${sessionScope.loginUser.id}</span>
+							  </c:when>
+						  </c:choose>
 				        </th>
 				      </tr>
 				    </thead>
 				    <tbody>
 				      <tr>
-				        <td colspan="3" style="padding-top:10px;">
+				        <td colspan="3" style="padding-top:20px;"> 
 				          <span style="font-weight:bold;">${sessionScope.loginUser.name}님</span>
-				          &nbsp;[<a href="javascript:editInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')">나의정보변경</a>]
+				          &nbsp;[<a href="javascript:editInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')" style="color: #f43cff;">나의정보변경</a>]
 				        </td>
 				      </tr>
 				      <tr>
@@ -368,19 +439,38 @@ function SearchItems() {
 				        </td>
 				      </tr>
 				      <tr>
+						  <td colspan="3" style="padding-top:10px;">
+						    <span style="font-weight: bold;">등급&nbsp;:</span>
+						    <span style="display: inline-flex; align-items: center;">
+						      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${sessionScope.loginUser.grade}
+						      <c:choose>
+						        <c:when test="${sessionScope.loginUser.grade eq 'bronze'}">
+						          <span class="pixel-crown bronze"></span>
+						        </c:when> 
+						        <c:when test="${sessionScope.loginUser.grade eq 'silver'}">
+						          <span class="pixel-crown silver"></span>
+						        </c:when>
+						        <c:when test="${sessionScope.loginUser.grade eq 'gold'}">
+						          <span class="pixel-crown gold"></span>
+						        </c:when>
+						        <c:when test="${sessionScope.loginUser.grade eq 'vip'}">
+						          <span class="pixel-crown vip"></span>
+						        </c:when>
+						      </c:choose>
+						    </span>
+						  </td>
+					  </tr>
+
+
+				      <tr>
 				        <td colspan="3" style="padding-top:10px;">
-				          <span style="font-weight: bold;">등급&nbsp;:</span>
-				          ${sessionScope.loginUser.grade}
+				          <span style="font-weight: bold;"><a href="<%=ctxPath %>/item/orderList.do" style="color: #666363;">주문목록 보기</a></span>
+				          &nbsp;&nbsp;&nbsp;&nbsp;<span><button type="button" class="btn btn-danger btn-sm" onclick="javascript:LogOut('<%=ctxPath%>')">Logout</button></span>
 				        </td>
 				      </tr>
 				      <tr>
 				        <td colspan="3" style="padding-top:10px;">
-				          <span style="font-weight: bold;"><a href="<%=ctxPath %>/item/orderList.do">주문목록 보기</a></span>
-				        </td>
-				      </tr>
-				      <tr>
-				        <td colspan="3" style="padding-top:10px;">
-				          <button type="button" class="btn btn-danger btn-sm" onclick="javascript:LogOut('<%=ctxPath%>')">Logout</button>
+				          
 				        </td>
 				      </tr>
 				    </tbody>
