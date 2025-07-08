@@ -587,14 +587,15 @@ function paymentSuccessOrderService(id, usePoint, totalAmount) {
       success:function(json){ // json ==> {"isSuccess":1} 또는 {"isSuccess":0}
           if(json.isSuccess == 1){
          <%-- location.href="<%= ctxPath%>/shop/orderList.do"; --%> 
-           	  location.href="<%= ctxPath%>/main.do";
+           	alert("결제가 완료되었습니다.")  
+         	location.href="<%= ctxPath%>/item/orderList.do";
           }
           else {
         	  location.href="<%= ctxPath%>/error.do";
           }
       },
       error: function(request, status, error){
-            alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+    	  	alert("결제에 실패하였습니다.");  
        }
    });
    //OrderService

@@ -61,7 +61,7 @@
 					</p>
 				</div>
 				
-				<div style="display: flex;">
+				<!-- <div style="display: flex;">
 					<div style="margin: 0 auto;">
 						<button style="display: none;" class="btn btn-dark" onclick="goTop()">
 							<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
@@ -69,10 +69,10 @@
 			      		</svg>
 						</button>
 					</div>
-				</div>
+				</div> -->
 				
 			</div>
 		</div>
 	</div>
-		
+		 
 <jsp:include page="../footer.jsp" />
