@@ -78,9 +78,13 @@ public interface ItemDAO {
 
 	//주문번호 채번하기
 	public int getOrderSequence() throws SQLException;
-
+	
+	public int getDeliverySequence() throws SQLException;
+	
 	public int insertOrderUpdate(Map<String, Object> paraMap) throws SQLException;
-
-	List<ItemVO> getOrderItemList(String id, String[] itemNoArr) throws SQLException;
-
+	
+	// 순수 item 리스트만 추출, cart관련 없음.
+	public List<ItemVO> getOrderItemList(String[] itemNoArr) throws SQLException;
+	
+	
 }
