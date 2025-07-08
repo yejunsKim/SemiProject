@@ -43,11 +43,15 @@ function displaySearch(start) {
                                     <h5 class="card-title">${item.itemname}</h5>
                                 </div>
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">${item.volume}ml</li>
-                                    <li class="list-group-item d-flex justify-content-between">
-                                        <a href="#" class="card-link">장바구니 담기</a>
-                                        <span>${item.price.toLocaleString()}원</span>
-                                    </li>
+                        			<li class="list-group-item">${item.volume}ml</li>   
+                                     <li class="list-group-item">${item.price.toLocaleString('en')}원</li>   
+                                     <li style="height: 40.8px; display: flex; align-items: center;">
+                                        <form id="cartPush" method="post" action="/SemiProject/item/cartAdd.do">
+                                           <input type="hidden" name="itemNo" value="${item.itemno}">
+                                           <input type="hidden" name="quantity" value="1">
+                                           <button type="submit" class="btn btn-link btn-sm cart-btn" style="color: black; margin-left: 10px;">장바구니 담기</button>
+                                        </form>
+                            		</li>
                                 </ul>
                             </div>
                         </div>`;

@@ -63,6 +63,10 @@ public interface ItemDAO {
 	// 로그인한 유저의 주문 내역의 총 페이지수 알아오기
 	int getTotalPage(String id) throws SQLException;
 
+	int getSearchResultCount(String searchID) throws SQLException;
+
+	List<ItemVO> searchItemsByName(String searchID, int start, int len) throws SQLException;
+
 	//로그인 유저의 장바구니 조회.	
 	public List<ItemVO> getOrderItem(String id, String[] selectedCartNoArray) throws SQLException;
 	
@@ -72,10 +76,6 @@ public interface ItemDAO {
 	// 로그인한 유저의 주문 상세 내역 조회(select)
 	List<Order_itemsVO> selectOrderDetail(Map<String, String> paraMap) throws SQLException;
 
-	List<ItemVO> searchItemsByName(String searchID, int start, int len) throws SQLException;
-
-	int getSearchResultCount(String searchID) throws SQLException;
-
 	// 카테고리별주문 통계정보 알아오기
 	List<Map<String, String>> myPurchase_byCategory(String id) throws SQLException;
 
@@ -83,4 +83,13 @@ public interface ItemDAO {
 	List<Map<String, String>> myPurchase_byMonth_byCategory(String id) throws SQLException;
 
 	
+
+	//주문번호 채번하기
+	public int getOrderSequence() throws SQLException;
+
+	public int insertOrderUpdate(Map<String, Object> paraMap) throws SQLException;
+
+	List<ItemVO> getOrderItemList(String id, String[] itemNoArr) throws SQLException;
+
+
 }

@@ -9,9 +9,39 @@
 .adminTab p {padding:40px 13px;border-bottom:1px solid #ddd;cursor:pointer;}
 .adminTab p:hover, .adminTab p:hover a {background-color:#000;color:#fff}
 
-.adminTab-wrapper {position: relative;overflow: hidden;height: 880px;width: 250px;position: fixed;top: 63px;right: 0;z-index: 10;}
-.adminTab {height: 100%;width: 250px;background: rgba(255, 255, 255, 0.6);position: absolute;right: -250px; top: 0;transition: right 0.9s ease;border-left: 1px solid #ddd;border-top:1px solid #ddd;z-index: 21;}
-.adminTab.adminTab-open {right: 0;}
+
+
+.adminTab-wrapper {
+  position: fixed;
+  top: 63px;
+  right: -250px;
+  z-index: 0;
+  width: 250px;
+  height: 880px;
+  overflow: hidden;
+}
+
+.adminTab-wrapper.wrapperOpen {
+  z-index: 21;
+  right:0px;
+}
+
+.adminTab {
+  width: 250px;
+  height: 100%;
+  position: absolute;
+  right: -250px;
+  top: 0;
+  background: rgba(255, 255, 255, 0.6);
+  transition: right 0.9s ease;
+  border-left: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+  z-index: 11;
+}
+
+.adminTab.adminTab-open {
+  right: 0;
+}
 
 </style>
 
