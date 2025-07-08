@@ -22,7 +22,7 @@ public class GoogleMail {
     	//    Google Gmail 인 경우  smtp.gmail.com
     	prop.put("mail.smtp.host", "smtp.gmail.com");
          	
-    	
+
     	prop.put("mail.smtp.port", "465");
     	prop.put("mail.smtp.starttls.enable", "true");
     	prop.put("mail.smtp.auth", "true");
@@ -65,7 +65,7 @@ public class GoogleMail {
     	msg.addRecipient(Message.RecipientType.TO, toAddr);
     	        
     	// 메시지 본문의 내용과 형식, 캐릭터 셋 설정
-    	msg.setContent("발송된 인증코드 : <span style='font-size:14pt; color:red;'>"+certification_code+"</span>", "text/html;charset=UTF-8"); 
+    	msg.setContent("발송된 인증코드 : <span style='font-size:14pt; color:;'>"+certification_code+"</span>", "text/html;charset=UTF-8"); 
     	        
     	// 메일 발송하기
     	Transport.send(msg);
@@ -118,7 +118,7 @@ public class GoogleMail {
     	MimeMessage msg = new MimeMessage(ses);
 
     	// 제목 설정
-    	String subject = "PerfumeArena "+name+"님의 주문이 성공했습니다.";
+    	String subject = "PerfumeArena에서 "+name+"님의 주문이 성공했습니다.";
     	msg.setSubject(subject);
     	        
     	// 보내는 사람의 메일주소
@@ -131,7 +131,7 @@ public class GoogleMail {
     	msg.addRecipient(Message.RecipientType.TO, toAddr);
     	
     	// 메시지 본문의 내용과 형식, 캐릭터 셋 설정
-    	msg.setContent("<div style='font-size:14pt; color:red;'>"+emailContents+"</div>", "text/html;charset=UTF-8");  
+    	msg.setContent("<div style='font-size:14pt; color:;'>"+emailContents+"</div>", "text/html;charset=UTF-8");  
     	        
     	// 메일 발송하기
     	Transport.send(msg);		
