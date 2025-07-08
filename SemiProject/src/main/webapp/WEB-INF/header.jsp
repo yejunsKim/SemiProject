@@ -43,22 +43,22 @@
 <script type="text/javascript">
 function editInfo(id, ctxPath) {
 
-	   const url = `<%=ctxPath%>/user/userEdit.do?id=${sessionScope.loginUser.id}`;
-	   
-	   // 너비 800, 높이 680 인 팝업창을 화면 가운데 위치시키기
-	   const width = 800;
-	   const height = 680;
-	   
-	   const left = Math.ceil((window.screen.width - width)/2);  // 정수로 만듬 
-	   const top = Math.ceil((window.screen.height - height)/2); // 정수로 만듬
-	   window.open(url, "editInfo", `left=${left}px, top=${top}px, 
-			   width=${width}px, height=${height}px`);
+      const url = `<%=ctxPath%>/user/userEdit.do?id=${sessionScope.loginUser.id}`;
+      
+      // 너비 800, 높이 680 인 팝업창을 화면 가운데 위치시키기
+      const width = 800;
+      const height = 680;
+      
+      const left = Math.ceil((window.screen.width - width)/2);  // 정수로 만듬 
+      const top = Math.ceil((window.screen.height - height)/2); // 정수로 만듬
+      window.open(url, "editInfo", `left=${left}px, top=${top}px, 
+            width=${width}px, height=${height}px`);
 }
 
 </script>
 
 <style>
-	/* reset.css */
+   /* reset.css */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -118,8 +118,8 @@ transition: background-color .3s ease-in;}
 .loginBox {z-index:20;}
 .trTab {padding:10px 0;display:flex;justify-content:space-between;align-items:center;}
 
-.userTab-wrapper {position: relative;overflow: hidden;height: 880px;width: 250px;position: fixed;top: 63px;right: 0;z-index: 0;}
-.userTab-wrapper.wrapperOpen {z-index:21;} 
+.userTab-wrapper {position: relative;overflow: hidden;height: 880px;width: 250px;position: fixed;top: 63px;right: -250px;z-index: 0;}
+.userTab-wrapper.wrapperOpen {z-index:21;right:0;} 
 .userTab {height: 100%;width: 250px;background: rgba(255, 255, 255, 0.6);position: absolute;right: -250px; top: 0;transition: right 0.9s ease;border-left: 1px solid #ddd;border-top:1px solid #ddd;z-index: 11;}
 .userTab.userTab-open {right: 0;}
 
@@ -128,7 +128,23 @@ transition: background-color .3s ease-in;}
 input#searchID {border-radius:30px;padding:5px 20px;border:1px solid #ddd;}
 .fa-search {position:absolute;top:11px;right:20px;left:initial;} 
 .btnSubmit {background-color:transparent;border:0;position:absolute;right:5px;top:7px;width:50px;height:21px;}
+.navbarRg {width:550px;display:flex;justify-content:space-between;align-items:center}
+.carts {display:block;} 
+.cartLiMo {display:none;background-image:url("/SemiProject/images/header/cart.png");background-repeat:no-repeat;background-position:center;}
+.cartLiMo:hover a {background-image:url("/SemiProject/images/header/w_cart2.svg");background-repeat:no-repeat;background-position:center;}
+.logins {border:1px solid #bbb;padding:10px 25px;border-radius:30px;background:#fff;color:#000;cursor:pointer;}
+#loginUser {border:0 !important;background-color:initial !important;}
+#adminUser {border:0 !important;background-color:initial !important;}
 
+@media screen and (max-width:650px){
+   #searchID {width:190px;font-size:10pt;}
+   .fa-search{top:9px;}
+   .navbarRg {max-width:310px;}
+   .carts {display:none;}
+   .cartLiMo {display:block;}
+   .userTab {width:130px;}
+   .logins {font-size:11pt;padding:8px 15px;}
+}
 </style>
 <script type="text/javascript">
 $(function () {
@@ -258,6 +274,7 @@ $(function () {
             $('.headerNav').css('backgroundColor', 'transparent');
         }
     });
+    
 });
 
 function SearchItems() {
@@ -279,152 +296,154 @@ function SearchItems() {
 </script>
 
 </head>
-	<body>
-		<div class="userTab-wrapper">
-			<div class="userTab">
-				<p><a href="${pageContext.request.contextPath}/item/mallHome.do">전체</a></p>
-				<c:forEach var="cvo" items="${applicationScope.categoryList}" varStatus="status">
-					<p class="categoryNo=${cvo.categoryNo}">
-						<a href="${pageContext.request.contextPath}/item/mallHome.do?categoryNo=${cvo.categoryNo}">
-						${cvo.categoryName}
-						</a>
-					</p>
-				</c:forEach>
-			</div>
-		</div>
-			<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
-				<div class="loginTheme">
-				  <c:if test="${empty sessionScope.loginUser}">
-					<form name="loginForm" action="<%=ctxPath%>/login/login.do"
-						method="post">
-						<table id="loginTbl">
-						
-							<thead>
-								<tr>
-									<th colspan="3">LOGIN</th>
-								</tr>
-							</thead>
+   <body>
+      <div class="userTab-wrapper">
+         <div class="userTab">
+            <p><a href="${pageContext.request.contextPath}/item/mallHome.do">전체</a></p>
+            <c:forEach var="cvo" items="${applicationScope.categoryList}" varStatus="status">
+               <p class="categoryNo=${cvo.categoryNo}">
+                  <a href="${pageContext.request.contextPath}/item/mallHome.do?categoryNo=${cvo.categoryNo}">
+                  ${cvo.categoryName}
+                  </a>
+               </p>
+            </c:forEach>
+            <p class="cartLiMo"><a href="/SemiProject/item/cartList.do"></a></p>
+         </div>
+      </div>
+         <div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
+            <div class="loginTheme">
+              <c:if test="${empty sessionScope.loginUser}">
+               <form name="loginForm" action="<%=ctxPath%>/login/login.do"
+                  method="post">
+                  <table id="loginTbl">
+                  
+                     <thead>
+                        <tr>
+                           <th colspan="3">LOGIN</th>
+                        </tr>
+                     </thead>
 
-							<tbody>
-								<tr class="trTab">
-									<td>ID</td>
-									<td></td>
-									<td>
-									   <input type="text" name="id" id="loginid" size="20" autocomplete="off" />
-									</td>
-								</tr>
-								<tr class="trTab">
-									<td>암호</td>
-									<td></td>
-									<td>
-										<input type="password" name="password" id="loginPwd" size="20" />
-									</td>
-								</tr>
+                     <tbody>
+                        <tr class="trTab">
+                           <td>ID</td>
+                           <td></td>
+                           <td>
+                              <input type="text" name="id" id="loginid" size="20" autocomplete="off" />
+                           </td>
+                        </tr>
+                        <tr class="trTab">
+                           <td>암호</td>
+                           <td></td>
+                           <td>
+                              <input type="password" name="password" id="loginPwd" size="20" />
+                           </td>
+                        </tr>
 
-								
-								<tr>
-									<td colspan="3" style="padding:3% 0.5%;font-size:13px;">
-										<a href="/SemiProject/login/idFind.do" style="cursor: pointer;">아이디찾기</a> 
-										/
-										<a href="/SemiProject/login/passwordFind.do" style="cursor: pointer;">비밀번호찾기</a>
-										<a href="/SemiProject/user/userRegister.do" style="margin-left:30px;">회원가입</a>
-									</td>
-								</tr>
+                        
+                        <tr>
+                           <td colspan="3" style="padding:3% 0.5%;font-size:13px;">
+                              <a href="/SemiProject/login/idFind.do" style="cursor: pointer;">아이디찾기</a> 
+                              /
+                              <a href="/SemiProject/login/passwordFind.do" style="cursor: pointer;">비밀번호찾기</a>
+                              <a href="/SemiProject/user/userRegister.do" style="margin-left:30px;">회원가입</a>
+                           </td>
+                        </tr>
 
-								<tr>
-									<td colspan="3">
-									<input type="checkbox" id="saveid"
-										name="saveid" />&nbsp;
-										<label for="saveid">아이디저장</label>
-										<button type="button" id="btnSubmit"
-											class="btn btn-dark btn-sm ml-3">로그인
-										</button>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</form>
-				 </c:if>
- 				 <c:if test="${not empty sessionScope.loginUser}">
-				  <table id="isLogin" style="width:100%;">
-				    <thead>
-				      <tr>
-				        <th id="loginUserId" colspan="3" style="text-align:center; font-size:18px;">
-				          ${sessionScope.loginUser.id}
-				        </th>
-				      </tr>
-				    </thead>
-				    <tbody>
-				      <tr>
-				        <td colspan="3" style="padding-top:10px;">
-				          <span style="font-weight:bold;">${sessionScope.loginUser.name}님</span>
-				          &nbsp;[<a href="javascript:editInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')">나의정보변경</a>]
-				        </td>
-				      </tr>
-				      <tr>
-				        <td colspan="3" style="padding-top:10px;">
-				          <span style="font-weight: bold;">포인트&nbsp;:</span>
-				          &nbsp;<fmt:formatNumber value="${sessionScope.loginUser.point}" pattern="###,###"/> POINT  
-				        </td>
-				      </tr>
-				      <tr>
-				        <td colspan="3" style="padding-top:10px;">
-				          <span style="font-weight: bold;">등급&nbsp;:</span>
-				          ${sessionScope.loginUser.grade}
-				        </td>
-				      </tr>
-				      <tr>
-				        <td colspan="3" style="padding-top:10px;">
-				          <span style="font-weight: bold;"><a href="">주문목록 보기</a></span>
-				        </td>
-				      </tr>
-				      <tr>
-				        <td colspan="3" style="padding-top:10px;">
-				          <button type="button" class="btn btn-danger btn-sm" onclick="javascript:LogOut('<%=ctxPath%>')">Logout</button>
-				        </td>
-				      </tr>
-				    </tbody>
-				  </table>
-				</c:if>
+                        <tr>
+                           <td colspan="3">
+                           <input type="checkbox" id="saveid"
+                              name="saveid" />&nbsp;
+                              <label for="saveid">아이디저장</label>
+                              <button type="button" id="btnSubmit"
+                                 class="btn btn-dark btn-sm ml-3">로그인
+                              </button>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </form>
+             </c:if>
+              <c:if test="${not empty sessionScope.loginUser}">
+              <table id="isLogin" style="width:100%;">
+                <thead>
+                  <tr>
+                    <th id="loginUserId" colspan="3" style="text-align:center; font-size:18px;">
+                      ${sessionScope.loginUser.id}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="3" style="padding-top:10px;">
+                      <span style="font-weight:bold;">${sessionScope.loginUser.name}님</span>
+                      &nbsp;[<a href="javascript:editInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')">나의정보변경</a>]
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" style="padding-top:10px;">
+                      <span style="font-weight: bold;">포인트&nbsp;:</span>
+                      &nbsp;<fmt:formatNumber value="${sessionScope.loginUser.point}" pattern="###,###"/> POINT  
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" style="padding-top:10px;">
+                      <span style="font-weight: bold;">등급&nbsp;:</span>
+                      ${sessionScope.loginUser.grade}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" style="padding-top:10px;">
+                      <span style="font-weight: bold;"><a href="">주문목록 보기</a></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" style="padding-top:10px;">
+                      <button type="button" class="btn btn-danger btn-sm" onclick="javascript:LogOut('<%=ctxPath%>')">Logout</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </c:if>
 
-				 
-				</div>
+             
+            </div>
 
-				</div>
-		 <nav class="headerNav">
-		 	<ul class="headerUl">
-		 		<li><a class="navbar-brand" href="/SemiProject/main.do" style="margin-right: 10%;"><img src="/SemiProject/images/header/favicon-32x32.png" /></a></li>
-		 		<div style="width:550px;display:flex;justify-content:space-between;align-items:center;">
-			 		<li>
-				 	  <div class="input-group">
-						<form name="searchFrm" id="searchFrm" onsubmit="return SearchItems();" style="display:flex;">
-						  <input type="text" name="searchID" id="searchID" placeholder="검색어를 입력하세요" />
-						  <i class="fas fa-search"></i>
-						   <button type="submit" class="btnSubmit"></button>
-						</form>
-					  </div>
-					</li>
-					<c:if test="${empty sessionScope.loginUser}">
-					<li class="logins" style="border:1px solid #bbb;padding:10px 25px;border-radius:30px;background:#fff;color:#000;cursor:pointer;">로그인</li>
-					</c:if>
-					
-					<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.id == 'admin'}">
-						<%-- header아이디에 따라 관리자 창 보이는곳 수정시작 --%>
-						<jsp:include page="headerAdmin.jsp" />
-				 	 	<%-- header아이디에 따라 관리자 창 보이는곳 수정 끝 --%>
-			 	 	</c:if>
-			 	 	
-			 	 	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.id != 'admin'}">
-						<%-- header아이디에 따라 관리자 창 보이는곳 수정시작 --%>
-						<li><a href="<%= ctxPath%>/item/cartList.do"><img src="/SemiProject/images/header/cart.png" ></a></li>						
+            </div>
+       <nav class="headerNav">
+          <ul class="headerUl">
+             <li><a class="navbar-brand" href="/SemiProject/main.do" style="margin-right: 10%;"><img src="/SemiProject/images/header/favicon-32x32.png" /></a></li>
+             <div class="navbarRg" >
+                <li>
+                  <div class="input-group">
+                  <form name="searchFrm" id="searchFrm" onsubmit="return SearchItems();" style="display:flex;">
+                    <input type="text" name="searchID" id="searchID" placeholder="검색어를 입력하세요" />
+                    <i class="fas fa-search"></i>
+                     <button type="submit" class="btnSubmit"></button>
+                  </form>
+                 </div>
+               </li>
+               <c:if test="${empty sessionScope.loginUser}">
+               <li class="logins">로그인</li>
+               </c:if>
+               
+               <c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.id == 'admin'}">
+                  <%-- header아이디에 따라 관리자 창 보이는곳 수정시작 --%>
+                  <jsp:include page="headerAdmin.jsp" />
+                    <%-- header아이디에 따라 관리자 창 보이는곳 수정 끝 --%>
+                 </c:if>
+                 
+                 <c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.id != 'admin'}">
+                  <%-- header아이디에 따라 관리자 창 보이는곳 수정시작 --%>
+                  <li class="carts"><a href="<%= ctxPath%>/item/cartList.do"><img src="/SemiProject/images/header/cart.png" ></a></li>                  
 
-						<li class="logins" id="loginUser"style="font-size:19pt;cursor:pointer;"><i class="fas fa-user-circle mr-2"></i></li>
-						<li class="userFunc" style="font-size:19pt;cursor:pointer;"><i class="fa-solid fa-bars"></i></li>
-				 	 	<%-- header아이디에 따라 관리자 창 보이는곳 수정 끝 --%>
-			 	 	</c:if>
-			 	</div>
-			</ul>
-		 </nav> 
+                  <li class="logins" id="loginUser"style="font-size:19pt;cursor:pointer;"><i class="fas fa-user-circle mr-2"></i></li>
+                  <li class="userFunc" style="font-size:19pt;cursor:pointer;"><i class="fa-solid fa-bars"></i></li>
+                    <%-- header아이디에 따라 관리자 창 보이는곳 수정 끝 --%>
+                    
+                 </c:if>
+             </div>
+         </ul>
+       </nav> 
           
        </div>
-	</div>
+   </div>
