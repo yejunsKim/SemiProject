@@ -19,8 +19,8 @@
 
 body {
     font-family: 'Noto Sans KR', sans-serif;
-    background: linear-gradient(135deg, #f5f7fa 0%, #f3e7e9 50%, #e3eeff 100%);
-    min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #f3e7e9 50%, #e3eeff 100%); 
+   min-height: 100vh;
 }
 /* 모바일에서 조금 더 밝게 */
 @media (max-width: 600px) {
@@ -143,7 +143,7 @@ form[name="commentFrm"] textarea:focus {
 #btnCommentOK {
     margin: 25px auto;
     display: block;
-    background: #667eea;
+    background: #b4c4f9;
     color: white;
     font-weight: 600;
     font-size: 1.1rem;
@@ -154,11 +154,56 @@ form[name="commentFrm"] textarea:focus {
     transition: background 0.3s, box-shadow 0.2s, transform 0.2s;
 }
 
+#btnCommentOK {
+    margin: 25px auto;
+    
+    background: #E0E7FF;
+    color: #4f4e4e;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 0.8rem 2.2rem;
+   
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(102,126,234,0.2);
+    transition: background 0.3s, box-shadow 0.2s, transform 0.2s;
+}
+
+#btnMoreItem {
+background: #E0E7FF;
+    color: black;
+     font-weight: 400;
+    font-size: 1.1rem;
+    padding: 0.8rem 2.2rem;
+    border:none;
+
+}
+#btnReviews {
+background: #E0E7FF;
+    color: black;
+     font-weight: 400;
+    font-size: 1.1rem;
+    padding: 0.8rem 2.2rem;
+    border:none;
+
+}
+
+
+#btnMoreItem:hover {
+    background: #92aaff;
+    box-shadow: 0 8px 20px rgba(102,126,234,0.35);
+    cursor: pointer;
+}
+
+#btnReviews:hover {
+    background: #92aaff;
+    box-shadow: 0 8px 20px rgba(102,126,234,0.35);
+    cursor: pointer;
+}
+
 #btnCommentOK:hover {
-    background: #4b59c7;
+    background: #92aaff;
     box-shadow: 0 8px 20px rgba(102,126,234,0.35);
     transform: translateY(-3px);
-    cursor: pointer;
 }
 
 /* ================================
@@ -615,9 +660,9 @@ let currentPage = 1;
 		</div>
 		
 		<%-- 상세 이미지 보기 버튼 & 리뷰작성 버튼--%>
-		<div class="col text-center d-flex justify-content-center gap-3 my-3">
-			<button type="button" class="btn btn-secondary btn-lg" id="btnMoreItem">자세히보기</button>
-			<button type="button" class="btn btn-secondary btn-lg" id="btnReviews">리뷰작성</button>
+		<div class="col text-center d-flex justify-content-center gap-3 my-3" style="gap: 2rem;">
+			<button type="button" class="btn btn-outline-secondary" id="btnMoreItem">자세히보기</button>
+			<button type="button" class="btn btn-outline-secondary" id="btnReviews">리뷰작성</button>
 		</div>			
 		
 		<%-- 상세 이미지 영역 --%>
