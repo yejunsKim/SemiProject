@@ -5,8 +5,10 @@
     String ctxPath = request.getContextPath();
 %>
 <style>
-.formBox {margin:0 auto;max-width:700px;padding:5% 5%;}
-#newPassword1, #newPassword2 {margin:2% auto;} 
+
+body {background-color: #f5f3ff;background-image: url(https://img.freepik.com/free-vector/hand-painted-watercolor-floral-pattern_23-2148931052.jpg);background-size: cover;background-position: center;background-attachment: fixed;background-blend-mode: overlay;}
+.formBox {margin:0 auto;max-width:500px;padding:4% 2%;margin:8% auto;border-radius:20px;background-color:#fff;}
+#newPassword1, #newPassword2 {margin:4% 0;} 
 </style>
 
 <script type="text/javascript">
@@ -38,14 +40,17 @@
 	
 	<div style="margin:150px auto 0;">
 		<form name="passwordUp" class="formBox">
-			비밀번호 변경할 아이디: ${requestScope.id}
+			<div style="margin-bottom:1%;text-align:center;font-size:16pt;">비밀번호 변경할 아이디: ${requestScope.id}</div>
 			<input type="hidden" name="id" value="${requestScope.id}" />
 			<br>
-			비밀번호: <input type="password" name="newPassword1" id="newPassword1">
+				<div style="display:flex;justify-content:space-between;align-items:center;">
+					비밀번호: <input type="password" name="newPassword1" id="newPassword1">
+				</div>
+				<div style="display:flex;justify-content:space-between;align-items:center;">
+					비밀번호 재확인: <input type="password" id="newPassword2"> <!-- name 제거 -->
+				</div>
 			<br>
-			비밀번호 재확인: <input type="password" id="newPassword2"> <!-- name 제거 -->
-			<br>
-			<button type="button" name="passwordUp" class="btn btn-info passwordUp">변경하기</button>
+			<button type="button" name="passwordUp" class="btn btn-info passwordUp" style="background-color: #c084fc !important;border:0 !important;width:100%;">변경하기</button>
 		</form>
 	</div>
 

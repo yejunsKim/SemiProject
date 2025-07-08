@@ -7,7 +7,8 @@
 <%
     String ctxPath = request.getContextPath();
 %>
-<jsp:include page="../header.jsp" />
+
+<jsp:include page="../header.jsp"/>
 
 <style>
 
@@ -65,7 +66,7 @@
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="<%=ctxPath%>/js/shop/orderForm.js"></script>
 <script type="text/javascript">
-let b_emailcheck_click = true; 
+let address_click = true; 
 //회원 수정의 이메일은 자동으로 받아오기 때문에, 건들지만 않으면 true가 맞다.
 
 
@@ -198,6 +199,8 @@ $(function(){
 		        document.getElementById("address").value = addr;
 		        // 커서를 상세주소 필드로 이동한다.
 		        document.getElementById("addressDetail").focus();
+		        // 그후 현재 주소지 변경을 누르도록 address_click = false;로 설정한다.
+		        address_click = false;
 		    }
 		}).open();
 				
@@ -292,9 +295,11 @@ $(function(){
 		}
 				
 	});	// end of $('input#email').blur((e) => {})-------------------	
-		
 	
- 	
+	$('input#addressDetail').bind('change', function(){
+		address_click = false;
+	});
+	
 	// 현재주소지로 변경 버튼을 눌렀을 때
  	$('#btnUseCurrentAddress').click(function() {
  		
@@ -309,10 +314,9 @@ $(function(){
 				return;
 			} // 만약 주소를 입력(찾기)하지 않았다면, 경고 후 함수종료시키기.
 			if(addressDetail === '' ) {
-				alert("상세주소를 입력해주세요.")
+				alert("상세주소를 입력해주세요.");
 				return;
 			}
-			
 			$.ajax({
 				url:"user/userUpdateAddress.do",
 				data:{"postcode":postcode,
@@ -332,6 +336,7 @@ $(function(){
 					if(json.isChanged) {
 						// isChanged가 true로 응답되면 주소 업데이트완료.
 						alert("변경이 완료되었습니다.");
+						address_click = true;
 					};
 				},
 				error: function(request, status, error){
@@ -387,9 +392,13 @@ $(function(){
 	       alert("상세주소를 입력해주세요.");
 	       $('#addressDetail').focus();
 	       e.preventDefault();
+	       address_click = false;
 	       return false;
 	    }
-	    
+	    if(address_click == false) {
+			alert('주소지 변경 후, "현재 주소지 변경" 버튼을 눌러주세요')
+			return false;
+		}
 	   /*  if ( $('#addressExtra').val().trim() === "") {
 		       alert("참고항목(동)를 입력해주세요.");
 		       $('#addressDetail').focus();
@@ -429,7 +438,9 @@ $(function(){
 			const usePoint = $('input#usePoint').val();
 			
  		// ==== 포트원(구 아임포트) 결제
- 		requestPayment(ctxPath, id, email, usePoint, totalAmount);
+ 		//requestPayment(ctxPath, id, email, usePoint, totalAmount);
+ 		paymentSuccessOrderService(id, usePoint, totalAmount);
+
     });
 	
 //////*** 유저 아이디를 찾기 위해 header에 loginUserId 라는 id값을 주었음. ***  ////// 
@@ -508,6 +519,15 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // 페이지 로딩 시 초기 실행
     updatePrices();
+    $('span.cartNo').each(function(index) {
+        console.log( '카트번호',$('span.cartNo').eq(index).text());
+        console.log('아이템번호',$('span.itemNo').eq(index).text());
+        console.log( $('span.quantity').eq(index).attr('data-price'));
+     });  
+    console.log('최종금액',$('#finalPrice > strong').text()); 
+    console.log('최종포인트',$('#getPoint > strong').text()); 
+ 	console.log($('input#usePoint').val());
+
 });
 
 
@@ -517,138 +537,68 @@ window.addEventListener('DOMContentLoaded', function() {
 
 //결제완료시 해당 함수 호출됨!
 function paymentSuccessOrderService(id, usePoint, totalAmount) {
-	console.log("결제완료되었고, >>>> ");
+	
 	console.log("결제완료시 해당 함수 호출됨! >> ", id, usePoint, totalAmount);
-	console.log("삭제해야할 장바구니 번호 : ", $('input.cartNo').eq[1]);
-	 //// === 체크박스의 체크된 value값(checked 속성이용) === ////
-	   //// === 체크가 된 것만 읽어와서 배열에 넣어준다. === ////
-	   
-	   const allCnt = $("input:checkbox[name='pnum']").length;
-	   
-	   const itemNoArr = new Array();        // 또는 const pnumArr = [];
-	   const quantity = new Array();       // 또는 const oqtyArr = [];
-	   const cartnoArr = new Array();      // 또는 const cartnoArr = [];
-	   const totalPriceArr = new Array();  // 또는 const totalPriceArr = [];
-	   const totalPointArr = new Array();  // 또는 const totalPointArr = []; 
-	   
-	   for(let i=0; i<allCnt; i++){
-		   if( $("input:checkbox[name='pnum']").eq(i).prop("checked") ) {
-			  
-			   console.log("제품번호 : ", $("input.itemNo").eq(i).val() );
-			   console.log("주문량 : ", $('input.quantity').eq(i).val() );
-			   console.log("삭제해야할 장바구니 번호 : ", $('input.cartNo').eq(i).val() );
-			   console.log("주문한 제품의 개수에 따른 가격합계 : ", $('input.totalPrice').eq(i).val() );
-			   console.log("주문한 제품의 개수에 따른 포인트합계 : ", $('input.totalPoint').eq(i).val() );
-			   console.log("======================================");
-			
-			 
-			   pnumArr.push($("input:checkbox[name='pnum']").eq(i).val());  
-			   oqtyArr.push($('input.oqty').eq(i).val());
-			   pqtyArr.push($('input.pqty').eq(i).val());
-			   cartnoArr.push($('input.cartno').eq(i).val());
-			   totalPriceArr.push($('input.totalPrice').eq(i).val());
-			   totalPointArr.push($('input.totalPoint').eq(i).val());
-		   }
-	   }// end of for-------------------
-	   
-	 
-	   for(let i=0; i<checkCtn; i++){
-		   console.log("확인용 제품번호: " + pnumArr[i] + ", 주문량: " + oqtyArr[i] + ", 잔고량: " + pqtyArr[i] + ", 장바구니번호 : " + cartnoArr[i] + ", 주문금액: " + totalPriceArr[i] + ", 포인트: " + totalPointArr[i]);
-		   /*
-		      확인용 제품번호: 58, 주문량: 1, 잔고량: 20, 장바구니번호 : 8, 주문금액: 10000, 포인트: 10
-         확인용 제품번호: 5, 주문량: 3, 잔고량: 100, 장바구니번호 : 7, 주문금액: 99000, 포인트: 60
-         확인용 제품번호: 56, 주문량: 2, 잔고량: 100, 장바구니번호 : 6, 주문금액: 2000000, 포인트: 120
-		   */
-	   }// end of for--------------------
-	
-	   
-	   for(let i=0; i<checkCtn; i++){
-		  if( Number(pqtyArr[i]) < Number(oqtyArr[i]) ) {
-			  // 주문할 제품중 아무거나 하나가 잔고량이 주문량 보다 적을 경우 
-			  alert("제품번호 "+ pnumArr[i] +" 의 주문개수가 잔고개수 보다 더 커서 진행할 수 없습니다.");
-			  location.href="javascript:history.go(0)";
-			  return; // goOrder 함수 종료 
-		  }
-	   }// end of for--------------------
-	   
-	   
-	   const str_pnum = pnumArr.join();
-	   const str_oqty = oqtyArr.join();
-	   const str_cartno = cartnoArr.join();
-	   const str_totalPrice = totalPriceArr.join();
-	   const str_totalPoint = totalPointArr.join();
-	       
- 
-  console.log("확인용 str_pnum : ", str_pnum);                 // 확인용 str_pnum :  58,5,56
-	   console.log("확인용 str_oqty : ", str_oqty);                 // 확인용 str_oqty :  1,3,2	  
-	   console.log("확인용 str_cartno : ", str_cartno);             // 확인용 str_cartno :  8,7,6
-	   console.log("확인용 str_totalPrice : ", str_totalPrice);     // 확인용 str_totalPrice :  10000,99000,2000000
-	   console.log("확인용 str_totalPoint : ", str_totalPoint);     // 확인용 str_totalPoint :  10,60,120    
-
-
-	   let n_sum_totalPrice = 0;
-  for(let i=0; i<totalPriceArr.length; i++){
-	   n_sum_totalPrice += Number(totalPriceArr[i]);
-  }// end of for-------------------
-  
-	   let n_sum_totalPoint = 0;
-	   for(let i=0; i<totalPointArr.length; i++){
-		   n_sum_totalPoint += Number(totalPointArr[i]);
-  }// end of for-------------------
-  
- 
-	   console.log("확인용 n_sum_totalPrice : ", n_sum_totalPrice);  // 확인용 n_sum_totalPrice :  2109000
-	   console.log("확인용 n_sum_totalPoint : ", n_sum_totalPoint);  // 확인용 n_sum_totalPoint :  190 
-	
-  
-  const current_coin = $(sessionScope.loginUser.coin);
-  
-  if(current_coin < n_sum_totalPrice) {
-	   $("p#order_error_msg").html("코인잔액이 부족하므로 주문이 불가합니다.<br>주문총액 : "+ n_sum_totalPrice.toLocaleString('en') +"원 / 코인잔액 : "+ current_coin.toLocaleString('en') +"원").css({'display':''});      
-	   // 숫자.toLocaleString('en') 이 자바스크립트에서 숫자 3자리마다 콤마 찍어주기 이다.   
-	   return; // 종료
-  }
-  else {
-	   $("p#order_error_msg").css({'display':'none'});
-	   
-	   if( confirm("총주문액 "+ n_sum_totalPrice.toLocaleString('en') + "원을 주문하시겠습니까?") ) { 
-		   
-		   $("div.loader").show(); // CSS 로딩화면 보여주기
-		   
-		   $.ajax({
-			   url:"<%= ctxPath%>/item/orderService.do",
-   		   type:"post",
-   		   data:{"n_sum_totalPrice":n_sum_totalPrice,
-				         "n_sum_totalPoint":n_sum_totalPoint,
-				         "str_pnum_join":str_pnum,
-				         "str_oqty_join":str_oqty,
-				     "str_totalPrice_join":str_totalPrice,
-				     "str_cartno_join":str_cartno
-			       },
-			       dataType:"json",
-			   success:function(json){ // json ==> {"isSuccess":1} 또는 {"isSuccess":0}
-				    if(json.isSuccess == 1){
-					   location.href="<%= ctxPath%>/shop/orderList.up"; 
-				    }
-				    else {
-						   location.href="<%= ctxPath%>/shop/orderError.up";
-					    }
-			   },
-			   error: function(request, status, error){
-			         alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-		       }
-		   });
-		   
-	   } 
-	   
-  }
-	
-	
-	
-	// 여기서 orderAdd 예정
-	//OrderService
-	 
-	
+    //// === 체크박스의 체크된 value값(checked 속성이용) === ////
+    //// === 체크가 된 것만 읽어와서 배열에 넣어준다. === ////
+      
+   const cartNoArr = new Array();     
+   const itemNoArr = new Array();       
+   const quantityArr = new Array(); 
+    
+   // 배열에 각 인스턴스 정보를 삽입하고,
+   $('span.cartNo').each(function(index) {
+      //console.log($('span.cartNo').eq(index).text());
+      //console.log($('span.itemNo').eq(index).text());
+      //console.log($('span.quantity').eq(index).attr('data-price'));
+	  console.log("현재 인덱스: ", index);
+      cartNoArr.push($('span.cartNo').eq(index).text());
+      itemNoArr.push($('span.itemNo').eq(index).text());
+      quantityArr.push($('span.quantity').eq(index).attr('data-price'));
+   }); 
+   /// string으로 각 배열들을 합치기(join) 시작
+   const str_cartNo = cartNoArr.join();
+   const str_itemNo = itemNoArr.join();
+   const str_quantity = quantityArr.join();
+   const getPoint = $('#getPoint > strong').text();
+   const email = $('input#email').val();
+   //console.log($('input#usePoint').val());
+   
+   console.log("확인용 str_cartNo : ", str_cartNo);       
+   console.log("확인용 str_itmeNo : ", str_itemNo);       
+   console.log("확인용 str_quantity : ", str_quantity);        
+   console.log( '최종금액',$('#finalPrice > strong').attr("data-price")); 
+   console.log('최종포인트',$('#getPoint > strong').text()); 
+   
+    
+   $.ajax({
+      url:"orderService.do",
+      type:"post",
+      data:{"totalAmount":$('#finalPrice > strong').attr("data-price"), 
+    	    //test시에는 totalAmount 값이 100원이라 위와 같이 설정.
+    	  	"usePoint":usePoint,
+            "getPoint":getPoint,
+            "str_itemNo":str_itemNo,
+            "str_quantity":str_quantity,
+            "str_cartNo":str_cartNo,
+            "email":email
+          },
+      dataType:"json",
+      success:function(json){ // json ==> {"isSuccess":1} 또는 {"isSuccess":0}
+          if(json.isSuccess == 1){
+         <%-- location.href="<%= ctxPath%>/shop/orderList.do"; --%> 
+           	  location.href="<%= ctxPath%>/main.do";
+          }
+          else {
+        	  location.href="<%= ctxPath%>/error.do";
+          }
+      },
+      error: function(request, status, error){
+            alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+       }
+   });
+   //OrderService
+    
 }// end of function paymentSuccess()-----------------------------
 
 
@@ -755,7 +705,7 @@ function paymentSuccessOrderService(id, usePoint, totalAmount) {
 							</span>
 						    &nbsp;&nbsp;&nbsp;
 						    <span> 
-								<fmt:formatNumber class="gradeBasedPoint" value="${item.price * item.cartvo.cartamount}" pattern="###,###"/>원
+								<fmt:formatNumber value="${item.price * item.cartvo.cartamount}" pattern="###,###"/>원
 							</span>
 							<span class="itemNo" style="display: none;">${item.itemNo}</span>
 							<span class="cartNo" style="display: none;">${item.cartvo.cartno}</span>

@@ -105,7 +105,9 @@ table {
 }
 
 .container-fluid {padding:0;}
-.headerNav {position:fixed;top:0;background-color:transparent;;z-index:15;width:100%;padding:10px 25px;}
+.headerNav {position:fixed;top:0;background-color:transparent;z-index:15;width:100%;padding:10px 25px;
+-webkit-transition: background-color .3s ease-in;
+transition: background-color .3s ease-in;}
 .headerUl {display:flex;justify-content:space-between;align-items:center;}
 .loginList {max-width:270px;width:100%;background-color:#fff;position:absolute;top:50%;left:50%;height:330px;padding:20px;box-shadow: 1px 3px 3px 2px #6f6363;border-radius:5px;transform:translate(-50%,-50%);z-index:15;}
 .loginList .loginBoxx .loginBTN {width:100%;border:0;border-radius:30px;background-color:#2c59e5;padding:15px 25px;margin-top:5px;color:#000;}
@@ -116,8 +118,9 @@ table {
 .loginBox {z-index:20;}
 .trTab {padding:10px 0;display:flex;justify-content:space-between;align-items:center;}
 
-.userTab-wrapper {position: relative;overflow: hidden;height: 880px;width: 250px;position: fixed;top: 63px;right: 0;z-index: 10;}
-.userTab {height: 100%;width: 250px;background: rgba(255, 255, 255, 0.6);position: absolute;right: -250px; top: 0;transition: right 0.9s ease;border-left: 1px solid #ddd;z-index: 21;}
+.userTab-wrapper {position: relative;overflow: hidden;height: 880px;width: 250px;position: fixed;top: 63px;right: 0;z-index: 0;}
+.userTab-wrapper.wrapperOpen {z-index:21;} 
+.userTab {height: 100%;width: 250px;background: rgba(255, 255, 255, 0.6);position: absolute;right: -250px; top: 0;transition: right 0.9s ease;border-left: 1px solid #ddd;border-top:1px solid #ddd;z-index: 11;}
 .userTab.userTab-open {right: 0;}
 
 .userTab p a {padding:40px 13px;border-bottom:1px solid #ddd;cursor:pointer;display:block;text-align:center;}
@@ -126,58 +129,135 @@ input#searchID {border-radius:30px;padding:5px 20px;border:1px solid #ddd;}
 .fa-search {position:absolute;top:11px;right:20px;left:initial;} 
 .btnSubmit {background-color:transparent;border:0;position:absolute;right:5px;top:7px;width:50px;height:21px;}
 
-
 </style>
 <script type="text/javascript">
-$(function() {
-	
-	$('div.loginBox').hide();
-    let isMenuOpen = false;
-    
-    $(document).on("click",".logins", function(){
-    	 if (isMenuOpen) {
-    		 /* $('i.fa-solid').css('transform', 'rotate(0deg)'); */
-             $('div.loginBox').hide();
-         } else {
-        	 /* $('i.fa-solid').css('transform', 'rotate(90deg)'); */
-             $('div.loginBox').show();
-         }
-         isMenuOpen = !isMenuOpen;
+$(function () {
+    $('div.loginBox').hide();
+
+    const loginBox = $('div.loginBox');
+    const adminTabWrapper = $('.adminTab-wrapper');
+    const adminTab = $('.adminTab');
+    const userTabWrapper = $('.userTab-wrapper');
+    const userTab = $('.userTab');
+
+    let openMenu = null; 
+    let isTransitioning = false;
+
+ 
+    function closeAllMenus(callback) {
+        if (openMenu === "login") {
+            loginBox.fadeOut(200, () => {
+                openMenu = null;
+                callback && callback();
+            });
+        } else if (openMenu === "admin") {
+            adminTab.removeClass('adminTab-open');
+            adminTab.one('transitionend', function () {
+                adminTabWrapper.removeClass('wrapperOpen').css({ zIndex: 0, right: '-250px' });
+                openMenu = null;
+                callback && callback();
+            });
+        } else if (openMenu === "user") {
+            userTab.removeClass('userTab-open');
+            userTab.one('transitionend', function () {
+                userTabWrapper.removeClass('wrapperOpen').css('z-index', 0);
+                openMenu = null;
+                callback && callback();
+            });
+        } else {
+            callback && callback();
+        }
+    }
+
+    // 로그인 박스 열기/닫기
+    $(document).on("click", ".logins", function () {
+        if (isTransitioning) return;
+        isTransitioning = true;
+
+        if (openMenu === "login") {
+            loginBox.fadeOut(200, () => {
+                openMenu = null;
+                isTransitioning = false;
+            });
+        } else {
+            closeAllMenus(() => {
+                loginBox.fadeIn(200, () => {
+                    openMenu = "login";
+                    isTransitioning = false;
+                });
+            });
+        }
     });
-    
-    if( ${empty sessionScope.loginuser} ) {
-		// 세션에 남겨놓은 유저가 있다면, 로컬로 남기겠다는 것.
-		const loginid = localStorage.getItem('saveid');
-		
-		if(loginid != null) { // 만약 세션 유저의 아이디가 있다면, 
-			$('input:text[name="id"]').val(loginid); //아이디 넣어주고,
-			$('input#saveid').prop("checked", true); //아이디저장 체크박스는 체크로 해두기
-		}
-	};
-	
-	
-	const pageurl = window.location.search
-	console.log(pageurl);
-	
-	$(function() {
-	    const loginId = "${sessionScope.loginUser.id}";
 
-	    if (loginId === 'admin') {
-	        const menuBtn = document.querySelector('.adminFunc');
-	        menuBtn?.addEventListener('click', () => {
-	            document.querySelector('.adminTab')?.classList.toggle('adminTab-open');
-	            $('div.loginBox').hide();
-	        });
-	    } else {
-	        const menuBtn = document.querySelector('.userFunc');
-	        menuBtn?.addEventListener('click', () => {
-	            document.querySelector('.userTab')?.classList.toggle('userTab-open');
-	            $('div.loginBox').hide();
-	        });
-	    }
-	});
-		
+    const loginId = "${sessionScope.loginUser.id}";
 
+    // === 관리자 메뉴 ===
+    if (loginId === 'admin') {
+        let isAdminOpen = false;
+        $('.adminFunc').on('click', function () {
+            if (isTransitioning) return;
+            isTransitioning = true;
+
+            if (openMenu === "admin") {
+                adminTab.removeClass('adminTab-open');
+                adminTab.one('transitionend', function () {
+                    adminTabWrapper.removeClass('wrapperOpen').css({ zIndex: 0, right: '-250px' });
+                    openMenu = null;
+                    isTransitioning = false;
+                });
+            } else {
+                closeAllMenus(() => {
+                    adminTabWrapper.addClass('wrapperOpen').css({ zIndex: 21, right: '0' });
+                    adminTab.addClass('adminTab-open');
+                    openMenu = "admin";
+                    isTransitioning = false;
+                });
+            }
+        });
+    }
+
+    // === 일반 사용자 메뉴 ===
+    else {
+        $('.userFunc').on('click', function () {
+            if (isTransitioning) return;
+            isTransitioning = true;
+
+            if (openMenu === "user") {
+                userTab.removeClass('userTab-open');
+                userTab.one('transitionend', function () {
+                    userTabWrapper.removeClass('wrapperOpen').css('z-index', 0);
+                    openMenu = null;
+                    isTransitioning = false;
+                });
+            } else {
+                closeAllMenus(() => {
+                    userTabWrapper.addClass('wrapperOpen').css('z-index', 21);
+                    userTab.addClass('userTab-open');
+                    openMenu = "user";
+                    isTransitioning = false;
+                });
+            }
+        });
+    }
+
+    // 로그인 저장 아이디 복원
+    if (${empty sessionScope.loginuser}) {
+        const loginid = localStorage.getItem('saveid');
+        if (loginid != null) {
+            $('input:text[name="id"]').val(loginid);
+            $('#saveid').prop("checked", true);
+        }
+    }
+
+    // 스크롤 시 header 배경 조절
+    $(window).scroll(function () {
+        const scrollTop = $(window).scrollTop();
+        if (scrollTop > 30) {
+            $('.headerNav').css('backgroundColor', 'rgba(255,255,255,0.9)');
+        } else {
+            $('.headerNav').css('backgroundColor', 'transparent');
+        }
+    });
 });
 
 function SearchItems() {
@@ -189,13 +269,11 @@ function SearchItems() {
     }
 
     const frm = document.searchFrm;
-    frm.action = "/SemiProject/item/searchResult.do";
+    frm.action = "/SemiProject/item/searchItem.do";
     frm.method = "get";
     frm.submit();
     return false; // 폼 기본 제출 막기
 }
-
-
 
 
 </script>
@@ -297,7 +375,7 @@ function SearchItems() {
 				      </tr>
 				      <tr>
 				        <td colspan="3" style="padding-top:10px;">
-				          <span style="font-weight: bold;"><a href="">주문목록 보기</a></span>
+				          <span style="font-weight: bold;"><a href="<%=ctxPath %>/item/orderList.do">주문목록 보기</a></span>
 				        </td>
 				      </tr>
 				      <tr>
@@ -350,5 +428,3 @@ function SearchItems() {
           
        </div>
 	</div>
-	
-	

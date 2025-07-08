@@ -18,7 +18,7 @@ function requestPayment(ctxPath, id, email, usePoint, totalAmount) {
 	
 	window.open(url, "payment", "left=" + left + ", top=" + top + ", width=" + width + ", height=" + height);	
 								//  ${}로 사용하면 오류 발생함. 이게 제일 안전함
-		
+	self.close();	
 };// end of requestPayment(ctxPath, totalAmount, id, usePoint) {}--------------------
 
 //----------------------------------------------------------------------//		
