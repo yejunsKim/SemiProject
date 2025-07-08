@@ -64,7 +64,7 @@ public class OrderAdd extends BaseController {
          int sumPoint = (int)(sumPrice * 0.05);
          
          
-		Map<String, String> paraMap = new HashMap<>();
+		Map<String, Object> paraMap = new HashMap<>();
 		
 	    paraMap.put("odrcode", odrcode);
 	    paraMap.put("id", id);

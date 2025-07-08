@@ -53,9 +53,9 @@ public interface ItemDAO {
 	int cartDelete(String cartno) throws SQLException;
 
 
-	
 	 // 트랜잭션으로 주문 insert & 재고감소 & 장바구니삭제 & 포인트적립
-	int insertOrderUpdate(Map<String, String> paraMap)throws SQLException;
+	int insertOrderUpdate(Map<String, Object> paraMap) throws SQLException;
+
 
 	// 장바구니 테이블에서 선택 제품의 주문량 변경시키기
 	int amountUpdate(Map<String, String> paraMap) throws SQLException;
@@ -76,6 +76,11 @@ public interface ItemDAO {
 	// 로그인한 유저의 주문 내역의 총 페이지수 알아오기
 	int getTotalPage(String id) throws SQLException;
 
+	int getSearchResultCount(String searchID) throws SQLException;
+
+	List<ItemVO> searchItemsByName(String searchID, int start, int len) throws SQLException;
+
+	
 	// 로그인한 본인의 주문목록에서 특정 페이지번호에 해당하는 내용들을 조회해오기
 	List<Order_historyVO> select_order_paging(Map<String, String> paraMap) throws SQLException;
 	
@@ -106,10 +111,16 @@ public interface ItemDAO {
 	// 리뷰 좋아요 수 조회
 	Map<String, Integer> getLikeCount(String reviewId)throws SQLException;
 
-
-	
-
-	
-
 		
+	//주문번호 채번하기
+	public int getOrderSequence() throws SQLException;
+	
+	public int getDeliverySequence() throws SQLException;
+	
+	
+	// 순수 item 리스트만 추출, cart관련 없음.
+	public List<ItemVO> getOrderItemList(String[] itemNoArr) throws SQLException;
+
+	
+	
 }

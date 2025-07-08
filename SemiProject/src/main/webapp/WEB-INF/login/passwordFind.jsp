@@ -118,7 +118,7 @@ $(function(){
 			</div>
 			
 			<div class="submitBtn">
-				<button type="button" class="btn btn-success" onclick="pwFind()">찾기</button>
+				<button type="button" class="btn btn-success" onclick="pwFind()" style="background-color:#c084fc !important;border:0px solid #fff !important;">찾기</button>
 			</div>
 			
 			<div id="div_findResult">${requestScope.n}</div>
