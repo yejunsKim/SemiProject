@@ -18,11 +18,13 @@ import myshop.domain.ItemVO;
 import myshop.model.ItemDAO;
 import myshop.model.ItemDAO_imple;
 import user.domain.UserVO;
+import user.model.UserDAO;
+import user.model.UserDAO_imple;
 
 public class OrderService extends BaseController {
 
-private ItemDAO itemDAO = new ItemDAO_imple();
-	
+	private ItemDAO itemDAO = new ItemDAO_imple();
+	private UserDAO userDAO = new UserDAO_imple();
 	
 	// === 전표(주문코드)를 생성해주는 메소드 생성하기 === //
 	private String getOrderNo() {
@@ -92,6 +94,7 @@ private ItemDAO itemDAO = new ItemDAO_imple();
 
 			HttpSession session = request.getSession();
 			UserVO loginUser = (UserVO) session.getAttribute("loginUser"); 
+		    loginUser = userDAO.selectUser(loginUser.getId());
 			
 			// ==== 주문테이블(tbl_order)에 insert 할 데이터 ==== 
 			String orderNo = getOrderNo(); // 사실상 orderCode인 셈.
@@ -192,7 +195,7 @@ private ItemDAO itemDAO = new ItemDAO_imple();
 		        ////////// === 주문이 완료되었다는 email 보내기 끝 === ///////////
 			
 			} // end of if(isSuccess == 1)----------------------	
-		
+			
 			JSONObject jsobj = new JSONObject(); // {}
 			jsobj.put("isSuccess", isSuccess);  // {"isSuccess":1} 또는 {"isSuccess":0}
 			
