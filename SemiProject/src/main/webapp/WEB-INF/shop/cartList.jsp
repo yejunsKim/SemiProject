@@ -325,9 +325,9 @@
 		<table>
 			<thead>
 				<tr>
-					<th style="width: 10%;"><input type="checkbox" id="allCheckOrNone" onclick="allCheckBox()" />  제품번호</th>
+					<th style="width: 5%;"><input type="checkbox" id="allCheckOrNone" onclick="allCheckBox()" /></th>
 					<th style="width: 15%;">이미지</th>
-					<th style="width: 15%;">향수명</th>
+					<th style="width: 20%;">향수명</th>
 					<th style="width: 10%;">상품금액(개당)</th>
 					<th style="width: 10%;">최대 적립 포인트</th>
 					<th style="width: 15%;">수량</th>
@@ -345,7 +345,7 @@
 					<c:if test="${not empty requestScope.cartList}">
 						<c:forEach var="cart" items="${requestScope.cartList}">
 							<tr>
-								<td><input type="checkbox" name="selectedItems" value="${cart.cartno}" />  ${cart.ivo.itemNo}</td>
+								<td><input type="checkbox" name="selectedItems" value="${cart.cartno}" /></td>
 								<td><img src="<%= ctxPath%>${cart.ivo.itemPhotoPath}" alt="상품 이미지" style="width: 120px; height: auto;" /></td>
 								<td><div id="cart_itemName">${cart.ivo.itemName}</div></td>
 								<td><fmt:formatNumber pattern="#,###">${cart.ivo.price}</fmt:formatNumber>원</td>

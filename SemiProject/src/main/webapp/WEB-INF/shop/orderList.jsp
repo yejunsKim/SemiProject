@@ -44,6 +44,9 @@
 	thead {
 		background-color: #e7f3f9; /* 연한 하늘색 */
 	}
+	tbody {
+		background-color: white;
+	}
 	th, td {
 		border: 1px solid #ddd;
 		padding: 10px;
@@ -62,6 +65,11 @@
 		padding: 6px 12px;
 		background-color: #fff;
 		border: 1px solid #ccc;
+		cursor: pointer;
+	}
+	.btn1:hover {
+		background-color: #fff;
+		border-color: blue;
 		cursor: pointer;
 	}
 </style>
@@ -97,7 +105,12 @@
 	
 	
 	function orderDetail(orderno){
-		alert(orderno);
+		if(orderno == null) {
+			alert("주문을 완료하셔야 클릭 가능합니다.");
+		}
+		else {
+		location.href = '<%= ctxPath %>/item/orderDetail.do?orderno=' + orderno;	// 주문 상세 페이지로 이동
+		}
 	}
 	
 </script>
@@ -115,8 +128,8 @@
 				<th style="width: 10%">주문일자</th>
 				<th style="width: 15%">주문번호</th>
 				<th>주문내역</th>
-				<th style="width: 15%">결제금액</th>
-				<th style="width: 10%">주문상태</th>
+				<th style="width: 15%">적립포인트</th>
+				<%-- <th style="width: 10%">주문상태</th> --%>
 				<th style="width: 10%"></th>
 			</tr>
 		</thead>
@@ -129,8 +142,8 @@
 						<td>${ohvo.orderdate}</td>
 						<td>${ohvo.orderno}</td>
 						<td>${ohvo.itemlist}</td>
-						<td>${ohvo.totalamount}</td>
-						<td>임시 주문상태</td>
+						<td><fmt:formatNumber pattern="#,###">${ohvo.rewarded}</fmt:formatNumber> Point</td>
+						<%-- <td>임시 주문상태</td> --%>
 						<td><button class="btn1" onclick="orderDetail('${ohvo.orderno}')" >상세보기</button></td>
 					</tr>
 				</c:forEach>

@@ -33,8 +33,10 @@
                 <div class="flex items-start">
                     <span class="w-24 font-medium text-gray-600">배송지</span>
                     <div class="flex-1 text-gray-800">
-                        ${sessionScope.loginUser.address}
-                        ${sessionScope.loginUser.addressDetail} ${sessionScope.loginUser.addressExtra}
+                       <span> ${requestScope.oiList[0].delivery_addressVO.address}&nbsp;</span>
+                        <span>${requestScope.oiList[0].delivery_addressVO.addressdetail}&nbsp;</span>
+                        <span>${requestScope.oiList[0].delivery_addressVO.addressextra}&nbsp;</span>
+                        <span>(배송코드: ${requestScope.oiList[0].delivery_addressVO.deliveryno})</span>
                     </div>
                 </div>
 
