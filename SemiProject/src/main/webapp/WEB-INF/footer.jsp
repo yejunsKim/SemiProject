@@ -8,6 +8,9 @@
 .footerTopnav {font-size:14pt;color:#fff !important;}
 .footerTopnav:after {content:"";width:2px;height:20px;display:inline-block;background-color:#fff;vertical-align:-3px;margin:0 15px;}
 .footerTopnav:last-child:after{content:initial;display:initial;}
+@media and screen (max-width:1250px){
+	
+}
 </style>
 
 <script type="text/javascript">
@@ -22,6 +25,18 @@ function serviceInfo() {
 
    window.open(url, "serviceInfoPopup", `left=${left}px,top=${top}px,width=${width}px,height=${height}px`);
 }
+
+function privacyInfo() {
+	   const url = "<%=ctxPath%>/privacyInfo.do";
+
+	   const width = 800;
+	   const height = 680;
+
+	   const left = Math.ceil((window.screen.width - width) / 2);
+	   const top = Math.ceil((window.screen.height - height) / 2);
+
+	   window.open(url, "serviceInfoPopup", `left=${left}px,top=${top}px,width=${width}px,height=${height}px`);
+	}
 </script>
 			
 	</div>
@@ -33,7 +48,7 @@ function serviceInfo() {
 				<a class="footerTopnav" href="<%= ctxPath%>/#">회사소개</a>
 				<a class="footerTopnav" href="<%= ctxPath%>/location.do" >오시는 길</a>
 				<a class="footerTopnav" href="javascript:serviceInfo()">이용약관</a>
-				<a class="footerTopnav" href="#">개인정보처리방침</a>
+				<a class="footerTopnav" href="javascript:privacyInfo()">개인정보처리방침</a>
 			</div>
 			
 			<p class="footerInfo">

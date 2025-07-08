@@ -1,8 +1,10 @@
 @charset "UTF-8";
 
+body {background-color: #f5f3ff;background-image: url(https://img.freepik.com/free-vector/hand-painted-watercolor-floral-pattern_23-2148931052.jpg);background-size: cover;background-position: center;background-attachment: fixed;background-blend-mode: overlay;}
+
 .headerNav {position:relative;}
 .pwFindWrap {margin:7% auto;max-width:500px;width:100%;}
-.pwFindWrap > #pwFindFrm {padding:6.5%;border:1px solid #ddd;border-radius:20px;}
+.pwFindWrap > #pwFindFrm {padding:12.5% 9%;border:1px solid #ddd;border-radius:20px;background-color:#fff;}
 .pwFindWrap > #pwFindFrm > .pwBox {display:flex;align-items:center;}
 .pwFindWrap > #pwFindFrm > .pwBox input {width:100%;margin:15px 0;}
 .pwFindWrap > #pwFindFrm > .pwBox p {max-width:150px;width:100%;}

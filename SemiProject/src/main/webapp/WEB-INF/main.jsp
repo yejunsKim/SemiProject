@@ -77,7 +77,7 @@ $(document).ready(function() {
   
 <div class="col-md-12" style="padding:0;">
 	<div class="container-fluid">		
-		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="height:100%;">
 		  <ol class="carousel-indicators">
 		 
 		    <c:if test="${not empty requestScope.categoryList}">

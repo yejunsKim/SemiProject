@@ -296,8 +296,74 @@
 					
 		});	// end of $('input#email').blur((e) => {})-------------------	
 			
+		
+	 	
+		// 현재주소지로 변경 버튼을 눌렀을 때
+	 	$('#btnUseCurrentAddress').click(function() {
+	 		
+	 		const postcode = $('input#postcode').val().trim();
+	 		const address = $('input#address').val().trim();
+	 		const addressDetail = $('input#addressDetail').val().trim();
+	 		const addressExtra = $('input#addressExtra').val().trim();
+	 		
+	 		
+	 		if(postcode === '' || address === '') {
+ 				alert("주소를 입력해주세요.")
+ 				return;
+ 			} // 만약 주소를 입력(찾기)하지 않았다면, 경고 후 함수종료시키기.
+ 			if(addressDetail === '' ) {
+ 				alert("상세주소를 입력해주세요.")
+ 				return;
+ 			}
+ 			
+ 			$.ajax({
+ 				url:"user/userUpdateAddress.do",
+ 				data:{"postcode":postcode,
+ 					  "address":address,
+ 					  "addressDetail":addressDetail,
+ 					  "addressExtra":addressExtra},
+ 				// data 속성은 http://localhost:9090/SemiProject/user/userRegister.do 로 
+ 				// 전송해야할 데이터를 말한다.
+ 				type:"post",
+ 				async:true, 
+ 				dataType:"json",  
+ 				
+ 				success:function(json){
+ 					console.log(json);
+ 					// {"isChanged":false} 또는 {"isChanged":true}
+ 					
+ 					if(json.isChanged) {
+ 						// isChanged가 true로 응답되면 주소 업데이트완료.
+ 						alert("변경이 완료되었습니다.");
+ 					};
+ 				},
+ 				error: function(request, status, error){
+ 	                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+ 	            }				  
+ 			});
+	 	});
 			
-	 	// 결제하기 버튼을 눌렀을 때 배송지가 입력되었는지, 약관에 동의 했는지
+		// 포인트 입력하는 input에 pattern을 넣는 방법.(###,###)처럼
+	 	$('#usePoint').on('input', function() {
+	 	    // 입력된 값에서 숫자만 추출 (쉼표나 POINT 제거)
+	 	    let raw = $(this).val().replace(/[^\d]/g, "");
+
+	 	    // 정수로 변환
+	 	    let inputPoint = parseInt(raw || 0);
+
+	 	    // 최대 포인트보다 크면 보유 포인트로 되돌리기
+	 	    if (inputPoint > ${sessionScope.loginUser.point}) {
+	 	        inputPoint = ${sessionScope.loginUser.point};
+	 	    }
+
+	 	    // 다시 쉼표 붙여서 보여주기
+	 	    let formatted = inputPoint.toLocaleString();
+	 	    $(this).val(formatted);
+	 	});
+		
+	
+		
+ 	// 결제하기 버튼을 눌렀을 때 배송지가 입력되었는지, 약관에 동의 했는지
 	 	$('#btnOrderSubmit').click(function(e) {
 		    if ( $('#name').val().trim() === "") {
 		       alert("받는 사람을 입력해주세요.");
@@ -348,30 +414,33 @@
 	            $('#agree').focus();
 	            return false;
 	        }
-	        // 약관에 동의한 경우에는 그냥 submit됨
+	 		
+////////////////////////////////////////////////////////////////////////// 
+	 		
+					 //	포트윈 결제하기 관련 여기서 부터
+		 
+////////////////////////////////////////////////////////////////////////// 
+	 
+ 			const ctxPath = "<%= ctxPath%>";
+ 		//	console.log($('#finalPrice > strong').attr('data-price'));
+ 			const totalAmount = $('#finalPrice > strong').attr('data-price');
+ 		//	console.log($('th#loginUserId').html().trim());
+ 			const id = $('th#loginUserId').html().trim();
+ 		// 	console.log($('input#usePoint').val());
+ 			const usepoint = $('input#usePoint').val();
+ 		
+	 		// ==== 포트원(구 아임포트) 결제
+	 		requestPayment(ctxPath, totalAmount, id, usepoint);
 	    });
 		
-		
-		// 현재주소지로 변경 버튼을 눌렀을 때
-	 	$('#btnUseCurrentAddress').click(function() {
- 	    	document.getElementById("postcode").value = '${sessionScope.loginUser.postcode}';
-	 	    document.getElementById("address").value = '${sessionScope.loginUser.address}';
-	 	    document.getElementById("addressDetail").value = '${sessionScope.loginUser.addressDetail}';
-	 	    document.getElementById("addressExtra").value = '${sessionScope.loginUser.addressExtra}';
-	 	});
-			
-		// 포인트 입력하는 input에 pattern을 넣는 방법.(###,###)처럼
-	 	$('#usePoint').on('input', function() {
-	 	    // 입력된 값에서 숫자만 추출 (쉼표나 POINT 제거)
-	 	    let raw = $(this).val().replace(/[^\d]/g, "");
+//////  *** 유저 아이디를 찾기 위해 header에 loginUserId 라는 id값을 주었음. ***  ////// 
+// <th id="loginUserId" colspan="3" .... > ${sessionScope.loginUser.id} </th>
 
-	 	    // 정수로 변환
-	 	    let inputPoint = parseInt(raw || 0);
+		console.log("<%= ctxPath%>");
+		console.log($('th#loginUserId').html().trim()); // 확인
 
-	 	    // 최대 포인트보다 크면 보유 포인트로 되돌리기
-	 	    if (inputPoint > ${sessionScope.loginUser.point}) {
-	 	        inputPoint = ${sessionScope.loginUser.point};
-	 	    }
+}); 
+// end of $(function(){})--------------------------------
 
 	 	    // 다시 쉼표 붙여서 보여주기
 	 	    let formatted = inputPoint.toLocaleString();
@@ -380,6 +449,24 @@
 		
 	
 	// totalPrice와 finalPrice
+// ==== 포트원(구 아임포트) 결제를 해주는 함수 ==== //
+function requestPayment(ctxPath, coinmoney, userid, usepoint) {
+	
+	const url = `${ctxPath}/item/itemPayment.do?userid=${userid}&coinmoney=${coinmoney}&usepoint=${usepoint}`;
+//	console.log(url);
+	// 너비 1000, 높이 600 인 팝업창을 화면 가운데 위치시키기
+	const width = 1000;
+	const height = 600;
+	
+	const left = Math.ceil((window.screen.width - width) / 2);	// 정수로 만듬
+							// 1400 - 1000 = 400		400/2 ==> 200
+	
+	const top = Math.ceil((window.screen.height - height) / 2);	// 정수로 만듬
+							// 1400 - 600 = 800		800/2 ==> 400
+	
+	window.open(url, "payment", `left=${left}, top=${top}, width=${width}, height=${height}`);
+	
+}// end of function goCoinPurchaseTypeChoice(userid, ctx_Path) {}--------------------
 
 	}); // end of $(function(){})--------------------------------
 window.addEventListener('DOMContentLoaded', function() {
@@ -389,20 +476,19 @@ window.addEventListener('DOMContentLoaded', function() {
     const usePointInput = document.querySelector('#usePoint');
     const maxPoint = ${sessionScope.loginUser.point};
 
-    function calcTotalPrice() {
-        let total = 0;
-        priceSpans.forEach(span => {
-            const raw = span.getAttribute('data-price');
-            total += parseInt(raw);
-        });
-        return total;
-    }
-
-    function updatePrices() {
-        const total = calcTotalPrice();
-        const usedPoint = parseInt(usePointInput.value.replace(/[^\d]/g, '')) || 0;
-        const adjustedUsed = usedPoint > maxPoint ? maxPoint : usedPoint;
-        const final = Math.max(total - adjustedUsed, 0);
+//----------------------------------------------------------------------//		
+					 //	포트윈 결제하기 관련 종료
+//----------------------------------------------------------------------//	
+	
+//결제완료시 해당 함수 호출됨!
+function paymentSuccess(id, usepoint, totalAmount) {
+	
+	console.log(id, usepoint, totalAmount);
+	
+	// 여기서 orderAdd 예정
+	
+	
+}// end of function paymentSuccess()-----------------------------
 
         // 가격 표시
         totalPrice.textContent = total.toLocaleString() + '원';
@@ -422,11 +508,58 @@ window.addEventListener('DOMContentLoaded', function() {
     updatePrices();
 });
 	
+=======
+//----------------------------------------------------------------------//
+				//	포트윈 결제 후, orderAdd 함수까지 종료!
+//----------------------------------------------------------------------//	
+	
+	window.addEventListener('DOMContentLoaded', function() {
+	    const priceSpans = document.querySelectorAll('.item-price');
+	    const totalPrice = document.querySelector('#totalPrice');
+	    const finalPrice = document.querySelector('#finalPrice');
+	    const usePointInput = document.querySelector('#usePoint');
+	    const maxPoint = ${sessionScope.loginUser.point};
+	
+	    function calcTotalPrice() {
+	        let total = 0;
+	        priceSpans.forEach(span => {
+	            const raw = span.getAttribute('data-price');
+	            total += parseInt(raw);
+	        });
+	        return total;
+	    }
+	
+	    function updatePrices() {
+	        const total = calcTotalPrice();
+	        const usedPoint = parseInt(usePointInput.value.replace(/[^\d]/g, '')) || 0;
+	        const adjustedUsed = usedPoint > maxPoint ? maxPoint : usedPoint;
+	        const final = Math.max(total - adjustedUsed, 0);
+	
+	        // 가격 표시
+	        totalPrice.textContent = total.toLocaleString() + '원';
+	        finalPrice.innerHTML = '<strong data-price="' + final + '">' + final.toLocaleString() + '원</strong>';
+	    }
+	
+	    // 포인트 입력 시마다 금액 업데이트
+	    usePointInput.addEventListener('input', () => {
+	        let raw = usePointInput.value.replace(/[^\d]/g, '');
+	        let num = parseInt(raw || 0);
+	        if (num > maxPoint) num = maxPoint;
+	        usePointInput.value = num.toLocaleString();
+	        updatePrices();
+	    });
+	
+	    // 초기 실행
+	    updatePrices();
+	});
+	
+	
+>>>>>>> branch 'main' of https://github.com/yejunsKim/SemiProject.git
 	
 </script>
 
 	<div class="col-md-12" id="divOrder" style="background-color: #f5f5f5;padding-top:80px;">
-      	<form name="orderFrm" method="post" action="">
+      	<form name="orderFrm" method="post">
       	
       		<%-- 배송지 --%>
       		<div class="section">
@@ -454,9 +587,13 @@ window.addEventListener('DOMContentLoaded', function() {
 	                	<tr>
                     		<td>우편번호&nbsp;<span class="star">*</span></td>
                     		<td>
-                       			<input type="text" name="postcode" id="postcode" size="6" maxlength="5" value="${sessionScope.loginUser.postcode}" />&nbsp;&nbsp;
+                       			<input type="text" name="postcode" id="postcode" size="10" maxlength="5" value="${sessionScope.loginUser.postcode}" />&nbsp;&nbsp;
                        			<%-- 우편번호 찾기 --%>
+<<<<<<< HEAD
                        			<img src="<%= ctxPath%>/images/find_postcode.gif" width="5%" id="postcodeSearch" />
+=======
+                       			<img src="<%= ctxPath%>/images/find_postcode.gif" width="27px" id="postcodeSearch" />
+>>>>>>> branch 'main' of https://github.com/yejunsKim/SemiProject.git
                        			&nbsp;&nbsp;&nbsp;
                        			<span class="error">우편번호 형식에 맞지 않습니다.</span>
                        			<button type="button" id="btnUseCurrentAddress" style="padding: 5px 10px; border: 3pt">
@@ -518,11 +655,19 @@ window.addEventListener('DOMContentLoaded', function() {
 							    &nbsp;&nbsp;&nbsp;
 							    <span class="quantity" data-price="${item.cartvo.cartamount}">
 									X ${item.cartvo.cartamount}개
+<<<<<<< HEAD
+								</span>
+							    &nbsp;&nbsp;&nbsp;
+							    <span> 
+									<fmt:formatNumber value="${item.price * item.cartvo.cartamount}" pattern="###,###"/>원
+=======
+>>>>>>> branch 'main' of https://github.com/yejunsKim/SemiProject.git
 								</span>
 							    &nbsp;&nbsp;&nbsp;
 							    <span> 
 									<fmt:formatNumber value="${item.price * item.cartvo.cartamount}" pattern="###,###"/>원
 								</span>
+								<span class="itemNo" style="display: none;">${item.itemNo}</span>
 							</td>
 						</tr>
                 	</c:forEach>
@@ -595,7 +740,7 @@ window.addEventListener('DOMContentLoaded', function() {
                		</tr>
                		<tr>
 					    <td colspan="2" style="text-align: center; padding-top: 20px;">
-					        <button type="submit" id="btnOrderSubmit" style="padding: 10px 30px; font-size: 16px; font-weight: bold;">
+					        <button type="button" id="btnOrderSubmit" style="padding: 10px 30px; font-size: 16px; font-weight: bold;">
 					            결제하기
 					        </button>
 					    </td>

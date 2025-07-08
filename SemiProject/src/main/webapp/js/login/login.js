@@ -63,3 +63,5 @@ function editInfo(id, ctxPath) {
 				    width=${width}, height=${height}`);
 	
 }
+
+

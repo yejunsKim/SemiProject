@@ -44,4 +44,7 @@ public interface UserDAO {
 
 	// userDatail을 위한 id로 userVO 끌고오기.
 	public UserVO selectUser(String id) throws SQLException;
+
+	// orderForm에서 결제직전 원하는 주소지로 변경하는 메소드.
+	public boolean updateAddress(Map<String, String> paraMap) throws SQLException;
 }

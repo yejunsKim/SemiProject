@@ -52,7 +52,7 @@ public class PerfumeDisplayJSON extends BaseController {
 			
 			itemList = idao.selectBycategoryName(paraMap);
 		}
-		
+		 
 		if(itemList.size() > 0) {
 			
 			for(ItemVO ivo : itemList) {
