@@ -27,7 +27,9 @@ public class ItemDetail extends BaseController {
 		}
 		
 		else {
-			String s_itemno = request.getParameter("itemno");	// itemno 값 가져옴!
+			String s_itemno = request.getParameter("itemNo");	// itemno 값 가져옴!
+			
+			
 			
 			if(s_itemno != null) {
 				int itemno = Integer.parseInt(s_itemno);
