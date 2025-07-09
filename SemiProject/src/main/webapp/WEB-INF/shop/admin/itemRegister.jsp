@@ -151,6 +151,7 @@
         }
     }
 </style>
+
 <script type="text/javascript">
 
   let total_fileSize = 0; 
@@ -226,6 +227,7 @@
 	  
   }); // end of $(function(){})
 </script>
+
 
 <div class="page-title" style="margin-top:20px; margin-bottom:10px;">일반상품 등록</div>
 <div align="center" style="margin-top:20px; margin-bottom: 20px;">

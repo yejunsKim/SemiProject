@@ -228,7 +228,10 @@ background: #E0E7FF;
     box-shadow: 0 8px 32px rgba(140,180,255,0.25);
     transform: translateY(-3px) scale(1.05);
 }
-
+#detailImageSection {
+    text-align: center;
+    margin-top: 20px;
+}
 
 </style>
 
@@ -599,7 +602,7 @@ let currentPage = 1;
      	        		$('textarea[name="content"]').val("").focus();
      	        	},
      	        	error: function(request, status, error){
-     				   alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+     				   //alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
      		   	    }
      	        });
      	   
@@ -641,15 +644,22 @@ let currentPage = 1;
 					<input type="hidden" name="itemNo" value="${item.itemNo}">
 				
 					<%-- 수량 입력 --%>
-					<div class="bg-white p-3 d-flex align-items-center mb-2" style="gap: 10px;">
-					  	<label for="quantity" class="mb-0" style="min-width: 80px;">수량&nbsp;:</label>
-					  	<select id="quantity" name="quantity" class="border-0 p-0" 
-					          style="box-shadow: none; width: 100px; text-align: center;">
-					    	<c:forEach var="itemAmount" begin="1" end="${item.itemAmount}">
-					      		<option value="${itemAmount}">${itemAmount}</option>
-					    	</c:forEach>
-					  	</select>
-					</div>
+	               <div class="bg-white p-3 d-flex align-items-center mb-2" style="gap: 10px;">
+	                  <label for="quantity" class="mb-0" style="min-width: 80px;">수량&nbsp;:</label>
+	                  <c:choose>
+	                     <c:when test="${item.itemAmount == 0}">
+	                        <span style="color: red;">현재 재고가 없습니다.</span>
+	                     </c:when>
+	                     <c:otherwise>
+	                        <select id="quantity" name="quantity" class="border-0 p-0" 
+	                        style="box-shadow: none; width: 100px; text-align: center;">
+	                           <c:forEach var="itemAmount" begin="1" end="${item.itemAmount}">
+	                              <option value="${itemAmount}">${itemAmount}</option>
+	                           </c:forEach>
+	                        </select>
+	                     </c:otherwise>
+	                  </c:choose>
+	               </div> 
 
 					<%-- 장바구니 담기 버튼 --%>
 					<button type="submit" class="btn btn-dark w-100 py-3" style="font-weight: bold;">장바구니 담기</button>

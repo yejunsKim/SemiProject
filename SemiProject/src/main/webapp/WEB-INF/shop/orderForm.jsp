@@ -438,8 +438,8 @@ $(function(){
 			const usePoint = $('input#usePoint').val();
 			
  		// ==== 포트원(구 아임포트) 결제
- 		//requestPayment(ctxPath, id, email, usePoint, totalAmount);
- 		paymentSuccessOrderService(id, usePoint, totalAmount);
+ 		requestPayment(ctxPath, id, email, usePoint, totalAmount);
+ 		//paymentSuccessOrderService(id, usePoint, totalAmount);
 
     });
 	
@@ -501,6 +501,8 @@ window.addEventListener('DOMContentLoaded', function() {
                 break;
             case 'gold': pointRate = 0.07; 	 // 골드는 7%
                 break;
+            case 'vip': pointRate = 0.1; 	 // VIP는 10%
+            	break;
         }
         // 적립 예정 포인트 계산 및 표시
         const expectedPoint = Math.floor(final * pointRate);

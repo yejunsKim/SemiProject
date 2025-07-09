@@ -80,7 +80,7 @@
 
     <!-- ✅ 여기! 제목 + select 가로 배치 들어갈 자리 -->
     <div class="chartOpt">
-      <h2 class="text-2xl font-bold text-gray-800 flex items-center">
+      <h2 class="text-2xl font-bold text-gray-800 flex items-center" style="font-size: 20pt;">
         <i class="fas fa-chart-pie text-indigo-600 mr-2 chartInfo" style="color:#8080ff;font-size:19pt;"></i> 주문통계 차트
       </h2>
 
@@ -203,7 +203,7 @@
                         $("div#table_container").html(html);
                     },
                     error: function (request, status, error) {
-                        //alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
+                        alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
                     }
                 });
                 break;
@@ -314,7 +314,7 @@
                         $("div#table_container").html(html);
                     },
                     error: function (request, status, error) {
-                        //alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
+                        alert("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
                     }
                 });
                 break;
@@ -323,5 +323,4 @@
 </script>
 
 <jsp:include page="../footer.jsp" />
-
 
