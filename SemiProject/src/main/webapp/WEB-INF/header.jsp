@@ -464,8 +464,18 @@ function SearchItems() {
 
 				      <tr>
 				        <td colspan="3" style="padding-top:10px;">
-				          <span style="font-weight: bold;"><a href="<%=ctxPath %>/item/orderList.do">주문목록 보기</a></span>
-				          &nbsp;&nbsp;&nbsp;&nbsp;<span><button type="button" class="btn btn-danger btn-sm" onclick="javascript:LogOut('<%=ctxPath%>')">Logout</button></span>
+				        	<c:choose>
+				        		<c:when test="${sessionScope.loginUser.id ne 'admin'}">
+				        			<span style="font-weight: bold;">
+				        				<a href="<%=ctxPath %>/item/orderList.do">주문목록 보기</a>
+				        			</span>
+				        		</c:when>
+				        		<c:otherwise>
+				        			<!-- 관리자일 경우 자리만 차지하게 -->
+				        			<span style="display: inline-block; width: 90px;"></span>
+				        		</c:otherwise>
+				        	</c:choose>
+				        	&nbsp;&nbsp;&nbsp;&nbsp;<span><button type="button" class="btn btn-danger btn-sm" onclick="javascript:LogOut('<%=ctxPath%>')">Logout</button></span>
 				        </td>
 				      </tr>
 				      <tr>

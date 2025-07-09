@@ -144,13 +144,13 @@ public class ItemVO {
 	public void setUserItemPoint(String grade) {	// 고객 등급별 제품 구매시 적립 포인트(개당) 계산
 		
 		if("bronze".equalsIgnoreCase(grade)) {
-			ItemPoint = (int) (price * 0.05);
+			ItemPoint = (int) (price * 0.03);
 		}
 		else if("silver".equalsIgnoreCase(grade)) {
-			ItemPoint = (int) (price * 0.07);
+			ItemPoint = (int) (price * 0.05);
 		}
 		else if("gold".equalsIgnoreCase(grade)) {
-			ItemPoint = (int) (price * 0.1);
+			ItemPoint = (int) (price * 0.7);
 		}
 	}
 	

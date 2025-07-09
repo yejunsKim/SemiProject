@@ -24,8 +24,10 @@ public class Logout extends BaseController {
 		if(!"admin".equals(login_userid) && referer != null ) {
 			
 			if(referer.contains("cartList.do") || 
-			   referer.contains("chart.do")) {
-				// 관리자가 아닌 일반 사용자로 들어와서 referer 페이지가 개인정보를 나타내는 것이라면 /MyMVC/index.up 페이지로 돌아간다.   
+			   referer.contains("chart.do") ||
+			   referer.contains("orderList.do") ||
+			   referer.contains("orderDetail.do")) {
+				// 관리자가 아닌 일반 사용자로 들어와서 referer 페이지가 개인정보를 나타내는 것이라면 main 페이지로 돌아간다.   
 				super.setViewPage(request.getContextPath()+"/main.do");
 			}
 			else {
@@ -35,7 +37,7 @@ public class Logout extends BaseController {
 						
 		}
 		else {
-			// referer 페이지가 없거나 또는 관리자로 로그아웃을 하면 무조건 /MyMVC/index.up 페이지로 돌아간다.   
+			// referer 페이지가 없거나 또는 관리자로 로그아웃을 하면 무조건 main 페이지로 돌아간다.   
 			super.setViewPage(request.getContextPath()+"/main.do");
 		}
 		
