@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,8 @@ import myshop.domain.Delivery_addressVO;
 import myshop.domain.ItemVO;
 import myshop.domain.Order_historyVO;
 import myshop.domain.Order_itemsVO;
+import myshop.domain.ReviewVO;
+import user.domain.UserVO;
 import util.security.AES256;
 import util.security.SecretMyKey;
 
@@ -418,7 +421,7 @@ public class ItemDAO_imple implements ItemDAO {
 		try {
 			conn = ds.getConnection();
 			
-			String sql = " SELECT C.cartno, I.itemPhotoPath, I.itemName, I.price, I.itemAmount, C.cartamount, I.itemNo, "
+			String sql = " SELECT C.cartno, I.itemPhotoPath, I.itemName, I.price, I.itemAmount, C.cartamount,  I.itemNo, "
 					   + " TO_CHAR(C.cartdate, 'yyyy-mm-dd') AS cartdate, U.grade "
 					   + " FROM cart C "
 					   + " JOIN users U ON C.fk_users_id = U.id "
@@ -431,6 +434,7 @@ public class ItemDAO_imple implements ItemDAO {
 			pstmt.setString(1, fk_users_id);
 			
 			rs = pstmt.executeQuery();
+			
 			
 			int cnt = 0;
 			while(rs.next()) {
@@ -449,6 +453,8 @@ public class ItemDAO_imple implements ItemDAO {
 				
 				// 등급에 따른 포인트 계산
 				ivo.setUserItemPoint(rs.getString("grade"));
+				
+				
 				
 				
 				CartVO cvo = new CartVO();
@@ -731,6 +737,8 @@ public class ItemDAO_imple implements ItemDAO {
 	    return getOrderItemList;
 	}
 	
+	
+
 	// 로그인 유저의 장바구니 조회.	
 	@Override
 	public List<ItemVO> getOrderItemList(String[] itemNoArr) throws SQLException {
@@ -951,61 +959,516 @@ public class ItemDAO_imple implements ItemDAO {
 		
 	}// end of public List<Order_itemsVO> selectOrderDetail(Map<String, String> paraMap) throws SQLException--------------
 
+		      	 
+
+
+		//주문번호 채번하기
+		@Override
+		public int get_order_seq() throws SQLException {
+			int seq = 0;
+			
+			try {
+				 conn = ds.getConnection();
+					 
+				 String sql = " select order_seq.nextval AS seq "
+				 		    + " from dual";
+					 
+				 pstmt = conn.prepareStatement(sql);
+					 
+				 rs = pstmt.executeQuery();
+					 
+				 rs.next();
+					 
+				 seq = rs.getInt("seq");
+					 
+				} finally {
+				  close();
+			}
+				
+			return seq;
+		}
+
+		
+
+		// 로그인한 사용자가 해당 제품을 구매했는지 알아오기
+		   @Override
+		   public boolean isOrder(Map<String, String> paraMap) throws SQLException {
+
+		      boolean bool = false;
+		      
+		      try {
+		         conn = ds.getConnection();
+		         
+		         String sql = " SELECT orderitemno "
+		                  + " FROM ORDER_ITEMS I JOIN ORDER_HISTORY H "
+		                  + " ON I.ORDERNO = H.ORDERNO "
+		                  + " WHERE H.id = ? AND I.itemno = ? ";
+		         
+		         pstmt = conn.prepareStatement(sql);
+		         pstmt.setString(1, paraMap.get("fk_id"));
+		         pstmt.setString(2, paraMap.get("fk_itemNo"));
+		         
+		         rs = pstmt.executeQuery();
+		         
+		         bool = rs.next();
+		         
+		         System.out.println(">>> DAO isOrder() 확인용 : " + paraMap);
+		               
+		      } finally {
+		         close();
+		      }
+		      
+		      return bool;
+		      
+		   }
+
+
+		   // 특정 사용자가 특정 제품에 대해 상품후기를 입력하기(insert)
+		   @Override
+		   public int addReview(ReviewVO reviewVO) throws SQLException {
+
+		      int n = 0;
+		      
+		      try {
+		         conn = ds.getConnection();
+		         
+		         String sql = " insert into reviews(reviewid, fk_id, fk_itemno, content, createdat) "
+		                  + " values(review_seq.nextval, ?, ?, ?, default) ";
+		                  
+		         pstmt = conn.prepareStatement(sql);
+		         pstmt.setString(1, reviewVO.getFk_id());
+		         pstmt.setInt(2, reviewVO.getFk_itemNo());
+		         pstmt.setString(3, reviewVO.getContent());
+		         
+		         n = pstmt.executeUpdate();
+		         
+		      } finally {
+		         close();
+		      }
+		      
+		      return n;
+		      
+		   }
+
+		// 리뷰 조회하기(select)  
+		   @Override
+		   public List<ReviewVO> reviewList(String fk_itemNo, int startRow, int endRow) throws SQLException{
+		       List<ReviewVO> reviewList = new ArrayList<>();
+		       try {
+		           conn = ds.getConnection();
+
+		           String sql = 
+		               " SELECT reviewId, fk_id, name, content, createdAt " +
+		               " FROM ( " +
+		               "    SELECT R.reviewId, R.fk_id, U.name, R.content, " +
+		               "           TO_CHAR(R.createdAt, 'yyyy-mm-dd hh24:mi:ss') AS createdAt, " +
+		               "           ROW_NUMBER() OVER (ORDER BY R.reviewId DESC) AS rn " +
+		               "    FROM reviews R " +
+		               "    JOIN users U ON R.fk_id = U.id " +
+		               "    WHERE R.fk_itemNo = ? " +
+		               " ) " +
+		               " WHERE rn BETWEEN ? AND ? ";
+
+		           pstmt = conn.prepareStatement(sql);
+		           pstmt.setString(1, fk_itemNo);
+		           pstmt.setInt(2, startRow);
+		           pstmt.setInt(3, endRow);
+
+		           rs = pstmt.executeQuery();
+		           while(rs.next()) {
+		               ReviewVO reviewvo = new ReviewVO();
+		               reviewvo.setReviewId(rs.getInt("reviewId"));
+		               reviewvo.setFk_id(rs.getString("fk_id"));
+
+		               UserVO uservo = new UserVO();
+		               uservo.setName(rs.getString("name"));
+		               reviewvo.setUserVO(uservo);
+
+		               reviewvo.setContent(rs.getString("content"));
+		               reviewvo.setCreatedAt(rs.getString("createdAt"));
+
+		               reviewList.add(reviewvo);
+		           }
+		       } finally {
+		           close();
+		       }
+		       return reviewList;
+		   }
+
+		   //리뷰페이지수
+			@Override
+			public int getReviewCount(String fk_itemNo) throws SQLException {
+			    int count = 0;
+			    try {
+			        conn = ds.getConnection();
+			        String sql = "SELECT COUNT(*) FROM reviews WHERE fk_itemNo = ?";
+			        pstmt = conn.prepareStatement(sql);
+			        pstmt.setString(1, fk_itemNo);
+
+			        rs = pstmt.executeQuery();
+			        if (rs.next()) {
+			            count = rs.getInt(1);
+			        }
+
+			    } finally {
+			        close();
+			    }
+			    return count;
+			
+		}
+
+
+		
+		// 리뷰 삭제하기 (delete)
+		@Override
+		public int reviewDel(String reviewId) throws SQLException {
+			
+			int n = 0;
+		      
+		      try {
+		         conn = ds.getConnection();
+		         
+		         String sql = " delete from reviews "
+		                  + " where reviewId = ? ";
+		                  
+		         pstmt = conn.prepareStatement(sql);
+		         pstmt.setString(1, reviewId);
+		         
+		         n = pstmt.executeUpdate();
+		         
+		      } finally {
+		         close();
+		      }
+		      
+		      return n;
+			
+		}//end of public int reviewDel(String review_seq) throws SQLException 
+
+		//리뷰 수정하기 (update)
+		@Override
+		public int reviewUpdate(Map<String, String> paraMap) throws SQLException {
+			
+			int n = 0;
+		      
+		      try {
+		         conn = ds.getConnection();
+		         
+		         String sql = " update reviews set content = ? "
+		                  + "                               , createdAt = sysdate "
+		                  + " where reviewId = ? ";
+		                  
+		         pstmt = conn.prepareStatement(sql);
+		         pstmt.setString(1, paraMap.get("content"));
+		         pstmt.setString(2, paraMap.get("reviewId"));
+		         
+		         n = pstmt.executeUpdate();
+		         
+		      } finally {
+		         close();
+		      }
+		      
+		      return n;
+			
+		}//end of public int reviewUpdate(String review_seq) throws SQLException
+
+		   
+		   @Override
+		   public int likeAdd(Map<String, String> paraMap) throws SQLException {
+		       int result = 0;
+		       
+		       String sql =" select count(*)  AS LIKECNT "+
+	                    "          from  review_reactions"+
+	                    "          where fk_reviewId = ?  and fk_id = ? ";
+		       
+		       try {
+		           conn = ds.getConnection();
+		           pstmt = conn.prepareStatement(sql);
+		           pstmt.setString(1, paraMap.get("fk_reviewId"));
+		           pstmt.setString(2, paraMap.get("fk_id"));
+		           
+		           rs = pstmt.executeQuery();
+		           if(rs.next() && rs.getInt("LIKECNT") > 0) {
+		        	   
+		               // 이미 좋아요 눌렀음 -> 삭제
+		               sql = "DELETE FROM review_reactions"
+		               		+ " WHERE fk_reviewId = ? and fk_id = ? ";
+		               
+		               pstmt = conn.prepareStatement(sql);
+		               pstmt.setString(1, paraMap.get("fk_reviewId"));
+			           pstmt.setString(2, paraMap.get("fk_id"));
+
+		               
+		               pstmt.executeUpdate();
+		               result = 0; // 좋아요 취소
+		           } else {
+		               // 좋아요 추가
+		        	    sql = " insert into review_reactions(fk_id, fk_reviewId) "
+				         		+ " values(?, ?) ";
+				         
+				         
+				         pstmt = conn.prepareStatement(sql);
+				         pstmt.setString(1, paraMap.get("fk_id") );
+				         pstmt.setString(2, paraMap.get("fk_reviewId"));
+				         
+		              
+		               pstmt.executeUpdate();
+		               result = 1; // 좋아요 추가
+		           }
+		       } finally {
+		           close();
+		       }
+		       return result;
+		   }
+		
+		// 리뷰 좋아요 수 조회
+		   @Override
+		   public Map<String, Integer> getLikeCount(String reviewId) throws SQLException {
+		       Map<String, Integer> map = new HashMap<>(); 
+		       System.out.println(">>> getLikeCount reviewId = " + reviewId);
+
+		       try {
+		           conn = ds.getConnection();
+		           String sql = 
+		               " SELECT count(*) AS LIKECNT " +
+		               " FROM review_reactions " +
+		               " WHERE fk_reviewId = ? ";
+
+		           pstmt = conn.prepareStatement(sql);
+		           pstmt.setString(1, reviewId);
+
+		           rs = pstmt.executeQuery();
+		           if (rs.next()) {
+		               int cnt = rs.getInt("LIKECNT");
+		               System.out.println(">>> like count for reviewId "+reviewId+" = "+cnt);
+		               map.put("likecnt", cnt);
+		           } else {
+		               System.out.println(">>> no rows found for reviewId "+reviewId);
+		               map.put("likecnt", 0);
+		           }
+		       } finally {
+		           close();
+		       }
+
+		       return map;
+		   }
+
+
+
+
 	@Override
-	public int getSearchResultCount(String searchID) throws SQLException {
-	    int count = 0;
+	   public List<ItemVO> searchItemsByName(String searchID, int start, int len) throws SQLException {
+	       List<ItemVO> list = new ArrayList<>();
 
-	    try {
-	        conn = ds.getConnection();
-	        String sql = "SELECT COUNT(*) AS cnt FROM item WHERE itemname LIKE ?";
-	        pstmt = conn.prepareStatement(sql);
-	        pstmt.setString(1, "%" + searchID + "%");
-	        rs = pstmt.executeQuery();
+	       try {
+	           conn = ds.getConnection();
+	           String sql = "SELECT * FROM ( " +
+	                        " SELECT ROWNUM AS rnum, a.* FROM ( " +
+	                        " SELECT itemno, itemname, itemphotopath, price, volume " +
+	                        " FROM item WHERE itemname LIKE ? ORDER BY itemno DESC " +
+	                        ") a ) " +
+	                        "WHERE rnum BETWEEN ? AND ?";
 
-	        if (rs.next()) {
-	            count = rs.getInt("cnt");
-	        }
-	    } finally {
-	        close();
-	    }
+	           pstmt = conn.prepareStatement(sql);
+	           pstmt.setString(1, "%" + searchID + "%");
+	           pstmt.setInt(2, start);
+	           pstmt.setInt(3, start + len - 1);
 
-	    return count;
+	           rs = pstmt.executeQuery();
+	           while (rs.next()) {
+	               ItemVO vo = new ItemVO();
+	               vo.setItemNo(rs.getInt("itemno"));
+	               vo.setItemName(rs.getString("itemname"));
+	               vo.setItemPhotoPath(rs.getString("itemphotopath"));
+	               vo.setPrice(rs.getInt("price"));
+	               vo.setVolume(rs.getInt("volume"));
+	               list.add(vo);
+	           }
+	       } finally {
+	           close();
+	       }
+
+	       return list;
+	   }
+	
+	@Override
+	   public int getSearchResultCount(String searchID) throws SQLException {
+	       int count = 0;
+
+	       try {
+	           conn = ds.getConnection();
+	           String sql = "SELECT COUNT(*) AS cnt FROM item WHERE itemname LIKE ?";
+	           pstmt = conn.prepareStatement(sql);
+	           pstmt.setString(1, "%" + searchID + "%");
+	           rs = pstmt.executeQuery();
+
+	           if (rs.next()) {
+	               count = rs.getInt("cnt");
+	           }
+	       } finally {
+	           close();
+	       }
+
+	       return count;
+	   }
+
+
+	// 카테고리별주문 통계정보 알아오기
+	@Override
+	public List<Map<String, String>> myPurchase_byCategory(String id) throws SQLException {
+
+		List<Map<String, String>> myPurchase_map_List = new ArrayList<>();
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " WITH "
+					   + " OH AS "
+					   + " ( SELECT orderNo "
+					   + "   FROM order_history "
+					   + " ) "
+					   + " , "
+					   + " OI AS "
+					   + " ( SELECT orderNo, ITEMNO, quantity, orderPrice "
+					   + "   FROM order_items "
+					   + " ) "
+					   + " SELECT C.categoryName "
+					   + "      , COUNT(*) AS CNT "
+					   + "      , SUM(OI.quantity * OI.orderPrice) AS SUMPAY"
+					   + "      , ROUND( SUM(OI.quantity * OI.orderPrice) / (SELECT SUM(OI.quantity * OI.orderPrice) "
+					   + "            										 FROM OH JOIN order_items OI "
+					   + "													 ON OH.orderNo = OI.orderNo) * 100, 2) AS SUMPAY_PCT "
+					   + " FROM OI JOIN OH "
+					   + " ON OH.orderNo = OI.orderNo "
+					   + " JOIN item I "
+					   + " ON OI.ITEMNO = I.ITEMNO "
+					   + " JOIN category C "
+					   + " ON I.fk_category_no = C.categoryNo "
+					   + " GROUP BY C.categoryName "
+					   + " ORDER BY SUMPAY DESC ";
+			
+			pstmt = conn.prepareStatement(sql);
+	         
+			rs = pstmt.executeQuery();
+	                  
+			while(rs.next()) {
+				String categoryname = rs.getString("categoryname");
+	            String cnt = rs.getString("CNT");
+	            String sumpay = rs.getString("SUMPAY");
+	            String sumpay_pct = rs.getString("SUMPAY_PCT");
+	            
+	            Map<String, String> map = new HashMap<>();
+	            map.put("categoryname", categoryname);
+	            map.put("cnt", cnt);
+	            map.put("sumpay", sumpay);
+	            map.put("sumpay_pct", sumpay_pct);
+	            
+	            myPurchase_map_List.add(map);
+			}
+			
+		} finally {
+			close();
+		}
+		
+		return myPurchase_map_List;
 	}
 
+
+	// 카테고리별 월별주문 통계정보 알아오기
 	@Override
-	public List<ItemVO> searchItemsByName(String searchID, int start, int len) throws SQLException {
-	    List<ItemVO> list = new ArrayList<>();
+	public List<Map<String, String>> myPurchase_byMonth_byCategory(String id) throws SQLException {
 
-	    try {
-	        conn = ds.getConnection();
-	        String sql = "SELECT * FROM ( " +
-	                     " SELECT ROWNUM AS rnum, a.* FROM ( " +
-	                     " SELECT itemno, itemname, itemphotopath, price, volume " +
-	                     " FROM item WHERE itemname LIKE ? ORDER BY itemno DESC " +
-	                     ") a ) " +
-	                     "WHERE rnum BETWEEN ? AND ?";
-
-	        pstmt = conn.prepareStatement(sql);
-	        pstmt.setString(1, "%" + searchID + "%");
-	        pstmt.setInt(2, start);
-	        pstmt.setInt(3, start + len - 1);
-
-	        rs = pstmt.executeQuery();
-	        while (rs.next()) {
-	            ItemVO vo = new ItemVO();
-	            vo.setItemNo(rs.getInt("itemno"));
-	            vo.setItemName(rs.getString("itemname"));
-	            vo.setItemPhotoPath(rs.getString("itemphotopath"));
-	            vo.setPrice(rs.getInt("price"));
-	            vo.setVolume(rs.getInt("volume"));
-	            list.add(vo);
-	        }
-	    } finally {
-	        close();
-	    }
-
-	    return list;
+		List<Map<String, String>> myPurchase_map_List = new ArrayList<>();
+	      
+		try {
+			conn = ds.getConnection();
+	         
+			String sql = " WITH "
+					   + " OH AS "
+					   + " (SELECT orderno, orderdate "
+					   + "  FROM order_history "
+					   + " ), "
+					   + " OI AS "
+					   + " (SELECT orderNo, ITEMNO, quantity, orderPrice "
+					   + "  FROM order_items "
+					   + " ) "
+					   + " SELECT C.categoryName "
+					   + "      , COUNT(*) AS CNT"
+					   + "		, SUM(OI.quantity * OI.orderPrice) AS SUMPAY "
+					   + "      , ROUND( SUM(OI.quantity * OI.orderPrice)/(SELECT SUM(OI.quantity * OI.orderPrice) "
+					   + "                                                 FROM OH JOIN OI "
+					   + "												   ON OH.orderNo = OI.orderNo) * 100, 2) AS SUMPAY_PCT "
+					   + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '01', OI.quantity * OI.orderPrice, 0)) AS M_01 "
+					   + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '02', OI.quantity * OI.orderPrice, 0)) AS M_02 "
+					   + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '03', OI.quantity * OI.orderPrice, 0)) AS M_03 "
+					   + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '04', OI.quantity * OI.orderPrice, 0)) AS M_04 "
+					   + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '05', OI.quantity * OI.orderPrice, 0)) AS M_05 "
+					   + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '06', OI.quantity * OI.orderPrice, 0)) AS M_06 "
+					   + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '07', OI.quantity * OI.orderPrice, 0)) AS M_07 "
+					   + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '08', OI.quantity * OI.orderPrice, 0)) AS M_08 "
+					   + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '09', OI.quantity * OI.orderPrice, 0)) AS M_09 "
+					   + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '10', OI.quantity * OI.orderPrice, 0)) AS M_10 "
+					   + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '11', OI.quantity * OI.orderPrice, 0)) AS M_11 "
+					   + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '12', OI.quantity * OI.orderPrice, 0)) AS M_12 "
+					   + " FROM OI JOIN OH "
+					   + " ON OH.orderNo = OI.orderNo "
+					   + " JOIN item I "
+					   + " ON OI.ITEMNO = I.itemNo "
+					   + " JOIN category C "
+					   + " ON I.fk_category_no = C.categoryNo "
+					   + " GROUP BY C.categoryName "
+					   + " ORDER BY SUMPAY DESC ";
+	         
+			pstmt = conn.prepareStatement(sql);
+	         
+			rs = pstmt.executeQuery();
+	                  
+			while(rs.next()) {
+				String categoryname = rs.getString("categoryname");
+	            String cnt = rs.getString("CNT");
+	            String sumpay = rs.getString("SUMPAY");
+	            String sumpay_pct = rs.getString("SUMPAY_PCT");
+	            String m_01 = rs.getString("M_01");
+	            String m_02 = rs.getString("M_02");
+	            String m_03 = rs.getString("M_03");
+	            String m_04 = rs.getString("M_04");
+	            String m_05 = rs.getString("M_05");
+	            String m_06 = rs.getString("M_06");
+	            String m_07 = rs.getString("M_07");
+	            String m_08 = rs.getString("M_08");
+	            String m_09 = rs.getString("M_09");
+	            String m_10 = rs.getString("M_10");
+	            String m_11 = rs.getString("M_11");
+	            String m_12 = rs.getString("M_12");
+	            
+	            Map<String, String> map = new HashMap<>();
+	            map.put("categoryname", categoryname);
+	            map.put("cnt", cnt);
+	            map.put("sumpay", sumpay);
+	            map.put("sumpay_pct", sumpay_pct);
+	            map.put("m_01", m_01);
+	            map.put("m_02", m_02);
+	            map.put("m_03", m_03);
+	            map.put("m_04", m_04);
+	            map.put("m_05", m_05);
+	            map.put("m_06", m_06);
+	            map.put("m_07", m_07);
+	            map.put("m_08", m_08);
+	            map.put("m_09", m_09);
+	            map.put("m_10", m_10);
+	            map.put("m_11", m_11);
+	            map.put("m_12", m_12);
+	            
+	            myPurchase_map_List.add(map);
+			} // end of while----------------------------------
+	                  
+		} finally {
+			close();
+		}
+	      
+		return myPurchase_map_List;   
+	      
 	}
+
 
 	//주문번호 채번하기
 	@Override
@@ -1223,4 +1686,5 @@ public class ItemDAO_imple implements ItemDAO {
 		return isSuccess;
 	}
 	
+
 }

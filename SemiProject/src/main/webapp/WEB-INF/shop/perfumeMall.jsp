@@ -19,7 +19,12 @@
 
 <%-- CSS 직접 추가한 부분 --%>
 <style>
-
+ 	#maincontent { 
+    background: #f0f4fa; /* 기존 background: none; 대신 배경색 추가 */
+    border-radius: 15px;
+    /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); */
+    padding: 30px;
+	}
 	.card-link {	/* 장바구니 담기 */
 		text-decoration: none;	/* 기본은 밑줄 없음  */
 		color: black;
@@ -38,17 +43,25 @@
 	.card-title:hover {	/* 제품명 */
 		text-decoration: underline; /* 마우스 올리면 밑줄 */
 	}
+	.card {
+	  transition: transform 0.3s ease, box-shadow 0.3s ease;
+	  cursor: pointer;
+	}
+	
+	.card:hover,
+	.card:active {
+	  transform: scale(1.05);
+	  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+	}
 	
 </style> 
 
 	<%-- === 카테고리(?) 상품을 모두 가져와서 디스플레이(페이징 처리 방식은 미정) === --%>
 	<%-- 수정사항3 --%>
-	<div class="col-md-12" id="maininfo" align="center" style="padding-top:80px;">
-	<div class="col-md-9" id="maininfo" align="center">
+	<div class="col-md-12" id="maininfo" align="center" style="padding-top:80px;background: #f0f4fa;">
 		<div id="maincontent">
-			<div style="background-color: #f5f5f5;">
-			
-				<p class="h3 my-3 text-center">- ${requestScope.categoryName} -</p>
+			<div>
+ 				<p class="h3 my-3 text-center">- ${requestScope.categoryName} -</p>
 				
 				<div class="row" id="displayHIT" style="text-align: left;"></div>
 				
