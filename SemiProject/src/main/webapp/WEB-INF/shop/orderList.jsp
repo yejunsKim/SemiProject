@@ -45,11 +45,37 @@
 		border: 1px solid #ccc;
 		cursor: pointer;
 	}
-	.btn1:hover {
+	.btn1 {
+		padding: 6px 12px;
 		background-color: #fff;
-		border-color: blue;
+		border: 1px solid #ccc;
 		cursor: pointer;
+		transition: all 0.3s ease;
+		border-radius: 0.375rem;
+		font-size: 10px;
 	}
+
+	.btn1:hover {
+		background-color: #3b82f6; /* Tailwind blue-500 */
+		color: white;
+		border-color: #3b82f6;
+	}
+
+	/* 빈 상태 메시지 */
+	.empty-state {
+		background-color: #f8fafc;
+		border-radius: 0.5rem;
+		padding: 2rem;
+		color: #6b7280;
+		text-align: center;
+		font-size: 15px;
+	}
+
+
+
+.btn1 span {
+	font-size: 8pt;
+}
 </style>
 
 <script type="text/javascript">
@@ -85,7 +111,7 @@
 				<th id="orderList">주문내역</th>
 				<th id="orderList" style="width: 15%">적립포인트</th>
 				<%-- <th id="orderList" style="width: 10%">주문상태</th> --%>
-				<th id="orderList" style="width: 10%"></th>
+				<th id="orderList" style="width: 15%"></th>
 			</tr>
 		</thead>
 		
@@ -99,15 +125,25 @@
 						<td id="orderList">${ohvo.itemlist}</td>
 						<td id="orderList"><fmt:formatNumber pattern="#,###">${ohvo.rewarded}</fmt:formatNumber> Point</td>
 						<%-- <td id="orderList">임시 주문상태</td> --%>
-						<td id="orderList"><button class="btn1" onclick="orderDetail('${ohvo.orderno}')" >상세보기</button></td>
+						<td id="orderList"><button class="btn1" onclick="orderDetail('${ohvo.orderno}')">
+						    <i class="fa-solid fa-truck" style="margin-right: 6px; color: #555;"></i>
+						    <span>상세보기</span>
+						</button>
+						</td>
 					</tr>
 				</c:forEach>
 			</c:if>
 			
 			<c:if test="${empty requestScope.ohList}">
-				<tr id="orderList">
-					<th colspan="6">주문한 내역이 없습니다.</th>
-				</tr id="orderList">
+				<tr>
+					<td colspan="4">
+						<div class="empty-state">
+							<i class="fa-solid fa-shopping-cart" style="font-size: 2rem; color: #9ca3af; margin-bottom: 0.5rem;"></i>
+							<h3 style="font-size: 1.1rem; color: #374151;">주문한 내역이 없습니다.</h3>
+							<p style="font-size: 0.9rem; color: #6b7280;">새로운 상품을 구매해보세요!</p>
+						</div>
+					</td>
+				</tr>
 			</c:if>
 		</tbody>
 				
