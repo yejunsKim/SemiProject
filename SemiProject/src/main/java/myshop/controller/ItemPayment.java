@@ -22,7 +22,7 @@ public class ItemPayment extends BaseController {
 			String email = request.getParameter("email");
 			String usePoint = request.getParameter("usePoint");
 			System.err.println(id+loginUser.getId());
-			
+			System.out.println(id);
 			if(loginUser.getId().equals(id)) {
 				// 로그인한 사용자가 결제하는 경우
 				

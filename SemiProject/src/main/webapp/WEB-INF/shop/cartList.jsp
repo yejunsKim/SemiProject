@@ -279,7 +279,7 @@ button[name="allDelete"]:hover {
 					data:{"id":id},
 					dataType:"json",
 					success:function(json){
-						if(json.n > 1){
+						if(json.n >= 1){
 							alert("장바구니를 모두 비웠습니다.");
 							location.href = "<%= ctxPath%>/item/cartList.do";	// 장바구니 보기 페이지로 간다.
 						}
@@ -419,5 +419,5 @@ button[name="allDelete"]:hover {
 	</form>
 	
 </body>
->>>>>>> branch 'main' of https://github.com/yejunsKim/SemiProject.git
+
 </html>
