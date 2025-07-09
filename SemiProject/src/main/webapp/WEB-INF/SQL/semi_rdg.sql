@@ -42,11 +42,3 @@ UPDATE users U SET U.grade = ( SELECT G.gradename
 
 
 
-
-
-
-
-
-
-
-
