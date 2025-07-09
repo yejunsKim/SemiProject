@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+   pageEncoding="UTF-8"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -37,6 +37,7 @@
 
 <style type="text/css">
 
+<<<<<<< HEAD
 	body {
 		font-family: Arial, sans-serif;
 		margin: 40px;
@@ -135,6 +136,87 @@ button[name="allDelete"]:hover {
     background-color: #888;
 }
 	
+=======
+   body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+   }
+   
+   table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+   }
+   
+   thead > tr {
+      height: 20px;
+   }
+   
+   tbody > tr {
+      height: 100px;
+   }
+   
+   th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+   }
+   
+   th {
+      background-color: #f5f5f5;
+   }
+   
+   .product-info {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+   }
+   
+   .product-info img {
+      width: 50px;
+      height: auto;
+   }
+   
+   .summary {
+      text-align: right;
+      font-size: 18px;
+      margin-top: 20px;
+   }
+   
+   .total-row {
+      font-weight: bold;
+      font-size: 20px;
+      text-align: right;
+      border-top: 2px solid #000;
+      padding-top: 10px;
+   }
+   
+   .btn-row {
+      margin-top: 30px;
+      text-align: center;
+   }
+   
+   .btn {
+      padding: 12px 24px;
+      margin: 5px;
+      font-size: 16px;
+      border: none;
+      background-color: #222;
+      color: #fff;
+      cursor: pointer;
+   }
+   
+   .btn:hover {
+      background-color: #555;
+   }
+   
+   .select-shipping {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+   }
+>>>>>>> branch 'main' of https://github.com/yejunsKim/SemiProject.git
 
 </style>
 
@@ -298,125 +380,125 @@ button[name="allDelete"]:hover {
 	// ==== 장바구니에서 제품 주문하기 ==== //
      function order_selected() {
       
-	     const checked = $('input[name="selectedItems"]:checked');
-	  
-	     if (checked.length === 0) {
-	        alert("주문할 상품을 선택해주세요.");
-	        return; 
-	     }
-	  
-	     const form = $('form[name="CartList"]');
-	  
-	     // 기존에 추가된 hidden input 제거
-	     form.find("input[type='hidden'][name^='send_']").remove();
-	  
-	     checked.each(function() {
-	        const itemNo = $(this).val(); 
-	        const $row = $(this).closest('tr');
-	   		// 해당 체크박스가 속한 행 전체 jQuery 객체($)로 잡았음. 헷갈리지않게.
-	        const itemName = $row.find('div#cart_itemName').text();
-	        const quantity = $row.find('input[name="quantity"]').val();
-	        const priceText = $row.find('td').eq(3).text().replace(/원|,/g, "").trim();
-	        const orderPrice = parseInt(priceText);
-	  
-	        form.append(`<input type="hidden" name="send_cartno" value="${itemNo}">`);
-	        form.append(`<input type="hidden" name="send_itemName_${itemNo}" value="${itemName}">`);
-	        form.append(`<input type="hidden" name="send_quantity_${itemNo}" value="${quantity}">`);
-	        form.append(`<input type="hidden" name="send_price_${itemNo}" value="${orderPrice}">`);
-	     });
-   	  form.action = "orderForm.do"
+        const checked = $('input[name="selectedItems"]:checked');
+     
+        if (checked.length === 0) {
+           alert("주문할 상품을 선택해주세요.");
+           return; 
+        }
+     
+        const form = $('form[name="CartList"]');
+     
+        // 기존에 추가된 hidden input 제거
+        form.find("input[type='hidden'][name^='send_']").remove();
+     
+        checked.each(function() {
+           const itemNo = $(this).val(); 
+           const $row = $(this).closest('tr');
+            // 해당 체크박스가 속한 행 전체 jQuery 객체($)로 잡았음. 헷갈리지않게.
+           const itemName = $row.find('div#cart_itemName').text();
+           const quantity = $row.find('input[name="quantity"]').val();
+           const priceText = $row.find('td').eq(3).text().replace(/원|,/g, "").trim();
+           const orderPrice = parseInt(priceText);
+     
+           form.append(`<input type="hidden" name="send_cartno" value="${itemNo}">`);
+           form.append(`<input type="hidden" name="send_itemName_${itemNo}" value="${itemName}">`);
+           form.append(`<input type="hidden" name="send_quantity_${itemNo}" value="${quantity}">`);
+           form.append(`<input type="hidden" name="send_price_${itemNo}" value="${orderPrice}">`);
+        });
+        form.action = "orderForm.do"
       form.submit();
    } // end of function order_selected()-----------------------------
-	 
-	
+    
+   
 </script>
 
 </head>
 <body>
-	
-	<h1 class="text-center" >${sessionScope.loginUser.name} 님 장바구니</h1>
-	
-	<hr style="border: solid 1px black;">
-	
-	<div class="text-center my-3" style="font-size: 10pt;">장바구니에 담긴 상품은 30일 동안 보관됩니다.</div>
-	
-	<form name="CartList" method="POST" action = "orderForm.do" >
-		<table>
-			<thead> 
-				<tr>
-					<th style="width: 5%;"><input type="checkbox" id="allCheckOrNone" onclick="allCheckBox()" /></th>
-					<th style="width: 15%;">이미지</th>
-					<th style="width: 20%;">향수명</th>
-					<th style="width: 10%;">상품금액(개당)</th>
-					<th style="width: 10%;">최대 적립 포인트</th>
-					<th style="width: 15%;">수량</th>
-					<th style="width: 15%;">등록날짜</th>
-					<th style="width: 10%;">비우기</th>
-				</tr>
-			</thead>
-			<tbody>
-					<c:if test="${empty requestScope.cartList}">
-						<tr>
-							<td colspan="8" style="text-align: center"><strong>장바구니가 비었습니다.</strong></td>
-						</tr>
-					</c:if>
-					
-					<c:if test="${not empty requestScope.cartList}">
-						<c:forEach var="cart" items="${requestScope.cartList}">
-							<tr>
-								<td><input type="checkbox" name="selectedItems" value="${cart.cartno}" /></td>
-								<td><img src="<%= ctxPath%>${cart.ivo.itemPhotoPath}" alt="상품 이미지" style="width: 120px; height: auto;" /></td>
-								<td><div id="cart_itemName">${cart.ivo.itemName}</div></td>
-								<td><fmt:formatNumber pattern="#,###">${cart.ivo.price}</fmt:formatNumber>원</td>
-								<td><fmt:formatNumber pattern="#,###">${cart.ivo.itemPoint}</fmt:formatNumber> Point</td>
-								<td>
-									<input type="number" name="quantity" value="${cart.cartamount}" min="1" style="width: 60px;" />	
-									<button type="button" class="amountUpdate" onclick="amountUpdate(this)">변경</button>
-									<input type="hidden" name="maxAmount" value="${cart.ivo.itemAmount}" />
-								</td>
-								<td>${cart.cartdate}</td>
-								<td>
-									<button type="button" id="cartDelete" onclick="cartDel('${cart.cartno}')">삭제</button>
-								</td>
-							</tr>
-						</c:forEach>
-					</c:if>
-			</tbody>
-		</table>
-		
-		<div class="select-shipping">
-			<div style="margin-left: auto;">
-				<button type="button" name="allDelete" onclick="allDel()">장바구니 비우기</button>
-			</div>
-		</div>
-		
-		<hr style="border: solid 1px black;">
-		
-<%-- 		<table style="width: 100%; text-align: center; font-size: 15pt; margin-top: 30px; 
-				border-collapse: collapse; border: 1px solid gray;">
-		
-			<thead>
-				<tr style="border-bottom: 1px solid #ddd;"> 
-					<th style="padding: 10px; width: 25%;">총 상품금액</th>
-					<th style="padding: 10px; width: 25%;">총 적립 포인트</th>
-					<th style="padding: 10px; width: 50%;">결제 예정 금액</th>
-				</tr>
-			</thead>
-			
-			<tbody>
-				<tr>
-					<td style="padding: 15px;"><strong><fmt:formatNumber pattern="#,###">${requestScope.totalPrice}</fmt:formatNumber></strong>원</td>
-					<td style="padding: 15px;"><fmt:formatNumber pattern="#,###">${requestScope.totalPoint}</fmt:formatNumber> Point</td>
-					<td style="padding: 15px; color: red; font-weight: bold;">= <fmt:formatNumber pattern="#,###">${requestScope.totalPrice}</fmt:formatNumber>원</td>
-				</tr>
-			</tbody>
-		</table> --%>
-		
-		<div class="btn-row">
-			<button type="button" onclick="order_selected()" class="btn" >선택상품주문</button>
-			<button type="button" onclick="location.href='<%= ctxPath%>/item/mallHome.do'" class="btn">쇼핑계속하기</button>
-		</div>
-	</form>
-	
+   
+   <h1 class="text-center" >${sessionScope.loginUser.name} 님 장바구니</h1>
+   
+   <hr style="border: solid 1px black;">
+   
+   <div class="text-center my-3" style="font-size: 10pt;">장바구니에 담긴 상품은 30일 동안 보관됩니다.</div>
+   
+   <form name="CartList" method="POST" action = "orderForm.do" >
+      <table>
+         <thead>
+            <tr>
+               <th style="width: 5%;"><input type="checkbox" id="allCheckOrNone" onclick="allCheckBox()" /></th>
+               <th style="width: 15%;">이미지</th>
+               <th style="width: 20%;">향수명</th>
+               <th style="width: 10%;">상품금액(개당)</th>
+               <th style="width: 10%;">최대 적립 포인트</th>
+               <th style="width: 15%;">수량</th>
+               <th style="width: 15%;">등록날짜</th>
+               <th style="width: 10%;">비우기</th>
+            </tr>
+         </thead>
+         <tbody>
+               <c:if test="${empty requestScope.cartList}">
+                  <tr>
+                     <td colspan="8" style="text-align: center"><strong>장바구니가 비었습니다.</strong></td>
+                  </tr>
+               </c:if>
+               
+               <c:if test="${not empty requestScope.cartList}">
+                  <c:forEach var="cart" items="${requestScope.cartList}">
+                     <tr>
+                        <td><input type="checkbox" name="selectedItems" value="${cart.cartno}" /></td>
+                        <td><img src="<%= ctxPath%>${cart.ivo.itemPhotoPath}" alt="상품 이미지" style="width: 120px; height: auto;" /></td>
+                        <td><div id="cart_itemName">${cart.ivo.itemName}</div></td>
+                        <td><fmt:formatNumber pattern="#,###">${cart.ivo.price}</fmt:formatNumber>원</td>
+                        <td><fmt:formatNumber pattern="#,###">${cart.ivo.itemPoint}</fmt:formatNumber> Point</td>
+                        <td>
+                           <input type="number" name="quantity" value="${cart.cartamount}" min="1" style="width: 60px;" />   
+                           <button type="button" class="amountUpdate" onclick="amountUpdate(this)">변경</button>
+                           <input type="hidden" name="maxAmount" value="${cart.ivo.itemAmount}" />
+                        </td>
+                        <td>${cart.cartdate}</td>
+                        <td>
+                           <button type="button" id="cartDelete" onclick="cartDel('${cart.cartno}')">삭제</button>
+                        </td>
+                     </tr>
+                  </c:forEach>
+               </c:if>
+         </tbody>
+      </table>
+      
+      <div class="select-shipping">
+         <div style="margin-left: auto;">
+            <button type="button" name="allDelete" onclick="allDel()">장바구니 비우기</button>
+         </div>
+      </div>
+      
+      <hr style="border: solid 1px black;">
+      
+<%--       <table style="width: 100%; text-align: center; font-size: 15pt; margin-top: 30px; 
+            border-collapse: collapse; border: 1px solid gray;">
+      
+         <thead>
+            <tr style="border-bottom: 1px solid #ddd;"> 
+               <th style="padding: 10px; width: 25%;">총 상품금액</th>
+               <th style="padding: 10px; width: 25%;">총 적립 포인트</th>
+               <th style="padding: 10px; width: 50%;">결제 예정 금액</th>
+            </tr>
+         </thead>
+         
+         <tbody>
+            <tr>
+               <td style="padding: 15px;"><strong><fmt:formatNumber pattern="#,###">${requestScope.totalPrice}</fmt:formatNumber></strong>원</td>
+               <td style="padding: 15px;"><fmt:formatNumber pattern="#,###">${requestScope.totalPoint}</fmt:formatNumber> Point</td>
+               <td style="padding: 15px; color: red; font-weight: bold;">= <fmt:formatNumber pattern="#,###">${requestScope.totalPrice}</fmt:formatNumber>원</td>
+            </tr>
+         </tbody>
+      </table> --%>
+      
+      <div class="btn-row">
+         <button type="button" onclick="order_selected()" class="btn" >선택상품주문</button>
+         <button type="button" onclick="location.href='<%= ctxPath%>/item/mallHome.do'" class="btn">쇼핑계속하기</button>
+      </div>
+   </form>
+   
 </body>
 </html>

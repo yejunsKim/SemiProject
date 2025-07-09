@@ -134,7 +134,7 @@ function displayHIT(start){   // start가  1 이라면   1~ 8  까지 상품 8�
          
       },
       error: function(request, _, error){
-         //lert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+         //alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
       }
    });
    
