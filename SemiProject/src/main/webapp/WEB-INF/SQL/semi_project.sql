@@ -282,5 +282,3 @@ select * from tab;
 select * from category;
 
 
-/
-select * from ORDER_HISTORY;

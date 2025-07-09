@@ -1685,6 +1685,5 @@ public class ItemDAO_imple implements ItemDAO {
 		
 		return isSuccess;
 	}
-	
 
 }

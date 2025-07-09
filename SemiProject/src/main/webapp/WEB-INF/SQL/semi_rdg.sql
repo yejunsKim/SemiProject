@@ -1,3 +1,4 @@
+----- 이건 미정! 임시 혹시나 공부용입니다..
 select table_name
 FROM user_tables;
 
