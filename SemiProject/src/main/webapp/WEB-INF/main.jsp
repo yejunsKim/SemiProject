@@ -105,12 +105,12 @@ $(document).ready(function() {
 				      <img src="<%= ctxPath%>${cvo.categoryImagePath}" class="d-block w-100" alt="...">
 				      </a>
 				      <div class="carousel-caption d-none d-md-block">
-					    <h5 style="font-size: 18px;">${cvo.categoryName }</h5>
+					    <h5 style="font-size: 18px;">${cvo.categoryName}</h5>
 					  </div>
 				    </div>
 			     </c:if>
 			    
-			     <c:if test="${status.index >0 }">
+			     <c:if test="${status.index > 0 }">
 				    <div class="carousel-item">
 				    
 				      <%-- 수정사항-rdg7203 --%>

@@ -33,13 +33,13 @@
 		text-decoration: underline; /* 마우스 올리면 밑줄 */
 	}
 	.card {transition:transform 2s ease 2s;}
-	.card a {overflow:hidden;max-width:330px; transition:transform 2s ease 2s;}
+	.card a {overflow:hidden;transition:transform 2s ease 2s;}
 	
 	.card:hover img {scale:1.2;}
-	
-	.searchBox {max-width:1440px;margin:0 auto;padding: 0 0 15vh;}
-	.searchTit {padding:15vh 0 10vh; font-size:20pt;}
-	
+	.searchBox {max-width:1440px;margin:0 auto;padding: 10vh 0 15vh;}
+	.searchTit {font-size: 20pt;background-image: url("/SemiProject/images/etc/searchBg.jpg");background-size: 100%;background-repeat: no-repeat;background-position: center;padding:15vh 0;position:relative;}
+	.searchTit::before {background-color:rgba(0,0,0,0.3);content:"";display:inline-block;width:100%;height:100%;position:absolute;left:0;top:0;}
+		
 </style>
 
 <input type="hidden" id="searchIDVal" value="${searchID}" />

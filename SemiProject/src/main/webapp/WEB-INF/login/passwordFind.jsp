@@ -7,6 +7,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <link rel="stylesheet" type="text/css" href="<%= ctxPath %>/css/find/pwFind.css" />
+<style>
+.finder {padding:15px 0;background-color:gray !important;width:30%;padding:7px;margin-bottom:15px;border:0;}
+.pwFindWrap > #pwFindFrm > .pwBox p {position:relative;}
+.pwFindWrap > #pwFindFrm > .pwBox p::after {content: "";display: inline-block;width: 5px;height: 5px;background-color: red;border-radius: 50%;position: absolute;left: 48px;top: 1px;}
+
+</style>
+
 <script type="text/javascript">
 $(function(){
 
@@ -95,9 +102,10 @@ $(function(){
 
 </script>
 
+
    <div class="pwFindWrap" id="pwFindWrap">
 	 <form id="pwFindFrm" name="pwFindFrm">
-	 		<p style="text-align:center;">비밀번호 찾기</p>
+	 		<p class="pwContain" style="text-align:center;">비밀번호 찾기</p>
 			<div class="pwBox">
 				<p>아이디</p>
 				<input type="text" id="id" name="id">
@@ -112,16 +120,16 @@ $(function(){
 				<button type="button" class="btn btn-success" onclick="pwFind()" style="background-color:#c084fc !important;border:0px solid #fff !important;">찾기</button>
 			</div>
 			
-			<div id="div_findResult">${requestScope.n}</div>
+			<%-- <div id="div_findResult">${requestScope.n}</div> --%>
 			<c:if test="${requestScope.n == 1}">
-				<div>
-					<p>인증코드가 ${requestScope.email} 로 발송되었습니다.<br> 인증코드를 입력해주세요</p>
-					<input type="text" name="input_confirmCode" />
+				<div style="text-align:center;">
+					<p style="text-align:center;line-height:22px;">인증코드가 ${requestScope.email} 로 발송되었습니다.<br> 인증코드를 입력해주세요</p>
+					<input type="text" name="input_confirmCode" style="margin-top:15px;" />
 					<br><br>
-					<button type="button" class="btn btn-info">인증하기</button>
+					<button type="button" class="btn btn-info finder">인증하기</button>
 				</div>
 			</c:if>
-			<c:if test="${requestScope.n == 0}"> 없습니다.</c:if>
+			<c:if test="${requestScope.n == 0}"><p style="text-align:center;line-height:22px;margin:10px 0 25px;font-size:16pt;">없습니다.</p></c:if>
 	   </form> 
 	</div>
 

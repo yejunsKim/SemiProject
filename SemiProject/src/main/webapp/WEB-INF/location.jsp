@@ -5,19 +5,33 @@
 <style>
 .root_daum_roughmap_landing {padding:150px 0; margin: auto;}
 .companySt {width:32%;box-shadow:2px 3px 8px 6px #ddd;padding:5%;}
+.companyTitle {background-image:url("/SemiProject/images/etc/MapInfo.jpg"); padding: 6% 0;color: #fff;background-repeat: no-repeat;    
+background-size: cover;position:relative;}
+.companyTitle::before{content:"";width:100%;height:100%;position:absolute;top:0;left:0;background-color:rgba(0,0,0,0.5)}
+.companyTitle::after{content:"오시는 길";display:inline-block;width:100%;height:100%;position:relative;z-index:15;}
+.companySubInfo {font-size:15pt;padding:2% 0;}
+
 @media screen and (max-width:1250px){
 	div.st {display:flex;flex-wrap:wrap;width:100%;padding:0 10%;}
 	.root_daum_roughmap_landing {width:100% !important;}
-	.companySt {width:62%;margin:0 auto;}
+	.companyTitle {padding:120px 0;} 
+	.companySt {width:62%;margin:0 auto 10%;}
 } 
+
+
+@media screen and (max-width:920px){
+	.companySt
+	.companyTitle {padding:80px 0;}
+	.companySubInfo {padding: 2% 0 4%;}
+}
 </style>
 
 <!-- * 카카오맵 - 지도퍼가기 -->
 <!-- 1. 지도 노드 -->
-<div style="padding:5% 0;">
-	<div class="text-center mb-12" style="padding:30px 0;">
-	    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4" style="font-size:2rem;font-weight:600;">오시는 길</h2>
-	    <p class="text-xl text-gray-600 max-w-2xl mx-auto" style="font-size:15pt;">저희 회사에 오신 것을 환영합니다.</p>
+<div>
+	<div class="text-center mb-12">
+	    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 companyTitle" style="font-size:2rem;font-weight:600;"></h2>
+	    <p class="text-xl text-gray-600 max-w-2xl mx-auto companySubInfo">저희 회사에 오신 것을 환영합니다.</p>
 	</div>
 	
 	<div class="st" style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;">

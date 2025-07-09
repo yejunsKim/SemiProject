@@ -28,7 +28,7 @@ function displaySearch(start) {
         dataType: "json",
         success: function(json) {
             if (start === 1 && json.length === 0) {
-                $('#displayHIT').html("<p>검색된 상품이 없습니다.</p>");
+                $('#displayHIT').html(`<p style="font-size: 18pt;padding: 15vh 0 0;margin: 0 auto;">검색된 상품이 없습니다.</p>`);
                 return;
             }
 

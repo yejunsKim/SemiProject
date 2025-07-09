@@ -83,4 +83,8 @@ public interface ItemDAO {
 
 	List<ItemVO> getOrderItemList(String id, String[] itemNoArr) throws SQLException;
 
+	List<Map<String, String>> myPurchase_byCategory(String id) throws SQLException;
+
+	List<Map<String, String>> myPurchase_byMonth_byCategory(String id) throws SQLException;
+
 }

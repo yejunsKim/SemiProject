@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -1144,5 +1145,162 @@ public class ItemDAO_imple implements ItemDAO {
 		
 		return isSuccess;
 	}
+
+	// 카테고리별주문 통계정보 알아오기
+	   @Override
+	   public List<Map<String, String>> myPurchase_byCategory(String id) throws SQLException {
+
+	      List<Map<String, String>> myPurchase_map_List = new ArrayList<>();
+	      
+	      try {
+	         conn = ds.getConnection();
+	         
+	         String sql = " WITH "
+	                  + " OH AS "
+	                  + " ( SELECT orderNo "
+	                  + "   FROM order_history "
+	                  + " ) "
+	                  + " , "
+	                  + " OI AS "
+	                  + " ( SELECT orderNo, ITEMNO, quantity, orderPrice "
+	                  + "   FROM order_items "
+	                  + " ) "
+	                  + " SELECT C.categoryName "
+	                  + "      , COUNT(*) AS CNT "
+	                  + "      , SUM(OI.quantity * OI.orderPrice) AS SUMPAY"
+	                  + "      , ROUND( SUM(OI.quantity * OI.orderPrice) / (SELECT SUM(OI.quantity * OI.orderPrice) "
+	                  + "                                           FROM OH JOIN order_items OI "
+	                  + "                                        ON OH.orderNo = OI.orderNo) * 100, 2) AS SUMPAY_PCT "
+	                  + " FROM OI JOIN OH "
+	                  + " ON OH.orderNo = OI.orderNo "
+	                  + " JOIN item I "
+	                  + " ON OI.ITEMNO = I.ITEMNO "
+	                  + " JOIN category C "
+	                  + " ON I.fk_category_no = C.categoryNo "
+	                  + " GROUP BY C.categoryName "
+	                  + " ORDER BY SUMPAY DESC ";
+	         
+	         pstmt = conn.prepareStatement(sql);
+	            
+	         rs = pstmt.executeQuery();
+	                     
+	         while(rs.next()) {
+	            String categoryname = rs.getString("categoryname");
+	               String cnt = rs.getString("CNT");
+	               String sumpay = rs.getString("SUMPAY");
+	               String sumpay_pct = rs.getString("SUMPAY_PCT");
+	               
+	               Map<String, String> map = new HashMap<>();
+	               map.put("categoryname", categoryname);
+	               map.put("cnt", cnt);
+	               map.put("sumpay", sumpay);
+	               map.put("sumpay_pct", sumpay_pct);
+	               
+	               myPurchase_map_List.add(map);
+	         }
+	         
+	      } finally {
+	         close();
+	      }
+	      
+	      return myPurchase_map_List;
+	   }
+
+
+	   // 카테고리별 월별주문 통계정보 알아오기
+	   @Override
+	   public List<Map<String, String>> myPurchase_byMonth_byCategory(String id) throws SQLException {
+
+	      List<Map<String, String>> myPurchase_map_List = new ArrayList<>();
+	         
+	      try {
+	         conn = ds.getConnection();
+	            
+	         String sql = " WITH "
+	                  + " OH AS "
+	                  + " (SELECT orderno, orderdate "
+	                  + "  FROM order_history "
+	                  + " ), "
+	                  + " OI AS "
+	                  + " (SELECT orderNo, ITEMNO, quantity, orderPrice "
+	                  + "  FROM order_items "
+	                  + " ) "
+	                  + " SELECT C.categoryName "
+	                  + "      , COUNT(*) AS CNT"
+	                  + "      , SUM(OI.quantity * OI.orderPrice) AS SUMPAY "
+	                  + "      , ROUND( SUM(OI.quantity * OI.orderPrice)/(SELECT SUM(OI.quantity * OI.orderPrice) "
+	                  + "                                                 FROM OH JOIN OI "
+	                  + "                                       ON OH.orderNo = OI.orderNo) * 100, 2) AS SUMPAY_PCT "
+	                  + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '01', OI.quantity * OI.orderPrice, 0)) AS M_01 "
+	                  + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '02', OI.quantity * OI.orderPrice, 0)) AS M_02 "
+	                  + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '03', OI.quantity * OI.orderPrice, 0)) AS M_03 "
+	                  + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '04', OI.quantity * OI.orderPrice, 0)) AS M_04 "
+	                  + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '05', OI.quantity * OI.orderPrice, 0)) AS M_05 "
+	                  + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '06', OI.quantity * OI.orderPrice, 0)) AS M_06 "
+	                  + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '07', OI.quantity * OI.orderPrice, 0)) AS M_07 "
+	                  + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '08', OI.quantity * OI.orderPrice, 0)) AS M_08 "
+	                  + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '09', OI.quantity * OI.orderPrice, 0)) AS M_09 "
+	                  + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '10', OI.quantity * OI.orderPrice, 0)) AS M_10 "
+	                  + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '11', OI.quantity * OI.orderPrice, 0)) AS M_11 "
+	                  + "      , SUM(DECODE(TO_CHAR(OH.orderdate, 'mm'), '12', OI.quantity * OI.orderPrice, 0)) AS M_12 "
+	                  + " FROM OI JOIN OH "
+	                  + " ON OH.orderNo = OI.orderNo "
+	                  + " JOIN item I "
+	                  + " ON OI.ITEMNO = I.itemNo "
+	                  + " JOIN category C "
+	                  + " ON I.fk_category_no = C.categoryNo "
+	                  + " GROUP BY C.categoryName "
+	                  + " ORDER BY SUMPAY DESC ";
+	            
+	         pstmt = conn.prepareStatement(sql);
+	            
+	         rs = pstmt.executeQuery();
+	                     
+	         while(rs.next()) {
+	            String categoryname = rs.getString("categoryname");
+	               String cnt = rs.getString("CNT");
+	               String sumpay = rs.getString("SUMPAY");
+	               String sumpay_pct = rs.getString("SUMPAY_PCT");
+	               String m_01 = rs.getString("M_01");
+	               String m_02 = rs.getString("M_02");
+	               String m_03 = rs.getString("M_03");
+	               String m_04 = rs.getString("M_04");
+	               String m_05 = rs.getString("M_05");
+	               String m_06 = rs.getString("M_06");
+	               String m_07 = rs.getString("M_07");
+	               String m_08 = rs.getString("M_08");
+	               String m_09 = rs.getString("M_09");
+	               String m_10 = rs.getString("M_10");
+	               String m_11 = rs.getString("M_11");
+	               String m_12 = rs.getString("M_12");
+	               
+	               Map<String, String> map = new HashMap<>();
+	               map.put("categoryname", categoryname);
+	               map.put("cnt", cnt);
+	               map.put("sumpay", sumpay);
+	               map.put("sumpay_pct", sumpay_pct);
+	               map.put("m_01", m_01);
+	               map.put("m_02", m_02);
+	               map.put("m_03", m_03);
+	               map.put("m_04", m_04);
+	               map.put("m_05", m_05);
+	               map.put("m_06", m_06);
+	               map.put("m_07", m_07);
+	               map.put("m_08", m_08);
+	               map.put("m_09", m_09);
+	               map.put("m_10", m_10);
+	               map.put("m_11", m_11);
+	               map.put("m_12", m_12);
+	               
+	               myPurchase_map_List.add(map);
+	         } // end of while----------------------------------
+	                     
+	      } finally {
+	         close();
+	      }
+	         
+	      return myPurchase_map_List;   
+	         
+	   }
 	
 }

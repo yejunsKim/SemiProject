@@ -118,8 +118,8 @@ transition: background-color .3s ease-in;}
 .loginBox {z-index:20;}
 .trTab {padding:10px 0;display:flex;justify-content:space-between;align-items:center;}
 
-.userTab-wrapper {position: relative;overflow: hidden;height: 880px;width: 250px;position: fixed;top: 63px;right: 0;z-index: 0;}
-.userTab-wrapper.wrapperOpen {z-index:21;} 
+.userTab-wrapper {position: relative;overflow: hidden;height: 880px;width: 250px;position: fixed;top: 63px;right: -250px;z-index: 0;}
+.userTab-wrapper.wrapperOpen {z-index:21;right:0;} 
 .userTab {height: 100%;width: 250px;background: rgba(255, 255, 255, 0.6);position: absolute;right: -250px; top: 0;transition: right 0.9s ease;border-left: 1px solid #ddd;border-top:1px solid #ddd;z-index: 11;}
 .userTab.userTab-open {right: 0;}
 
@@ -128,7 +128,23 @@ transition: background-color .3s ease-in;}
 input#searchID {border-radius:30px;padding:5px 20px;border:1px solid #ddd;}
 .fa-search {position:absolute;top:11px;right:20px;left:initial;} 
 .btnSubmit {background-color:transparent;border:0;position:absolute;right:5px;top:7px;width:50px;height:21px;}
+.navbarRg {width:550px;display:flex;justify-content:space-between;align-items:center}
+.carts {display:block;} 
+.cartLiMo {display:none;background-image:url("/SemiProject/images/header/cart.png");background-repeat:no-repeat;background-position:center;}
+.cartLiMo:hover a {background-image:url("/SemiProject/images/header/w_cart2.svg");background-repeat:no-repeat;background-position:center;}
+.logins {border:1px solid #bbb;padding:10px 25px;border-radius:30px;background:#fff;color:#000;cursor:pointer;}
+#loginUser {border:0 !important;background-color:initial !important;}
+#adminUser {border:0 !important;background-color:initial !important;}
 
+@media screen and (max-width:650px){
+	#searchID {width:190px;font-size:10pt;}
+	.fa-search{top:9px;}
+	.navbarRg {max-width:310px;}
+	.carts {display:none;}
+	.cartLiMo {display:block;}
+	.userTab {width:130px;}
+	.logins {font-size:11pt;padding:8px 15px;}
+}
 </style>
 <script type="text/javascript">
 $(function () {
@@ -258,6 +274,7 @@ $(function () {
             $('.headerNav').css('backgroundColor', 'transparent');
         }
     });
+    
 });
 
 function SearchItems() {
@@ -265,6 +282,13 @@ function SearchItems() {
 
     if (searchID === "") {
         alert("검색어를 입력하세요.");
+        return false;
+    }
+
+    const pattern = /^[가-힣\s]+$/;
+
+    if (!pattern.test(searchID)) {
+        alert("완성된 한글 단어만 입력 가능합니다.");
         return false;
     }
 
@@ -290,6 +314,7 @@ function SearchItems() {
 						</a>
 					</p>
 				</c:forEach>
+				<p class="cartLiMo"><a href="/SemiProject/item/cartList.do"></a></p>
 			</div>
 		</div>
 			<div class="loginBox" style="height: 200px; text-align: left; padding: 11px;">
@@ -394,7 +419,7 @@ function SearchItems() {
 		 <nav class="headerNav">
 		 	<ul class="headerUl">
 		 		<li><a class="navbar-brand" href="/SemiProject/main.do" style="margin-right: 10%;"><img src="/SemiProject/images/header/favicon-32x32.png" /></a></li>
-		 		<div style="width:550px;display:flex;justify-content:space-between;align-items:center;">
+		 		<div class="navbarRg" >
 			 		<li>
 				 	  <div class="input-group">
 						<form name="searchFrm" id="searchFrm" onsubmit="return SearchItems();" style="display:flex;">
@@ -405,7 +430,7 @@ function SearchItems() {
 					  </div>
 					</li>
 					<c:if test="${empty sessionScope.loginUser}">
-					<li class="logins" style="border:1px solid #bbb;padding:10px 25px;border-radius:30px;background:#fff;color:#000;cursor:pointer;">로그인</li>
+					<li class="logins">로그인</li>
 					</c:if>
 					
 					<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.id == 'admin'}">
@@ -416,11 +441,12 @@ function SearchItems() {
 			 	 	
 			 	 	<c:if test="${not empty sessionScope.loginUser && sessionScope.loginUser.id != 'admin'}">
 						<%-- header아이디에 따라 관리자 창 보이는곳 수정시작 --%>
-						<li><a href="<%= ctxPath%>/item/cartList.do"><img src="/SemiProject/images/header/cart.png" ></a></li>						
+						<li class="carts"><a href="<%= ctxPath%>/item/cartList.do"><img src="/SemiProject/images/header/cart.png" ></a></li>						
 
 						<li class="logins" id="loginUser"style="font-size:19pt;cursor:pointer;"><i class="fas fa-user-circle mr-2"></i></li>
 						<li class="userFunc" style="font-size:19pt;cursor:pointer;"><i class="fa-solid fa-bars"></i></li>
 				 	 	<%-- header아이디에 따라 관리자 창 보이는곳 수정 끝 --%>
+				 	 	
 			 	 	</c:if>
 			 	</div>
 			</ul>
