@@ -438,8 +438,8 @@ $(function(){
 			const usePoint = $('input#usePoint').val();
 			
  		// ==== 포트원(구 아임포트) 결제
- 		//requestPayment(ctxPath, id, email, usePoint, totalAmount);
- 		paymentSuccessOrderService(id, usePoint, totalAmount);
+ 		requestPayment(ctxPath, id, email, usePoint, totalAmount);
+ 		//paymentSuccessOrderService(id, usePoint, totalAmount);
 
     });
 	

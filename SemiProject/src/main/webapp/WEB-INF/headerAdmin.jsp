@@ -56,6 +56,6 @@
 	<div class="adminTab">
 		<p><a href="<%= ctxPath %>/user/admin/userList.do">회원목록 전체보기</a></p>
 		<p><a href="<%= ctxPath %>/item/admin/itemRegister.do">제품 등록하기</a></p>
-		<p><a href="#">주문통계 차트보기</a></p>
+		<p><a href="<%= ctxPath %>/shop/admin/chart.do">주문통계 차트보기</a></p>
 	</div>
 </div>
