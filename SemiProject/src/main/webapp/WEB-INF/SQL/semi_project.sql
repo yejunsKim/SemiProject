@@ -173,11 +173,10 @@ WHERE itemNo = 1;
 SELECT * FROM item WHERE itemno = 1;
 
 desc order_history;
-=======
+
 select id, name, email, grade from users;
 
-<<<<<<< HEAD
->>>>>>> refs/heads/main
+
 
 ///
 
@@ -277,11 +276,11 @@ JOIN item I ON OI.ITEMNO = I.itemNo
 JOIN category C ON I.fk_category_no = C.categoryNo
 GROUP BY C.categoryName
 ORDER BY SUMPAY DESC;
-=======
+
 select * from tab;
 
 select * from category;
->>>>>>> refs/heads/main
+
 
 /
 select * from ORDER_HISTORY;

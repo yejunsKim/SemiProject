@@ -431,7 +431,7 @@ $(function(){
 			console.log($('#finalPrice > strong').attr('data-price'));
 			const totalAmount = $('#finalPrice > strong').attr('data-price');
 			console.log($('th#loginUserId').html().trim());
-			const id = $('th#loginUserId').html().trim();
+			const id = $('span#loginUserId').html().trim();
 			const email = $('input#email').val();
 			console.log(email);
 		 	console.log($('input#usePoint').val());

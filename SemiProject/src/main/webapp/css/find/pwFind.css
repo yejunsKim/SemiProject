@@ -11,3 +11,19 @@ body {background-color: #f5f3ff;background-image: url(https://img.freepik.com/fr
 .pwFindWrap > #pwFindFrm > .pwBox p {max-width:150px;width:100%;}
 .submitBtn {text-align:center;}
 .btn.btn-success {width: 30%;margin: 10px auto 25px;text-align: center;}
+
+@media screen and (max-width:1200px) {
+	.pwFindWrap {margin: 7% auto 17%;}
+}
+
+@media screen and (max-width:700px) {
+	.pwFindWrap {margin: 7% auto 22%;}
+}
+
+@media screen and (max-width:550px) {
+	.pwFindWrap {margin: 11% auto 25%;}
+}
+
+@media screen and (max-width:500px) {
+	.pwFindWrap {margin: 13% auto 28%;}
+}

@@ -410,16 +410,16 @@ function SearchItems() {
 				        <th id="loginUserId" colspan="3" style="text-align:center; font-size:18px;padding-top:10px;"> 
 				          <c:choose>
 							  <c:when test="${sessionScope.loginUser.grade eq 'bronze'}">
-							    <span class="grade-name bronze-name">${sessionScope.loginUser.id}</span>
+							    <span id="loginUserId" class="grade-name bronze-name">${sessionScope.loginUser.id}</span>
 							  </c:when>
 							  <c:when test="${sessionScope.loginUser.grade eq 'silver'}">
-							    <span class="grade-name silver-name">${sessionScope.loginUser.id}</span>
+							    <span id="loginUserId" class="grade-name silver-name">${sessionScope.loginUser.id}</span>
 							  </c:when>
 							  <c:when test="${sessionScope.loginUser.grade eq 'gold'}">
-							    <span class="grade-name gold-name">${sessionScope.loginUser.id}</span>
+							    <span id="loginUserId" class="grade-name gold-name">${sessionScope.loginUser.id}</span>
 							  </c:when>
 							  <c:when test="${sessionScope.loginUser.grade eq 'vip'}">
-							    <span class="grade-name vip-name">${sessionScope.loginUser.id}</span>
+							    <span id="loginUserId" class="grade-name vip-name">${sessionScope.loginUser.id}</span>
 							  </c:when>
 						  </c:choose>
 				        </th>
@@ -429,7 +429,7 @@ function SearchItems() {
 				      <tr>
 				        <td colspan="3" style="padding-top:20px;"> 
 				          <span style="font-weight:bold;">${sessionScope.loginUser.name}님</span>
-				          &nbsp;[<a href="javascript:editInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')">나의정보변경</a>]
+				          &nbsp;[<a href="javascript:editInfo('${sessionScope.loginUser.id}', '<%=ctxPath %>')" style="color: #f43cff;">나의정보변경</a>]
 				        </td>
 				      </tr>
 				      <tr>
@@ -464,7 +464,9 @@ function SearchItems() {
 
 				      <tr>
 				        <td colspan="3" style="padding-top:10px;">
-				          <span style="font-weight: bold;"><a href="<%=ctxPath %>/item/orderList.do">주문목록 보기</a></span>
+				          <c:if test="${sessionScope.loginUser.id ne 'admin'}">
+				          <span style="font-weight: bold;"><a href="<%=ctxPath %>/item/orderList.do" style="color: #666363;">주문목록 보기</a></span>
+				          </c:if>
 				          &nbsp;&nbsp;&nbsp;&nbsp;<span><button type="button" class="btn btn-danger btn-sm" onclick="javascript:LogOut('<%=ctxPath%>')">Logout</button></span>
 				        </td>
 				      </tr>
