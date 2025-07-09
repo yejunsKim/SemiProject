@@ -136,7 +136,7 @@
 			
 			<c:if test="${empty requestScope.ohList}">
 				<tr>
-					<td colspan="4">
+					<td colspan="5">
 						<div class="empty-state">
 							<i class="fa-solid fa-shopping-cart" style="font-size: 2rem; color: #9ca3af; margin-bottom: 0.5rem;"></i>
 							<h3 style="font-size: 1.1rem; color: #374151;">주문한 내역이 없습니다.</h3>

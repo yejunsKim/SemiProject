@@ -7,8 +7,11 @@
 <style>
 
 body {background-color: #f5f3ff;background-image: url(https://img.freepik.com/free-vector/hand-painted-watercolor-floral-pattern_23-2148931052.jpg);background-size: cover;background-position: center;background-attachment: fixed;background-blend-mode: overlay;}
-.formBox {margin:0 auto;max-width:500px;padding:4% 2%;margin:8% auto;border-radius:20px;background-color:#fff;}
-#newPassword1, #newPassword2 {margin:4% 0;} 
+.formBox {margin:0 auto;max-width:500px;margin:8% auto;border-radius:20px;background-color:#fff;text-align:center;}
+.pwdCheck {width: 100%;margin: 25px 0;display: flex;justify-content: space-between; align-items: center;padding: 0 25px;}
+@media screen and (max-width:950px){
+	.formBox {margin:15vh auto;}
+} 
 </style>
 
 <script type="text/javascript">
@@ -40,17 +43,15 @@ body {background-color: #f5f3ff;background-image: url(https://img.freepik.com/fr
 	
 	<div style="margin:150px auto 0;">
 		<form name="passwordUp" class="formBox">
-			<div style="margin-bottom:1%;text-align:center;font-size:16pt;">비밀번호 변경할 아이디: ${requestScope.id}</div>
+			<div style="text-align: center;background: #bf83fb;color: #fff;border-top-left-radius: 10px;border-top-right-radius: 10px;margin-bottom: 1%;font-weight: 600;font-size: 15pt;padding:4% 0;">비밀번호 변경할 아이디: ${requestScope.id}</div>
 			<input type="hidden" name="id" value="${requestScope.id}" />
-			<br>
-				<div style="display:flex;justify-content:space-between;align-items:center;">
+			<div class="pwdCheck">
 					비밀번호: <input type="password" name="newPassword1" id="newPassword1">
-				</div>
-				<div style="display:flex;justify-content:space-between;align-items:center;">
+			</div>
+			<div class="pwdCheck">
 					비밀번호 재확인: <input type="password" id="newPassword2"> <!-- name 제거 -->
-				</div>
-			<br>
-			<button type="button" name="passwordUp" class="btn btn-info passwordUp" style="background-color: #c084fc !important;border:0 !important;width:100%;">변경하기</button>
+			</div>
+			<button type="button" name="passwordUp" class="btn btn-info passwordUp" style="background-color: #c084fc !important;border:0 !important;width:30%;margin-bottom:25px;">변경하기</button>
 		</form>
 	</div>
 
