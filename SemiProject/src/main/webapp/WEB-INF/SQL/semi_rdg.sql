@@ -38,7 +38,9 @@ UPDATE users U SET U.grade = ( SELECT G.gradename
 
 
 
+delete from item where itemName like ('%exam%');
 
+commit;
 
 
 
