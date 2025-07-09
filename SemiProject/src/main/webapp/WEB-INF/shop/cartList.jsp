@@ -116,6 +116,25 @@
 		align-items: center;
 		margin: 20px 0;
 	}
+	/* 공통 스타일 적용 */
+button.amountUpdate,
+button#cartDelete,
+button[name="allDelete"] {
+    border: none;
+    border-radius: 8px;
+    color: black;
+    padding: 8px 14px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.amountUpdate:hover,
+button#cartDelete:hover,
+button[name="allDelete"]:hover {
+    background-color: #888;
+}
+	
 
 </style>
 
@@ -177,7 +196,7 @@
 					
 				},
 				error: function(request, status, error){
-					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					//alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 				}
 			});
 		}
@@ -233,7 +252,7 @@
 					}
 				},
 				error: function(request, status, error){
-					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					//alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 				}
 			});
 		}
@@ -260,7 +279,7 @@
 					data:{"id":id},
 					dataType:"json",
 					success:function(json){
-						if(json.n >= 1){
+						if(json.n > 1){
 							alert("장바구니를 모두 비웠습니다.");
 							location.href = "<%= ctxPath%>/item/cartList.do";	// 장바구니 보기 페이지로 간다.
 						}
@@ -323,11 +342,11 @@
 	
 	<form name="CartList" method="POST" action = "orderForm.do" >
 		<table>
-			<thead>
+			<thead> 
 				<tr>
-					<th style="width: 10%;"><input type="checkbox" id="allCheckOrNone" onclick="allCheckBox()" />  제품번호</th>
+					<th style="width: 5%;"><input type="checkbox" id="allCheckOrNone" onclick="allCheckBox()" /></th>
 					<th style="width: 15%;">이미지</th>
-					<th style="width: 15%;">향수명</th>
+					<th style="width: 20%;">향수명</th>
 					<th style="width: 10%;">상품금액(개당)</th>
 					<th style="width: 10%;">최대 적립 포인트</th>
 					<th style="width: 15%;">수량</th>
@@ -400,4 +419,5 @@
 	</form>
 	
 </body>
+>>>>>>> branch 'main' of https://github.com/yejunsKim/SemiProject.git
 </html>

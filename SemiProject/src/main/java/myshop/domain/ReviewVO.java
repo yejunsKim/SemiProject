@@ -4,31 +4,33 @@ import user.domain.UserVO;
 
 public class ReviewVO {
 	
-		private int reviewId; //작성번호
-		private String  id; //회원아이디
-		private int itemNo; //제품번호
+		private int reviewId; //작성번호 -seq
+		private String  fk_id; //회원아이디
+		private int fk_itemNo; //제품번호
 		private String content; //후기내용
-		private String  createdAt; //작성일자
+		private String  createdAt; //작성일자 -sysdate
 		    
 		private UserVO userVO;
 		private ItemVO itemVO;
+		
 		public int getReviewId() {
 			return reviewId;
 		}
 		public void setReviewId(int reviewId) {
 			this.reviewId = reviewId;
 		}
-		public String getId() {
-			return id;
+		public String getFk_id() {
+			return fk_id;
 		}
-		public void setId(String id) {
-			this.id = id;
+		public void setFk_id(String fk_id) {
+			this.fk_id = fk_id;
 		}
-		public int getItemNo() {
-			return itemNo;
+		public int getFk_itemNo() {
+			return fk_itemNo;
 		}
-		public void setItemNo(int itemNo) {
-			this.itemNo = itemNo;
+		public void setFk_itemNo(int fk_itemNo) {
+			this.fk_itemNo = fk_itemNo;
+
 		}
 		public String getContent() {
 			return content;
@@ -56,7 +58,4 @@ public class ReviewVO {
 		}
 		
 		
-		
-		
-
 }

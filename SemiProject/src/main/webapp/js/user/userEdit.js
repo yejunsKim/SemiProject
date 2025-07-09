@@ -326,7 +326,7 @@ $(function(){
 			},
 			
 			error: function(request, status, error){
-                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+                //alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
             }
 		 });
 		
@@ -378,7 +378,7 @@ $(function(){
 			},
 			
 			error: function(request, status, error){
-                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+                //alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
             }				  
 		});
 			

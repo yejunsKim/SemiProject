@@ -9,6 +9,7 @@ import myshop.domain.CategoryVO;
 import myshop.domain.ItemVO;
 import myshop.domain.Order_historyVO;
 import myshop.domain.Order_itemsVO;
+import myshop.domain.ReviewVO;
 
 public interface ItemDAO {
 
@@ -50,15 +51,27 @@ public interface ItemDAO {
 	
 	// 장바구니에서 특정 제품 삭제하기
 	int cartDelete(String cartno) throws SQLException;
-	
+
+
+	 // 트랜잭션으로 주문 insert & 재고감소 & 장바구니삭제 & 포인트적립
+	int insertOrderUpdate(Map<String, Object> paraMap) throws SQLException;
+
+
 	// 장바구니 테이블에서 선택 제품의 주문량 변경시키기
 	int amountUpdate(Map<String, String> paraMap) throws SQLException;
+
+	// 주문번호 채번
+	int get_order_seq() throws SQLException;
+
+	//30일  지난 장바구니 항목 먼저 삭제
+	void deleteOldCart(String fk_users_id)throws SQLException;
+
 	
 	// 장바구니 모두 비우기
 	int cartAllDelete(String id) throws SQLException;
 
-	// 30일 지난 장바구니 항목 먼저 삭제
-	void deleteOldCart(String fk_users_id) throws SQLException;
+	 //로그인 유저의 장바구니 조회.	
+	public List<ItemVO> getOrderItem(String id, String[] selectedCartNoArray)throws SQLException;
 	
 	// 로그인한 유저의 주문 내역의 총 페이지수 알아오기
 	int getTotalPage(String id) throws SQLException;
@@ -67,8 +80,6 @@ public interface ItemDAO {
 
 	List<ItemVO> searchItemsByName(String searchID, int start, int len) throws SQLException;
 
-	//로그인 유저의 장바구니 조회.	
-	public List<ItemVO> getOrderItem(String id, String[] selectedCartNoArray) throws SQLException;
 	
 	// 로그인한 본인의 주문목록에서 특정 페이지번호에 해당하는 내용들을 조회해오기
 	List<Order_historyVO> select_order_paging(Map<String, String> paraMap) throws SQLException;
@@ -76,15 +87,45 @@ public interface ItemDAO {
 	// 로그인한 유저의 주문 상세 내역 조회(select)
 	List<Order_itemsVO> selectOrderDetail(Map<String, String> paraMap) throws SQLException;
 
+	// 리뷰 조회하기
+	List<ReviewVO> reviewList(String fk_itemNo, int startRow, int endRow) throws SQLException;
+
+	//리뷰 페이지 수 
+	int getReviewCount(String fk_itemNo)throws SQLException;
+	
+	//리뷰 등록하기
+	int addReview(ReviewVO reviewVO) throws SQLException;
+
+	//로그인한 사용자가 해당 제품을 구매했는지 알아오기
+	boolean isOrder(Map<String, String> paraMap) throws SQLException;
+
+	//리뷰에 대한 좋아요남기기
+	int likeAdd(Map<String, String> paraMap) throws SQLException;
+
+	//리뷰 삭제하기
+	int reviewDel(String reviewId)throws SQLException;
+
+	//리뷰 수정하기
+	int reviewUpdate(Map<String, String> paraMap)throws SQLException;
+
+	// 리뷰 좋아요 수 조회
+	Map<String, Integer> getLikeCount(String reviewId)throws SQLException;
+
 	//주문번호 채번하기
 	public int getOrderSequence() throws SQLException;
+	
+	public int getDeliverySequence() throws SQLException;	
+	
+	// 순수 item 리스트만 추출, cart관련 없음.
+	public List<ItemVO> getOrderItemList(String[] itemNoArr) throws SQLException;
 
-	public int insertOrderUpdate(Map<String, Object> paraMap) throws SQLException;
 
 	List<ItemVO> getOrderItemList(String id, String[] itemNoArr) throws SQLException;
 
+
+	// 카테고리별주문 통계정보 알아오기
 	List<Map<String, String>> myPurchase_byCategory(String id) throws SQLException;
 
+	// 카테고리별 월별주문 통계정보 알아오기
 	List<Map<String, String>> myPurchase_byMonth_byCategory(String id) throws SQLException;
-
 }
