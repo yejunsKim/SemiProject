@@ -45,11 +45,10 @@ function privacyInfo() {
 		<div class="col-md-12 footerInner" style="display:flex;flex-direction:column;">
 			<p style="max-width:150px;"><img src="/SemiProject/images/footer/footerLogo.png" style="width:100%;"></p>
 			<div class="footerBox">
-				<a class="footerTopnav" href="<%= ctxPath%>/#">회사소개</a>
-				<a class="footerTopnav" href="<%= ctxPath%>/location.do" >오시는 길</a>
-				<a class="footerTopnav" href="javascript:serviceInfo()">이용약관</a>
-				<a class="footerTopnav" href="javascript:privacyInfo()">개인정보처리방침</a>
-			</div>
+	            <a class="footerTopnav" href="<%= ctxPath%>/location.do" >오시는 길</a>
+	            <a class="footerTopnav" href="javascript:serviceInfo()">이용약관</a>
+	            <a class="footerTopnav" href="javascript:privacyInfo()">개인정보처리방침</a>
+         	</div>
 			
 			<p class="footerInfo">
 				회사명: 퍼퓸아레나 | 위치: 서울시 강남구 (역삼동) 한독빌딩 8층<br>
