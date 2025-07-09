@@ -541,12 +541,6 @@ window.addEventListener('DOMContentLoaded', function() {
 function paymentSuccessOrderService(id, usePoint, totalAmount) {
 	
 	console.log("결제완료시 해당 함수 호출됨! >> ", id, usePoint, totalAmount);
-<<<<<<< HEAD
-	console.log("삭제해야할 장바구니 번호 : ", $('input.cartNo').html());
-	 //// === 체크박스의 체크된 value값(checked 속성이용) === ////
-	   //// === 체크가 된 것만 읽어와서 배열에 넣어준다. === ////
-		
-=======
     //// === 체크박스의 체크된 value값(checked 속성이용) === ////
     //// === 체크가 된 것만 읽어와서 배열에 넣어준다. === ////
       
@@ -608,7 +602,6 @@ function paymentSuccessOrderService(id, usePoint, totalAmount) {
    });
    //OrderService
     
->>>>>>> refs/heads/main
 }// end of function paymentSuccess()-----------------------------
 
 
@@ -714,11 +707,7 @@ function paymentSuccessOrderService(id, usePoint, totalAmount) {
 								X ${item.cartvo.cartamount}개
 							</span>
 						    &nbsp;&nbsp;&nbsp;
-<<<<<<< HEAD
-						    <span class="gradeBasedPoint"> 
-=======
 						    <span> 
->>>>>>> refs/heads/main
 								<fmt:formatNumber value="${item.price * item.cartvo.cartamount}" pattern="###,###"/>원
 							</span>
 							<span class="itemNo" style="display: none;">${item.itemNo}</span>
