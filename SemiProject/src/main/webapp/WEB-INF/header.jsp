@@ -464,7 +464,10 @@ function SearchItems() {
 
 				      <tr>
 				        <td colspan="3" style="padding-top:10px;">
-				          <span style="font-weight: bold;"><a href="<%=ctxPath %>/item/orderList.do" style="color: #666363;">주문목록 보기</a></span>
+				          <c:if test="${sessionScope.loginUser.id ne 'admin'}">
+				          	<span style="font-weight: bold;"><a href="<%=ctxPath %>/item/orderList.do" style="color: #666363;">주문목록 보기</a></span>
+				          </c:if>
+				          <%-- <span style="font-weight: bold;"><a href="<%=ctxPath %>/item/orderList.do" style="color: #666363;">주문목록 보기</a></span> --%>
 				          &nbsp;&nbsp;&nbsp;&nbsp;<span><button type="button" class="btn btn-danger btn-sm" onclick="javascript:LogOut('<%=ctxPath%>')">Logout</button></span>
 				        </td>
 				      </tr>
