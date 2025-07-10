@@ -35,7 +35,7 @@ public class UserDAO_imple implements UserDAO {
 			
 			Context initContext = new InitialContext();
 		    Context envContext  = (Context)initContext.lookup("java:/comp/env");
-		    ds = (DataSource)envContext.lookup("jdbc/semiproject");
+		    ds = (DataSource)envContext.lookup("jdbc/local_semiproject");
 		    
 		    aes = new AES256(SecretMyKey.KEY);
 		    

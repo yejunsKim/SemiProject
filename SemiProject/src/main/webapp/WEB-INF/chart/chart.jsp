@@ -76,7 +76,8 @@
 
 <!-- 통계 페이지 레이아웃 -->
 <main class="chartMain">
-  <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-md p-6" style="padding:1.5%;border-radius:15px;box-shadow:1px 1px 7px 1px #ddd;">
+  <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-md p-6" 
+  	   style="padding:1.5%; border-radius:15px; box-shadow:1px 1px 7px 1px #ddd;">
 
     <!-- ✅ 여기! 제목 + select 가로 배치 들어갈 자리 -->
     <div class="chartOpt">
@@ -87,7 +88,8 @@
       <form name="searchFrm">
         <div class="relative w-72" style="position:relative;">
           <select name="searchType" id="searchType"
-            class="block w-full px-4 py-3 pr-10 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none z-10">
+            class="block w-full px-4 py-3 pr-10 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm 
+            	   focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none z-10">
             <option value="myPurchase_byMonth_byCategory">카테고리별 월별주문 통계</option>
             <option value="myPurchase_byCategory">카테고리별주문 통계</option>
           </select>
@@ -96,7 +98,8 @@
     </div>
 
     <!-- 그래프 및 표 -->
-    <div id="chart_container" class="p-4 bg-gray-50 border border-gray-200 rounded-xl mb-6 min-h-[350px]" style="padding:1.5rem !1important;background:#f9fafb;border-radius:15px;"></div>
+    <div id="chart_container" class="p-4 bg-gray-50 border border-gray-200 rounded-xl mb-6 min-h-[350px]" 
+    	 style="padding:1.5rem !1important;background:#f9fafb;border-radius:15px;"></div>
     <div id="table_container" style="overflow-x:scroll;z-index:30;"></div>
 
   </div>
