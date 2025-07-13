@@ -1459,7 +1459,7 @@ public class ItemDAO_imple implements ItemDAO {
 	            map.put("m_12", m_12);
 	            
 	            myPurchase_map_List.add(map);
-			} // end of while----------------------------------
+			}
 	                  
 		} finally {
 			close();

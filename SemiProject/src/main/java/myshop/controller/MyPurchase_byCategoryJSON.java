@@ -52,7 +52,7 @@ public class MyPurchase_byCategoryJSON extends BaseController {
 					json_obj.put("sumpay_pct", map.get("sumpay_pct"));
 					
 					json_arr.put(json_obj);
-				} // end of for
+				}
 				
 			} 
 			
